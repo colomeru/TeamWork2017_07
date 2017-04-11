@@ -1,9 +1,8 @@
-#include "TitleScene.h"
-#include "../Def.h"
+#include "CreditScene.h"
 #include "../time/Time.h"
 
-TitleScene::TitleScene() :
-nextScene_(Scene::Menu)
+CreditScene::CreditScene() :
+nextScene_(Scene::Ending)
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -14,16 +13,16 @@ nextScene_(Scene::Menu)
 	});
 }
 
-TitleScene::~TitleScene()
+CreditScene::~CreditScene()
 {
 }
 
-void TitleScene::Initialize()
+void CreditScene::Initialize()
 {
 	isEnd_ = false;
 }
 
-void TitleScene::Update()
+void CreditScene::Update()
 {
 	// 更新
 	world_->Update();
@@ -33,31 +32,31 @@ void TitleScene::Update()
 		isEnd_ = true;
 }
 
-void TitleScene::Draw() const
+void CreditScene::Draw() const
 {
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "TitleScene");
+	DrawFormatString(0, 00, GetColor(255, 255, 255), "CreditScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	// 描画
 	world_->Draw();
 }
 
-bool TitleScene::IsEnd() const
+bool CreditScene::IsEnd() const
 {
 	return isEnd_;
 }
 
-Scene TitleScene::Next() const
+Scene CreditScene::Next() const
 {
 	return nextScene_;
 }
 
-void TitleScene::End()
+void CreditScene::End()
 {
 	// 初期化
 	world_->Clear();
 }
 
-void TitleScene::handleMessage(EventMessage message, void * param)
+void CreditScene::handleMessage(EventMessage message, void * param)
 {
 }

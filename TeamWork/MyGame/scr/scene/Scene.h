@@ -6,7 +6,8 @@ enum class Scene
 	None,
 	Demo,
 	Title,
+	Menu,
 	GamePlay,
-	GameBattle,
-	GameEnd,
+	Credit,
+	Ending
 };

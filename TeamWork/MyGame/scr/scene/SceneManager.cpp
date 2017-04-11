@@ -6,11 +6,11 @@
 #include "../time/Time.h"
 #include <algorithm>
 
-const int SceneManager::MaxStageCount = 4;
+const int SceneManager::MaxStageCount = 6;
 
 // コンストラクタ
 SceneManager::SceneManager() :
-mStageCount(4)
+mStageCount(6)
 {
 }
 

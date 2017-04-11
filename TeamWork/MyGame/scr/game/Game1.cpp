@@ -2,7 +2,10 @@
 #include "../input/Keyboard.h"
 #include "../scene/DemoScene.h"
 #include "../scene/TitleScene.h"
+#include "../scene/MenuScene.h"
 #include "../scene/GamePlayScene.h"
+#include "../scene/CreditScene.h"
+#include "../scene/EndingScene.h"
 
 #include "../graphic/Anime.h"
 #include "../graphic/Model.h"
@@ -26,7 +29,10 @@ void Game1::Initialize()
 	// シーンの追加
 	mSceneManager.Add(Scene::Demo, std::make_shared<DemoScene>());
 	mSceneManager.Add(Scene::Title, std::make_shared<TitleScene>());
+	mSceneManager.Add(Scene::Menu, std::make_shared<MenuScene>());
 	mSceneManager.Add(Scene::GamePlay, std::make_shared<GamePlayScene>());
+	mSceneManager.Add(Scene::Credit, std::make_shared<CreditScene>());
+	mSceneManager.Add(Scene::Ending, std::make_shared<EndingScene>());
 
 	// シーンの読み込み
 	mSceneManager.SetScene(Scene::Demo);

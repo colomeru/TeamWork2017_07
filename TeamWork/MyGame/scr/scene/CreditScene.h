@@ -1,14 +1,15 @@
 #pragma once
-
 #include "IScene.h"
+#include <map>
 
-class TitleScene : public IScene
+class CreditScene : public IScene
 {
 public:
 	// コンストラクタ
-	TitleScene();
+	CreditScene();
 	// デストラクタ
-	~TitleScene();
+	~CreditScene();
+
 	// 初期化
 	virtual void Initialize() override;
 	// 更新

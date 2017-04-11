@@ -1,9 +1,8 @@
-#include "TitleScene.h"
-#include "../Def.h"
+#include "EndingScene.h"
 #include "../time/Time.h"
 
-TitleScene::TitleScene() :
-nextScene_(Scene::Menu)
+EndingScene::EndingScene() :
+nextScene_(Scene::Title)
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -14,16 +13,16 @@ nextScene_(Scene::Menu)
 	});
 }
 
-TitleScene::~TitleScene()
+EndingScene::~EndingScene()
 {
 }
 
-void TitleScene::Initialize()
+void EndingScene::Initialize()
 {
 	isEnd_ = false;
 }
 
-void TitleScene::Update()
+void EndingScene::Update()
 {
 	// 更新
 	world_->Update();
@@ -33,31 +32,31 @@ void TitleScene::Update()
 		isEnd_ = true;
 }
 
-void TitleScene::Draw() const
+void EndingScene::Draw() const
 {
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "TitleScene");
+	DrawFormatString(0, 00, GetColor(255, 255, 255), "EndingScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	// 描画
 	world_->Draw();
 }
 
-bool TitleScene::IsEnd() const
+bool EndingScene::IsEnd() const
 {
 	return isEnd_;
 }
 
-Scene TitleScene::Next() const
+Scene EndingScene::Next() const
 {
 	return nextScene_;
 }
 
-void TitleScene::End()
+void EndingScene::End()
 {
 	// 初期化
 	world_->Clear();
 }
 
-void TitleScene::handleMessage(EventMessage message, void * param)
+void EndingScene::handleMessage(EventMessage message, void * param)
 {
 }

@@ -4,6 +4,7 @@
 enum ACTOR_ID
 {
 	BEGIN_ACTOR,
+	SAMPLE_ACTOR,
 
 	END_ACTOR,
 };

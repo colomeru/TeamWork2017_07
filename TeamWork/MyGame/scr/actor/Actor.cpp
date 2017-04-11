@@ -8,7 +8,7 @@ Actor::Actor(IWorld * world, Actor * parent) :
 world_(world),
 parent_(parent)
 {
-
+	
 }
 
 Actor::~Actor()

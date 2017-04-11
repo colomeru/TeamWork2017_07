@@ -31,7 +31,8 @@ private:
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr	= std::shared_ptr<World>;
-
+	// ワールド
+	WorldPtr		world_;
 
 	// 次のシーン
 	Scene			nextScene_;

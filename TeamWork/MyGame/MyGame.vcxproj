@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="scr\actor\Actor.cpp" />
     <ClCompile Include="scr\actor\ActorManager.cpp" />
+    <ClCompile Include="scr\actor\SampleActor.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
     <ClCompile Include="scr\collision\Collision.cpp" />
     <ClCompile Include="scr\collision\CollisionDX.cpp" />
@@ -186,10 +187,12 @@
     <ClCompile Include="scr\math\Quaternion.cpp" />
     <ClCompile Include="scr\math\Vector2.cpp" />
     <ClCompile Include="scr\math\Vector3.cpp" />
+    <ClCompile Include="scr\scene\CreditScene.cpp" />
     <ClCompile Include="scr\scene\DemoScene.cpp" />
+    <ClCompile Include="scr\scene\EndingScene.cpp" />
     <ClCompile Include="scr\scene\GamePlayScene.cpp" />
+    <ClCompile Include="scr\scene\MenuScene.cpp" />
     <ClCompile Include="scr\scene\SceneManager.cpp" />
-    <ClCompile Include="scr\scene\SceneMediator.cpp" />
     <ClCompile Include="scr\scene\TitleScene.cpp" />
     <ClCompile Include="scr\time\FPS.cpp" />
     <ClCompile Include="scr\time\Time.cpp" />
@@ -201,6 +204,7 @@
     <ClInclude Include="scr\actor\ActorManager.h" />
     <ClInclude Include="scr\actor\ActorParameter.h" />
     <ClInclude Include="scr\actor\ActorPtr.h" />
+    <ClInclude Include="scr\actor\SampleActor.h" />
     <ClInclude Include="scr\AllInclude.h" />
     <ClInclude Include="scr\camera\Camera.h" />
     <ClInclude Include="scr\collision\Collision.h" />
@@ -234,14 +238,16 @@
     <ClInclude Include="scr\math\Quaternion.h" />
     <ClInclude Include="scr\math\Vector2.h" />
     <ClInclude Include="scr\math\Vector3.h" />
+    <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />
+    <ClInclude Include="scr\scene\EndingScene.h" />
     <ClInclude Include="scr\scene\GamePlayScene.h" />
     <ClInclude Include="scr\scene\IScene.h" />
     <ClInclude Include="scr\scene\ISceneMediator.h" />
+    <ClInclude Include="scr\scene\MenuScene.h" />
     <ClInclude Include="scr\scene\Scene.h" />
     <ClInclude Include="scr\scene\SceneManager.h" />
     <ClInclude Include="scr\scene\IScenePtr.h" />
-    <ClInclude Include="scr\scene\SceneMediator.h" />
     <ClInclude Include="scr\scene\TitleScene.h" />
     <ClInclude Include="scr\time\FPS.h" />
     <ClInclude Include="scr\time\Time.h" />

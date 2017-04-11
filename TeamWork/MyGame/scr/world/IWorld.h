@@ -1,0 +1,34 @@
+#pragma once
+#include "../actor/ActorPtr.h"
+#include <functional>
+
+enum ACTOR_ID;
+enum COL_ID;
+enum class EventMessage;
+
+// ワールドインターフェース
+class IWorld
+{
+public:
+	// 仮想デストラクタ
+	virtual ~IWorld() = default;
+	// 追加
+	virtual void Add(ACTOR_ID id_, ActorPtr actor_) = 0;
+	// 終了
+	virtual bool IsEnd() const = 0;
+	// 衝突判定の設定
+	virtual void SetCollideSelect(ActorPtr thisActor, ACTOR_ID otherID, COL_ID colID) = 0;
+	// メッセージの送信
+	virtual void sendMessage(EventMessage message, void* param = nullptr) = 0;
+	// 指定グループの巡回
+	virtual void EachActor(ACTOR_ID id, std::function<void(Actor&)> func) = 0;
+	// 指定グループの巡回
+	virtual void EachActor(ACTOR_ID id, std::function<void(const Actor&)> func) const = 0;
+	// 指定グループのアクター数を取得
+	virtual int Count(ACTOR_ID id) const = 0;
+
+	// 操作アクターセット
+	virtual void PushStackActor(ActorPtr actor) = 0;
+	// 操作アクターポップ
+	virtual void PopStackActor() = 0;
+};

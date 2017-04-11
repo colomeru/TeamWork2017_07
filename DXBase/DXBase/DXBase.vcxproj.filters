@@ -1,0 +1,1276 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="ソース ファイル">
+      <UniqueIdentifier>{4FC737F1-C7A5-4376-A066-2A32D752A2FF}</UniqueIdentifier>
+      <Extensions>cpp;c;cc;cxx;def;odl;idl;hpj;bat;asm;asmx</Extensions>
+    </Filter>
+    <Filter Include="ヘッダー ファイル">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="リソース ファイル">
+      <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
+      <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="sources\Game\Game.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Game\GameDevice.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Game\MyGame.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Input\InputMgr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Input\KeyCode.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\Renderer.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\World\World.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\World\IWorld.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\World\IWorldPtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Game\Time.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\Field.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\FieldPtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\ResourceLoader\ResourceLoader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\AquaLib\AquaLib.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\AquaLib\A_Utility.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\Math.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\MathHelper.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\Matrix.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\Quaternion.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\Vector2.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\Vector3.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\FileReader\CsvReader.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Base\Actor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Base\ActorGroup.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Base\ActorManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Base\ActorPtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\Body.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\ShapeType.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\States\Enemy_IdleState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\Base\IState.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\Base\IStatePtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\Base\StateMgr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\Player.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\BackGraundManager\BackGraundManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\BoundingBox.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\BoundingCapsule.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\CollisionBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\PlayerBody.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\Base\ActionType.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\Base\PlayerStatePtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\BoundingCircle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\BoundingSegment.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\BaseEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\EnemyManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\PlayerStatePtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\Puyo_Texture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Define.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\PlayerConnector.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\FloorSearchPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Enemys\FloorTurnEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MapGenerator.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MapChip.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Enemys\WallTurnEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Enemys\Prickle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\BezierCurve.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\DrawShape.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\NavChip.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MoveFloorRightLeft.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MoveFloorUpDown.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MovelessFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\TurnFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\PlayerSearchObj.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\PlayerState_Enum.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_StandBy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_Idle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Single\PlayerState_Single.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\Base\State_Dammy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Math\Easing.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\ImportEnemys.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\BaseBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Enemys\FlyingEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Enemys\WallMoveEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\TranslessTurnFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\Puyo_Texture_K.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Base\ActorUI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\UIActor\BossGaugeUI\BossGaugeUI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Base\IScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Base\IScenePtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Base\Scene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Base\SceneMgr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Base\SceneNull.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\GamePlay\GamePlayScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\LoadingScene\LoadingScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\BossManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\bossAttack\BossAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\bossAttack\importBossAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\bossAttack\JumpAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\bossAttack\ThreeJumpAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\GamePlay\MoveScreen.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\GamePlay\PauseScreen.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\GameClear\GameClearScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Base\SceneDataKeeper.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\StageClear\StageClearScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\GameOverPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\CollidelessFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\StageClearPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\FontManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\BossEntry.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\bossAttack\WallAttack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\PlayerBodyCollider.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\SticklessFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\SegmentFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_LeanBack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MoveFloorCenterRightLeft.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MoveFloorCenterUpDown.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\BossAreaFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\BossStage\BossStage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Enemys\NeedleEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Animation\Base\Animation2D.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Animation\Player\PlayerAnimation2D.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\PlayerBodyPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\PlayerPtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Rock.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Credit\CreditScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\MainMenu\MainMenuScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\MainMenu\SceneChange.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\PuyoCollision.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\DeadEnemy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Animation\Enemy\EnemyAnimation2D.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Single\PlayerStateMgr_Single.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Single\StatePath_Single.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Collision\Collision.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Animation\Player\PlayerEffect2D.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\Effect\PlayerEffectObj.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\GameEnd\GameEndScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_Dead.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_Freeze.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_Idle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_Jump.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_StandBy.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\PlayerState_Union.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\PlayerStateMgr_Union.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\StatePath_Union.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\BossAnimationNumber.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\AttackEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\BossEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\ImportEffects.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\TeamLogoScene\TeamLogoScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Door\Door.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\ChipHeaders.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\BokoEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\PiyoriEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\ResourceLoader\Movie.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\IBody.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Body\IBodyPtr.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\Tutoreal\TutorealScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_EventTime.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_LeanBack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\StageClear\StageClearTextAnm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\ShockWave.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\EntrySignEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\resource.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\EnemyDeadEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Enemys\EnemyCreateBox.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\ImportBosses.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\UIActor\HelperUI\HelperUI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\MainMenu\SceneChangeAnm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MovelessFloorBreak.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Tubo\Tubo.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_HoldAir.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\EnemyCollideEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\GamePlay\ClearScreen.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\Items.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\ItemSpawnFloor.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\PlayerState_HoldBoth.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldBegin.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldFull.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldSwim.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Air\PlayerState_HoldAirBegin.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Air\PlayerState_HoldAirFull.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Air\PlayerState_HoldAirSwim.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBossManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\ItemAnm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\StageClear\SceneChangeBossAnm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\BossWingEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\BadItemAnm.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\BadItems.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\Effect\ScatterWingEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\ResourceLoader\ResourceID.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\AdhereMiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\FlyingMiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\UIActor\HurryUpUI\HurryUpUI.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\BackGraundManager\ScroolJudge.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\World\ScrollJudge.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\NumberTexture.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\PlayerFont.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\PlayerTxt.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Renderer\TxtRead.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\BonusStage\BonusStage.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\FirstGamePlay\FirstGamePlayScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\EnemyHeaderImport.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\StarEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\GameOver\GameOverScene.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Scene\FirstGamePlay\TutorialManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\PlayerState_HoldItem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Attack\PlayerState_Attack.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Move\PlayerState_MoveEach.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Move\PlayerState_MoveBoth.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\StarEffectManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\FighterMiniBossh.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\ImportAnimationNumber.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\TrackingMiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\WingAttackMiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bullet\WingBullet.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldInit.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Base\HitOpponent.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Full.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Wall.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Air.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Swim.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Begin.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\State\Base\State.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\BossScrollPoint.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\ImportMediumBosses.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\MediumBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\Stage1MiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\Stage2MiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\Stage3MiniBoss.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\BossMoves\BossMove.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\BossMoves\PiyoriMove.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\MoveItem.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\Effect\PowerUpEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\Effect\PowerUpFontEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Item\Effect\StarPowerUpEffect.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\BlockParticle\BlockParticle.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Enemy\Bosses\MiniBossRepair.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Person\Player\Body\PlayerBodyBase.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Actor\Smoke\Smoke.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="sources\Field\MovelessFloorInvis.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="sources\Game\GameDevice.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Game\MyGame.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Input\InputMgr.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="main.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\World\World.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Game\Time.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\Field.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\ResourceLoader\ResourceLoader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Math\MathHelper.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Math\Matrix.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Math\Quaternion.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Math\Vector2.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Math\Vector3.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\FileReader\CsvReader.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Base\Actor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Base\ActorManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\Base\StateMgr.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\Player.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\BackGraundManager\BackGraundManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Body\BoundingBox.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Body\BoundingCapsule.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Body\CollisionBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\PlayerBody.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Body\BoundingCircle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Body\BoundingSegment.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\BaseEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\EnemyManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\Puyo_Texture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\PlayerConnector.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\FloorSearchPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Enemys\FloorTurnEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MapChip.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Enemys\WallTurnEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Enemys\Prickle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Math\BezierCurve.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\DrawShape.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\NavChip.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MoveFloorRightLeft.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MoveFloorUpDown.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MovelessFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\TurnFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\PlayerSearchObj.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_Idle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_StandBy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Single\PlayerState_Single.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\BaseBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Enemys\FlyingEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Enemys\WallMoveEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\TranslessTurnFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\Puyo_Texture_K.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Base\ActorUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\UIActor\BossGaugeUI\BossGaugeUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\Base\SceneMgr.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\Base\SceneNull.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\GamePlay\GamePlayScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\LoadingScene\LoadingScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\BossManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\bossAttack\BossAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\bossAttack\JumpAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\bossAttack\ThreeJumpAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\GamePlay\MoveScreen.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\GamePlay\PauseScreen.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\GameClear\GameClearScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\Base\SceneDataKeeper.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\StageClear\StageClearScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\GameOverPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\CollidelessFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\StageClearPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\FontManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\BossEntry.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\bossAttack\WallAttack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\PlayerBodyCollider.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\SticklessFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\SegmentFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_LeanBack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MoveFloorCenterRightLeft.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MoveFloorCenterUpDown.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\BossAreaFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\BossStage\BossStage.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Enemys\NeedleEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Animation\Base\Animation2D.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Animation\Player\PlayerAnimation2D.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\PlayerBodyPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Rock.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\Credit\CreditScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\MainMenu\MainMenuScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\MainMenu\SceneChange.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\PuyoCollision.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\DeadEnemy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Animation\Enemy\EnemyAnimation2D.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Single\PlayerStateMgr_Single.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Animation\Player\PlayerEffect2D.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\Effect\PlayerEffectObj.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\GameEnd\GameEndScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Single\Elements\PlayerState_Single_Dead.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_Freeze.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_Idle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_Jump.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_StandBy.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\PlayerState_Union.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\PlayerStateMgr_Union.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\AttackEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\BossEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\TeamLogoScene\TeamLogoScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Door\Door.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\BokoEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\PiyoriEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\ResourceLoader\Movie.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Collision\Collision.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\Tutoreal\TutorealScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_EventTime.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\PlayerState_LeanBack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\StageClear\StageClearTextAnm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\ShockWave.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\EntrySignEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\EnemyDeadEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Enemys\EnemyCreateBox.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\UIActor\HelperUI\HelperUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\MainMenu\SceneChangeAnm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MovelessFloorBreak.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Tubo\Tubo.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\EnemyCollideEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\GamePlay\ClearScreen.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\ItemSpawnFloor.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\PlayerState_HoldBoth.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldBegin.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldFull.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldSwim.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Air\PlayerState_HoldAirBegin.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Air\PlayerState_HoldAirFull.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Air\PlayerState_HoldAirSwim.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBossManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Item\ItemAnm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\StageClear\SceneChangeBossAnm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Item\BadItemAnm.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\BossWingEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\Effect\ScatterWingEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\AdhereMiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\FlyingMiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\UIActor\HurryUpUI\HurryUpUI.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\NumberTexture.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\PlayerFont.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\PlayerTxt.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Renderer\TxtRead.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\BonusStage\BonusStage.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\FirstGamePlay\FirstGamePlayScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Item\StarEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\GameOver\GameOverScene.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Scene\FirstGamePlay\TutorialManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\PlayerState_HoldItem.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Attack\PlayerState_Attack.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Move\PlayerState_MoveEach.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Item\StarEffectManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\FighterMiniBossh.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\TrackingMiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\WingAttackMiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bullet\WingBullet.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Wall\PlayerState_HoldInit.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Full.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Wall.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Air.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Swim.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Hold\Base\PlayerState_HoldBase_Begin.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\States\Union\Elements\Move\PlayerState_MoveBoth.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Player\State\Base\State.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\BossScrollPoint.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\MediumBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\Stage1MiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\Stage2MiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBoss\MediumBoss\Stage3MiniBoss.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\BossMoves\BossMove.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\BossMoves\PiyoriMove.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Item\Effect\PowerUpEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Item\Effect\PowerUpFontEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Item\Effect\StarPowerUpEffect.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\BlockParticle\BlockParticle.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Person\Enemy\Bosses\MiniBossRepair.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Actor\Smoke\Smoke.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="sources\Field\MovelessFloorInvis.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <Image Include="resources\sprite\BackGraund.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="resources\sprite\BackGraundBot.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="resources\sprite\BackGraundTop.png">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+    <Image Include="sources\icon.ico">
+      <Filter>リソース ファイル</Filter>
+    </Image>
+  </ItemGroup>
+  <ItemGroup>
+    <ResourceCompile Include="sources\resource.rc">
+      <Filter>リソース ファイル</Filter>
+    </ResourceCompile>
+  </ItemGroup>
+</Project>

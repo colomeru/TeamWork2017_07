@@ -1,7 +1,7 @@
 #include "Actor.h"
 #include "../collision/Collision.h"
 #include "../collision/CollisionDX.h"
-#include "../dxlib/DXConverter.h"
+#include "../conv/DXConverter.h"
 #include "../graphic/Model.h"
 
 Actor::Actor(IWorld * world, Actor * parent) :

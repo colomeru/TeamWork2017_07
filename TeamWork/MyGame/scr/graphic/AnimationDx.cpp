@@ -1,6 +1,6 @@
 #include "AnimationDx.h"
-#include "../DxLib/DxLib.h"
 #include "../math/MathHelper.h"
+#include <DxLib.h>
 #include <math.h>
 #include <algorithm>
 

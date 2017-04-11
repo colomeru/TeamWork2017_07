@@ -1,5 +1,5 @@
 #include "ShadowMap.h"
-#include "../dxlib/DXConverter.h"
+#include "../conv/DXConverter.h"
 
 ShadowMap::~ShadowMap()
 {

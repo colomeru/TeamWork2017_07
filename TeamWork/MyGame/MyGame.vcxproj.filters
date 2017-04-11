@@ -129,7 +129,7 @@
     <ClCompile Include="scr\math\Color.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\dxlib\DXConverter.cpp">
+    <ClCompile Include="scr\conv\DXConverter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -284,10 +284,10 @@
     <ClInclude Include="scr\collision\CollisionDX.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\dxlib\DXConverter.h">
+    <ClInclude Include="scr\math\Color.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\math\Color.h">
+    <ClInclude Include="scr\conv\DXConverter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

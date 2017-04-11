@@ -5,7 +5,7 @@
 #include <vector>
 #include <memory>
 #include <functional>
-#include "../dxlib/DXConverter.h"
+#include "../conv/DXConverter.h"
 #include "../math/Vector2.h"
 #include "../math/Vector3.h"
 #include "../math/Color.h"

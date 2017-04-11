@@ -1,5 +1,5 @@
 #include "CollisionDX.h"
-#include "../DxLib/DXConverter.h"
+#include "../conv/DXConverter.h"
 #include "../math/MathHelper.h"
 #include "../math/Vector3.h"
 

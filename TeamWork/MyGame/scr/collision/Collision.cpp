@@ -1,5 +1,5 @@
 #include "Collision.h"
-#include "../dxlib/DXConverter.h"
+#include "../conv/DXConverter.h"
 
 // ‹…‚ÆOBB‚ÌÕ“Ë”»’è
 CollisionParameter Collision::Sphere_vs_OBB(CollisionParameter & colpara, Sphere & sphere, Box & box)

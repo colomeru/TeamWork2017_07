@@ -1,6 +1,8 @@
 #include "TitleScene.h"
 #include "../Def.h"
 #include "../time/Time.h"
+#include "../camera/Camera.h"
+#include "../conv/DXConverter.h"
 
 TitleScene::TitleScene() :
 nextScene_(Scene::Menu)
@@ -20,6 +22,12 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
+	Camera::GetInstance().SetRange(0.1f, 10000.0f);
+	Camera::GetInstance().SetViewAngle(60.0f);
+	Camera::GetInstance().Up.Set(Vector3::Up);
+	Camera::GetInstance().Position.Set(Vector3(0, 0, -10));
+	Camera::GetInstance().Target.Set(Vector3(0, 0, 0));
+	Camera::GetInstance().Update();
 	isEnd_ = false;
 }
 
@@ -31,13 +39,18 @@ void TitleScene::Update()
 	// I—¹
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
+	Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
+	Camera::GetInstance().Target.Set(Vector3(0,0,0));
+	Camera::GetInstance().Update();
 }
 
 void TitleScene::Draw() const
 {
+	auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
+	auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
 	DrawFormatString(0, 00, GetColor(255, 255, 255), "TitleScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-
+	DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
 	// •`‰æ
 	world_->Draw();
 }

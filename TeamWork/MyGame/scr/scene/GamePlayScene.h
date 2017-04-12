@@ -1,6 +1,7 @@
 #pragma once
 #include "IScene.h"
 #include <map>
+#include"../actor/CameraAct/TPSCamera.h"
 
 class GamePlayScene : public IScene
 {	
@@ -30,10 +31,17 @@ private:
 
 private:
 	// ワールド用シェアドポインタ
-	using WorldPtr	= std::shared_ptr<World>;
+	using WorldPtr = std::shared_ptr<World>;
+	using CameraPtr	= std::shared_ptr<TPSCamera>;
 	// ワールド
 	WorldPtr		world_;
 
 	// 次のシーン
 	Scene			nextScene_;
+
+	Vector3 posit;
+
+	CameraPtr camera_;
+	Vector3 camera_pos_;
+	Vector3 target_;
 };

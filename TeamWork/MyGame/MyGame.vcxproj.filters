@@ -332,5 +332,8 @@
     <ClInclude Include="scr\actor\efect\Efect.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="scr\actor\CameraAct\TPSCamera.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

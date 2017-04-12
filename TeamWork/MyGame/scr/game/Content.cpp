@@ -11,6 +11,8 @@
 void Content::LoadSprite(Sprite& sprite, Model& model)
 {
 	WorkFolder::SetWorkFolder("res/Sprite/");
+	sprite.Load("particle.bmp",SPRITE_ID::TEST_SPRITE);
+	sprite.Load("3219116.png", SPRITE_ID::TEST2_SPRITE);
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ
@@ -19,6 +21,7 @@ void Content::LoadModel(Model& model, bool async)
 	WorkFolder::SetWorkFolder("res/Model/");
 
 	model.Load("plane.mv1", MODEL_ID::PLANE_MODEL);
+	model.Load("cube.mv1", MODEL_ID::PLAYER_MODEL);
 
 	WorkFolder::SetWorkFolder("res/Model2D/");
 }

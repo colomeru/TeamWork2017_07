@@ -158,6 +158,8 @@
   <ItemGroup>
     <ClCompile Include="scr\actor\Actor.cpp" />
     <ClCompile Include="scr\actor\ActorManager.cpp" />
+    <ClCompile Include="scr\actor\efect\Efect.cpp" />
+    <ClCompile Include="scr\actor\enemy\Enemy.cpp" />
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
     <ClCompile Include="scr\actor\stage\Stage.cpp" />
@@ -206,6 +208,8 @@
     <ClInclude Include="scr\actor\ActorManager.h" />
     <ClInclude Include="scr\actor\ActorParameter.h" />
     <ClInclude Include="scr\actor\ActorPtr.h" />
+    <ClInclude Include="scr\actor\efect\Efect.h" />
+    <ClInclude Include="scr\actor\enemy\Enemy.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
     <ClInclude Include="scr\actor\stage\Stage.h" />

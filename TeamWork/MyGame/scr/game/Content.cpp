@@ -18,6 +18,8 @@ void Content::LoadModel(Model& model, bool async)
 {
 	WorkFolder::SetWorkFolder("res/Model/");
 
+	model.Load("plane.mv1", MODEL_ID::PLANE_MODEL);
+
 	WorkFolder::SetWorkFolder("res/Model2D/");
 }
 

@@ -5,6 +5,7 @@ enum ACTOR_ID
 {
 	BEGIN_ACTOR,
 	SAMPLE_ACTOR,
+	STAGE_ACTOR,
 
 	END_ACTOR,
 };
@@ -37,6 +38,8 @@ enum SPRITE_ID
 enum MODEL_ID
 {
 	BEGIN_MODEL,
+
+	PLANE_MODEL,
 
 	END_MODEL,
 };

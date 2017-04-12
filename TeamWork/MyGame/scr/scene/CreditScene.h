@@ -1,6 +1,8 @@
 #pragma once
 #include "IScene.h"
 #include <map>
+#include "../camera/Camera.h"
+#include "../math/Vector3.h"
 
 class CreditScene : public IScene
 {
@@ -33,6 +35,9 @@ private:
 	using WorldPtr = std::shared_ptr<World>;
 	// ワールド
 	WorldPtr		world_;
+
+	Vector3 camera_pos_;
+	Vector3 target_;
 
 	// 次のシーン
 	Scene			nextScene_;

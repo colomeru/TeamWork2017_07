@@ -158,7 +158,9 @@
   <ItemGroup>
     <ClCompile Include="scr\actor\Actor.cpp" />
     <ClCompile Include="scr\actor\ActorManager.cpp" />
+    <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
+    <ClCompile Include="scr\actor\stage\Stage.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
     <ClCompile Include="scr\collision\Collision.cpp" />
     <ClCompile Include="scr\collision\CollisionDX.cpp" />
@@ -204,7 +206,9 @@
     <ClInclude Include="scr\actor\ActorManager.h" />
     <ClInclude Include="scr\actor\ActorParameter.h" />
     <ClInclude Include="scr\actor\ActorPtr.h" />
+    <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
+    <ClInclude Include="scr\actor\stage\Stage.h" />
     <ClInclude Include="scr\AllInclude.h" />
     <ClInclude Include="scr\camera\Camera.h" />
     <ClInclude Include="scr\collision\Collision.h" />

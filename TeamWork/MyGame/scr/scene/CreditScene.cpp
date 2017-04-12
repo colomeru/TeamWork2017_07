@@ -3,6 +3,7 @@
 #include "../conv/DXConverter.h"
 
 #include "../actor/player/Player.h"
+#include "../actor/enemy/Enemy.h"
 #include "../actor/stage/Stage.h"
 #include "../graphic/Model.h"
 
@@ -35,7 +36,8 @@ void CreditScene::Initialize()
 	Camera::GetInstance().Target.Set(target_);
 	Camera::GetInstance().Update();
 
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Stage>(world_.get()));
+	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<Enemy>(world_.get()));
 	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<Player>(world_.get()));
 }
 

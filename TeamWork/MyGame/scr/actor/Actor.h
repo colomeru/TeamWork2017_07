@@ -53,6 +53,8 @@ protected:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
+	CollisionParameter Test_Col(const Actor& other) const;
+
 	/* ÉRÉsÅ[ã÷é~ */
 	Actor(const Actor& other) = delete;
 	Actor& operator = (const Actor& other) = delete;

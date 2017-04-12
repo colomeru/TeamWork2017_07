@@ -5,8 +5,14 @@ enum ACTOR_ID
 {
 	BEGIN_ACTOR,
 	STAGE_ACTOR,
+<<<<<<< HEAD
 	SAMPLE_ACTOR,
 
+=======
+	PLAYER_ACTOR,
+	ENEMY_ACTOR,
+	EFECT_ACTOR,
+>>>>>>> 751fa7991d9670179af25c47e8ac68007ea23b1e
 	END_ACTOR,
 };
 
@@ -22,7 +28,7 @@ enum UI_ID
 enum COL_ID
 {
 	BEGIN_COL,
-
+	TEST_COL,
 	END_COL,
 };
 
@@ -39,9 +45,8 @@ enum SPRITE_ID
 enum MODEL_ID
 {
 	BEGIN_MODEL,
-
 	PLANE_MODEL,
-
+	PLAYER_MODEL,
 	END_MODEL,
 };
 

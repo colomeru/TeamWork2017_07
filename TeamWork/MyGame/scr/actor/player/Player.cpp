@@ -1,11 +1,14 @@
 #include "Player.h"
 #include "../../input/Keyboard.h"
 #include "../../conv/DXConverter.h"
+#include "../../graphic/Model.h"
 
 Player::Player(IWorld * world)
 	:Actor(world)
 	,angle_(0.0f)
 {
+	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
+
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationY(0.0f)
@@ -53,7 +56,9 @@ void Player::Draw() const
 	auto pos_1 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation());
 	auto pos_2 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation() + Vector3(0, 10, 0));
 
-	DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
+	//DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
+
+	Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
 
 	auto pos = parameter_.mat.Translation();
 

@@ -35,7 +35,7 @@ void CreditScene::Initialize()
 	Camera::GetInstance().Target.Set(target_);
 	Camera::GetInstance().Update();
 
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Stage>(world_.get()));
 	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<Player>(world_.get()));
 }
 

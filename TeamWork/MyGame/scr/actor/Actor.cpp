@@ -8,7 +8,7 @@ Actor::Actor(IWorld * world, Actor * parent) :
 world_(world),
 parent_(parent)
 {
-	
+	colFunc_[COL_ID::TEST_COL] = std::bind(&Actor::Test_Col, this, std::placeholders::_1);
 }
 
 Actor::~Actor()
@@ -69,4 +69,13 @@ void Actor::OnCollide(Actor & other, CollisionParameter colpara)
 
 void Actor::OnMessage(EventMessage message, void * param)
 {
+}
+
+CollisionParameter Actor::Test_Col(const Actor & other) const
+{
+	CollisionParameter colpara;
+	colpara.colID = COL_ID::TEST_COL;
+	colpara.colFrag = CollisionDX::Capsule_vs_Capsule(Capsule(GetParameter()), Capsule(other.GetParameter()));
+
+	return colpara;
 }

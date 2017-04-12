@@ -7,6 +7,8 @@ enum ACTOR_ID
 	SAMPLE_ACTOR,
 	STAGE_ACTOR,
 	PLAYER_ACTOR,
+	ENEMY_ACTOR,
+	EFECT_ACTOR,
 	END_ACTOR,
 };
 
@@ -22,7 +24,7 @@ enum UI_ID
 enum COL_ID
 {
 	BEGIN_COL,
-
+	TEST_COL,
 	END_COL,
 };
 

@@ -11,6 +11,8 @@
 void Content::LoadSprite(Sprite& sprite, Model& model)
 {
 	WorkFolder::SetWorkFolder("res/Sprite/");
+	sprite.Load("particle.bmp",SPRITE_ID::TEST_SPRITE);
+	sprite.Load("3219116.png", SPRITE_ID::TEST2_SPRITE);
 }
 
 // ‚R‚cƒ‚ƒfƒ‹‚ğ“Ç‚İ‚Ş

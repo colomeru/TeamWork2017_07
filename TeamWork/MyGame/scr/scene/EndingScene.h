@@ -26,8 +26,9 @@ public:
 	void handleMessage(EventMessage message, void* param);
 
 private:
-
-
+	float size;
+	float vertical;
+	float horizontal;
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;

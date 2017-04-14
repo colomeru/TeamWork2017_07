@@ -1,11 +1,11 @@
 *.opensdf
 *.obj
 *.cso
-RiguruLib/RiguruLib/Release/
-RiguruLib/Release/
-Dxlib/
-RiguruLib/RiguruLib/Log.txt
-RiguruLib/Log.txt
+TeamWork/MyGame/Release/
+MyGame/Release/
+Libs/
+TeamWork/MyGame/Log.txt
+MyGame/Log.txt
 *.suo
 *.sdf
 *.user

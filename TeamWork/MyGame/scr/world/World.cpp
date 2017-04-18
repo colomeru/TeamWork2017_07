@@ -24,8 +24,9 @@ void World::Update()
 {
 	if (targetAct_ != nullptr) {
 		inv(targetMat_);
-		targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
-			//*Matrix::CreateRotationZ(targetAct_->GetAngle());
+		//targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
+		targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+		//*Matrix::CreateRotationZ(targetAct_->GetAngle());
 	}
 
 	actors_.Update();

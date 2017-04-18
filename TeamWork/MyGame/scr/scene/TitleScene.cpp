@@ -3,6 +3,7 @@
 #include "../time/Time.h"
 #include "../camera/Camera.h"
 #include "../conv/DXConverter.h"
+#include "../actor/PlayerLine.h"
 
 TitleScene::TitleScene() :
 nextScene_(Scene::Menu)
@@ -29,6 +30,8 @@ void TitleScene::Initialize()
 	Camera::GetInstance().Target.Set(Vector3(0, 0, 0));
 	Camera::GetInstance().Update();
 	isEnd_ = false;
+
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<PlayerLine>(world_.get()));
 }
 
 void TitleScene::Update()
@@ -46,11 +49,11 @@ void TitleScene::Update()
 
 void TitleScene::Draw() const
 {
-	auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
-	auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "TitleScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-	DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
+	//auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
+	//auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
+	//DrawFormatString(0, 00, GetColor(255, 255, 255), "TitleScene");
+	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+	//DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
 	// •`‰æ
 	world_->Draw();
 }

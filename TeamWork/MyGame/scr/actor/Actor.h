@@ -37,12 +37,23 @@ public:
 	virtual void SetPose(const Matrix& mat);
 	// 受動更新
 	virtual void OnUpdate();
-
+	void CommonUpdate() {
+		prevPosition_ = position_;
+	}
 	// 自分取得
 	Actor* GetActor() const;
 	// 親取得
 	Actor* GetParent() const;
 
+	Vector2 GetPosition() const{
+		return position_;
+	}
+	Vector2 GetPrevPosition() const {
+		return prevPosition_;
+	}
+	float GetAngle() const {
+		return angle_;
+	}
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
 
@@ -68,10 +79,12 @@ protected:
 	// パラメータ
 	ActorParameter	parameter_;
 	// 位置
-	Vector3			position_;
+	Vector2			position_;
+	Vector2			prevPosition_;
 	// 移動量
-	Vector3			velocity_;
+	Vector2			velocity_;
 
+	float angle_;
 private:
 	// ファンクションマップ
 	std::map<COL_ID, std::function<CollisionParameter(const Actor&)>> colFunc_;

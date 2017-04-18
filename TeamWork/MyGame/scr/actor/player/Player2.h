@@ -1,13 +1,13 @@
 #pragma once
 #include "../Actor.h"
 
-class Player : public Actor, public std::enable_shared_from_this<Player>
+class Player2 : public Actor, public std::enable_shared_from_this<Player2>
 {
 public:
 	//コンストラクタ
-	Player(IWorld* world);
+	Player2(IWorld* world);
 	//デストラクタ
-	~Player();
+	~Player2();
 	//更新
 	virtual void Update() override;
 	//描画
@@ -20,6 +20,8 @@ public:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
+	//回転角度
 	//衝突しているか
 	bool isHit_;
+	float jumpVec;
 };

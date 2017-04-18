@@ -7,7 +7,8 @@
 Actor::Actor(IWorld * world, Actor * parent) :
 	world_(world),
 	parent_(parent),
-	angle_(0.f)
+	angle_(0.f),
+	position_(Vector2::Zero)
 {
 	colFunc_[COL_ID::TEST_COL] = std::bind(&Actor::Test_Col, this, std::placeholders::_1);
 }

@@ -52,7 +52,7 @@ void GamePlayScene::Initialize()
 	
 	ply1 = std::make_shared<Player3>(world_.get());
 	ply2 = std::make_shared<Player2>(world_.get());
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, ply1);
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, ply2);
 
 	//–{”Ô—p
@@ -67,6 +67,9 @@ void GamePlayScene::Initialize()
 	//Camera::GetInstance().Position.Set(camera_pos_);
 	//Camera::GetInstance().Target.Set(target_);
 	//Camera::GetInstance().Update();
+
+	world_->InitializeInv(Vector2(ply1->GetPosition().x, ply1->GetPosition().y));
+	world_->SetTarget(ply1.get());
 }
 
 void GamePlayScene::Update()

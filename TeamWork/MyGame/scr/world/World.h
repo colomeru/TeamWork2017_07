@@ -1,8 +1,11 @@
 #pragma once
 #include "IWorld.h"
 #include "WorldActor.h"
+#include"../math/MathHelper.h"
+#include"../math/Vector3.h"
 #include <stack>
 
+static const Vector2 playerScreenPos_ = Vector2(300, 600);
 class World : public IWorld
 {
 public:
@@ -27,6 +30,9 @@ public:
 	/* ワールドインターフェース */
 	// 追加
 	virtual void Add(ACTOR_ID id, ActorPtr actor);
+	virtual void SetTarget(Actor* tgt){
+		targetAct_ = tgt;
+	}
 	// 終わっているか？
 	virtual bool IsEnd() const;
 	// 衝突判定設定
@@ -45,9 +51,44 @@ public:
 	// 操作アクターポップ
 	virtual void PopStackActor();
 
+	virtual void inv(const Matrix& mat) override;
+	virtual Matrix InitializeInv(Vector2 position) override;
+	
+	virtual Matrix GetInv()override {
+		return inv_;
+	}
+	virtual void SetScroolPos(const Vector2& pos) override {
+		targetMat_.Translation(Vector3(pos.x, pos.y, 0));
+	}
+
 private:
+	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
+	{
+		// バネの伸び具合を計算
+		Vector2 stretch = (pos - resPos);
+		// バネの力を計算
+		Vector2 force = -stiffness * stretch;
+		// 加速度を追加
+		Vector2 acceleration = force / mass;
+		// 移動速度を計算
+		velo = friction * (velo + acceleration);
+
+		pos = pos + velo;
+	}
+
+private:
+	
+	Matrix inv_;
+	Matrix resInv_;
+	Matrix targetMat_;
+	Actor* targetAct_;
+	Vector2 mPrePos;
+	Vector2 mCurPos;
 	// アクター
 	WorldActor	actors_;
+
+	Vector2 mVelo;
+	Vector2 velo;
 
 	// 受動更新アクター用スタック
 	std::stack<ActorPtr>	manualStackActor_;

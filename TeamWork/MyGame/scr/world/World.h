@@ -5,7 +5,7 @@
 #include"../math/Vector3.h"
 #include <stack>
 
-static const Vector2 playerScreenPos_ = Vector2(300, 600);
+static const Vector2 playerScreenPos_ = Vector2(300, 0);
 class World : public IWorld
 {
 public:

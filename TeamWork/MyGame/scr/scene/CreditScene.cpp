@@ -4,9 +4,10 @@
 
 #include "../actor/player/Player3.h"
 #include "../actor/enemy/Enemy.h"
-#include "../actor/stage/Stage.h"
 #include "../graphic/Model.h"
 #include "../math/MathHelper.h"
+#include "../stageGenerate/Stage.h"
+#include "../stageGenerate/Stage1/Stage1.h"
 
 CreditScene::CreditScene() :
 nextScene_(Scene::Ending),
@@ -26,6 +27,9 @@ gravity_(0.2f)
 	{
 		handleMessage(msg, param);
 	});
+
+	stageGenerateManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
+	stageGenerateManager.SetStage(Stage::Stage1);
 }
 
 CreditScene::~CreditScene()
@@ -42,6 +46,7 @@ void CreditScene::Initialize()
 	Camera::GetInstance().Position.Set(camera_pos_);
 	Camera::GetInstance().Target.Set(target_);
 	Camera::GetInstance().Update();
+
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Player3>(world_.get()));

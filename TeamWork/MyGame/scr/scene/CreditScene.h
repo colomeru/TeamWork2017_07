@@ -4,6 +4,7 @@
 #include "../camera/Camera.h"
 #include "../math/Vector2.h"
 #include "../math/Vector3.h"
+#include "../stageGenerate/StageGenerateManager.h"
 
 class CreditScene : public IScene
 {
@@ -44,6 +45,8 @@ private:
 	Vector3 camera_pos_;
 	Vector3 target_;
 
+	StageGenerateManager stageGenerateManager;
+
 	//支点座標
 	Vector2 fulcrum_;
 	//重りの座標
@@ -56,6 +59,8 @@ private:
 	float length_;
 	//重力加速度
 	float gravity_;
+
+
 
 	// 次のシーン
 	Scene			nextScene_;

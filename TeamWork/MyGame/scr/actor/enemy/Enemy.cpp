@@ -6,7 +6,7 @@ Enemy::Enemy(IWorld * world)
 	,isHit_(false)
 {
 	parameter_.radius = 3.0f;
-	parameter_.size = Vector3(3.0f, 3.0f, 3.0f);
+	parameter_.size = Vector2(3.0f, 3.0f);
 	parameter_.ID = ACTOR_ID::ENEMY_ACTOR;
 
 	parameter_.mat

@@ -5,8 +5,9 @@
 #include "../graphic/Model.h"
 
 Actor::Actor(IWorld * world, Actor * parent) :
-world_(world),
-parent_(parent)
+	world_(world),
+	parent_(parent),
+	angle_(0.f)
 {
 	colFunc_[COL_ID::TEST_COL] = std::bind(&Actor::Test_Col, this, std::placeholders::_1);
 }
@@ -39,7 +40,7 @@ Matrix Actor::GetPose() const
 void Actor::SetPose(const Matrix& mat)
 {
 	parameter_.mat = mat;
-	position_ = parameter_.mat.Translation();
+	position_ = Vector2(parameter_.mat.Translation().x, parameter_.mat.Translation().y);
 }
 
 void Actor::OnUpdate()
@@ -75,7 +76,7 @@ CollisionParameter Actor::Test_Col(const Actor & other) const
 {
 	CollisionParameter colpara;
 	colpara.colID = COL_ID::TEST_COL;
-	colpara.colFrag = CollisionDX::Capsule_vs_Capsule(Capsule(GetParameter()), Capsule(other.GetParameter()));
+	//colpara.colFrag = CollisionDX::Capsule_vs_Capsule(Capsule(GetParameter()), Capsule(other.GetParameter()));
 
 	return colpara;
 }

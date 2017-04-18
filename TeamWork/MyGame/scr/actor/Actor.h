@@ -8,6 +8,7 @@
 #include "../world/IWorld.h"
 #include <functional>
 #include <map>
+#include"../math/Vector3.h"
 
 #include "DxLib.h"
 
@@ -39,6 +40,8 @@ public:
 	virtual void OnUpdate();
 	void CommonUpdate() {
 		prevPosition_ = position_;
+		Vector3 cmpos3d = Vector3(position_.x,position_.y,0)*world_->GetInv();
+		drawPos_ = Vector2(cmpos3d.x, cmpos3d.y);
 	}
 	// Ž©•ªŽæ“¾
 	Actor* GetActor() const;
@@ -46,6 +49,7 @@ public:
 	Actor* GetParent() const;
 
 	Vector2 GetPosition() const{
+
 		return position_;
 	}
 	Vector2 GetPrevPosition() const {
@@ -81,6 +85,8 @@ protected:
 	// ˆÊ’u
 	Vector2			position_;
 	Vector2			prevPosition_;
+
+	Vector2 drawPos_;
 	// ˆÚ“®—Ê
 	Vector2			velocity_;
 

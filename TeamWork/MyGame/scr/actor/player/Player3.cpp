@@ -15,7 +15,7 @@ Player3::Player3(IWorld * world)
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(5, 5, 0));
+		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	auto pos = parameter_.mat.Translation();
 }
@@ -80,7 +80,7 @@ void Player3::Draw() const
 	//DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
 
 	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = position_;
+	auto pos = drawPos_;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
 
 	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
@@ -101,8 +101,8 @@ void Player3::Draw() const
 	DrawCircle(pos.x, pos.y, 50, GetColor(255, 255, 255), false);
 
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
-	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
+	//DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
+	//DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
 
 	DrawFormatString(500, 120, GetColor(255, 255, 255), "rot_spd_ %f", rot_spd_);
 	DrawFormatString(500, 140, GetColor(255, 255, 255), "rot_ %f", rot_);

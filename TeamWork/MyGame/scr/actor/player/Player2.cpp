@@ -14,9 +14,11 @@ Player2::Player2(IWorld * world)
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(5,5,0));
+		* Matrix::CreateTranslation(Vector3(0,0,0));
 
 	auto pos = parameter_.mat.Translation();
+
+	position_ = Vector2(200, 0);
 }
 
 Player2::~Player2()
@@ -77,7 +79,7 @@ void Player2::Draw() const
 	//DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
 
 	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = position_;
+	auto pos = drawPos_;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
 
 	auto box1 = Vector3(- sizeVec.x, - sizeVec.y)*is;
@@ -97,7 +99,7 @@ void Player2::Draw() const
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
+	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
 	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
 
 }

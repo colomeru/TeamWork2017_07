@@ -176,7 +176,6 @@ bool Col_Segment_Segment(const Segment &seg1, const Segment &seg2,Vector2& inter
 
 	double R = 0;
 	double S = 0;
-	DrawFormatString(400, 400, GetColor(255, 255, 255), "%f", Segment_Segment_MinLength_Square(p1_start, p1_end, p2_start, p2_end));
 	if (Segment_Segment_MinLength_Square(p1_start, p1_end, p2_start, p2_end) <= 0.01f) {
 		CalcIntersectionPoint(Vector2(seg1start.x, seg1start.y), Vector2(seg1end.x, seg1end.y),
 			Vector2(seg2start.x, seg2start.y), Vector2(seg2end.x, seg2end.y), intersectPoint,R,S);

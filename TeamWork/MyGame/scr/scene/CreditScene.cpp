@@ -2,7 +2,7 @@
 #include "../time/Time.h"
 #include "../conv/DXConverter.h"
 
-#include "../actor/player/Player.h"
+#include "../actor/player/Player3.h"
 #include "../actor/enemy/Enemy.h"
 #include "../actor/stage/Stage.h"
 #include "../graphic/Model.h"
@@ -44,7 +44,7 @@ void CreditScene::Initialize()
 	Camera::GetInstance().Update();
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
-	//world_->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Player>(world_.get()));
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Player3>(world_.get()));
 	//world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<Enemy>(world_.get()));
 }
 
@@ -72,7 +72,7 @@ void CreditScene::Draw() const
 	DrawFormatString(0, 60, GetColor(255, 255, 255), "座標 x :%f y :%f", weight_pos_.x, weight_pos_.y);
 
 	DrawCircle(fulcrum_.x, fulcrum_.y, 10, GetColor(255, 0, 0), true);
-	DrawCircle(weight_pos_.x, weight_pos_.y, 50, GetColor(255, 255, 255), true);
+	//DrawCircle(weight_pos_.x, weight_pos_.y, 50, GetColor(255, 255, 255), true);
 
 	// 描画
 	world_->Draw();
@@ -102,7 +102,7 @@ Vector2 CreditScene::pendulum(Vector2 fulcrum, float length)
 {
 	Vector2 result_;										//結果(移動後)
 	Vector2 result_2;										//結果(移動前)
-	auto friction = 0.998f;									//摩擦
+	float friction = 0.998f;								//摩擦
 
 	//現在の重りの位置
 	weight_pos_.x = fulcrum.x + MathHelper::Cos(rot_) * length;

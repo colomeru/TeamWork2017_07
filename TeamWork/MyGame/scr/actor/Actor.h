@@ -40,9 +40,12 @@ public:
 	virtual void OnUpdate();
 	void CommonUpdate() {
 		prevPosition_ = position_;
-		Vector3 cmpos3d = Vector3(position_.x,position_.y,0)*world_->GetInv();
+	}
+	void LateUpdate() {
+		Vector3 cmpos3d = Vector3(position_.x, position_.y, 0)*world_->GetInv();
 		drawPos_ = Vector2(cmpos3d.x, cmpos3d.y);
 	}
+
 	// ©•ªæ“¾
 	Actor* GetActor() const;
 	// eæ“¾

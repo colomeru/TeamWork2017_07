@@ -1,30 +1,32 @@
-#include "Player3.h"
-#include "../../input/Keyboard.h"
-#include "../../conv/DXConverter.h"
-#include "../../graphic/Model.h"
-#include "../../math/MathHelper.h"
+#include "BaseClothes.h"
 
-Player3::Player3(IWorld * world)
+#include "../../../input/Keyboard.h"
+#include "../../../conv/DXConverter.h"
+#include "../../../graphic/Model.h"
+
+BaseClothes::BaseClothes(IWorld * world, Vector2 pos)
 	:Actor(world)
-	, isHit_(false), jumpVec(0), fulcrum_(500.0f, 200.0f), rot_(90.0f), rot_spd_(3.0f), length_(300.0f), gravity_(0.5f)
+	, isHit_(false), jumpVec(0)
 {
 	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
 	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(96.0f, 96.0f);
+	parameter_.size = Vector2(200, 200.f);
 	parameter_.HP = 10;
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
-	auto pos = parameter_.mat.Translation();
+	//auto pos = parameter_.mat.Translation();
+
+	position_ = pos;
 }
 
-Player3::~Player3()
+BaseClothes::~BaseClothes()
 {
 }
 
-void Player3::Update()
+void BaseClothes::Update()
 {
 	velocity_ = Vector2::Zero;
 	float speed = 0.0f;
@@ -32,25 +34,23 @@ void Player3::Update()
 	jumpVec -= 0.1f;
 	auto pos = parameter_.mat.Translation();
 
-	Pendulum(fulcrum_, length_);
-
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::UP)) {
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 		velocity_.y -= 1.0f;
 	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::DOWN)) {
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
 		velocity_.y += 1.0f;
 	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT)) {
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)) {
 		velocity_.x += 1.0f;
 	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT)) {
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) {
 		velocity_.x -= 1.0f;
 	}
 
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::X)) {
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::V)) {
 		angle_ -= 1.0f;
 	}
-	else if (Keyboard::GetInstance().KeyStateDown(KEYCODE::Z)) {
+	else if (Keyboard::GetInstance().KeyStateDown(KEYCODE::C)) {
 		angle_ += 1.0f;
 	}
 
@@ -73,7 +73,7 @@ void Player3::Update()
 
 }
 
-void Player3::Draw() const
+void BaseClothes::Draw() const
 {
 	//auto pos_1 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation());
 	//auto pos_2 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation() + Vector3(0, 10, 0));
@@ -98,61 +98,23 @@ void Player3::Draw() const
 	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	DrawCircle(pos.x, pos.y, 50, GetColor(255, 255, 255), false);
 
+	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-	//DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
-	//DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
-
-	DrawFormatString(500, 120, GetColor(255, 255, 255), "rot_spd_ %f", rot_spd_);
-	DrawFormatString(500, 140, GetColor(255, 255, 255), "rot_ %f", rot_);
+	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
+	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
 
 }
 
-void Player3::OnUpdate()
+void BaseClothes::OnUpdate()
 {
 }
 
-void Player3::OnCollide(Actor * other, CollisionParameter colpara)
+void BaseClothes::OnCollide(Actor * other, CollisionParameter colpara)
 {
 	isHit_ = true;
 }
 
-void Player3::OnMessage(EventMessage message, void * param)
+void BaseClothes::OnMessage(EventMessage message, void * param)
 {
-}
-
-void Player3::Pendulum(Vector2 fulcrum, float length)
-{
-	float friction = 0.998f;								//ñÄéC
-
-	//åªç›ÇÃèdÇËÇÃà íu
-	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
-	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
-
-	//èdóÕà⁄ìÆó ÇîΩâfÇµÇΩèdÇËÇÃà íu
-	auto length_vec = position_ - fulcrum;
-	auto t = -(length_vec.y * gravity_) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
-	auto move_weightX = position_.x + t * length_vec.x;
-	auto move_weightY = position_.y + gravity_ + t * length_vec.y;
-
-	//2Ç¬ÇÃèdÇËÇÃà íuÇÃäpìxç∑
-	auto r = MathHelper::ATan(move_weightY - fulcrum.y, move_weightX - fulcrum.x);
-
-	//äpìxç∑Çäpë¨ìxÇ…â¡éZ
-	auto sub = r - rot_;
-	sub -= std::floor(sub / 360.0f) * 360.0f;
-	if (sub < -180.0f) sub += 360.0f;
-	if (sub > 180.0f) sub -= 360.0f;
-	rot_spd_ += sub;
-
-	//ñÄéC
-	rot_ *= friction;
-
-	//äpìxÇ…äpë¨ìxÇâ¡éZ
-	rot_ += rot_spd_;
-
-	//êVÇµÇ¢èdÇËÇÃà íu
-	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
-	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
 }

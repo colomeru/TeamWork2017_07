@@ -8,6 +8,7 @@
 #include"../conv/DXConverter.h"
 #include"../actor/player/Player3.h"
 #include"../actor/player/Player2.h"
+#include"../actor/Field/Clothes/BaseClothes.h"
 #include"../actor/stage/Stage.h"
 
 #include"../myData/MyTestCamera.h"
@@ -54,6 +55,9 @@ void GamePlayScene::Initialize()
 	ply2 = std::make_shared<Player2>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, ply2);
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(),Vector2(500,200)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(850, 200)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(1200, 200)));
 
 	//–{”Ô—p
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));

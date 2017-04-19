@@ -9,7 +9,6 @@
 #include"../actor/player/Player3.h"
 #include"../actor/player/Player2.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
-#include"../actor/stage/Stage.h"
 
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"

@@ -17,6 +17,7 @@ public:
 	virtual void OnUpdate() override;
 	//衝突時のアクション
 	virtual void OnCollide(Actor& other, CollisionParameter colpara)override;
+	virtual void NonCollide(Actor& other, CollisionParameter colpara)override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 

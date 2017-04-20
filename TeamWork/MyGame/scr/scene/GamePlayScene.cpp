@@ -6,7 +6,7 @@
 #include "../actor/SampleActor.h"
 #include"../camera/Camera.h"
 #include"../conv/DXConverter.h"
-#include"../actor/player/Player3.h"
+#include"../actor/player/Player.h"
 #include"../actor/player/Player2.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
 
@@ -50,13 +50,17 @@ void GamePlayScene::Initialize()
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 	
-	ply1 = std::make_shared<Player3>(world_.get());
+	ply1 = std::make_shared<Player>(world_.get());
 	ply2 = std::make_shared<Player2>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, ply2);
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(),Vector2(500,200)));
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(850, 200)));
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(1200, 200)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(1600, 200)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(2200, 200)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(2800, 200)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), Vector2(3500, 200)));
 
 	//–{”Ô—p
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
@@ -97,16 +101,16 @@ void GamePlayScene::Draw() const
 
 	DrawFormatString(700, 600, GetColor(255, 255, 255), "%f", ply1->GetAngle());
 
-	CollisionParameter param= IsHit_OBB_Segment(*ply1->GetActor(), *ply2->GetActor());
-	if (param.colFrag) {
-		DrawFormatString(0, 500, GetColor(255, 255, 255), "%f:%f", param.colPos.x,param.colPos.y);
-		DrawCircle(param.colPos.x, param.colPos.y, 32, GetColor(255, 0, 0));
-	}
-	else
-	{
-		DrawFormatString(0, 500, GetColor(255, 255, 255), "dame");
+	//CollisionParameter param = MyCol::IsHit_OBB_Segment(*ply1->GetActor(), *ply2->GetActor());
+	//if (param.colFrag) {
+	//	DrawFormatString(0, 500, GetColor(255, 255, 255), "%f:%f", param.colPos.x,param.colPos.y);
+	//	DrawCircle(param.colPos.x, param.colPos.y, 32, GetColor(255, 0, 0));
+	//}
+	//else
+	//{
+	//	DrawFormatString(0, 500, GetColor(255, 255, 255), "dame");
 
-	}
+	//}
 	// •`‰æ
 	world_->Draw();
 

@@ -113,7 +113,7 @@ void Player3::OnUpdate()
 {
 }
 
-void Player3::OnCollide(Actor * other, CollisionParameter colpara)
+void Player3::OnCollide(Actor & other, CollisionParameter colpara)
 {
 	isHit_ = true;
 }

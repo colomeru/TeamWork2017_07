@@ -41,7 +41,8 @@ public:
 	void CommonUpdate() {
 		prevPosition_ = position_;
 	}
-	void LateUpdate() {
+
+	void LateComUpdate() {
 		Vector3 cmpos3d = Vector3(position_.x, position_.y, 0)*world_->GetInv();
 		drawPos_ = Vector2(cmpos3d.x, cmpos3d.y);
 	}
@@ -55,6 +56,9 @@ public:
 
 		return position_;
 	}
+	Vector2 GetDrawPos()const {
+		return drawPos_;
+	}
 	Vector2 GetPrevPosition() const {
 		return prevPosition_;
 	}
@@ -67,11 +71,23 @@ public:
 protected:
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara);
+	virtual void NonCollide(Actor& other, CollisionParameter colpara) {
+
+	}
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
 	CollisionParameter Test_Col(const Actor& other) const;
+
+	// スプライトの当たり判定（２次元のOBB vs OBB）
+	CollisionParameter IsHit_OBB_OBB(const Actor& sprite2);
+	CollisionParameter IsHit_OBB_Segment(const Actor& sprite2);
+	CollisionParameter IsHit_Segment_Segment(const Actor& sprite2);
+	CollisionParameter IsHit_Circle_Circle(const Actor& sprite2);
+	CollisionParameter IsHit_Circle_Segment(const Actor& sprite2);
+	CollisionParameter IsHit_OBB_Circle(const Actor& sprite2);
+	CollisionParameter IsHit_OBB_Clothes(const Actor & sprite2);
 
 	/* コピー禁止 */
 	Actor(const Actor& other) = delete;
@@ -96,5 +112,5 @@ protected:
 	float angle_;
 private:
 	// ファンクションマップ
-	std::map<COL_ID, std::function<CollisionParameter(const Actor&)>> colFunc_;
+	std::map<COL_ID, std::function<CollisionParameter(const Actor& sprite2)>> colFunc_;
 };

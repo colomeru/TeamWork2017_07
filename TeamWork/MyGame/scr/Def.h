@@ -3,12 +3,12 @@
 ///<summary>
 /// ウィンドウ横サイズ
 ///</summary>
-static const int WINDOW_WIDTH = 1280;
+static const int WINDOW_WIDTH = 1920;
 
 ///<summary>
 /// ウィンドウ縦サイズ
 ///</summary>
-static const int WINDOW_HEIGHT = 720;
+static const int WINDOW_HEIGHT = 1080;
 
 ///<summary>
 /// 画面色のビット深度

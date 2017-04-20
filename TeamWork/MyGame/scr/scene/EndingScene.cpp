@@ -60,10 +60,14 @@ void EndingScene::Initialize()
 	length = 150.0f;
 	g = 0.5f;
 	friction = 0.995f;
-	vec = 7;
-	len = 118.0f;
-	line1_Rot = -45.0f;
-	
+	vec = 0;
+	r = 32.0f;
+	len = length - r;
+	line1_Rot = -90.0f;
+	stageLen = 5000.0f;
+	meterLen = 800.0f;
+	meterPos = Vector2(200.0f, 100.0f);
+
 }
 
 void EndingScene::Update()
@@ -143,6 +147,7 @@ void EndingScene::Update()
 	{
 		cAlpha = 0.5f;
 	}
+
 	else
 	{
 		cAlpha = 1.0f;
@@ -187,7 +192,7 @@ void EndingScene::Update()
 	spherePos.x = px;
 	spherePos.y = py;
 
-	//
+	//äpìxí≤êÆ
 	rot2 = rot - 90.0f;
 
 	//line1
@@ -230,7 +235,7 @@ void EndingScene::Update()
 	line8_Pos_In.y = spherePos.y + MathHelper::Sin(line8_Rot + rot2) * 32.0f;
 	line8_Pos_Out.x = line8_Pos_In.x + MathHelper::Cos(line8_Rot + rot2) * len;
 	line8_Pos_Out.y = line8_Pos_In.y + MathHelper::Sin(line8_Rot + rot2) * len;
-
+	//äOë§ÇÃç¿ïWÇvectorÇ…äiî[
 	fulcrum = { line1_Pos_Out,
 		line2_Pos_Out ,
 		line3_Pos_Out ,
@@ -269,6 +274,7 @@ void EndingScene::Update()
 		fy = fulcrum[vec].y;
 		line1_Rot -= 45.0f;
 		rot += 45.0f;
+		turn = false;
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT))
 	{
@@ -278,6 +284,7 @@ void EndingScene::Update()
 		fy = fulcrum[vec].y;
 		line1_Rot += 45.0f;
 		rot -= 45.0f;
+		turn = true;
 	}
 	//line1_Rot = -45.0f;
 	line2_Rot = line1_Rot + 45.0f;
@@ -322,18 +329,20 @@ void EndingScene::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::CIRCLE_SPRITE, circlePos, cAlpha);
 
 	Sprite::GetInstance().Draw(SPRITE_ID::ARROW_SPRITE, arrowPos, aAlpha);
-	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, spherePos, Vector2(16, 32), Vector2::One, rot2 + line2_Rot);
-	DrawCircle(spherePos.x, spherePos.y, 32, GetColor(255, 255, 255), 0, 1);
-	DrawCircle(fx, fy, 16, GetColor(255, 0, 0), 0, 1); //éxì_
-	DrawLine(line1_Pos_In.x, line1_Pos_In.y, line1_Pos_Out.x, line1_Pos_Out.y, GetColor(0, 255, 0), 1);
-	DrawLine(line2_Pos_In.x, line2_Pos_In.y, line2_Pos_Out.x, line2_Pos_Out.y, GetColor(255, 0, 0), 1);
-	DrawLine(line3_Pos_In.x, line3_Pos_In.y, line3_Pos_Out.x, line3_Pos_Out.y, GetColor(0, 0, 255), 1);
-	DrawLine(line4_Pos_In.x, line4_Pos_In.y, line4_Pos_Out.x, line4_Pos_Out.y, GetColor(255, 255, 0), 1);
-	DrawLine(line5_Pos_In.x, line5_Pos_In.y, line5_Pos_Out.x, line5_Pos_Out.y, GetColor(255, 0, 255), 1);
-	DrawLine(line6_Pos_In.x, line6_Pos_In.y, line6_Pos_Out.x, line6_Pos_Out.y, GetColor(0, 255, 255), 1);
-	DrawLine(line7_Pos_In.x, line7_Pos_In.y, line7_Pos_Out.x, line7_Pos_Out.y, GetColor(255, 165, 0), 1);
-	DrawLine(line8_Pos_In.x, line8_Pos_In.y, line8_Pos_Out.x, line8_Pos_Out.y, GetColor(255, 255, 255), 1);
+	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, spherePos, Vector2(16, 32), Vector2::One, rot2 + line3_Rot);
+	DrawCircle(spherePos.x, spherePos.y, (int)r, GetColor(255, 255, 255), 0, 1);
+	DrawCircle(fx, fy, 16, GetColor(255, 0, 0), 0, 1); //éxì_Ç…â~Çï\é¶
+	DrawLine(line1_Pos_In.x, line1_Pos_In.y, line1_Pos_Out.x, line1_Pos_Out.y, GetColor(0, 255, 0), 1); //óŒ
+	DrawLine(line2_Pos_In.x, line2_Pos_In.y, line2_Pos_Out.x, line2_Pos_Out.y, GetColor(255, 0, 0), 1); //ê‘
+	DrawLine(line3_Pos_In.x, line3_Pos_In.y, line3_Pos_Out.x, line3_Pos_Out.y, GetColor(0, 0, 255), 1); //ê¬
+	DrawLine(line4_Pos_In.x, line4_Pos_In.y, line4_Pos_Out.x, line4_Pos_Out.y, GetColor(255, 255, 0), 1); //â©êF
+	DrawLine(line5_Pos_In.x, line5_Pos_In.y, line5_Pos_Out.x, line5_Pos_Out.y, GetColor(255, 0, 255), 1); //éá
+	DrawLine(line6_Pos_In.x, line6_Pos_In.y, line6_Pos_Out.x, line6_Pos_Out.y, GetColor(0, 255, 255), 1); //êÖêF
+	DrawLine(line7_Pos_In.x, line7_Pos_In.y, line7_Pos_Out.x, line7_Pos_Out.y, GetColor(255, 165, 0), 1); //ÉIÉåÉìÉW
+	DrawLine(line8_Pos_In.x, line8_Pos_In.y, line8_Pos_Out.x, line8_Pos_Out.y, GetColor(255, 255, 255), 1); //îí
 
+	DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
+	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
 
 }
 

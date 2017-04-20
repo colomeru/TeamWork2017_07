@@ -17,7 +17,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("circle.png", SPRITE_ID::CIRCLE_SPRITE);
 	sprite.Load("sphere.png", SPRITE_ID::SPHERE_SPRITE);
 	sprite.Load("êl.png", SPRITE_ID::HITO_SPRITE);
-
+	sprite.Load("snake.png", SPRITE_ID::SNAKE_SPRITE);
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ

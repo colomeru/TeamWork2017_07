@@ -165,6 +165,7 @@
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
     <ClCompile Include="scr\actor\player\Player3.cpp" />
+    <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
     <ClCompile Include="scr\collision\Collision.cpp" />
@@ -222,12 +223,14 @@
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />
     <ClInclude Include="scr\actor\player\Player3.h" />
+    <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
     <ClInclude Include="scr\AllInclude.h" />
     <ClInclude Include="scr\camera\Camera.h" />
     <ClInclude Include="scr\collision\Collision.h" />
     <ClInclude Include="scr\collision\CollisionDX.h" />
     <ClInclude Include="scr\collision\CollisionParameter.h" />
+    <ClInclude Include="scr\collision\MyCol.h" />
     <ClInclude Include="scr\Def.h" />
     <ClInclude Include="scr\conv\DXConverter.h" />
     <ClInclude Include="scr\fade\FadePanel.h" />
@@ -252,6 +255,7 @@
     <ClInclude Include="scr\math\Color.h" />
     <ClInclude Include="scr\math\MathHelper.h" />
     <ClInclude Include="scr\math\Matrix.h" />
+    <ClInclude Include="scr\math\MyFuncionList.h" />
     <ClInclude Include="scr\math\Point.h" />
     <ClInclude Include="scr\math\Quaternion.h" />
     <ClInclude Include="scr\math\Vector2.h" />

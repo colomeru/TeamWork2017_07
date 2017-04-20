@@ -16,6 +16,9 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, Vector2 pos)
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(-100.f, 100.f));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(	0.f, 100.f));
+	parameter_.ClothSegmentPoints_.push_back(Vector2( 100.f, 100.f));
 
 	//auto pos = parameter_.mat.Translation();
 

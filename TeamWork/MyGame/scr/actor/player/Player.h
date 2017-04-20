@@ -57,6 +57,7 @@ public:
 	int GetCurHead()const {
 		return currentHead_;
 	}
+	
 	void CurHeadBite(const Vector2& target) {
 		pGrav_ = defPGravPow;
 		Vector2 tpos = target - position_;
@@ -65,9 +66,12 @@ public:
 		rot_ = 90;
 		rot_spd_ = 3.0f;
 	}
+	//噛み付ける状態かを返す
 	bool GetIsBiteMode()const {
 		return isBiteMode_;
 	}
+	//Headのレーンを本体のレーンに合わせる
+	void SetMyHeadLaneNum(int targetNum);
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();

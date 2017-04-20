@@ -13,6 +13,8 @@ Player::Player(IWorld * world)
 	:Actor(world)
 	, isHit_(false), fulcrum_(500.0f, 200.0f), rot_(90.0f), rot_spd_(3.0f), length_(300.0f), gravity_(0.3f), currentHead_(0), headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(false), isNextPushKey_(true),pendulumVect_(Vector2::Zero)
 {
+	laneNum_ = 1;
+
 	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(96.0f, 96.0f);
@@ -36,6 +38,8 @@ Player::Player(IWorld * world)
 
 		pHeads_[i]=(std::make_shared<Player_Head>(world,this, pHeadPoses_[i],i));
 		world_->Add(ACTOR_ID::PLAYER_ACTOR,pHeads_[i]);
+
+		SetMyHeadLaneNum(i);
 	}
 
 }
@@ -203,6 +207,13 @@ void Player::HeadPosUpdate()
 
 }
 
+
+//Head‚ÌƒŒ[ƒ“‚ð–{‘Ì‚ÌƒŒ[ƒ“‚É‡‚í‚¹‚é
+
+void Player::SetMyHeadLaneNum(int targetNum) {
+		pHeads_[targetNum]->SetLaneNum(laneNum_);
+}
+
 void Player::PlayerInputControl()
 {
 	if (pHeads_[currentHead_]->getIsHit()) {
@@ -220,6 +231,13 @@ void Player::PlayerInputControl()
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT)) {
 		velocity_.x -= 20.0f;
 	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)) {
+		laneNum_++;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S)) {
+		laneNum_--;
+	}
+	MathHelper::Clamp(laneNum_,0, 2);
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z)&&!isBiteMode_) {
 		isShootMode_ = false;
 		isBiteMode_ = false;

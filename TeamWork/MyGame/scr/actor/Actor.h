@@ -65,15 +65,18 @@ public:
 	float GetAngle() const {
 		return angle_;
 	}
+	int GetLaneNum() const {
+		return laneNum_;
+	}
+	void SetLaneNum(int laneNum){
+		laneNum_= laneNum;
+	}
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
 
 protected:
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara);
-	virtual void NonCollide(Actor& other, CollisionParameter colpara) {
-
-	}
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param);
 
@@ -105,11 +108,13 @@ protected:
 	Vector2			position_;
 	Vector2			prevPosition_;
 
-	Vector2 drawPos_;
+	Vector2			drawPos_;
 	// 移動量
 	Vector2			velocity_;
 
-	float angle_;
+	int				laneNum_;
+
+	float			angle_;
 private:
 	// ファンクションマップ
 	std::map<COL_ID, std::function<CollisionParameter(const Actor& sprite2)>> colFunc_;

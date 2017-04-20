@@ -141,11 +141,6 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	player_->CurHeadBite(stopPos_);
 }
 
-void Player_Head::NonCollide(Actor & other, CollisionParameter colpara)
-{
-
-}
-
 void Player_Head::OnMessage(EventMessage message, void * param)
 {
 }

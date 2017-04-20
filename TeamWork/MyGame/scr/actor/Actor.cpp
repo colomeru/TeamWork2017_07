@@ -9,7 +9,8 @@ Actor::Actor(IWorld * world, Actor * parent) :
 	world_(world),
 	parent_(parent),
 	angle_(0.f),
-	position_(Vector2::Zero)
+	position_(Vector2::Zero),
+	laneNum_(0)
 {
 	colFunc_[COL_ID::TEST_COL] = std::bind(&Actor::IsHit_Circle_Circle,this,std::placeholders::_1);
 	colFunc_[COL_ID::BOX_SEGMENT_COL] = std::bind(&Actor::IsHit_OBB_Segment, this, std::placeholders::_1);
@@ -22,15 +23,13 @@ Actor::~Actor()
 
 void Actor::Collide(COL_ID id, Actor & other)
 {
+	if (laneNum_ != other.laneNum_)return;
+
 	CollisionParameter colpara = colFunc_[id](other);
 	if (colpara.colFrag)
 	{
 		OnCollide(other, colpara);
 		other.OnCollide(*this, colpara);
-	}
-	else {
-		NonCollide(other, colpara);
-		other.NonCollide(*this, colpara);
 	}
 }
 

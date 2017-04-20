@@ -1,7 +1,6 @@
 #pragma once
-
-#include "IStageGeneratePtr.h"
-#include "IStageGenerate.h"
+#include "StageGeneratorPtr.h"
+#include "StageGenerator.h"
 #include "Stage.h"
 #include <unordered_map>
 
@@ -11,10 +10,12 @@ public:
 	//コンストラクタ
 	StageGenerateManager();
 	//ステージの追加
-	void Add(Stage name, const IStageGeneratePtr& stage);
-	void SetStage(Stage name);
+	void Add(const Stage name, const StageGeneratorPtr& stage);
+	void SetStage(const Stage name);
 	//ステージの消去
 	void Clear();
+	//ステージサイズ取得
+	Vector2 GetStageSize(const Stage name);
 
 private:
 	//コピー禁止
@@ -23,5 +24,5 @@ private:
 
 private:
 	//ステージ
-	std::unordered_map<Stage, IStageGeneratePtr> stages;
+	std::unordered_map<Stage, StageGeneratorPtr> stages;
 };

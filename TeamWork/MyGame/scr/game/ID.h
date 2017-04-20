@@ -63,3 +63,10 @@ enum BGM_ID
 
 	END_BGM
 };
+
+// •žID
+enum CLOTHES_ID
+{
+	TEST_CLOTHES,
+	BASE_CLOTHES,
+};

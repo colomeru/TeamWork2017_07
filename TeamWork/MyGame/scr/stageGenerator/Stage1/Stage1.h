@@ -1,8 +1,7 @@
 #pragma once
+#include "../StageGenerator.h"
 
-#include "../IStageGenerate.h"
-
-class Stage1 : public IStageGenerate
+class Stage1 : public StageGenerator
 {
 public:
 	//コンストラクタ
@@ -13,4 +12,6 @@ public:
 	virtual void LoadStage() override;
 	//ステージ追加
 	virtual void AddStage() override;
+	//ステージサイズ取得
+	virtual Vector2 GetStageSize() const override;
 };

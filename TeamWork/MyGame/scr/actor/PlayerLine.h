@@ -32,5 +32,23 @@ private:
 	Vector2 line2_;
 	Vector2 head2_;
 
+	Vector2 line3_;
+	Vector2 head3_;
+
+	Vector2 line4_;
+	Vector2 head4_;
+
+	Vector2 line5_;
+	Vector2 head5_;
+	
+	Vector2 line6_;
+	Vector2 head6_;
+	
+	Vector2 line7_;
+	Vector2 head7_;
+	
+	Vector2 line8_;
+	Vector2 head8_;
+
 	Vector2 pos_;
 };

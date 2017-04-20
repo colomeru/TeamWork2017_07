@@ -6,7 +6,10 @@
 void ActorManager::Update()
 {
 	for (auto& actor : actorPtr)
+	{
+		actor->CommonUpdate();
 		actor->Update();
+	}
 }
 
 // •`‰æ

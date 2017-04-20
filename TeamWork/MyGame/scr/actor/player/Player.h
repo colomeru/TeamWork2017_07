@@ -20,8 +20,6 @@ public:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
-	//‰ñ“]Šp“x
-	float angle_;
 	//Õ“Ë‚µ‚Ä‚¢‚é‚©
 	bool isHit_;
 };

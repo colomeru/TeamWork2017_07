@@ -147,9 +147,6 @@
     <ClCompile Include="scr\actor\enemy\Enemy.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\actor\efect\Efect.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\actor\player\Player2.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -159,13 +156,19 @@
     <ClCompile Include="scr\actor\Field\Clothes\BaseClothes.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\stageGenerate\StageGenerateManager.cpp">
+    <ClCompile Include="scr\stageGenerator\Stage1\Stage1.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\stageGenerate\IStageGenerate.cpp">
+    <ClCompile Include="scr\stageGenerator\StageGenerator.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\stageGenerate\Stage1\Stage1.cpp">
+    <ClCompile Include="scr\stageGenerator\StageGeneratorManager.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\actor\Field\Clothes\Clothes.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\actor\player\Player_Head.cpp">
@@ -344,9 +347,6 @@
     <ClInclude Include="scr\actor\enemy\Enemy.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\actor\efect\Efect.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\actor\CameraAct\TPSCamera.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -359,19 +359,25 @@
     <ClInclude Include="scr\actor\Field\Clothes\BaseClothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\stageGenerate\IStageGenerate.h">
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage1.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\stageGenerate\IStageGeneratePtr.h">
+    <ClInclude Include="scr\stageGenerator\Stage.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\stageGenerate\StageGenerateManager.h">
+    <ClInclude Include="scr\stageGenerator\StageGenerator.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\stageGenerate\Stage.h">
+    <ClInclude Include="scr\stageGenerator\StageGeneratorPtr.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\stageGenerate\Stage1\Stage1.h">
+    <ClInclude Include="scr\stageGenerator\StageGeneratorManager.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\actor\Field\Clothes\Clothes.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\player\Player_Head.h">

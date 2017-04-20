@@ -1,4 +1,4 @@
-#include "StageGenerateManager.h"
+#include "StageGeneratorManager.h"
 
 //コンストラクタ
 StageGenerateManager::StageGenerateManager()
@@ -6,7 +6,7 @@ StageGenerateManager::StageGenerateManager()
 }
 
 //ステージの追加
-void StageGenerateManager::Add(Stage name, const IStageGeneratePtr & stage)
+void StageGenerateManager::Add(Stage name, const StageGeneratorPtr & stage)
 {
 	stages[name] = stage;
 }
@@ -21,4 +21,10 @@ void StageGenerateManager::SetStage(Stage name)
 void StageGenerateManager::Clear()
 {
 	stages.clear();
+}
+
+//ステージサイズ取得
+Vector2 StageGenerateManager::GetStageSize(const Stage name)
+{
+	return stages[name]->GetStageSize();
 }

@@ -4,11 +4,11 @@
 #include "../../../conv/DXConverter.h"
 #include "../../../graphic/Model.h"
 
-BaseClothes::BaseClothes(IWorld * world, Vector2 pos)
-	:Actor(world)
-	, isHit_(false), jumpVec(0)
+BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, Vector2 pos)
+	:Clothes(world, clothes)
 {
-	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
+	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
+	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(200, 200.f);
 	parameter_.HP = 10;
@@ -34,7 +34,6 @@ void BaseClothes::Update()
 	velocity_ = Vector2::Zero;
 	float speed = 0.0f;
 	isHit_ = false;
-	jumpVec -= 0.1f;
 	auto pos = parameter_.mat.Translation();
 
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {

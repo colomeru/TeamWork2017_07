@@ -3,7 +3,7 @@
 #include <map>
 #include"../actor/CameraAct/TPSCamera.h"
 
-class Player3;
+class Player;
 class Player2;
 
 class GamePlayScene : public IScene
@@ -35,7 +35,7 @@ private:
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
-	using Player3Ptr = std::shared_ptr<Player3>;
+	using PlayerPtr = std::shared_ptr<Player>;
 	using Player2Ptr = std::shared_ptr<Player2>;
 	// ワールド
 	WorldPtr		world_;
@@ -43,7 +43,7 @@ private:
 	// 次のシーン
 	Scene			nextScene_;
 
-	Player3Ptr ply1;
+	PlayerPtr ply1;
 	Player2Ptr ply2;
 
 	//Vector3 posit;

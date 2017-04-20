@@ -9,7 +9,7 @@ void ActorManager::Update()
 	{
 		actor->CommonUpdate();
 		actor->Update();
-		actor->LateUpdate();
+		actor->LateComUpdate();
 	}
 }
 

@@ -1,6 +1,8 @@
 #pragma once
 #include "../actor/ActorPtr.h"
 #include <functional>
+#include"../math/Matrix.h"
+#include"../math/Vector2.h"
 
 enum ACTOR_ID;
 enum COL_ID;
@@ -27,6 +29,12 @@ public:
 	// 指定グループのアクター数を取得
 	virtual int Count(ACTOR_ID id) const = 0;
 
+	virtual void inv(const Matrix& mat) = 0;
+	virtual Matrix InitializeInv(Vector2 position) = 0;
+	virtual Matrix GetInv() = 0;
+	virtual void SetScroolPos(const Vector2& pos) = 0;
+	//スクロール対象の設定
+	virtual void SetTarget(Actor* tgt) = 0;
 	// 操作アクターセット
 	virtual void PushStackActor(ActorPtr actor) = 0;
 	// 操作アクターポップ

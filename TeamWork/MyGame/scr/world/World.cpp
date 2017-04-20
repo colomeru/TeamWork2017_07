@@ -1,8 +1,9 @@
 #include "World.h"
 #include "../actor/Actor.h"
+#include"../math/Vector3.h"
 
 // コンストラクタ
-World::World()
+World::World():targetAct_(nullptr)
 {
 }
 
@@ -21,6 +22,13 @@ void World::Initialize()
 // 更新
 void World::Update()
 {
+	if (targetAct_ != nullptr) {
+		inv(targetMat_);
+		//targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
+		targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+		//*Matrix::CreateRotationZ(targetAct_->GetAngle());
+	}
+
 	actors_.Update();
 	
 	// 受動更新
@@ -35,6 +43,7 @@ void World::Update()
 // 描画
 void World::Draw() const
 {
+	DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
 	actors_.Draw();
 }
 
@@ -115,4 +124,62 @@ void World::PopStackActor()
 {
 	if (!manualStackActor_.empty())
 		manualStackActor_.pop();
+}
+
+void World::inv(const Matrix & mat)
+{
+	//1フレーム前の座標
+	mPrePos = Vector2(inv_.Translation().x, inv_.Translation().y);
+	//スクロールストップ処理
+	Matrix playerMat;
+	playerMat = mat;
+
+	//最大最小値の指定(マジックナンバー0,999999は後で消そう)
+	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, 0, 999999);
+	float clampPosY = MathHelper::Clamp((int)playerMat.Translation().y, 0, 999999);
+
+	//if (scrool.scroolJudge.x == 0)
+	//	clampPosX = playerScreenPos_.x;
+	//if (scrool.scroolJudge.y == 0)
+	//	clampPosY = playerScreenPos_.y;
+	playerMat.Translation(Vector3(clampPosX, clampPosY, 0.0f));
+
+	//行くべき位置を設定(matrix版)
+	resInv_ = Matrix::Invert(playerMat) *
+		Matrix::CreateTranslation(Vector3(playerScreenPos_.x, playerScreenPos_.y));
+	//行くべき位置を設定
+	Vector2 resPos = Vector2(resInv_.Translation().x, resInv_.Translation().y);
+	Vector2 pos = Vector2(inv_.Translation().x, inv_.Translation().y);
+
+	Spring(pos, resPos, velo, 0.2f);
+	//補正された移動マトリックス代入
+	inv_ = Matrix::CreateTranslation(Vector3(
+		pos.x,//*scrool.scroolJudge.x,
+		pos.y,//*scrool.scroolJudge.y,
+		0.0f));
+
+	//1フレーム後の座標
+	mCurPos = Vector2(inv_.Translation().x, inv_.Translation().y);
+	//移動量を計算
+	mVelo = mPrePos - mCurPos;
+	mVelo = Vector2(mVelo.x/**scrool.scroolJudge.x*/, mVelo.y /** scrool.scroolJudge.y*/);
+
+}
+Matrix World::InitializeInv(Vector2 position)
+{
+	//1フレーム前の座標
+	mPrePos = Vector2(inv_.Translation().x, inv_.Translation().y);
+	Matrix playerMat;
+	playerMat.Translation(Vector3(position.x, position.y, 0.0f));
+
+	inv_ = Matrix::Invert(playerMat) *
+		Matrix::CreateTranslation(Vector3(playerScreenPos_.x, playerScreenPos_.y));
+	resInv_ = Matrix::Invert(playerMat) *
+		Matrix::CreateTranslation(Vector3(playerScreenPos_.x, playerScreenPos_.y));
+
+	//1フレーム後の座標
+	mCurPos = Vector2(inv_.Translation().x, inv_.Translation().y);
+	//移動量を計算
+	//mVelo = mPrePos - mCurPos;
+	return inv_;
 }

@@ -158,6 +158,7 @@
   <ItemGroup>
     <ClCompile Include="scr\actor\Actor.cpp" />
     <ClCompile Include="scr\actor\ActorManager.cpp" />
+<<<<<<< HEAD
     <ClCompile Include="scr\actor\CameraAct\TPSCamera.cpp" />
     <ClCompile Include="scr\actor\efect\Efect.cpp" />
     <ClCompile Include="scr\actor\enemy\Enemy.cpp" />
@@ -165,8 +166,17 @@
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
     <ClCompile Include="scr\actor\player\Player3.cpp" />
+=======
+    <ClCompile Include="scr\actor\enemy\Enemy.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\BaseClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\Clothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp" />
+    <ClCompile Include="scr\actor\player\Player.cpp" />
+    <ClCompile Include="scr\actor\player\Player2.cpp" />
+    <ClCompile Include="scr\actor\player\Player3.cpp" />
+    <ClCompile Include="scr\actor\player\Player_Head.cpp" />
+>>>>>>> a04626199c7a9526bf6cc61f2ecba5eef0840ee9
     <ClCompile Include="scr\actor\SampleActor.cpp" />
-    <ClCompile Include="scr\actor\stage\Stage.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
     <ClCompile Include="scr\collision\Collision.cpp" />
     <ClCompile Include="scr\collision\CollisionDX.cpp" />
@@ -202,6 +212,9 @@
     <ClCompile Include="scr\scene\MenuScene.cpp" />
     <ClCompile Include="scr\scene\SceneManager.cpp" />
     <ClCompile Include="scr\scene\TitleScene.cpp" />
+    <ClCompile Include="scr\stageGenerator\StageGenerator.cpp" />
+    <ClCompile Include="scr\stageGenerator\Stage1\Stage1.cpp" />
+    <ClCompile Include="scr\stageGenerator\StageGeneratorManager.cpp" />
     <ClCompile Include="scr\time\FPS.cpp" />
     <ClCompile Include="scr\time\Time.cpp" />
     <ClCompile Include="scr\world\World.cpp" />
@@ -213,14 +226,22 @@
     <ClInclude Include="scr\actor\ActorParameter.h" />
     <ClInclude Include="scr\actor\ActorPtr.h" />
     <ClInclude Include="scr\actor\CameraAct\TPSCamera.h" />
-    <ClInclude Include="scr\actor\efect\Efect.h" />
     <ClInclude Include="scr\actor\enemy\Enemy.h" />
+<<<<<<< HEAD
     <ClInclude Include="scr\actor\PlayerLine.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />
     <ClInclude Include="scr\actor\player\Player3.h" />
+=======
+    <ClInclude Include="scr\actor\Field\Clothes\BaseClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\Clothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h" />
+    <ClInclude Include="scr\actor\player\Player.h" />
+    <ClInclude Include="scr\actor\player\Player2.h" />
+    <ClInclude Include="scr\actor\player\Player3.h" />
+    <ClInclude Include="scr\actor\player\Player_Head.h" />
+>>>>>>> a04626199c7a9526bf6cc61f2ecba5eef0840ee9
     <ClInclude Include="scr\actor\SampleActor.h" />
-    <ClInclude Include="scr\actor\stage\Stage.h" />
     <ClInclude Include="scr\AllInclude.h" />
     <ClInclude Include="scr\camera\Camera.h" />
     <ClInclude Include="scr\collision\Collision.h" />
@@ -251,6 +272,7 @@
     <ClInclude Include="scr\math\Color.h" />
     <ClInclude Include="scr\math\MathHelper.h" />
     <ClInclude Include="scr\math\Matrix.h" />
+    <ClInclude Include="scr\math\MyFuncionList.h" />
     <ClInclude Include="scr\math\Point.h" />
     <ClInclude Include="scr\math\Quaternion.h" />
     <ClInclude Include="scr\math\Vector2.h" />
@@ -266,6 +288,11 @@
     <ClInclude Include="scr\scene\SceneManager.h" />
     <ClInclude Include="scr\scene\IScenePtr.h" />
     <ClInclude Include="scr\scene\TitleScene.h" />
+    <ClInclude Include="scr\stageGenerator\StageGenerator.h" />
+    <ClInclude Include="scr\stageGenerator\StageGeneratorPtr.h" />
+    <ClInclude Include="scr\stageGenerator\Stage.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage1.h" />
+    <ClInclude Include="scr\stageGenerator\StageGeneratorManager.h" />
     <ClInclude Include="scr\time\FPS.h" />
     <ClInclude Include="scr\time\Time.h" />
     <ClInclude Include="scr\world\IWorld.h" />

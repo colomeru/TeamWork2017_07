@@ -51,11 +51,13 @@ void GamePlayScene::Initialize()
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 	
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test")));
-	stageGeneratorManager.SetStage(Stage::Stage1);
+	//stageGeneratorManager.SetStage(Stage::Stage1);
 	
 	
 	ply1 = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
+
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 1, Vector2(200, 100)));
 
 	//–{”Ô—p
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));

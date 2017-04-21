@@ -5,6 +5,8 @@
 #include"../math/Vector3.h"
 #include <stack>
 
+static const float defDrawLinePos[3] = { 0,0,0 };
+
 //World内で、アクター全員が取得出来るデータ
 struct KeepDatas {
 	//playerの現在のレーン

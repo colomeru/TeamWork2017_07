@@ -6,9 +6,9 @@ class DemoScene : public IScene
 {
 public:
 	// コンストラクタ
-	DemoScene() = default;
+	DemoScene();
 	// デストラクタ
-	~DemoScene() = default;
+	~DemoScene();
 
 	// 初期化
 	virtual void Initialize() override;
@@ -24,6 +24,8 @@ public:
 	virtual void End() override;
 
 private:
-	float fpsTimer = 0;
-	float fps = 0;
+	// 非同期読み込みコンテント数
+	float	maxLoadContentCount_;
+	// 読み込み中コンテント数
+	float	currentLoadCount_;
 };

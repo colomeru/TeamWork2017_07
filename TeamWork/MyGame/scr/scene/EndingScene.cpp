@@ -7,6 +7,9 @@
 #include <cmath>
 #include <math.h>
 #include "../math/MathHelper.h"
+#include "../stageGenerator/Stage1/Stage1.h"
+#include "../input//GamePad.h"
+#include "../game//Random.h"
 
 
 EndingScene::EndingScene() :
@@ -52,22 +55,30 @@ void EndingScene::Initialize()
 	particleSize = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE);
 	circleSize = Sprite::GetInstance().GetSize(SPRITE_ID::CIRCLE_SPRITE);
 
+	stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
+	stageManager.SetStage(Stage::Stage1);
+
 	//振り子
+	for (int i = 0; i < 8; i++)
+	{
+		neckLen[i] = Random::GetInstance().Range(50.0f, 200.0f);
+	}
+
 	fx = 200.0f;
 	fy = 100.0f;
 	rot = 0.0f;
 	rot_spd = 0.0f;
-	length = 150.0f;
+	r = 32.0f;
+	vec = 0;
+	length = neckLen[vec];
 	g = 0.5f;
 	friction = 0.995f;
 	vec = 0;
-	r = 32.0f;
-	len = length - r;
-	line1_Rot = -90.0f;
-	stageLen = 5000.0f;
+	lineRot[0] = -90.0f;
+	stageLen = stageManager.GetStageSize(Stage::Stage1).x;
 	meterLen = 800.0f;
 	meterPos = Vector2(200.0f, 100.0f);
-
+	
 }
 
 void EndingScene::Update()
@@ -78,10 +89,10 @@ void EndingScene::Update()
 	// 終了
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
-
 	Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
 	Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
 	Camera::GetInstance().Update();
+
 
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))
 	{
@@ -155,7 +166,6 @@ void EndingScene::Update()
 
 
 
-
 	//振り子
 	//現在の重りの位置
 	auto px = fx + MathHelper::Cos(rot) * length;
@@ -169,10 +179,10 @@ void EndingScene::Update()
 	auto gy = py + g + t * vy;
 
 	//２つの重りの位置の確度差
-	auto r = MathHelper::ATan(gy - fy, gx - fx);
+	auto rDiff = MathHelper::ATan(gy - fy, gx - fx);
 
 	//角度差を角速度に加算
-	auto sub = r - rot;
+	auto sub = rDiff - rot;
 	sub -= std::floor(sub / 360.0f) * 360.0f;
 	if (sub < -180.0f) sub += 360.0f;
 	if (sub > 180.0f) sub -= 360.0f;
@@ -195,63 +205,22 @@ void EndingScene::Update()
 	//角度調整
 	rot2 = rot - 90.0f;
 
-	//line1
-	line1_Pos_In.x = spherePos.x + MathHelper::Cos(line1_Rot + rot2) * 32.0f;
-	line1_Pos_In.y = spherePos.y + MathHelper::Sin(line1_Rot + rot2) * 32.0f;
-	line1_Pos_Out.x = line1_Pos_In.x + MathHelper::Cos(line1_Rot + rot2) * len;
-	line1_Pos_Out.y = line1_Pos_In.y + MathHelper::Sin(line1_Rot + rot2) * len;
-	//line2
-	line2_Pos_In.x = spherePos.x + MathHelper::Cos(line2_Rot + rot2) * 32.0f;
-	line2_Pos_In.y = spherePos.y + MathHelper::Sin(line2_Rot + rot2) * 32.0f;
-	line2_Pos_Out.x = line2_Pos_In.x + MathHelper::Cos(line2_Rot + rot2) * len;
-	line2_Pos_Out.y = line2_Pos_In.y + MathHelper::Sin(line2_Rot + rot2) * len;
-	//line3
-	line3_Pos_In.x = spherePos.x + MathHelper::Cos(line3_Rot + rot2) * 32.0f;
-	line3_Pos_In.y = spherePos.y + MathHelper::Sin(line3_Rot + rot2) * 32.0f;
-	line3_Pos_Out.x = line3_Pos_In.x + MathHelper::Cos(line3_Rot + rot2) * len;
-	line3_Pos_Out.y = line3_Pos_In.y + MathHelper::Sin(line3_Rot + rot2) * len;
-	//line4
-	line4_Pos_In.x = spherePos.x + MathHelper::Cos(line4_Rot + rot2) * 32.0f;
-	line4_Pos_In.y = spherePos.y + MathHelper::Sin(line4_Rot + rot2) * 32.0f;
-	line4_Pos_Out.x = line4_Pos_In.x + MathHelper::Cos(line4_Rot + rot2) * len;
-	line4_Pos_Out.y = line4_Pos_In.y + MathHelper::Sin(line4_Rot + rot2) * len;
-	//line5
-	line5_Pos_In.x = spherePos.x + MathHelper::Cos(line5_Rot + rot2) * 32.0f;
-	line5_Pos_In.y = spherePos.y + MathHelper::Sin(line5_Rot + rot2) * 32.0f;
-	line5_Pos_Out.x = line5_Pos_In.x + MathHelper::Cos(line5_Rot + rot2) * len;
-	line5_Pos_Out.y = line5_Pos_In.y + MathHelper::Sin(line5_Rot + rot2) * len;
-	//line6
-	line6_Pos_In.x = spherePos.x + MathHelper::Cos(line6_Rot + rot2) * 32.0f;
-	line6_Pos_In.y = spherePos.y + MathHelper::Sin(line6_Rot + rot2) * 32.0f;
-	line6_Pos_Out.x = line6_Pos_In.x + MathHelper::Cos(line6_Rot + rot2) * len;
-	line6_Pos_Out.y = line6_Pos_In.y + MathHelper::Sin(line6_Rot + rot2) * len;
-	//line7
-	line7_Pos_In.x = spherePos.x + MathHelper::Cos(line7_Rot + rot2) * 32.0f;
-	line7_Pos_In.y = spherePos.y + MathHelper::Sin(line7_Rot + rot2) * 32.0f;
-	line7_Pos_Out.x = line7_Pos_In.x + MathHelper::Cos(line7_Rot + rot2) * len;
-	line7_Pos_Out.y = line7_Pos_In.y + MathHelper::Sin(line7_Rot + rot2) * len;
-	//line8
-	line8_Pos_In.x = spherePos.x + MathHelper::Cos(line8_Rot + rot2) * 32.0f;
-	line8_Pos_In.y = spherePos.y + MathHelper::Sin(line8_Rot + rot2) * 32.0f;
-	line8_Pos_Out.x = line8_Pos_In.x + MathHelper::Cos(line8_Rot + rot2) * len;
-	line8_Pos_Out.y = line8_Pos_In.y + MathHelper::Sin(line8_Rot + rot2) * len;
-	//外側の座標をvectorに格納
-	fulcrum = { line1_Pos_Out,
-		line2_Pos_Out ,
-		line3_Pos_Out ,
-		line4_Pos_Out ,
-		line5_Pos_Out ,
-		line6_Pos_Out ,
-		line7_Pos_Out ,
-		line8_Pos_Out
-	};
+
+	for (int i = 0; i < 8; i++)
+	{
+		inPos[i].x = spherePos.x + MathHelper::Cos(lineRot[i] + rot2) * r;
+		inPos[i].y = spherePos.y + MathHelper::Sin(lineRot[i] + rot2) * r;
+		outPos[i].x = inPos[i].x + MathHelper::Cos(lineRot[i] + rot2) * (neckLen[i] - r);
+		outPos[i].y = inPos[i].y + MathHelper::Sin(lineRot[i] + rot2) * (neckLen[i] - r);
+		fulcrum[i] = outPos[i];
+	}
 
 	//circleの当たり判定
 	Vector2 absA = spherePos - arrowPos;
 	float distanceS = sqrt((absA.x * absA.x) + (absA.y * absA.y));
 	if (distanceS < 32.0f ||
-		rot_spd < 0 && Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT) ||
-		rot_spd > 0 && Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT))
+		rot_spd < 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::RIGHT)) ||
+		rot_spd > 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::LEFT)))
 	{
 		aAlpha = 0.5f; //circleに当たっていれば半透明
 		friction = 1.02f; //摩擦を減らす
@@ -261,39 +230,77 @@ void EndingScene::Update()
 		aAlpha = 1.0f; //circleに当たっていなければ不透明
 		friction = 0.98f;
 	}
+
 	//スピード制限
 	if (rot_spd > 4.0f) rot_spd = 4.0f;
 	if (rot_spd < -4.0f) rot_spd = -4.0f;
 
 	//支点を移動
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT))
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) || 
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
 	{
 		vec += 1;
 		if (vec > 7) vec = 0;
+		length = neckLen[vec];
 		fx = fulcrum[vec].x;
 		fy = fulcrum[vec].y;
-		line1_Rot -= 45.0f;
+		lineRot[0] -= 45.0f;
 		rot += 45.0f;
 		turn = false;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT))
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) || 
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
 	{
 		vec -= 1;
 		if (vec < 0) vec = 7;
+		length = neckLen[vec];
 		fx = fulcrum[vec].x;
 		fy = fulcrum[vec].y;
-		line1_Rot += 45.0f;
+		lineRot[0] += 45.0f;
 		rot -= 45.0f;
 		turn = true;
 	}
-	//line1_Rot = -45.0f;
-	line2_Rot = line1_Rot + 45.0f;
-	line3_Rot = line2_Rot + 45.0f;
-	line4_Rot = line3_Rot + 45.0f;
-	line5_Rot = line4_Rot + 45.0f;
-	line6_Rot = line5_Rot + 45.0f;
-	line7_Rot = line6_Rot + 45.0f;
-	line8_Rot = line7_Rot + 45.0f;
+
+	for (int i = 1; i < 8; i++)
+	{
+		lineRot[i] = lineRot[i - 1] + 45.0f;
+	}
+
+	//お試し
+	if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6))
+	{
+		if (vec == 7)
+		{
+			if (neckLen[vec - 1] <= r + 20.0f) return;
+			neckLen[0] += 5.0f;
+			neckLen[vec - 1] -= 5.0f;
+		}
+		else
+		{
+			if ((vec != 0 && neckLen[vec - 1] <= r + 20.0f) || (vec == 0 && neckLen[7] <= r + 20.0f)) return;
+			neckLen[vec + 1] += 5.0f;
+			if (vec == 0) neckLen[7] -= 5.0f;
+			else neckLen[vec - 1] -= 5.0f;
+			//neckLen[vec - 1, 7] = MathHelper::Clamp(neckLen[vec - 1,7], 0.0f, 500.0f);
+		}
+	}
+	else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM5))
+	{
+		if (vec == 0)
+		{
+			if (neckLen[vec + 1] <= r + 20.0f) return;
+			neckLen[7] += 5.0f;
+			neckLen[vec + 1] += 5.0f;
+		}
+		else
+		{
+			if ((vec != 7 && neckLen[vec + 1] <= r + 20.0f) || (vec == 7 && neckLen[0] <= r + 20.0f)) return;
+			neckLen[vec - 1] += 5.0f;
+			if (vec == 7) neckLen[0] -= 5.0f;
+			else neckLen[vec + 1] -= 5.0f;
+			//neckLen[vec + 1, 0] = MathHelper::Clamp(neckLen[vec + 1,0], 20.0f, 500.0f);
+		}
+	}
 
 }
 
@@ -309,6 +316,13 @@ void EndingScene::Draw() const
 	DrawFormatString(0, 140, GetColor(255, 255, 255), "friction:%f", friction);
 	DrawFormatString(0, 160, GetColor(255, 255, 255), "line1_Rot:%f", line1_Rot);
 	DrawFormatString(0, 180, GetColor(255, 255, 255), "vec:%d", vec);
+	DrawFormatString(0, 180, GetColor(255, 255, 255), "spherePos x:%f y:%f", spherePos.x, spherePos.y);
+	for (int i = 0; i < 8; i++)
+	{
+		DrawFormatString(0, 200 + 20 * i, GetColor(255, 255, 255), "neckLen%d:%f", i,neckLen[i]);
+	}
+	DrawFormatString(0, 360, GetColor(255, 255, 255), "r:%f", r);
+
 
 
 	// 描画
@@ -329,17 +343,17 @@ void EndingScene::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::CIRCLE_SPRITE, circlePos, cAlpha);
 
 	Sprite::GetInstance().Draw(SPRITE_ID::ARROW_SPRITE, arrowPos, aAlpha);
-	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, spherePos, Vector2(16, 32), Vector2::One, rot2 + line3_Rot);
+	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, spherePos, Vector2(16, 32), Vector2::One, rot2 + lineRot[2]);
 	DrawCircle(spherePos.x, spherePos.y, (int)r, GetColor(255, 255, 255), 0, 1);
 	DrawCircle(fx, fy, 16, GetColor(255, 0, 0), 0, 1); //支点に円を表示
-	DrawLine(line1_Pos_In.x, line1_Pos_In.y, line1_Pos_Out.x, line1_Pos_Out.y, GetColor(0, 255, 0), 1); //緑
-	DrawLine(line2_Pos_In.x, line2_Pos_In.y, line2_Pos_Out.x, line2_Pos_Out.y, GetColor(255, 0, 0), 1); //赤
-	DrawLine(line3_Pos_In.x, line3_Pos_In.y, line3_Pos_Out.x, line3_Pos_Out.y, GetColor(0, 0, 255), 1); //青
-	DrawLine(line4_Pos_In.x, line4_Pos_In.y, line4_Pos_Out.x, line4_Pos_Out.y, GetColor(255, 255, 0), 1); //黄色
-	DrawLine(line5_Pos_In.x, line5_Pos_In.y, line5_Pos_Out.x, line5_Pos_Out.y, GetColor(255, 0, 255), 1); //紫
-	DrawLine(line6_Pos_In.x, line6_Pos_In.y, line6_Pos_Out.x, line6_Pos_Out.y, GetColor(0, 255, 255), 1); //水色
-	DrawLine(line7_Pos_In.x, line7_Pos_In.y, line7_Pos_Out.x, line7_Pos_Out.y, GetColor(255, 165, 0), 1); //オレンジ
-	DrawLine(line8_Pos_In.x, line8_Pos_In.y, line8_Pos_Out.x, line8_Pos_Out.y, GetColor(255, 255, 255), 1); //白
+	DrawLine(inPos[0].x, inPos[0].y, outPos[0].x, outPos[0].y, GetColor(0, 255, 0), 1); //緑
+	DrawLine(inPos[1].x, inPos[1].y, outPos[1].x, outPos[1].y, GetColor(255, 0, 0), 1); //赤
+	DrawLine(inPos[2].x, inPos[2].y, outPos[2].x, outPos[2].y, GetColor(0, 0, 255), 1); //青
+	DrawLine(inPos[3].x, inPos[3].y, outPos[3].x, outPos[3].y, GetColor(255, 255, 0), 1); //黄色
+	DrawLine(inPos[4].x, inPos[4].y, outPos[4].x, outPos[4].y, GetColor(255, 0, 255), 1); //紫
+	DrawLine(inPos[5].x, inPos[5].y, outPos[5].x, outPos[5].y, GetColor(0, 255, 255), 1); //水色
+	DrawLine(inPos[6].x, inPos[6].y, outPos[6].x, outPos[6].y, GetColor(255, 165, 0), 1); //オレンジ
+	DrawLine(inPos[7].x, inPos[7].y, outPos[7].x, outPos[7].y, GetColor(255, 255, 255), 1); //白
 
 	DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);

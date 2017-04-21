@@ -10,6 +10,7 @@
 #include "../graphic/Anime.h"
 #include "../graphic/Model.h"
 #include "../graphic/Sprite.h"
+#include "../input//GamePad.h"
 
 void Game1::Initialize()
 {
@@ -45,6 +46,7 @@ void Game1::Update()
 
 	// 入力を更新
 	Keyboard::GetInstance().Update();
+	GamePad::GetInstance().Update();
 
 	// Escキー入力で強制終了
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::ESC))

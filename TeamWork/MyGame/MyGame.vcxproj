@@ -186,6 +186,7 @@
     <ClCompile Include="scr\graphic\Sprite.cpp" />
     <ClCompile Include="scr\graphic\TextDraw.cpp" />
     <ClCompile Include="scr\input\CsvReader.cpp" />
+    <ClCompile Include="scr\input\GamePad.cpp" />
     <ClCompile Include="scr\input\Keyboard.cpp" />
     <ClCompile Include="scr\main.cpp" />
     <ClCompile Include="scr\math\Color.cpp" />
@@ -251,6 +252,7 @@
     <ClInclude Include="scr\graphic\Sprite.h" />
     <ClInclude Include="scr\graphic\TextDraw.h" />
     <ClInclude Include="scr\input\CsvReader.h" />
+    <ClInclude Include="scr\input\GamePad.h" />
     <ClInclude Include="scr\input\Keyboard.h" />
     <ClInclude Include="scr\math\Color.h" />
     <ClInclude Include="scr\math\MathHelper.h" />

@@ -3,6 +3,8 @@
 #include <map>
 #include "../math/Vector2.h"
 #include <vector>
+#include <array>
+#include "../stageGenerator/StageGeneratorManager.h"
 
 using namespace std;
 
@@ -96,8 +98,13 @@ private:
 	float stageLen; //ステージの長さ
 	float meterLen; //進行度メーターの長さ
 	Vector2 meterPos; //進行度メーターの位置
+	StageGenerateManager stageManager;
 	
-	vector<Vector2> fulcrum;
+	std::array<Vector2,8> fulcrum; //支点
+	std::array<Vector2, 8> inPos; //内側
+	std::array<Vector2, 8> outPos; //外側
+	std::array<float, 8> lineRot; //それぞれの首の角度
+	std::array<float, 8> neckLen; //それぞれの首の長さ
 	int vec;
 
 private:

@@ -14,7 +14,7 @@ static const float defJumpShotPower = 1.f;
 Player::Player(IWorld * world)
 	:Actor(world),
 	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.3f), currentHead_(0),
-	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(false), isNextPushKey_(true),
+	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(0), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false)
 {
 	laneNum_ = 1;
@@ -142,8 +142,8 @@ void Player::Draw() const
 	DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
 	DrawFormatString(0, 100, GetColor(255, 255, 255), "%d",laneNum_);
-	//if (isBiteMode_)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
-	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
+	if (isShootMode_>=1)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
+	else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
 	DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
 
 	for (auto sgT : pHeads_) {
@@ -255,8 +255,13 @@ inline void Player::worldSetMyDatas() {
 void Player::PlayerInputControl()
 {
 	//if (pHeads_[currentHead_]->getIsHit()) {
-	if (isBiteMode_) {
-		//Pendulum(pHeadPoses_[currentHead_]+(pHeadPoses_[currentHead_] - pHeads_[currentHead_]->GetPosition()), length_);
+	//if (isBiteMode_&&pHeads_[currentHead_]->getIsHit()) {
+	if (pHeads_[currentHead_]->getIsHit()) {
+		OutputDebugString(std::to_string(pHeads_[currentHead_]->GetPosition().x).c_str());
+		OutputDebugString(":");
+		OutputDebugString(std::to_string(pHeads_[currentHead_]->GetPosition().y).c_str());
+		OutputDebugString("\n");
+		//Pendulum(pHeadPoses_[currentHead_]+(pHeads_[currentHead_]->GetPosition()- pHeadPoses_[currentHead_]), length_);
 		Pendulum(pHeads_[currentHead_]->GetPosition(), length_);
 	}
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::UP)) {
@@ -286,49 +291,73 @@ void Player::PlayerInputControl()
 
 	SetAllHeadLaneNum();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z)&&!isBiteMode_) {
-		isShootMode_ = false;
+		isShootMode_ = 0;
 		isBiteMode_ = false;
 		//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
 		PHeadLengthReset();
 		changeHead();
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::X) && !isBiteMode_) {
-		isShootMode_ = false;
+		isShootMode_ = 0;
 		isBiteMode_ = false;
 		//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
 		PHeadLengthReset();
 		backChangeHead();
 	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
-		if (!isBiteMode_&&isNextPushKey_) {
-			isShootMode_ = true;
 
-			CurPHeadLengPlus(headShotPower);
-		}
-		isBiteMode_ = false;
-	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-		if (pHeads_[currentHead_]->getIsHit()) {
-			isShootMode_ = false;
-			//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
+		isNextPushKey_ = true;
+		if (!isBiteMode_&&isNextPushKey_) {
+			isShootMode_ = 1;
 			isNextPushKey_ = false;
+		}
+		if (isBiteMode_) {
+			isBiteMode_ = false;
 			PHeadLengthReset();
 			//êŠ‚ð–ß‚µ‚Ä‚©‚çHead‚ðŒð‘ã‚·‚é
 			changeHead();
 		}
-		else {
-			isNextPushKey_ = true;
-			isShootMode_ = false;
-		}
 	}
-	if(!Keyboard::GetInstance().KeyStateDown(KEYCODE::M)){
-		if (isShootMode_) {
-			if (pHeads_[currentHead_]->getIsBitePoint()) {
-				isBiteMode_ = true;
-			}
-		}
-		isShootMode_ = false;
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+		if(!isBiteMode_&&isShootMode_==1)CurPHeadLengPlus(headShotPower);
 	}
+	else if(Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M)){
+		isShootMode_ = 2;
+	}
+	else {
+		isShootMode_ = 0;
+	}
+	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+	//	if (!isBiteMode_)isShootMode_ = true;
+	//	if (!isBiteMode_&&isNextPushKey_) {
+	//		isShootMode_ = true;
+
+	//		CurPHeadLengPlus(headShotPower);
+	//	}
+	//	isBiteMode_ = false;
+	//}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+	//	if (pHeads_[currentHead_]->getIsHit()) {
+	//		isShootMode_ = false;
+	//		//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
+	//		isNextPushKey_ = false;
+	//		PHeadLengthReset();
+	//		//êŠ‚ð–ß‚µ‚Ä‚©‚çHead‚ðŒð‘ã‚·‚é
+	//		changeHead();
+	//	}
+	//	else {
+	//		isNextPushKey_ = true;
+	//		isShootMode_ = false;
+	//	}
+	//}
+	//if(!Keyboard::GetInstance().KeyStateDown(KEYCODE::M)){
+	//	if (isShootMode_) {
+	//		if (pHeads_[currentHead_]->getIsBitePoint()) {
+	//			//isBiteMode_ = true;
+	//		}
+	//	}
+	//	//isShootMode_ = false;
+	//}
 
 }
 

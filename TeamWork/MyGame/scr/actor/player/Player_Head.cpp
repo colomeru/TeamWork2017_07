@@ -31,17 +31,18 @@ Player_Head::~Player_Head()
 
 void Player_Head::Update()
 {
-	if(player_->GetIsBiteMode()&&player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f,1- player_->GetSlipCount()/ defSlipCount);
-	else{
-		fatigueCheckColor_ -=2;
+	if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
+	else {
+		fatigueCheckColor_ -= 2;
 		fatigueCheckColor_ = max(fatigueCheckColor_, 0);
 	}
 	//Vector2 posAddP = position_;
-
+	{
 	if (!isHitOnce) {
 		isBitePoint_ = false;
 	}
 	isHitOnce = false;
+	}
 	auto basePos = player_->GetHeadPos(myNumber_);
 	Vector2 vel = basePos-player_->GetPosition();
 
@@ -76,7 +77,7 @@ void Player_Head::Update()
 	//position_ += velocity_;
 	//parameter_.mat.Translation(pos);
 	if (player_->GetCurHead() == myNumber_) {
-		if (isHit_&&player_->GetIsBiteMode()) {
+		if (isHit_) {
 			position_ = stopPos_;
 		}
 		//else if (player_->GetIsSlipped()) {
@@ -126,7 +127,8 @@ void Player_Head::Draw() const
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
 	if (myNumber_ == player_->GetCurHead())DrawFormatString(300, 700, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", angle_);
-	if(myNumber_==player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
+	if (myNumber_ == player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
+	if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
 
 }
 
@@ -138,7 +140,7 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
 	isBitePoint_ = true;
 	isHitOnce = true;
-	if (player_->GetCurHead()!=myNumber_||isHit_|| !player_->GetIsBiteMode())return;
+	if (player_->GetCurHead()!=myNumber_||isHit_|| player_->GetIsShootMode()!=2)return;
 
 	isHit_ = true;
 	isBitePoint_ = false;

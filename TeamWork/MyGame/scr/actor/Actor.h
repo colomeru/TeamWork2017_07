@@ -39,10 +39,15 @@ public:
 	virtual void SetPose(const Matrix& mat);
 	// Žó“®XV
 	virtual void OnUpdate();
+	virtual void FastUpdate() {
+
+	}
+	virtual void LateUpdate() {
+
+	}
 	void CommonUpdate() {
 		prevPosition_ = position_;
 	}
-
 	void LateComUpdate() {
 		Vector3 cmpos3d = Vector3(position_.x, position_.y, 0)*world_->GetInv();
 		drawPos_ = Vector2(cmpos3d.x, cmpos3d.y);

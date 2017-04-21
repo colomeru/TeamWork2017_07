@@ -7,8 +7,10 @@ void ActorManager::Update()
 {
 	for (auto& actor : actorPtr)
 	{
+		actor->FastUpdate();
 		actor->CommonUpdate();
 		actor->Update();
+		actor->LateUpdate();
 		actor->LateComUpdate();
 	}
 }

@@ -10,8 +10,10 @@
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
 Player::Player(IWorld * world)
-	:Actor(world)
-	, isHit_(false), fulcrum_(500.0f, 200.0f), rot_(90.0f), rot_spd_(3.0f), length_(300.0f), gravity_(0.3f), currentHead_(0), headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(false), isNextPushKey_(true),pendulumVect_(Vector2::Zero)
+	:Actor(world),
+	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.3f), currentHead_(0),
+	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(false), isNextPushKey_(true),
+	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount)
 {
 	laneNum_ = 1;
 
@@ -41,7 +43,7 @@ Player::Player(IWorld * world)
 
 		SetMyHeadLaneNum(i);
 	}
-
+	worldSetMyDatas();
 }
 
 Player::~Player()
@@ -86,6 +88,12 @@ void Player::Update()
 	parameter_.mat.Translation(pos);
 
 	HeadPosUpdate();
+
+
+	if (isBiteMode_) {
+		slipCount_ -= 0.016f;
+		slipCount_ = max(slipCount_,0.f);
+	}
 }
 
 void Player::Draw() const
@@ -120,8 +128,7 @@ void Player::Draw() const
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
 	DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
-	if (isBiteMode_)DrawFormatString(0, 100, GetColor(255, 255, 255), "curH %f", rotTimer);
-	else DrawFormatString(0, 100, GetColor(255, 255, 255), "curH");
+	DrawFormatString(0, 100, GetColor(255, 255, 255), "%d",laneNum_);
 
 
 	for (auto sgT : pHeads_) {
@@ -214,6 +221,19 @@ void Player::SetMyHeadLaneNum(int targetNum) {
 		pHeads_[targetNum]->SetLaneNum(laneNum_);
 }
 
+inline void Player::SetAllHeadLaneNum() {
+	for (auto& pHs : pHeads_)
+	{
+		pHs->SetLaneNum(laneNum_);
+	}
+}
+
+inline void Player::worldSetMyDatas() {
+	//共有データに、自身の現レーン位置を保存
+	//world_->SetKeepDatas(KeepDatas(laneNum_));
+	world_->GetKeepDatas().SetPlayerLane(laneNum_);
+}
+
 void Player::PlayerInputControl()
 {
 	if (pHeads_[currentHead_]->getIsHit()) {
@@ -232,12 +252,12 @@ void Player::PlayerInputControl()
 		velocity_.x -= 20.0f;
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)) {
-		laneNum_++;
+		UpdateLaneNum(1);
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S)) {
-		laneNum_--;
+		UpdateLaneNum(-1);
 	}
-	MathHelper::Clamp(laneNum_,0, 2);
+	SetAllHeadLaneNum();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z)&&!isBiteMode_) {
 		isShootMode_ = false;
 		isBiteMode_ = false;

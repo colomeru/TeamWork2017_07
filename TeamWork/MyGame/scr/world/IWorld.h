@@ -7,6 +7,7 @@
 enum ACTOR_ID;
 enum COL_ID;
 enum class EventMessage;
+struct KeepDatas;
 
 // ワールドインターフェース
 class IWorld
@@ -39,4 +40,8 @@ public:
 	virtual void PushStackActor(ActorPtr actor) = 0;
 	// 操作アクターポップ
 	virtual void PopStackActor() = 0;
+
+	virtual void SetKeepDatas(KeepDatas data) = 0;
+	virtual KeepDatas& GetKeepDatas() = 0;
+	virtual KeepDatas GetCanChangedKeepDatas() const = 0;
 };

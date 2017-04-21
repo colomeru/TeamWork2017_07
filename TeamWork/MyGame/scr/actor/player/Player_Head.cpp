@@ -45,7 +45,7 @@ void Player_Head::Update()
 	
 	
 	//Ž©•ª,‘ŠŽè‚ÌID,Col‚ÌŽí—Þ
-	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
+	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
 	
 	//velocity_ = Vector2::Zero;
 	//float speed = 0.0f;
@@ -115,13 +115,6 @@ void Player_Head::Draw() const
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", angle_);
 	DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
 
-	if (isBitePoint_) {
-		DrawFormatString(400, 400, GetColor(255, 255, 255), "true");
-	}
-	else{
-		DrawFormatString(400, 400, GetColor(255, 255, 255), "false");
-
-	}
 }
 
 void Player_Head::OnUpdate()

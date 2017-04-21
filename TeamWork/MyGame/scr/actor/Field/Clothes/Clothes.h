@@ -6,7 +6,7 @@ class Clothes : public Actor
 {
 public:
 	//コンストラクタ
-	Clothes(IWorld* world, CLOTHES_ID clothes);
+	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum);
 	//仮想デストラクタ
 	virtual ~Clothes() = default;
 	//更新

@@ -4,8 +4,8 @@
 #include "../../../conv/DXConverter.h"
 #include "../../../graphic/Model.h"
 
-BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, Vector2 pos)
-	:Clothes(world, clothes)
+BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -19,6 +19,8 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, Vector2 pos)
 	parameter_.ClothSegmentPoints_.push_back(Vector2(-100.f, 100.f));
 	parameter_.ClothSegmentPoints_.push_back(Vector2(	0.f, 100.f));
 	parameter_.ClothSegmentPoints_.push_back(Vector2( 100.f, 100.f));
+
+	laneNum_ = laneNum;
 
 	//auto pos = parameter_.mat.Translation();
 

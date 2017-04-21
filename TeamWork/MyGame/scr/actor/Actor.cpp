@@ -14,7 +14,8 @@ Actor::Actor(IWorld * world, Actor * parent) :
 {
 	colFunc_[COL_ID::TEST_COL] = std::bind(&Actor::IsHit_Circle_Circle,this,std::placeholders::_1);
 	colFunc_[COL_ID::BOX_SEGMENT_COL] = std::bind(&Actor::IsHit_OBB_Segment, this, std::placeholders::_1);
-	colFunc_[COL_ID::BOX_CLOTHES_COL] = std::bind(&Actor::IsHit_OBB_Clothes,this,std::placeholders::_1);
+	colFunc_[COL_ID::BOX_CLOTHES_COL] = std::bind(&Actor::IsHit_OBB_Clothes, this, std::placeholders::_1);
+	colFunc_[COL_ID::BOX_BOX_COL] = std::bind(&Actor::IsHit_OBB_OBB, this, std::placeholders::_1);
 }
 
 Actor::~Actor()

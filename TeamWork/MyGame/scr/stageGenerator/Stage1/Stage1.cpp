@@ -35,10 +35,10 @@ void Stage1::AddStage()
 			switch (data)
 			{
 			case 1:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_, CLOTHES_ID::BASE_CLOTHES, Vector2(j, i) * 32));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_, CLOTHES_ID::BASE_CLOTHES, 0, Vector2(j, i) * 32));
 				break;
 			case 2:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, Vector2(j, i) * 32));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, 0, Vector2(j, i) * 32));
 				break;
 			default:
 				break;

@@ -9,6 +9,7 @@
 #include <functional>
 #include <map>
 #include"../math/Vector3.h"
+#include"../world/World.h"
 
 #include "DxLib.h"
 

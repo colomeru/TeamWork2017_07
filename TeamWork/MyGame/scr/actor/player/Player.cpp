@@ -9,11 +9,13 @@
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
+static const float defJumpShotPower = 1.f;
+
 Player::Player(IWorld * world)
 	:Actor(world),
 	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.3f), currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(false), isNextPushKey_(true),
-	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount)
+	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false)
 {
 	laneNum_ = 1;
 
@@ -55,7 +57,8 @@ void Player::Update()
 	pendulumVect_ -= pendulumVect_*0.05f;
 
 	length_ = Vector2::Distance(pHeads_[currentHead_]->GetPosition(), position_);
-	if(!pHeads_[currentHead_]->getIsHit())pGrav_+= defPGravPow;
+	//if(!pHeads_[currentHead_]->getIsHit())pGrav_+= defPGravPow;
+	if (!isBiteMode_)pGrav_ += defPGravPow;
 	velocity_ = Vector2::Zero;
 	isHit_ = false;
 	auto pos = parameter_.mat.Translation();
@@ -84,7 +87,11 @@ void Player::Update()
 
 	//if (pos.y < 0)pos.y = 0;
 
-	position_ += velocity_+ pendulumVect_;
+	if (!isBiteMode_) {
+		position_ += velocity_ + pendulumVect_;
+
+		slipCount_ = defSlipCount;
+	}
 	parameter_.mat.Translation(pos);
 
 	HeadPosUpdate();
@@ -92,6 +99,12 @@ void Player::Update()
 
 	if (isBiteMode_) {
 		slipCount_ -= 0.016f;
+		if (slipCount_ <= 0.f) {
+			isBiteMode_ = false;
+			isSlipped_ = true;
+			//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
+			pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
+		}
 		slipCount_ = max(slipCount_,0.f);
 	}
 }
@@ -129,7 +142,9 @@ void Player::Draw() const
 	DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
 	DrawFormatString(0, 100, GetColor(255, 255, 255), "%d",laneNum_);
-
+	//if (isBiteMode_)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
+	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
+	DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
 
 	for (auto sgT : pHeads_) {
 		DrawLine(drawPos_.x, drawPos_.y, sgT->GetDrawPos().x, sgT->GetDrawPos().y, GetColor(255, 255, 255));
@@ -139,6 +154,8 @@ void Player::Draw() const
 		DrawFormatString(300, 300 + (30 * count),GetColor(255,255,255),"%f",sgT );
 		count++;
 	}
+
+
 }
 
 void Player::OnUpdate()
@@ -195,7 +212,8 @@ void Player::Pendulum(Vector2 fulcrum, float length)
 
 	angle_ = (angleDtData * 180)/2;
 	
-	pendulumVect_ = position_ - curdefPos;
+	pendulumVect_ = (position_ - curdefPos);
+	pendulumVect_.x = pendulumVect_.x*jumpShotPower_;
 }
 
 void Player::HeadPosUpdate()
@@ -236,7 +254,9 @@ inline void Player::worldSetMyDatas() {
 
 void Player::PlayerInputControl()
 {
-	if (pHeads_[currentHead_]->getIsHit()) {
+	//if (pHeads_[currentHead_]->getIsHit()) {
+	if (isBiteMode_) {
+		//Pendulum(pHeadPoses_[currentHead_]+(pHeadPoses_[currentHead_] - pHeads_[currentHead_]->GetPosition()), length_);
 		Pendulum(pHeads_[currentHead_]->GetPosition(), length_);
 	}
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::UP)) {
@@ -257,6 +277,13 @@ void Player::PlayerInputControl()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S)) {
 		UpdateLaneNum(-1);
 	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Q)) {
+		jumpShotPower_ -= 1.f;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::E)) {
+		jumpShotPower_ += 1.f;
+	}
+
 	SetAllHeadLaneNum();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z)&&!isBiteMode_) {
 		isShootMode_ = false;

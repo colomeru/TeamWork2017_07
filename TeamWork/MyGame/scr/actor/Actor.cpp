@@ -101,7 +101,7 @@ CollisionParameter Actor::IsHit_OBB_OBB(const Actor & sprite2)
 	MyCol::CreateOBB(&obb1, sp1Translation, GetParameter().mat.RotationMatrix(), Vector2(GetParameter().size.x / 2.0f, GetParameter().size.y / 2.0f));
 	MyCol::CreateOBB(&obb2, sp2Translation, sprite2.GetParameter().mat.RotationMatrix(), Vector2(sprite2.GetParameter().size.x / 2.0f, sprite2.GetParameter().size.y / 2.0f));
 
-	return CollisionParameter(COL_ID::BEGIN_COL, MyCol::TestOBBOBB(obb1, obb2));
+	return CollisionParameter(COL_ID::BEGIN_COL, MyCol::TestOBBOBB(obb1, obb2),position_);
 
 }
 

@@ -9,9 +9,9 @@ static const int headAngleSetter = -2;
 static const float defHeadChangeTime = 0.2f;
 static const float defHeadLength = 2.f;
 static const float defPGravPow = 0.07f;
-static const float defGravAddPow = 0.1f;
+static const float defGravAddPow = 0.0f;
 static const float HeadShootMult = 0.5f;
-static const float defSlipCount = 10.f;
+static const float defSlipCount = 1.f;
 class Player : public Actor, public std::enable_shared_from_this<Player>
 {
 public:
@@ -42,6 +42,8 @@ public:
 	}
 	void HeadPosUpdate();
 	void changeHead() {
+		//回転した時点でSlip状態を直す
+		isSlipped_ = false;
 		//pHeadLength_[currentHead_] = defHeadLength*HeadShootMult;
 		currentHead_++;
 		if (currentHead_ >= 8)currentHead_ = 0;
@@ -69,6 +71,12 @@ public:
 	//噛み付ける状態かを返す
 	bool GetIsBiteMode()const {
 		return isBiteMode_;
+	}
+	float GetSlipCount()const {
+		return slipCount_;
+	}
+	bool GetIsSlipped()const {
+		return isSlipped_;
 	}
 	//Headのレーンを本体のレーンに合わせる
 	void SetMyHeadLaneNum(int targetNum);
@@ -129,9 +137,11 @@ private:
 	float maxChainLength_;
 
 	float slipCount_;
+	bool isSlipped_;
 
 	bool isBiteMode_;
 
 	bool isShootMode_;
 	bool isNextPushKey_;
+	float jumpShotPower_;
 };

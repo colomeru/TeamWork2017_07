@@ -4,9 +4,9 @@
 #include "../../conv/DXConverter.h"
 #include "../../graphic/Model.h"
 
-Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos,int myNumber)
-	:Actor(world,targetP)
-	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true)
+Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
+	:Actor(world, targetP)
+	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0)
 {
 	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
 	parameter_.radius = 32.0f;
@@ -31,18 +31,26 @@ Player_Head::~Player_Head()
 
 void Player_Head::Update()
 {
+	if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
+	else {
+		fatigueCheckColor_ -= 2;
+		fatigueCheckColor_ = max(fatigueCheckColor_, 0);
+	}
+	//Vector2 posAddP = position_;
+	{
 	if (!isHitOnce) {
 		isBitePoint_ = false;
 	}
 	isHitOnce = false;
+	}
 	auto basePos = player_->GetHeadPos(myNumber_);
 	Vector2 vel = basePos-player_->GetPosition();
 
 
 	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
 
-	position_ = basePos + bPlusLngPos;
-	
+	if(player_->GetCurHead()==myNumber_&&player_->GetIsSlipped())position_ = basePos + posAddVect_;
+	else 	position_ = basePos + bPlusLngPos;
 	
 	//Ž©•ª,‘ŠŽè‚ÌID,Col‚ÌŽí—Þ
 	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
@@ -72,11 +80,13 @@ void Player_Head::Update()
 		if (isHit_) {
 			position_ = stopPos_;
 		}
+		//else if (player_->GetIsSlipped()) {
+		//	position_.x = posAddP.x;
+		//}
 	}
 	else {
 		isHit_ = false;
 	}
-
 }
 
 void Player_Head::Draw() const
@@ -108,12 +118,17 @@ void Player_Head::Draw() const
 	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), TRUE);
-
+	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
+	//if (player_->GetCurHead() == myNumber_) {
+		SetDrawBlendMode(BLEND_MODE::Alpha, fatigueCheckColor_);
+		DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), TRUE);
+		SetDrawBlendMode(BLEND_MODE::NoBlend, 0);
+	//}
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
-	//DrawFormatString(0, 700, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
+	if (myNumber_ == player_->GetCurHead())DrawFormatString(300, 700, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", angle_);
-	DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
+	if (myNumber_ == player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
+	if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
 
 }
 
@@ -125,7 +140,7 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
 	isBitePoint_ = true;
 	isHitOnce = true;
-	if (player_->GetCurHead()!=myNumber_||isHit_|| !player_->GetIsBiteMode())return;
+	if (player_->GetCurHead()!=myNumber_||isHit_|| player_->GetIsShootMode()!=2)return;
 
 	isHit_ = true;
 	isBitePoint_ = false;

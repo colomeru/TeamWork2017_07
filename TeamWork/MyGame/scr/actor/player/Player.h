@@ -9,9 +9,9 @@ static const int headAngleSetter = -2;
 static const float defHeadChangeTime = 0.2f;
 static const float defHeadLength = 2.f;
 static const float defPGravPow = 0.07f;
-static const float defGravAddPow = 0.1f;
+static const float defGravAddPow = 0.0f;
 static const float HeadShootMult = 0.5f;
-static const float defSlipCount = 10.f;
+static const float defSlipCount = 99999999.f;
 class Player : public Actor, public std::enable_shared_from_this<Player>
 {
 public:
@@ -21,6 +21,9 @@ public:
 	~Player();
 	//更新
 	virtual void Update() override;
+	virtual void FastUpdate() override {
+		//isShootMode_ = false;
+	}
 	//描画
 	virtual void Draw() const override;
 	//受動更新
@@ -42,6 +45,8 @@ public:
 	}
 	void HeadPosUpdate();
 	void changeHead() {
+		//回転した時点でSlip状態を直す
+		isSlipped_ = false;
 		//pHeadLength_[currentHead_] = defHeadLength*HeadShootMult;
 		currentHead_++;
 		if (currentHead_ >= 8)currentHead_ = 0;
@@ -59,8 +64,8 @@ public:
 	}
 	
 	void CurHeadBite(const Vector2& target) {
+		isBiteMode_ = true;
 		pGrav_ = defPGravPow;
-		Vector2 tpos = target - position_;
 		//角度を求める
 		//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
 		rot_ = 135;
@@ -69,6 +74,15 @@ public:
 	//噛み付ける状態かを返す
 	bool GetIsBiteMode()const {
 		return isBiteMode_;
+	}
+	int GetIsShootMode()const {
+		return isShootMode_;
+	}
+	float GetSlipCount()const {
+		return slipCount_;
+	}
+	bool GetIsSlipped()const {
+		return isSlipped_;
 	}
 	//Headのレーンを本体のレーンに合わせる
 	void SetMyHeadLaneNum(int targetNum);
@@ -129,9 +143,12 @@ private:
 	float maxChainLength_;
 
 	float slipCount_;
+	bool isSlipped_;
 
 	bool isBiteMode_;
 
-	bool isShootMode_;
+	//0=false 1=start 2=end
+	int isShootMode_;
 	bool isNextPushKey_;
+	float jumpShotPower_;
 };

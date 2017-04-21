@@ -26,6 +26,9 @@ public:
 	bool getIsBitePoint()const{
 		return isBitePoint_;
 	}
+	void SetPosAddVect(const Vector2& posAV) {
+		posAddVect_ = posAV;
+	}
 private:
 	//è’ìÀÇµÇƒÇ¢ÇÈÇ©
 	bool isHit_;
@@ -38,4 +41,8 @@ private:
 	int myNumber_;
 
 	bool isHitOnce;
+
+	Vector2 posAddVect_;
+
+	int fatigueCheckColor_;
 };

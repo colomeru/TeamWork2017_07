@@ -7,11 +7,11 @@
 #include"../camera/Camera.h"
 #include"../conv/DXConverter.h"
 #include"../actor/player/Player.h"
-#include"../actor/player/Player2.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
 
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"
+#include"../stageGenerator/Stage1/Stage1.h"
 
 GamePlayScene::GamePlayScene() :
 nextScene_(Scene::Credit)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
@@ -50,17 +50,14 @@ void GamePlayScene::Initialize()
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 	
+	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test")));
+	//stageGeneratorManager.SetStage(Stage::Stage1);
+	
+	
 	ply1 = std::make_shared<Player>(world_.get());
-	ply2 = std::make_shared<Player2>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
-	world_->Add(ACTOR_ID::ENEMY_ACTOR, ply2);
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, Vector2(500,200)));
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, Vector2(850, 200)));
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, Vector2(1200, 200)));
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, Vector2(1600, 200)));
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, Vector2(2200, 200)));
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, Vector2(2800, 200)));
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, Vector2(3500, 200)));
+
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 1, Vector2(200, 100)));
 
 	//–{”Ô—p
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
@@ -114,7 +111,6 @@ void GamePlayScene::Draw() const
 	// •`‰æ
 	world_->Draw();
 
-	DrawLine(ply1->GetParameter().mat.Translation().x, ply1->GetParameter().mat.Translation().y, ply2->GetParameter().mat.Translation().x, ply2->GetParameter().mat.Translation().y,GetColor(255,255,255));
 
 	//VECTOR pos1 = DXConverter::GetInstance().ToVECTOR(posit);
 	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);

@@ -1,7 +1,7 @@
 #include "TestClothes.h"
 
-TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, Vector2 pos)
-	:Clothes(world, clothes)
+TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::TEST_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -9,6 +9,8 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, Vector2 pos)
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
+
+	laneNum_ = laneNum;
 
 	position_ = pos;
 

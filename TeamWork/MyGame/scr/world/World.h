@@ -5,6 +5,21 @@
 #include"../math/Vector3.h"
 #include <stack>
 
+static const float defDrawLinePos[3] = { 0,0,0 };
+
+//World内で、アクター全員が取得出来るデータ
+struct KeepDatas {
+	//playerの現在のレーン
+	int playerLane_;
+
+	KeepDatas(int lane=0):playerLane_(lane){}
+
+	//playerの現レーンを変更する
+	void SetPlayerLane(int pLane) {
+		playerLane_ = pLane;
+	}
+};
+
 static const Vector2 playerScreenPos_ = Vector2(300, 0);
 class World : public IWorld
 {
@@ -60,6 +75,18 @@ public:
 	virtual void SetScroolPos(const Vector2& pos) override {
 		targetMat_.Translation(Vector3(pos.x, pos.y, 0));
 	}
+	//共有データを更新する、変更を行わない値の引数は、元のKeepDatasの値を渡す事
+	virtual void SetKeepDatas(KeepDatas data) override {
+		keepDatas_ = data;
+	}
+	//共有データを取得する
+	virtual KeepDatas& GetKeepDatas() override {
+		return keepDatas_;
+	}
+
+	virtual KeepDatas GetCanChangedKeepDatas() const override {
+		return keepDatas_;
+	}
 
 private:
 	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
@@ -89,6 +116,8 @@ private:
 
 	Vector2 mVelo;
 	Vector2 velo;
+
+	KeepDatas keepDatas_;
 
 	// 受動更新アクター用スタック
 	std::stack<ActorPtr>	manualStackActor_;

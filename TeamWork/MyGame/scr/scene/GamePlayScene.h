@@ -2,10 +2,9 @@
 #include "IScene.h"
 #include <map>
 #include"../actor/CameraAct/TPSCamera.h"
+#include"../stageGenerator/StageGeneratorManager.h"
 
 class Player;
-class Player2;
-
 class GamePlayScene : public IScene
 {	
 public:
@@ -36,7 +35,6 @@ private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
 	using PlayerPtr = std::shared_ptr<Player>;
-	using Player2Ptr = std::shared_ptr<Player2>;
 	// ワールド
 	WorldPtr		world_;
 
@@ -44,8 +42,8 @@ private:
 	Scene			nextScene_;
 
 	PlayerPtr ply1;
-	Player2Ptr ply2;
 
+	StageGenerateManager stageGeneratorManager;
 	//Vector3 posit;
 
 	//Vector3 camera_pos_;

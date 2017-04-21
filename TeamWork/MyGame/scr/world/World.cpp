@@ -3,7 +3,7 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World():targetAct_(nullptr)
+World::World():targetAct_(nullptr),keepDatas_()
 {
 }
 

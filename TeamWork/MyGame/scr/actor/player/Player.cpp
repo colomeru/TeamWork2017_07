@@ -141,7 +141,8 @@ void Player::Draw() const
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
 	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
-	DrawFormatString(0, 100, GetColor(255, 255, 255), "%d",laneNum_);
+	DrawFormatString(0, 100, GetColor(255, 255, 255), "%d", laneNum_);
+	DrawFormatString(400, 100, GetColor(255, 255, 255), "%f",angle_);
 	//if (isShootMode_>=1)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
 	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
 	//DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
@@ -167,224 +168,224 @@ void Player::OnCollide(Actor& other, CollisionParameter colpara)
 void Player::OnMessage(EventMessage message, void * param)
 {
 }
-//void Player::Pendulum(Vector2 fulcrum, float length)
-//{
-//	//振り子
-//	//支点Posを設定
-//	float fx = fulcrum.x;
-//	float fy = fulcrum.y;
-//	//Gravityを設定
-//	float g = gravity_;
-//	//角度を設定
-//	float rot = rot_;
-//	//角速度を設定
-//	float rot_spd = rot_spd_;
-//	//摩擦を設定
-//	float friction = 0.998f;
-//	//重りの位置を設定
-//	Vector2 spherePos = position_;
-//	//それぞれの首の軸位置を設定
-//	std::vector<Vector2> inPos = pHeadPoses_;
-//	//それぞれの首の移動先座標を格納可能に
-//	std::array<Vector2, 8> outPos;
-//	//それぞれの首の角度
-//	std::array<float, 8> lineRot;
-//	//自身の半径を設定
-//	float r = parameter_.radius;
-//	//それぞれの首の長さを設定
-//	std::vector<float> neckLen = pHeadLength_;
-//	////支点を格納可能に
-//	//std::array<Vector2, 8> fulcrums;
-//	//現在の重りの位置
-//	//auto px = fx + MathHelper::Cos(rot) * length;
-//	//auto py = fy + MathHelper::Sin(rot) * length;
-//	auto px = fx + MathHelper::Cos(rot_) * length;
-//	auto py = fy + MathHelper::Sin(rot_) * length;
-//
-//	//重力移動量を反映した重りの位置
-//	auto vx = px - fx;
-//	auto vy = py - fy;
-//	auto t = -(vy * g) / (vx * vx + vy * vy);
-//	auto gx = px + t * vx;
-//	auto gy = py + g + t * vy;
-//
-//	//２つの重りの位置の確度差
-//	auto rDiff = MathHelper::ATan(gy - fy, gx - fx);
-//
-//	//角度差を角速度に加算
-//	auto sub = rDiff - rot;
-//	sub -= std::floor(sub / 360.0f) * 360.0f;
-//	if (sub < -180.0f) sub += 360.0f;
-//	if (sub > 180.0f) sub -= 360.0f;
-//	rot_spd += sub;
-//
-//	//摩擦
-//	rot_spd *= friction;
-//
-//	//角度に角速度を加算
-//	rot += rot_spd;
-//
-//	//新しい重りの位置
-//	px = fx + MathHelper::Cos(rot) * length;
-//	py = fy + MathHelper::Sin(rot) * length;
-//
-//	//重りの座標
-//	spherePos.x = px;
-//	spherePos.y = py;
-//
-//	//角度調整
-//	float rot2 = rot - 90.0f;
-//
-//
-//		//inPos外周
-//		//outPosLength分のばしたposition
-//		//各Headの角度を代入
-//		
-//		pHeadPoses_[currentHead_].x = spherePos.x + MathHelper::Cos(angle_ + rot2) * r;
-//		pHeadPoses_[currentHead_].y = spherePos.y + MathHelper::Sin(angle_ + rot2) * r;
-//		outPos[currentHead_].x = inPos[currentHead_].x + MathHelper::Cos(angle_ + rot2) * (neckLen[currentHead_] - r);
-//		outPos[currentHead_].y = inPos[currentHead_].y + MathHelper::Sin(angle_ + rot2) * (neckLen[currentHead_] - r);
-//		//fulcrums[currentHead_] = outPos[currentHead_];
-//		//lineRot[i] = pHeads_[i]->GetAngle();
-//		//inPos[i].x = spherePos.x + MathHelper::Cos(lineRot[i] + rot2) * r;
-//		//inPos[i].y = spherePos.y + MathHelper::Sin(lineRot[i] + rot2) * r;
-//		//outPos[i].x = inPos[i].x + MathHelper::Cos(lineRot[i] + rot2) * (neckLen[i] - r);
-//		//outPos[i].y = inPos[i].y + MathHelper::Sin(lineRot[i] + rot2) * (neckLen[i] - r);
-//		//fulcrum[i] = outPos[i];
-//
-//	////circleの当たり判定
-//	//Vector2 absA = spherePos - arrowPos;
-//	//float distanceS = sqrt((absA.x * absA.x) + (absA.y * absA.y));
-//	//if (distanceS < 32.0f ||
-//	//	rot_spd < 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::RIGHT)) ||
-//	//	rot_spd > 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::LEFT)))
-//	//{
-//	//	aAlpha = 0.5f; //circleに当たっていれば半透明
-//	//	friction = 1.02f; //摩擦を減らす
-//	//}
-//	//else
-//	//{
-//	//	aAlpha = 1.0f; //circleに当たっていなければ不透明
-//	//	friction = 0.98f;
-//	//}
-//
-//	////スピード制限
-//	//if (rot_spd > 4.0f) rot_spd = 4.0f;
-//	//if (rot_spd < -4.0f) rot_spd = -4.0f;
-//
-//	////支点を移動
-//	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
-//	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
-//	//{
-//	//	vec += 1;
-//	//	if (vec > 7) vec = 0;
-//	//	length = neckLen[vec];
-//	//	fx = fulcrums[vec].x;
-//	//	fy = fulcrums[vec].y;
-//	//	lineRot[0] -= 45.0f;
-//	//	rot += 45.0f;
-//	//	turn = false;
-//	//}
-//	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
-//	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
-//	//{
-//	//	vec -= 1;
-//	//	if (vec < 0) vec = 7;
-//	//	length = neckLen[vec];
-//	//	fx = fulcrums[vec].x;
-//	//	fy = fulcrums[vec].y;
-//	//	lineRot[0] += 45.0f;
-//	//	rot -= 45.0f;
-//	//	turn = true;
-//	//}
-//
-//	//for (int i = 1; i < 8; i++)
-//	//{
-//	//	lineRot[i] = lineRot[i - 1] + 45.0f;
-//	//}
-//
-//	////お試し
-//	//if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6))
-//	//{
-//	//	if (vec == 7)
-//	//	{
-//	//		if (neckLen[vec - 1] <= r + 20.0f) return;
-//	//		neckLen[0] += 5.0f;
-//	//		neckLen[vec - 1] -= 5.0f;
-//	//	}
-//	//	else
-//	//	{
-//	//		if ((vec != 0 && neckLen[vec - 1] <= r + 20.0f) || (vec == 0 && neckLen[7] <= r + 20.0f)) return;
-//	//		neckLen[vec + 1] += 5.0f;
-//	//		if (vec == 0) neckLen[7] -= 5.0f;
-//	//		else neckLen[vec - 1] -= 5.0f;
-//	//		//neckLen[vec - 1, 7] = MathHelper::Clamp(neckLen[vec - 1,7], 0.0f, 500.0f);
-//	//	}
-//	//}
-//	//else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM5))
-//	//{
-//	//	if (vec == 0)
-//	//	{
-//	//		if (neckLen[vec + 1] <= r + 20.0f) return;
-//	//		neckLen[7] += 5.0f;
-//	//		neckLen[vec + 1] += 5.0f;
-//	//	}
-//	//	else
-//	//	{
-//	//		if ((vec != 7 && neckLen[vec + 1] <= r + 20.0f) || (vec == 7 && neckLen[0] <= r + 20.0f)) return;
-//	//		neckLen[vec - 1] += 5.0f;
-//	//		if (vec == 7) neckLen[0] -= 5.0f;
-//	//		else neckLen[vec + 1] -= 5.0f;
-//	//		//neckLen[vec + 1, 0] = MathHelper::Clamp(neckLen[vec + 1,0], 20.0f, 500.0f);
-//	//	}
-//	//}
-//}
-
 void Player::Pendulum(Vector2 fulcrum, float length)
 {
-	float friction = 0.998f;								//摩擦
-	//現在の重りの位置
-	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
-	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
-	
+	//振り子
+	//支点Posを設定
+	float fx = fulcrum.x;
+	float fy = fulcrum.y;
+	//Gravityを設定
+	float g = gravity_;
+	//変更前のpositionを保存
 	Vector2 curdefPos = position_;
+	//摩擦を設定
+	float friction = 0.998f;
+	//それぞれの首の移動先座標を格納可能に
+	std::array<Vector2, 8> outPos;
+	//自身の半径を設定
+	float r = parameter_.radius;
+	//それぞれの首の長さを設定
+	std::vector<float> neckLen = pHeadLength_;
+	////支点を格納可能に
+	//std::array<Vector2, 8> fulcrums;
+	//現在の重りの位置
+	auto px = fx + MathHelper::Cos(rot_) * length;
+	auto py = fy + MathHelper::Sin(rot_) * length;
+	//auto px = fx + MathHelper::Cos(rot) * length;
+	//auto py = fy + MathHelper::Sin(rot) * length;
 
 	//重力移動量を反映した重りの位置
-	auto length_vec = position_ - fulcrum;
-	auto t = -(length_vec.y * gravity_) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
-	auto move_weightX = position_.x + t * length_vec.x;
-	auto move_weightY = position_.y + gravity_ + t * length_vec.y;
+	auto vx = px - fx;
+	auto vy = py - fy;
+	auto t = -(vy * g) / (vx * vx + vy * vy);
+	auto gx = px + t * vx;
+	auto gy = py + g + t * vy;
 
-	//2つの重りの位置の角度差
-	auto r = MathHelper::ATan(move_weightY - fulcrum.y, move_weightX - fulcrum.x);
+	//２つの重りの位置の確度差
+	auto rDiff = MathHelper::ATan(gy - fy, gx - fx);
+
 	//角度差を角速度に加算
-	auto sub = r - rot_;
+	auto sub = rDiff - rot_;
 	sub -= std::floor(sub / 360.0f) * 360.0f;
 	if (sub < -180.0f) sub += 360.0f;
 	if (sub > 180.0f) sub -= 360.0f;
 	rot_spd_ += sub;
 
 	//摩擦
-	rot_ *= friction;
+	rot_spd_ *= friction;
 
 	//角度に角速度を加算
 	rot_ += rot_spd_;
 
 	//新しい重りの位置
-	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
-	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
+	px = fx + MathHelper::Cos(rot_) * length;
+	py = fy + MathHelper::Sin(rot_) * length;
 
-	//ここまで振り子
-	//
-	Vector2 pendulumAngleVec = fulcrum - position_;
-	
-	float angleDtData = Vector2::Dot(Vector2::Right, pendulumAngleVec.Normalize());
+	//重りの座標
+	position_.x = px;
+	position_.y = py;
 
-	angle_ = (angleDtData * 180)/2;
-	
-	pendulumVect_ = (position_ - curdefPos);
-	pendulumVect_.x = pendulumVect_.x*jumpShotPower_;
+	//角度調整
+	float rot2 = rot_ - 90.0f;
+
+
+		//inPos外周
+		//outPosLength分のばしたposition
+		//各Headの角度を代入
+		
+		pHeadPoses_[currentHead_].x = position_.x + MathHelper::Cos(angle_ + rot2) * r;
+		pHeadPoses_[currentHead_].y = position_.y + MathHelper::Sin(angle_ + rot2) * r;
+		outPos[currentHead_].x = pHeadPoses_[currentHead_].x + MathHelper::Cos(angle_ + rot2) * (neckLen[currentHead_] - r);
+		outPos[currentHead_].y = pHeadPoses_[currentHead_].y + MathHelper::Sin(angle_ + rot2) * (neckLen[currentHead_] - r);
+		//fulcrums[currentHead_] = outPos[currentHead_];
+		//lineRot[i] = pHeads_[i]->GetAngle();
+		//inPos[i].x = spherePos.x + MathHelper::Cos(lineRot[i] + rot2) * r;
+		//inPos[i].y = spherePos.y + MathHelper::Sin(lineRot[i] + rot2) * r;
+		//outPos[i].x = inPos[i].x + MathHelper::Cos(lineRot[i] + rot2) * (neckLen[i] - r);
+		//outPos[i].y = inPos[i].y + MathHelper::Sin(lineRot[i] + rot2) * (neckLen[i] - r);
+		//fulcrum[i] = outPos[i];
+
+		Vector2 pendulumAngleVec = fulcrum - position_;
+		float angleDtData = Vector2::Dot(Vector2::Right, pendulumAngleVec.Normalize());
+		
+			angle_ = (angleDtData * 180)/2;
+			
+			pendulumVect_ = (position_ - curdefPos);
+			pendulumVect_.x = pendulumVect_.x*jumpShotPower_;
+
+	////circleの当たり判定
+	//Vector2 absA = spherePos - arrowPos;
+	//float distanceS = sqrt((absA.x * absA.x) + (absA.y * absA.y));
+	//if (distanceS < 32.0f ||
+	//	rot_spd < 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::RIGHT)) ||
+	//	rot_spd > 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::LEFT)))
+	//{
+	//	aAlpha = 0.5f; //circleに当たっていれば半透明
+	//	friction = 1.02f; //摩擦を減らす
+	//}
+	//else
+	//{
+	//	aAlpha = 1.0f; //circleに当たっていなければ不透明
+	//	friction = 0.98f;
+	//}
+
+	////スピード制限
+	//if (rot_spd > 4.0f) rot_spd = 4.0f;
+	//if (rot_spd < -4.0f) rot_spd = -4.0f;
+
+	////支点を移動
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
+	//{
+	//	vec += 1;
+	//	if (vec > 7) vec = 0;
+	//	length = neckLen[vec];
+	//	fx = fulcrums[vec].x;
+	//	fy = fulcrums[vec].y;
+	//	lineRot[0] -= 45.0f;
+	//	rot += 45.0f;
+	//	turn = false;
+	//}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
+	//{
+	//	vec -= 1;
+	//	if (vec < 0) vec = 7;
+	//	length = neckLen[vec];
+	//	fx = fulcrums[vec].x;
+	//	fy = fulcrums[vec].y;
+	//	lineRot[0] += 45.0f;
+	//	rot -= 45.0f;
+	//	turn = true;
+	//}
+
+	//for (int i = 1; i < 8; i++)
+	//{
+	//	lineRot[i] = lineRot[i - 1] + 45.0f;
+	//}
+
+	////お試し
+	//if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6))
+	//{
+	//	if (vec == 7)
+	//	{
+	//		if (neckLen[vec - 1] <= r + 20.0f) return;
+	//		neckLen[0] += 5.0f;
+	//		neckLen[vec - 1] -= 5.0f;
+	//	}
+	//	else
+	//	{
+	//		if ((vec != 0 && neckLen[vec - 1] <= r + 20.0f) || (vec == 0 && neckLen[7] <= r + 20.0f)) return;
+	//		neckLen[vec + 1] += 5.0f;
+	//		if (vec == 0) neckLen[7] -= 5.0f;
+	//		else neckLen[vec - 1] -= 5.0f;
+	//		//neckLen[vec - 1, 7] = MathHelper::Clamp(neckLen[vec - 1,7], 0.0f, 500.0f);
+	//	}
+	//}
+	//else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM5))
+	//{
+	//	if (vec == 0)
+	//	{
+	//		if (neckLen[vec + 1] <= r + 20.0f) return;
+	//		neckLen[7] += 5.0f;
+	//		neckLen[vec + 1] += 5.0f;
+	//	}
+	//	else
+	//	{
+	//		if ((vec != 7 && neckLen[vec + 1] <= r + 20.0f) || (vec == 7 && neckLen[0] <= r + 20.0f)) return;
+	//		neckLen[vec - 1] += 5.0f;
+	//		if (vec == 7) neckLen[0] -= 5.0f;
+	//		else neckLen[vec + 1] -= 5.0f;
+	//		//neckLen[vec + 1, 0] = MathHelper::Clamp(neckLen[vec + 1,0], 20.0f, 500.0f);
+	//	}
+	//}
 }
+
+//void Player::Pendulum(Vector2 fulcrum, float length)
+//{
+//	float friction = 0.998f;								//摩擦
+//	//現在の重りの位置
+//	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
+//	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
+//	
+//	Vector2 curdefPos = position_;
+//
+//	//重力移動量を反映した重りの位置
+//	auto length_vec = position_ - fulcrum;
+//	auto t = -(length_vec.y * gravity_) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
+//	auto move_weightX = position_.x + t * length_vec.x;
+//	auto move_weightY = position_.y + gravity_ + t * length_vec.y;
+//
+//	//2つの重りの位置の角度差
+//	auto r = MathHelper::ATan(move_weightY - fulcrum.y, move_weightX - fulcrum.x);
+//	//角度差を角速度に加算
+//	auto sub = r - rot_;
+//	sub -= std::floor(sub / 360.0f) * 360.0f;
+//	if (sub < -180.0f) sub += 360.0f;
+//	if (sub > 180.0f) sub -= 360.0f;
+//	rot_spd_ += sub;
+//
+//	//摩擦
+//	rot_ *= friction;
+//
+//	//角度に角速度を加算
+//	rot_ += rot_spd_;
+//
+//	//新しい重りの位置
+//	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
+//	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
+//
+//	//ここまで振り子
+//	//
+//	Vector2 pendulumAngleVec = fulcrum - position_;
+//	
+//	float angleDtData = Vector2::Dot(Vector2::Right, pendulumAngleVec.Normalize());
+//
+//	angle_ = (angleDtData * 180)/2;
+//	
+//	pendulumVect_ = (position_ - curdefPos);
+//	pendulumVect_.x = pendulumVect_.x*jumpShotPower_;
+//}
 
 void Player::HeadPosUpdate()
 {

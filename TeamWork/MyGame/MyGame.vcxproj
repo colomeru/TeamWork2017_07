@@ -161,7 +161,12 @@
     <ClCompile Include="scr\actor\enemy\Enemy.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\BaseClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Clothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\GumClothes\GumClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\Hanger\Hanger.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp" />
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
     <ClCompile Include="scr\actor\player\Player3.cpp" />
@@ -186,6 +191,7 @@
     <ClCompile Include="scr\graphic\Sprite.cpp" />
     <ClCompile Include="scr\graphic\TextDraw.cpp" />
     <ClCompile Include="scr\input\CsvReader.cpp" />
+    <ClCompile Include="scr\input\GamePad.cpp" />
     <ClCompile Include="scr\input\Keyboard.cpp" />
     <ClCompile Include="scr\main.cpp" />
     <ClCompile Include="scr\math\Color.cpp" />
@@ -219,7 +225,12 @@
     <ClInclude Include="scr\actor\enemy\Enemy.h" />
     <ClInclude Include="scr\actor\Field\Clothes\BaseClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Clothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\GumClothes\GumClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\Hanger\Hanger.h" />
     <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />
     <ClInclude Include="scr\actor\player\Player3.h" />
@@ -251,6 +262,7 @@
     <ClInclude Include="scr\graphic\Sprite.h" />
     <ClInclude Include="scr\graphic\TextDraw.h" />
     <ClInclude Include="scr\input\CsvReader.h" />
+    <ClInclude Include="scr\input\GamePad.h" />
     <ClInclude Include="scr\input\Keyboard.h" />
     <ClInclude Include="scr\math\Color.h" />
     <ClInclude Include="scr\math\MathHelper.h" />

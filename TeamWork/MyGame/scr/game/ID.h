@@ -74,6 +74,11 @@ enum BGM_ID
 // 服ID
 enum CLOTHES_ID
 {
-	TEST_CLOTHES,
-	BASE_CLOTHES,
+	TEST_CLOTHES,		//テスト用
+	BASE_CLOTHES,		//普通の服
+	GUM_CLOTHES,		//ゴムの服
+	FLUFFY_CLOTHES,		//ふわふわな服
+	THIN_CLOTHES,		//薄い生地
+	HANGER,				//ハンガー
+	GOAL_CLOTHES,		//ゴール
 };

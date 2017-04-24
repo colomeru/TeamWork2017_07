@@ -28,10 +28,10 @@ void WorldActor::Update()
 }
 
 // •`‰æ
-void WorldActor::Draw() const
+void WorldActor::Draw(const int laneCount, const int playerLane) const
 {
 	// ‘SƒLƒƒƒ‰•`‰æ
-	EachActor([](const ActorManager& manager) { manager.Draw(); });
+	EachActor([&](const ActorManager& manager) { manager.Draw(laneCount, playerLane); });
 }
 
 // ’Ç‰Á

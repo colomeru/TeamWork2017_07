@@ -41,10 +41,10 @@ void World::Update()
 }
 
 // •`‰æ
-void World::Draw() const
+void World::Draw(const int laneCount, const int playerLane) const
 {
 	DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
-	actors_.Draw();
+	actors_.Draw(laneCount, playerLane);
 }
 
 // ƒNƒŠƒA

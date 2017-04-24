@@ -33,7 +33,7 @@ public:
 	// 更新
 	void Update();
 	// 描画
-	void Draw() const;
+	void Draw(const int laneCount = 0, const int playerLane = 0) const;
 	// クリア
 	void Clear();
 	// イベントリスナーの追加

@@ -2,7 +2,8 @@
 #include "../fade/FadePanel.h"
 
 DemoScene::DemoScene() :
-maxLoadContentCount_((float)GetASyncLoadNum())
+maxLoadContentCount_((float)GetASyncLoadNum()),
+currentLoadCount_(0)
 {
 }
 

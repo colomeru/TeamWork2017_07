@@ -9,6 +9,7 @@
 #include "../stageGenerator/Stage.h"
 #include "../stageGenerator/Stage1/Stage1.h"
 #include "../actor/Field/Clothes/TestClothes.h"
+#include "../actor/Field/Clothes/Hanger/Hanger.h"
 
 CreditScene::CreditScene() :
 nextScene_(Scene::Ending),
@@ -32,18 +33,22 @@ void CreditScene::Initialize()
 {
 	isEnd_ = false;
 
-	Camera::GetInstance().SetRange(0.1f, 10000.0f);
-	Camera::GetInstance().SetViewAngle(60.0f);
-	Camera::GetInstance().Up.Set(Vector3::Up);
-	Camera::GetInstance().Position.Set(camera_pos_);
-	Camera::GetInstance().Target.Set(target_);
-	Camera::GetInstance().Update();
+	//Camera::GetInstance().SetRange(0.1f, 10000.0f);
+	//Camera::GetInstance().SetViewAngle(60.0f);
+	//Camera::GetInstance().Up.Set(Vector3::Up);
+	//Camera::GetInstance().Position.Set(camera_pos_);
+	//Camera::GetInstance().Target.Set(target_);
+	//Camera::GetInstance().Update();
 
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage1);
 
-	world_->Add(ACTOR_ID::PLAYER_ACTOR, std::make_shared<Player3>(world_.get()));
+	player_ = std::make_shared<Player>(world_.get());
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
 	//world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<Enemy>(world_.get()));
+
+	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
+	world_->SetTarget(player_.get());
 
 }
 
@@ -52,9 +57,19 @@ void CreditScene::Update()
 	// çXêV
 	world_->Update();
 
-	Camera::GetInstance().Position.Set(camera_pos_);
-	Camera::GetInstance().Target.Set(target_);
-	Camera::GetInstance().Update();
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
+		world_->sendMessage(EventMessage::BEGIN_WIND);
+	}	
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
+		world_->sendMessage(EventMessage::ATTENUATE_WIND);
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
+		world_->sendMessage(EventMessage::END_WIND);
+	}
+
+	//Camera::GetInstance().Position.Set(camera_pos_);
+	//Camera::GetInstance().Target.Set(target_);
+	//Camera::GetInstance().Update();
 
 	// èIóπ
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))

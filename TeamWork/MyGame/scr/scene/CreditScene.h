@@ -5,6 +5,7 @@
 #include "../math/Vector2.h"
 #include "../math/Vector3.h"
 #include "../stageGenerator/StageGeneratorManager.h"
+#include "../actor/player/Player.h"
 
 class CreditScene : public IScene
 {
@@ -32,8 +33,10 @@ public:
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
+	using PlayerPtr = std::shared_ptr<Player>;
 	// ワールド
 	WorldPtr		world_;
+	PlayerPtr		player_;
 
 	Vector3 camera_pos_;
 	Vector3 target_;

@@ -1,13 +1,14 @@
 #pragma once
-#include "Clothes.h"
+#include "../Clothes.h"
 
-class TestClothes : public Clothes, public std::enable_shared_from_this<TestClothes>
+//ゴムの服
+class ThinClothes : public Clothes, public std::enable_shared_from_this<ThinClothes>
 {
 public:
 	//コンストラクタ
-	TestClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
+	ThinClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
 	//デストラクタ
-	~TestClothes();
+	~ThinClothes();
 	//更新
 	virtual void Update() override;
 	//描画
@@ -20,4 +21,5 @@ public:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
+
 };

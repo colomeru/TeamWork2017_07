@@ -1,11 +1,9 @@
-#include "TestClothes.h"
-#include "../MyGame/scr/graphic/Sprite.h"
-#include "../MyGame/scr/input/Keyboard.h"
+#include "GumClothes.h"
 
-TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
 {
-	clothes_ID = CLOTHES_ID::TEST_CLOTHES;
+	clothes_ID = CLOTHES_ID::GUM_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(200, 200.f);
@@ -17,21 +15,17 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	laneNum_ = laneNum;
 
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, length_);
-
 }
 
-TestClothes::~TestClothes()
+GumClothes::~GumClothes()
 {
 }
 
-void TestClothes::Update()
+void GumClothes::Update()
 {
-	isHit_ = false;
-	ShakesClothes();
 }
 
-void TestClothes::Draw() const
+void GumClothes::Draw() const
 {
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
@@ -53,35 +47,20 @@ void TestClothes::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 153, 0), TRUE);
+	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
+	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
+	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
 }
 
-void TestClothes::OnUpdate()
+void GumClothes::OnUpdate()
 {
 }
 
-void TestClothes::OnCollide(Actor * other, CollisionParameter colpara)
+void GumClothes::OnCollide(Actor * other, CollisionParameter colpara)
 {
 }
 
-void TestClothes::OnMessage(EventMessage message, void * param)
+void GumClothes::OnMessage(EventMessage message, void * param)
 {
-	switch (message)
-	{
-	case EventMessage::BEGIN_WIND:
-		basePosition_ = position_;
-		isPendulum_ = true;
-		isFriction = true;
-		break;
-	case EventMessage::ATTENUATE_WIND:
-		rot_spd_ = 0.0f;
-		isFriction = false;
-		break;
-	case EventMessage::END_WIND:
-		rot_spd_ = 0.0f;
-		rot_ = 90.0f;
-		position_ = basePosition_;
-		isPendulum_ = false;
-		break;
-	}
 }

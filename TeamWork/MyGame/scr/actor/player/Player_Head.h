@@ -45,4 +45,5 @@ private:
 	Vector2 posAddVect_;
 
 	int fatigueCheckColor_;
+
 };

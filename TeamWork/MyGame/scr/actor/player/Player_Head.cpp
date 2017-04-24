@@ -31,12 +31,15 @@ Player_Head::~Player_Head()
 
 void Player_Head::Update()
 {
+	if (player_->GetPHeadDead(myNumber_))return;
 	if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
 	else {
 		fatigueCheckColor_ -= 2;
 		fatigueCheckColor_ = max(fatigueCheckColor_, 0);
 	}
 	//Vector2 posAddP = position_;
+
+	//毎フレーム、1度でも当たったかを調べる
 	{
 	if (!isHitOnce) {
 		isBitePoint_ = false;
@@ -49,9 +52,12 @@ void Player_Head::Update()
 
 	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
 
-	if(player_->GetCurHead()==myNumber_&&player_->GetIsSlipped())position_ = basePos + posAddVect_;
-	else 	position_ = basePos + bPlusLngPos;
-	
+	if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()){
+		position_ = basePos + posAddVect_;
+	}
+	else {
+		position_ = basePos + bPlusLngPos;
+	}
 	//自分,相手のID,Colの種類
 	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
 	
@@ -87,10 +93,12 @@ void Player_Head::Update()
 	else {
 		isHit_ = false;
 	}
+	if (!player_->GetIsBiteMode())isHit_ = false;
 }
 
 void Player_Head::Draw() const
 {
+	if (player_->GetPHeadDead(myNumber_))return;
 	//auto pos_1 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation());
 	//auto pos_2 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation() + Vector3(0, 10, 0));
 	//DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
@@ -129,7 +137,9 @@ void Player_Head::Draw() const
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", angle_);
 	if (myNumber_ == player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
 	if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
+	DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
 
+	DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
 }
 
 void Player_Head::OnUpdate()
@@ -138,6 +148,7 @@ void Player_Head::OnUpdate()
 
 void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
+	if (player_->GetPHeadDead(myNumber_))return;
 	isBitePoint_ = true;
 	isHitOnce = true;
 	if (player_->GetCurHead()!=myNumber_||isHit_|| player_->GetIsShootMode()!=2)return;

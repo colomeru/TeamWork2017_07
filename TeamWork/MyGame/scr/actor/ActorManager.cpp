@@ -19,7 +19,7 @@ void ActorManager::Update()
 void ActorManager::Draw() const
 {
 	for (auto& actor : actorPtr)
-		actor->Draw();
+		actor->BaseDraw();
 }
 
 // ’Ç‰Á

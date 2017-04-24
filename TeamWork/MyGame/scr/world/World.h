@@ -5,13 +5,13 @@
 #include"../math/Vector3.h"
 #include <stack>
 
-static const float defDrawLinePos[3] = { 0,0,0 };
+static const float defDrawLinePosY[3] = { 0,400,1000 };
 
 //World内で、アクター全員が取得出来るデータ
 struct KeepDatas {
 	//playerの現在のレーン
 	int playerLane_;
-
+	
 	KeepDatas(int lane=0):playerLane_(lane){}
 
 	//playerの現レーンを変更する
@@ -80,11 +80,11 @@ public:
 		keepDatas_ = data;
 	}
 	//共有データを取得する
-	virtual KeepDatas& GetKeepDatas() override {
+	virtual KeepDatas GetKeepDatas()const override {
 		return keepDatas_;
 	}
 
-	virtual KeepDatas GetCanChangedKeepDatas() const override {
+	virtual KeepDatas& GetCanChangedKeepDatas() override {
 		return keepDatas_;
 	}
 

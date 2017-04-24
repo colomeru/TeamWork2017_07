@@ -11,7 +11,7 @@ static const float defHeadLength = 2.f;
 static const float defPGravPow = 0.07f;
 static const float defGravAddPow = 0.0f;
 static const float HeadShootMult = 0.5f;
-static const float defSlipCount = 99999999.f;
+static const float defSlipCount = 10.f;
 class Player : public Actor, public std::enable_shared_from_this<Player>
 {
 public:
@@ -62,7 +62,9 @@ public:
 	int GetCurHead()const {
 		return currentHead_;
 	}
-	
+	bool GetPHeadDead(int pHeadNum)const {
+		return pHeadDead_[pHeadNum];
+	}
 	void CurHeadBite(const Vector2& target) {
 		isBiteMode_ = true;
 		pGrav_ = defPGravPow;
@@ -99,6 +101,7 @@ private:
 			pHL = 2.f;
 		}
 	}
+	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
 
 	void UpdateLaneNum(int updateNum) {
@@ -131,6 +134,7 @@ private:
 	std::vector<Vector2> pHeadPoses_;
 	//各Headのチェーンの長さ
 	std::vector<float> pHeadLength_;
+	std::vector<bool> pHeadDead_;
 
 	int currentHead_;
 
@@ -143,12 +147,15 @@ private:
 	float maxChainLength_;
 
 	float slipCount_;
+
 	bool isSlipped_;
 
+	//噛んでいるか
 	bool isBiteMode_;
 
 	//0=false 1=start 2=end
 	int isShootMode_;
 	bool isNextPushKey_;
 	float jumpShotPower_;
+
 };

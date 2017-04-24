@@ -10,7 +10,8 @@ Actor::Actor(IWorld * world, Actor * parent) :
 	parent_(parent),
 	angle_(0.f),
 	position_(Vector2::Zero),
-	laneNum_(0)
+	laneNum_(0),
+	isDraw_(true)
 {
 	colFunc_[COL_ID::TEST_COL] = std::bind(&Actor::IsHit_Circle_Circle,this,std::placeholders::_1);
 	colFunc_[COL_ID::BOX_SEGMENT_COL] = std::bind(&Actor::IsHit_OBB_Segment, this, std::placeholders::_1);
@@ -122,9 +123,9 @@ CollisionParameter Actor::IsHit_OBB_Segment(const Actor & sprite2)
 	int intSet[][2] = { { 0,1 },{ 0,2 },{ 1,3 },{ 2,3 } };
 
 	for (int i = 0; i < 4; i++) {
-		DrawLine(points[intSet[i][0]].x, points[intSet[i][0]].y, points[intSet[i][1]].x, points[intSet[i][1]].y, GetColor(255, 0, 0));
+		//DrawLine(points[intSet[i][0]].x, points[intSet[i][0]].y, points[intSet[i][1]].x, points[intSet[i][1]].y, GetColor(255, 0, 0));
 	}
-	DrawLine(seg.startPoint.x, seg.startPoint.y, seg.endPoint.x, seg.endPoint.y, GetColor(255, 255, 255));
+	//DrawLine(seg.startPoint.x, seg.startPoint.y, seg.endPoint.x, seg.endPoint.y, GetColor(255, 255, 255));
 
 	bool isHitCheck = false;
 	if (MyCol::Col_OBB_Segment(obb, seg, points, segPoint)) {
@@ -147,8 +148,8 @@ CollisionParameter Actor::IsHit_Segment_Segment(const Actor & sprite2)
 	//CeateOBB(&obb1, sp1Translation, sprite1.mat.RotationMatrix(), Vector2(sprite1.size.x / 2.0f, sprite1.size.y / 2.0f));
 	//CreateOBB(&obb2, sp2Translation, sprite2.mat.RotationMatrix(), Vector2(sprite2.size.x / 2.0f, sprite2.size.y / 2.0f));
 
-	DrawLine(seg1.startPoint.x, seg1.startPoint.y, seg1.endPoint.x, seg1.endPoint.y, GetColor(255, 255, 255));
-	DrawLine(seg2.startPoint.x, seg2.startPoint.y, seg2.endPoint.x, seg2.endPoint.y, GetColor(255, 255, 255));
+	//DrawLine(seg1.startPoint.x, seg1.startPoint.y, seg1.endPoint.x, seg1.endPoint.y, GetColor(255, 255, 255));
+	//DrawLine(seg2.startPoint.x, seg2.startPoint.y, seg2.endPoint.x, seg2.endPoint.y, GetColor(255, 255, 255));
 
 	Vector2 segPoint;
 	bool colPF = false;
@@ -171,8 +172,8 @@ CollisionParameter Actor::IsHit_Circle_Circle(const Actor & sprite2)
 	//CeateOBB(&obb1, sp1Translation, sprite1.mat.RotationMatrix(), Vector2(sprite1.size.x / 2.0f, sprite1.size.y / 2.0f));
 	//CreateOBB(&obb2, sp2Translation, sprite2.mat.RotationMatrix(), Vector2(sprite2.size.x / 2.0f, sprite2.size.y / 2.0f));
 
-	DrawCircle(sp1Translation.x, sp1Translation.y, GetParameter().radius, GetColor(255, 255, 255));
-	DrawCircle(sp2Translation.x, sp2Translation.y, sprite2.GetParameter().radius, GetColor(255, 255, 255));
+	//DrawCircle(sp1Translation.x, sp1Translation.y, GetParameter().radius, GetColor(255, 255, 255));
+	//DrawCircle(sp2Translation.x, sp2Translation.y, sprite2.GetParameter().radius, GetColor(255, 255, 255));
 
 	Vector2 segPoint;
 	bool colPF = false;
@@ -192,8 +193,8 @@ CollisionParameter Actor::IsHit_Circle_Segment(const Actor & sprite2)
 	MyCol::CreateCircle(&crc, sp1Translation, GetParameter().radius);
 	MyCol::CreateSegment(&seg, sp2Translation, Matrix::CreateRotationZ(sprite2.GetAngle()), sprite2.GetParameter().size.x);
 
-	DrawCircle(sp1Translation.x, sp1Translation.y, GetParameter().radius, GetColor(255, 255, 255));
-	DrawLine(seg.startPoint.x, seg.startPoint.y, seg.endPoint.x, seg.endPoint.y, GetColor(255, 255, 255));
+	//DrawCircle(sp1Translation.x, sp1Translation.y, GetParameter().radius, GetColor(255, 255, 255));
+	//DrawLine(seg.startPoint.x, seg.startPoint.y, seg.endPoint.x, seg.endPoint.y, GetColor(255, 255, 255));
 
 	Vector2 segPoint;
 	return CollisionParameter(COL_ID::BEGIN_COL, MyCol::Col_Circle_Segment(crc, seg, segPoint), segPoint);
@@ -210,7 +211,7 @@ CollisionParameter Actor::IsHit_OBB_Circle(const Actor & sprite2) {
 	MyCol::CreateOBB(&obb, sp1Translation, Matrix::CreateRotationZ(GetAngle()), GetParameter().size);
 	MyCol::CreateCircle(&crc, sp2Translation, sprite2.GetParameter().radius);
 
-	DrawCircle(sp2Translation.x, sp2Translation.y, sprite2.GetParameter().radius, GetColor(255, 255, 255));
+	//DrawCircle(sp2Translation.x, sp2Translation.y, sprite2.GetParameter().radius, GetColor(255, 255, 255));
 
 	Vector2 segPoint;
 	std::vector<Vector2> points = MyCol::GetOBBPoints(*this);

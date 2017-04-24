@@ -13,6 +13,7 @@
 
 #include "DxLib.h"
 
+static const int alphaSetter[2] = {255,100};
 class Actor 
 {
 public:
@@ -23,6 +24,18 @@ public:
 	// XV
 	virtual void Update() = 0;
 	// •`‰æ
+	void BaseDraw()const {
+		if (!isDraw_)return;
+		else 
+		{
+			int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
+			drawLane = MathHelper::Abs(drawLane);
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, alphaSetter[drawLane]);
+			Draw();
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+
+		}
+	}
 	virtual void Draw() const = 0;
 	// Ž€–S‚µ‚Ä‚¢‚é‚©H
 	virtual bool isDead() const { return parameter_.isDead; }
@@ -51,6 +64,15 @@ public:
 	void LateComUpdate() {
 		Vector3 cmpos3d = Vector3(position_.x, position_.y, 0)*world_->GetInv();
 		drawPos_ = Vector2(cmpos3d.x, cmpos3d.y);
+
+		int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
+		if (drawLane >= 2) {
+			isDraw_ = false;
+		}
+		else {
+			isDraw_ = true;
+			drawPos_.y += defDrawLinePosY[drawLane+1];
+		}
 	}
 
 	// Ž©•ªŽæ“¾
@@ -115,6 +137,7 @@ protected:
 	Vector2			prevPosition_;
 
 	Vector2			drawPos_;
+	bool isDraw_;
 	// ˆÚ“®—Ê
 	Vector2			velocity_;
 

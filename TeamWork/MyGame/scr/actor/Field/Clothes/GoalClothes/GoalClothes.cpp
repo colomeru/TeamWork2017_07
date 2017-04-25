@@ -24,6 +24,7 @@ GoalClothes::~GoalClothes()
 
 void GoalClothes::Update()
 {
+	isHit_ = false;
 }
 
 void GoalClothes::Draw() const

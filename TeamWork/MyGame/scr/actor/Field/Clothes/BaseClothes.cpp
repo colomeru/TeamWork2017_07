@@ -3,6 +3,7 @@
 #include "../../../input/Keyboard.h"
 #include "../../../conv/DXConverter.h"
 #include "../../../graphic/Model.h"
+#include "../../../graphic/Sprite.h"
 
 BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
@@ -33,48 +34,14 @@ BaseClothes::~BaseClothes()
 
 void BaseClothes::Update()
 {
-	velocity_ = Vector2::Zero;
-	float speed = 0.0f;
+	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	}
+	if (laneNum_ == world_->GetKeepDatas().nextLane_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	}
+
 	isHit_ = false;
-	auto pos = parameter_.mat.Translation();
-
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-		velocity_.y -= 1.0f;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
-		velocity_.y += 1.0f;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)) {
-		velocity_.x += 1.0f;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) {
-		velocity_.x -= 1.0f;
-	}
-
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::V)) {
-		angle_ -= 1.0f;
-	}
-	else if (Keyboard::GetInstance().KeyStateDown(KEYCODE::C)) {
-		angle_ += 1.0f;
-	}
-
-	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::ENEMY_ACTOR, COL_ID::TEST_COL);
-
-	//行列にangleをかける
-	parameter_.mat += Matrix::CreateRotationZ(angle_);
-	parameter_.mat.NormalizeRotationMatrix();
-
-	//正面への移動量を追加(DXライブラリだからZにマイナス)
-	//velocity_ += parameter_.mat.Backward() * speed;
-	//velocity_ += parameter_.mat.Up() * jumpVec;
-	//velocityをpositionに追加
-	pos += Vector3(velocity_.x, velocity_.y);
-	position_ += velocity_;
-
-	//if (pos.y < 0)pos.y = 0;
-
-	parameter_.mat.Translation(pos);
-
 }
 
 void BaseClothes::Draw() const
@@ -103,7 +70,9 @@ void BaseClothes::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
 	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
@@ -116,7 +85,6 @@ void BaseClothes::OnUpdate()
 
 void BaseClothes::OnCollide(Actor * other, CollisionParameter colpara)
 {
-	isHit_ = true;
 }
 
 void BaseClothes::OnMessage(EventMessage message, void * param)

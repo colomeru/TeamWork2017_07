@@ -4,7 +4,7 @@
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 	:Actor(world)
 	,isHit_(false), isPendulum_(false), isFriction(true)
-	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.0f), length_(300.0f), gravity_(0.3f)
+	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.0f), length_(200.0f), gravity_(0.3f)
 {
 	isHit_ = true;
 }
@@ -12,6 +12,7 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 //当たり判定処理
 void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
+	isHit_ = true;
 }
 
 //メッセージ処理
@@ -23,7 +24,7 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 {
 	float friction = 1.0f;						//摩擦
 	if (isFriction) {
-		friction = 1.005f;						//増加
+		friction = 1.007f;						//増加
 	}
 	else {
 		friction = 0.995f;						//減衰
@@ -54,7 +55,7 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	rot_ *= friction;
 
 	//角速度の制限
-	MathHelper::Clamp(rot_spd_, -3.0f, -3.0f);
+	rot_spd_ = MathHelper::Clamp(rot_spd_, -1.5f, 2.0f);
 
 	//角度に角速度を加算
 	rot_ += rot_spd_;

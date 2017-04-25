@@ -6,14 +6,11 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	clothes_ID = CLOTHES_ID::HANGER;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(100, 100.f);
+	parameter_.size = Vector2(200, 200.f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
-	parameter_.ClothSegmentPoints_.push_back(Vector2(-50.f, 50.f));
-	parameter_.ClothSegmentPoints_.push_back(Vector2(0, 50.f));
-	parameter_.ClothSegmentPoints_.push_back(Vector2(50.f, 50.f));
 
 	laneNum_ = laneNum;
 
@@ -59,15 +56,7 @@ void Hanger::Draw() const
 
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
-	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
 
-	if (isHit_) {
-		DrawFormatString(0, 280, GetColor(255, 255, 255), "Hit!!!!!!");
-	}
-	else {
-		DrawFormatString(0, 260, GetColor(255, 255, 255), "damedame");
-	}
 }
 
 void Hanger::OnUpdate()

@@ -23,6 +23,14 @@ ThinClothes::~ThinClothes()
 
 void ThinClothes::Update()
 {
+	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	}
+	if (laneNum_ == world_->GetKeepDatas().nextLane_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	}
+
+	isHit_ = false;
 }
 
 void ThinClothes::Draw() const
@@ -49,8 +57,6 @@ void ThinClothes::Draw() const
 
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(204, 204, 204), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
-	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
 }
 
 void ThinClothes::OnUpdate()

@@ -27,8 +27,16 @@ TestClothes::~TestClothes()
 
 void TestClothes::Update()
 {
-	isHit_ = false;
 	ShakesClothes();
+
+	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	}
+	if (laneNum_ == world_->GetKeepDatas().nextLane_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	}
+
+	isHit_ = false;
 }
 
 void TestClothes::Draw() const

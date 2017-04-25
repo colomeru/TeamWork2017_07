@@ -425,5 +425,8 @@
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
+    <ClInclude Include="scr\sound\sound.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

@@ -10,6 +10,7 @@
 #include "../stageGenerator/Stage1/Stage1.h"
 #include "../actor/Field/Clothes/TestClothes.h"
 #include "../actor/Field/Clothes/Hanger/Hanger.h"
+#include "../graphic/Sprite.h"
 
 CreditScene::CreditScene() :
 nextScene_(Scene::Ending),
@@ -32,6 +33,7 @@ CreditScene::~CreditScene()
 void CreditScene::Initialize()
 {
 	isEnd_ = false;
+	isTest_ = false;
 
 	//Camera::GetInstance().SetRange(0.1f, 10000.0f);
 	//Camera::GetInstance().SetViewAngle(60.0f);
@@ -45,11 +47,12 @@ void CreditScene::Initialize()
 
 	player_ = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
-	//world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<Enemy>(world_.get()));
+
+	//goal_ = std::make_shared<GoalClothes>(world_.get(), CLOTHES_ID::GOAL_CLOTHES, 1, Vector2(1000, 500));
+	//world_->Add(ACTOR_ID::STAGE_ACTOR, goal_);
 
 	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
 	world_->SetTarget(player_.get());
-
 }
 
 void CreditScene::Update()
@@ -71,6 +74,10 @@ void CreditScene::Update()
 	//Camera::GetInstance().Target.Set(target_);
 	//Camera::GetInstance().Update();
 
+	if (stageGeneratorManager.GetGoalFlag(Stage::Stage1)) {
+		isTest_ = true;
+	}
+
 	// I—¹
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
@@ -83,6 +90,10 @@ void CreditScene::Draw() const
 
 	// •`‰æ
 	world_->Draw();
+
+	if (isTest_) {
+		Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, Vector2(500, 400));
+	}
 }
 
 bool CreditScene::IsEnd() const

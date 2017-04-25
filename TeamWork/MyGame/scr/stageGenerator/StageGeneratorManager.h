@@ -16,6 +16,8 @@ public:
 	void Clear();
 	//ステージサイズ取得
 	Vector2 GetStageSize(const Stage name);
+	//ゴールフラグ取得
+	bool GetGoalFlag(const Stage name);
 
 private:
 	//コピー禁止

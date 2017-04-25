@@ -2,6 +2,7 @@
 #include "../Clothes.h"
 #include "../MyGame/scr/actor/player/Player.h"
 
+//ƒnƒ“ƒK[
 class Hanger : public Clothes, public std::enable_shared_from_this<Hanger>
 {
 public:

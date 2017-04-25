@@ -6,6 +6,7 @@
 #include "../math/Vector3.h"
 #include "../stageGenerator/StageGeneratorManager.h"
 #include "../actor/player/Player.h"
+#include "../actor/Field/Clothes/GoalClothes/GoalClothes.h"
 
 class CreditScene : public IScene
 {
@@ -34,12 +35,17 @@ private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
 	using PlayerPtr = std::shared_ptr<Player>;
+	using GoalPtr = std::shared_ptr<GoalClothes>;
 	// ワールド
 	WorldPtr		world_;
 	PlayerPtr		player_;
+	GoalPtr			goal_;
 
 	Vector3 camera_pos_;
 	Vector3 target_;
+
+	//テスト用フラグ
+	bool isTest_;
 
 	//ステージ作成マネージャー
 	StageGenerateManager stageGeneratorManager;

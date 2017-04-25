@@ -1,6 +1,7 @@
 #pragma once
 #include "../Clothes.h"
 
+//ゴール
 class GoalClothes: public Clothes, public std::enable_shared_from_this<GoalClothes>
 {
 public:
@@ -18,6 +19,10 @@ public:
 	virtual void OnCollide(Actor* other, CollisionParameter colpara);
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
+
+	bool GetGoalFlag() {
+		return isHit_;
+	}
 
 private:
 };

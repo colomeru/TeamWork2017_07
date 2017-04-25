@@ -28,3 +28,8 @@ Vector2 StageGenerateManager::GetStageSize(const Stage name)
 {
 	return stages[name]->GetStageSize();
 }
+
+bool StageGenerateManager::GetGoalFlag(const Stage name)
+{
+	return stages[name]->GetGoalFlag();
+}

@@ -47,6 +47,8 @@ private:
 	//テスト用フラグ
 	bool isTest_;
 
+	Vector2 size;
+
 	//ステージ作成マネージャー
 	StageGenerateManager stageGeneratorManager;
 

@@ -1,6 +1,7 @@
 #include "CreditScene.h"
 #include "../time/Time.h"
 #include "../conv/DXConverter.h"
+#include "../fade/FadePanel.h"
 
 #include "../actor/player/Player3.h"
 #include "../actor/enemy/Enemy.h"
@@ -42,6 +43,8 @@ void CreditScene::Initialize()
 	//Camera::GetInstance().Target.Set(target_);
 	//Camera::GetInstance().Update();
 
+	FadePanel::GetInstance().Initialize();
+
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage1);
 
@@ -53,6 +56,8 @@ void CreditScene::Initialize()
 
 	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
 	world_->SetTarget(player_.get());
+
+	size = stageGeneratorManager.GetStageSize(Stage::Stage1);
 }
 
 void CreditScene::Update()
@@ -89,11 +94,14 @@ void CreditScene::Draw() const
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	// •`‰æ
-	world_->Draw();
+	world_->Draw(3, world_->GetKeepDatas().playerLane_);
+
 
 	if (isTest_) {
-		Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, Vector2(500, 400));
+		Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, Vector2(1500, 400));
 	}
+
+	DrawFormatString(0, 200, GetColor(255, 255, 255), "stageSize x:%f y:%f", size.x, size.y);
 }
 
 bool CreditScene::IsEnd() const

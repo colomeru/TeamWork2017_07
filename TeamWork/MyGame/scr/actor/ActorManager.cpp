@@ -9,17 +9,34 @@ void ActorManager::Update()
 	{
 		actor->FastUpdate();
 		actor->CommonUpdate();
-		actor->Update();
+		actor->UpdateList();
 		actor->LateUpdate();
 		actor->LateComUpdate();
 	}
 }
 
 // 描画
-void ActorManager::Draw() const
+void ActorManager::Draw(const int laneCount, const int playerLane) const
 {
-	for (auto& actor : actorPtr)
-		actor->Draw();
+	// レーン数だけ描画
+	for (int i = 0; i <= laneCount; i++)
+	{
+		// プレイヤーとのレーン差が1以上なら省略
+		auto dif = playerLane - i;
+		if (MathHelper::Abs(dif) > 1)
+			continue;
+
+		for (auto& actor : actorPtr)
+		{
+			auto thisLane = actor->GetLaneNum();
+			// 描画レーンとアクターのレーンが合っていたら描画
+			if (thisLane == i && (actor->GetIsUpdate() && actor->GetIsDraw()))
+				actor->Draw();
+
+			// 描画はActor側で値を決めるようにする
+			//actor->BaseDraw();
+		}
+	}
 }
 
 // 追加

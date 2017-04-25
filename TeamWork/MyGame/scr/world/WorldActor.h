@@ -23,7 +23,7 @@ public:
 	// 更新
 	void Update();
 	// 描画
-	void Draw() const;
+	void Draw(const int laneCount=0,const int playerLane=0) const;
 	// 追加
 	void Add(ACTOR_ID id, ActorPtr actor);
 	// クリア

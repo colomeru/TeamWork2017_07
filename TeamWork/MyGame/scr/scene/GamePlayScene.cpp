@@ -8,13 +8,15 @@
 #include"../conv/DXConverter.h"
 #include"../actor/player/Player.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
+#include"../actor/Field/Clothes/TestClothes.h"
 
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"
 #include"../stageGenerator/Stage1/Stage1.h"
 
+static const int maxLaneCount = 3;
 GamePlayScene::GamePlayScene() :
-nextScene_(Scene::Credit)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
+	nextScene_(Scene::Credit)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 
 {
 	// ワールド生成
@@ -44,20 +46,20 @@ void GamePlayScene::Initialize()
 	//Vector3 target_ = posit;
 	//RangeF range = RangeF(0.f, 1000.f);
 	//float angle = 60.f;
-	
+
 	//camera_ = std::make_shared<TPSCamera>(world_.get(), position_, target_, range, angle, Vector3::Up, 0);
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR,camera_);
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
-	
+
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test")));
-	//stageGeneratorManager.SetStage(Stage::Stage1);
-	
-	
+	stageGeneratorManager.SetStage(Stage::Stage1);
+
+
 	ply1 = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 1, Vector2(200, 100)));
+	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 2, Vector2(200, 100)));
 
 	//本番用
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
@@ -93,10 +95,10 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw() const
 {
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+	//DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
+	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
-	DrawFormatString(700, 600, GetColor(255, 255, 255), "%f", ply1->GetAngle());
+	//DrawFormatString(700, 600, GetColor(255, 255, 255), "%f", ply1->GetAngle());
 
 	//CollisionParameter param = MyCol::IsHit_OBB_Segment(*ply1->GetActor(), *ply2->GetActor());
 	//if (param.colFrag) {
@@ -109,12 +111,12 @@ void GamePlayScene::Draw() const
 
 	//}
 	// 描画
-	world_->Draw();
+	world_->Draw(maxLaneCount, world_->GetKeepDatas().playerLane_);
 
 
 	//VECTOR pos1 = DXConverter::GetInstance().ToVECTOR(posit);
 	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);
-	
+
 	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
 
 }

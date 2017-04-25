@@ -42,6 +42,6 @@ public:
 	virtual void PopStackActor() = 0;
 
 	virtual void SetKeepDatas(KeepDatas data) = 0;
-	virtual KeepDatas& GetKeepDatas() = 0;
-	virtual KeepDatas GetCanChangedKeepDatas() const = 0;
+	virtual KeepDatas GetKeepDatas() const = 0;
+	virtual KeepDatas& GetCanChangedKeepDatas() = 0;
 };

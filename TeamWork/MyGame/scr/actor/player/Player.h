@@ -8,10 +8,13 @@ static const Vector2 pHDist = Vector2(32, 32);
 static const int headAngleSetter = -2;
 static const float defHeadChangeTime = 0.2f;
 static const float defHeadLength = 2.f;
-static const float defPGravPow = 0.07f;
-static const float defGravAddPow = 0.0f;
+static const float defPGravPow = 0.05f;
+static const float defGravAddPow = 0.2f;
 static const float HeadShootMult = 0.5f;
-static const float defSlipCount = 99999999.f;
+static const float defSlipCount = 5.f;
+static const int defLaneChangeCoolTime_ = 60;
+
+
 class Player : public Actor, public std::enable_shared_from_this<Player>
 {
 public:
@@ -21,9 +24,6 @@ public:
 	~Player();
 	//更新
 	virtual void Update() override;
-	virtual void FastUpdate() override {
-		//isShootMode_ = false;
-	}
 	//描画
 	virtual void Draw() const override;
 	//受動更新
@@ -37,9 +37,11 @@ public:
 	Vector2 GetHeadPos(int headNum)const {
 		return pHeadPoses_[headNum];
 	}
+	//Headのデータ上の長さを返す
 	float GetHeadLength(int headNum) const {
 		return pHeadLength_[headNum];
 	}
+	//Headの長さを実際のゲームに反映される値に変換して返す
 	float GetHeadLengthChangeToPosMult(int headNum) const {
 		return pHeadLength_[headNum] * HeadShootMult;
 	}
@@ -62,7 +64,9 @@ public:
 	int GetCurHead()const {
 		return currentHead_;
 	}
-	
+	bool GetPHeadDead(int pHeadNum)const {
+		return pHeadDead_[pHeadNum];
+	}
 	void CurHeadBite(const Vector2& target) {
 		isBiteMode_ = true;
 		pGrav_ = defPGravPow;
@@ -74,6 +78,9 @@ public:
 	//噛み付ける状態かを返す
 	bool GetIsBiteMode()const {
 		return isBiteMode_;
+	}
+	void SetIsBiteMode(bool ismode) {
+		isBiteMode_ = ismode;
 	}
 	int GetIsShootMode()const {
 		return isShootMode_;
@@ -90,26 +97,46 @@ public:
 
 	//worldの共有データに自分の情報を代入する
 	void worldSetMyDatas();
+
+	//新しいレーンの値を入力して、そのレーンに行けるかを調べる
+	void SetNextLane(int updateNum) {
+		if (laneChangeCoolTime_ > 0)return;
+
+		laneAddNum_ = updateNum;
+		nextLane_ = laneNum_ + updateNum;
+
+	}
+	void SetIsCanChangeLane(bool isCanChange) {
+		if (laneChangeCoolTime_ > 0)return;
+		laneChangeCoolTime_ = defLaneChangeCoolTime_;
+		isCanChangeLane_ = isCanChange;
+	}
+
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
 
 	void PHeadLengthReset() {
+		//チェーンのロックをリセットする
+		chainLock_ = false;
 		for (auto& pHL : pHeadLength_) {
 			pHL = 2.f;
 		}
 	}
+	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
 
 	void UpdateLaneNum(int updateNum) {
-		laneNum_+=updateNum;
+		isCanChangeLane_ = false;
+
+		laneNum_ += updateNum;
 		laneNum_ = MathHelper::Clamp(laneNum_, 0, 2);
 
 		worldSetMyDatas();
 	}
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
-	
+
 	//衝突しているか
 	bool isHit_;
 
@@ -131,6 +158,7 @@ private:
 	std::vector<Vector2> pHeadPoses_;
 	//各Headのチェーンの長さ
 	std::vector<float> pHeadLength_;
+	std::vector<bool> pHeadDead_;
 
 	int currentHead_;
 
@@ -143,12 +171,24 @@ private:
 	float maxChainLength_;
 
 	float slipCount_;
+
 	bool isSlipped_;
 
+	//噛んでいるか
 	bool isBiteMode_;
 
 	//0=false 1=start 2=end
 	int isShootMode_;
 	bool isNextPushKey_;
 	float jumpShotPower_;
+	bool chainLock_;
+
+	//レーン移動したフレームで噛む対象があるかを調べる
+	bool isNextLaneBite_;
+
+	int nextLane_;
+	int laneAddNum_;
+	bool isCanChangeLane_;
+
+	int laneChangeCoolTime_;
 };

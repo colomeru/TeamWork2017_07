@@ -8,9 +8,11 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 	:Actor(world, targetP)
 	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0)
 {
+	spriteId_ = SPRITE_ID::PLAYER_HEAD_SPRITE;
+
 	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
-	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(32.0f, 64.0f);
+	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2;
+	parameter_.size = Sprite::GetInstance().GetSize(spriteId_);
 	parameter_.HP = 10;
 
 	parameter_.mat
@@ -31,30 +33,37 @@ Player_Head::~Player_Head()
 
 void Player_Head::Update()
 {
+	if (player_->GetPHeadDead(myNumber_))return;
 	if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
 	else {
 		fatigueCheckColor_ -= 2;
 		fatigueCheckColor_ = max(fatigueCheckColor_, 0);
 	}
 	//Vector2 posAddP = position_;
+
+
+	//毎フレーム、1度でも当たったかを調べる
 	{
-	if (!isHitOnce) {
-		isBitePoint_ = false;
-	}
-	isHitOnce = false;
+		if (!isHitOnce) {
+			isBitePoint_ = false;
+		}
+		isHitOnce = false;
 	}
 	auto basePos = player_->GetHeadPos(myNumber_);
-	Vector2 vel = basePos-player_->GetPosition();
+	Vector2 vel = basePos - player_->GetPosition();
 
 
 	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
 
-	if(player_->GetCurHead()==myNumber_&&player_->GetIsSlipped())position_ = basePos + posAddVect_;
-	else 	position_ = basePos + bPlusLngPos;
-	
+	if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()) {
+		position_ = basePos + posAddVect_;
+	}
+	else {
+		position_ = basePos + bPlusLngPos;
+	}
 	//自分,相手のID,Colの種類
-	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
-	
+	//world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
+
 	//velocity_ = Vector2::Zero;
 	//float speed = 0.0f;
 	//isHit_ = false;
@@ -87,10 +96,12 @@ void Player_Head::Update()
 	else {
 		isHit_ = false;
 	}
+	if (!player_->GetIsBiteMode())isHit_ = false;
 }
 
 void Player_Head::Draw() const
 {
+	if (player_->GetPHeadDead(myNumber_))return;
 	//auto pos_1 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation());
 	//auto pos_2 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation() + Vector3(0, 10, 0));
 	//DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
@@ -118,18 +129,24 @@ void Player_Head::Draw() const
 	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
+	Vector2 headOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
+	Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_, Vector2::One);
+	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
+
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
 	//if (player_->GetCurHead() == myNumber_) {
-		SetDrawBlendMode(BLEND_MODE::Alpha, fatigueCheckColor_);
-		DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), TRUE);
-		SetDrawBlendMode(BLEND_MODE::NoBlend, 0);
+	//SetDrawBlendMode(BLEND_MODE::Alpha, fatigueCheckColor_);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), TRUE);
+	//SetDrawBlendMode(BLEND_MODE::NoBlend, 0);
 	//}
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
-	if (myNumber_ == player_->GetCurHead())DrawFormatString(300, 700, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
+	//if (myNumber_ == player_->GetCurHead())DrawFormatString(300, 700, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", angle_);
-	if (myNumber_ == player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
-	if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
+	//if (myNumber_ == player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
+	//if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
+	//DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
 
+	DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
 }
 
 void Player_Head::OnUpdate()
@@ -138,9 +155,21 @@ void Player_Head::OnUpdate()
 
 void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
+	if (player_->GetPHeadDead(myNumber_))return;
+
 	isBitePoint_ = true;
 	isHitOnce = true;
-	if (player_->GetCurHead()!=myNumber_||isHit_|| player_->GetIsShootMode()!=2)return;
+
+
+	if (player_->GetCurHead() != myNumber_) {
+		return;
+	}
+	else if (other.GetLaneNum() != laneNum_) {
+		player_->SetIsCanChangeLane(true);
+		return;
+	}
+
+	if (isHit_ || (player_->GetIsShootMode() != 2 && player_->GetIsShootMode() != 4))return;
 
 	isHit_ = true;
 	isBitePoint_ = false;

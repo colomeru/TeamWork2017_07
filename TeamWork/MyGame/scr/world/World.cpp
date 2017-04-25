@@ -3,7 +3,7 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World():targetAct_(nullptr),keepDatas_()
+World::World() :targetAct_(nullptr), keepDatas_()
 {
 }
 
@@ -30,7 +30,7 @@ void World::Update()
 	}
 
 	actors_.Update();
-	
+
 	// 受動更新
 	if (!manualStackActor_.empty())
 		manualStackActor_.top()->OnUpdate();
@@ -41,10 +41,10 @@ void World::Update()
 }
 
 // 描画
-void World::Draw() const
+void World::Draw(const int laneCount, const int playerLane) const
 {
-	DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
-	actors_.Draw();
+	//DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
+	actors_.Draw(laneCount, playerLane);
 }
 
 // クリア

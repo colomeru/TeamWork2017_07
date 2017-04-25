@@ -3,21 +3,33 @@
 #include "WorldActor.h"
 #include"../math/MathHelper.h"
 #include"../math/Vector3.h"
+#include"../math/Vector2.h"
 #include <stack>
 
-static const float defDrawLinePos[3] = { 0,0,0 };
+static const float defDrawLinePosY[3] = { 0,400,1000 };
 
 //World内で、アクター全員が取得出来るデータ
 struct KeepDatas {
 	//playerの現在のレーン
 	int playerLane_;
+	int nextLane_;
+	Vector2 playerPos_;
 
-	KeepDatas(int lane=0):playerLane_(lane){}
+	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero, int nextLane = 999) :playerLane_(lane), playerPos_(pos), nextLane_(nextLane) {}
 
-	//playerの現レーンを変更する
-	void SetPlayerLane(int pLane) {
+	//playerの現レーンを更新する
+	void SetPlayerLane(const int& pLane) {
 		playerLane_ = pLane;
 	}
+	//playerの現レーンを変更する
+	void SetPlayerPos(const Vector2& pPos) {
+		playerPos_ = pPos;
+	}
+	//プレイヤーが次に行くレーンを指定する
+	void SetPlayerNextLane(const int& pNLane) {
+		nextLane_ = pNLane;
+	}
+
 };
 
 static const Vector2 playerScreenPos_ = Vector2(300, 0);
@@ -33,7 +45,7 @@ public:
 	// 更新
 	void Update();
 	// 描画
-	void Draw() const;
+	void Draw(const int laneCount = 0, const int playerLane = 0) const;
 	// クリア
 	void Clear();
 	// イベントリスナーの追加
@@ -45,7 +57,7 @@ public:
 	/* ワールドインターフェース */
 	// 追加
 	virtual void Add(ACTOR_ID id, ActorPtr actor);
-	virtual void SetTarget(Actor* tgt){
+	virtual void SetTarget(Actor* tgt) {
 		targetAct_ = tgt;
 	}
 	// 終わっているか？
@@ -68,7 +80,7 @@ public:
 
 	virtual void inv(const Matrix& mat) override;
 	virtual Matrix InitializeInv(Vector2 position) override;
-	
+
 	virtual Matrix GetInv()override {
 		return inv_;
 	}
@@ -80,11 +92,11 @@ public:
 		keepDatas_ = data;
 	}
 	//共有データを取得する
-	virtual KeepDatas& GetKeepDatas() override {
+	virtual KeepDatas GetKeepDatas()const override {
 		return keepDatas_;
 	}
 
-	virtual KeepDatas GetCanChangedKeepDatas() const override {
+	virtual KeepDatas& GetCanChangedKeepDatas() override {
 		return keepDatas_;
 	}
 
@@ -104,7 +116,7 @@ private:
 	}
 
 private:
-	
+
 	Matrix inv_;
 	Matrix resInv_;
 	Matrix targetMat_;

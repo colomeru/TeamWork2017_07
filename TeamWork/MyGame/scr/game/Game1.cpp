@@ -1,5 +1,6 @@
 #include "Game1.h"
 #include "../input/Keyboard.h"
+#include "../input/GamePad.h"
 #include "../scene/DemoScene.h"
 #include "../scene/TitleScene.h"
 #include "../scene/MenuScene.h"
@@ -45,6 +46,8 @@ void Game1::Update()
 
 	// 入力を更新
 	Keyboard::GetInstance().Update();
+
+	GamePad::GetInstance().Update();
 
 	// Escキー入力で強制終了
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::ESC))

@@ -3,6 +3,8 @@
 #include <map>
 #include "../math/Vector2.h"
 #include <vector>
+#include <array>
+#include "../stageGenerator/StageGeneratorManager.h"
 
 using namespace std;
 
@@ -28,6 +30,8 @@ public:
 	virtual void End() override;
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
+	//振り子
+	virtual void Pendulum();
 
 private:
 	float size;
@@ -52,9 +56,9 @@ private:
 	Vector2 cCenterPos;
 	bool turn;
 	vector<int> v;
-	float friction;
-	float x1;
-	float x2;
+	float friction; //摩擦
+	float x1; //支点のｘ座標
+	float x2; //支点のy座標
 
 	//ここから振り子
 	float fx; //支点x座標
@@ -63,40 +67,30 @@ private:
 	float rot_spd; //角速度
 	float length; //紐の長さ
 	float g; //重力加速度
-	Vector2 spherePos;
-	float rad;
-	float angle;
-	Vector2 line1_Pos_In;
-	Vector2 line1_Pos_Out;
-	Vector2 line2_Pos_In;
-	Vector2 line2_Pos_Out;
-	Vector2 line3_Pos_In;
-	Vector2 line3_Pos_Out;
-	Vector2 line4_Pos_In;
-	Vector2 line4_Pos_Out;
-	Vector2 line5_Pos_In;
-	Vector2 line5_Pos_Out;
-	Vector2 line6_Pos_In;
-	Vector2 line6_Pos_Out;
-	Vector2 line7_Pos_In;
-	Vector2 line7_Pos_Out;
-	Vector2 line8_Pos_In;
-	Vector2 line8_Pos_Out;
+	Vector2 spherePos; //重りの位置
 
-	float len;
-	float line1_Rot;
-	float line2_Rot;
-	float line3_Rot;
-	float line4_Rot;
-	float line5_Rot;
-	float line6_Rot;
-	float line7_Rot;
-	float line8_Rot;
+	float len; //首の長さ
 	float rot2;
+	float r; //重りの半径
+	float stageLen; //ステージの長さ
+	float meterLen; //進行度メーターの長さ
+	Vector2 meterPos; //進行度メーターの位置
+	StageGenerateManager stageManager;
 	
-	vector<Vector2> fulcrum;
-	int vec;
+	std::array<Vector2,8> fulcrum; //支点
+	std::array<Vector2, 8> inPos; //内側
+	std::array<Vector2, 8> outPos; //外側
+	std::array<float, 8> lineRot; //それぞれの首の角度
+	std::array<float, 8> neckLen; //それぞれの首の長さ
+	int vec; //現在の首番号
+	const float spdLimit = 2.75f; //
+	bool rotDirection;; //回転方向：trueなら右回り、falseなら左回り
+	int r1; //1フレーム前のrot
+	int r2; //1フレーム後のrot
 
+	Vector2 v1;
+	Vector2 v2;
+	float f;
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;

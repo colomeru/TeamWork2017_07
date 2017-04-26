@@ -20,9 +20,15 @@ void Game1::Initialize()
 	Model::GetInstance().Initialize();
 	Sprite::GetInstance().Initialize();
 
+	// 非同期読み込み開始
+	mContent.EnableASync();
+
 	// ファイルの読み込み
 	mContent.LoadSprite(Sprite::GetInstance(), Model::GetInstance());
 	mContent.LoadModel(Model::GetInstance(), false);
+
+	// 非同期読み込み終了
+	mContent.DisableASync();
 
 	// 時間初期化
 	mTime.Initialize();
@@ -46,7 +52,6 @@ void Game1::Update()
 
 	// 入力を更新
 	Keyboard::GetInstance().Update();
-
 	GamePad::GetInstance().Update();
 
 	// Escキー入力で強制終了

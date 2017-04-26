@@ -21,6 +21,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("headFatigue.bmp", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
 	sprite.Load("baseClothes.bmp", SPRITE_ID::BASE_CLOTHES_SPRITE);
 	sprite.Load("testClothes.bmp", SPRITE_ID::TEST_CLOTHES_SPRITE);
+	sprite.Load("goal.bmp", SPRITE_ID::TEST_GOAL_SPRITE);
 
 }
 

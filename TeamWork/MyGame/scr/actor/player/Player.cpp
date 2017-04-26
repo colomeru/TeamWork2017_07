@@ -15,7 +15,8 @@ Player::Player(IWorld * world)
 	:Actor(world),
 	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.5f), currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(0), isNextPushKey_(true),
-	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false), nextLane_(999), isCanChangeLane_(false), laneChangeCoolTime_(0)
+	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false), nextLane_(999), isCanChangeLane_(false), laneChangeCoolTime_(0),
+	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), isReSetClothesType_(false)
 {
 	laneNum_ = 1;
 
@@ -31,6 +32,14 @@ Player::Player(IWorld * world)
 		* Matrix::CreateTranslation(Vector3::Zero);
 
 	position_ = Vector2(0, 200);
+
+	slipCountMult_[CLOTHES_ID::BASE_CLOTHES] = 1.f;
+	slipCountMult_[CLOTHES_ID::FLUFFY_CLOTHES] = 0.f;
+	slipCountMult_[CLOTHES_ID::GOAL_CLOTHES] = 1.f;
+	slipCountMult_[CLOTHES_ID::GUM_CLOTHES] = 1.f;
+	slipCountMult_[CLOTHES_ID::HANGER] = 1.5f;
+	slipCountMult_[CLOTHES_ID::TEST_CLOTHES] = 1.f;
+	slipCountMult_[CLOTHES_ID::THIN_CLOTHES] = 2.f;
 
 	pHeads_.resize(8);
 	for (int i = 0; i < 8; i++)
@@ -48,6 +57,8 @@ Player::Player(IWorld * world)
 		SetMyHeadLaneNum(i);
 	}
 	worldSetMyDatas();
+
+	StartPlayerSet();
 }
 
 Player::~Player()
@@ -111,7 +122,7 @@ void Player::Update()
 
 
 	if (isBiteMode_) {
-		slipCount_ -= 0.016f;
+		slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
 		if (slipCount_ <= 0.f) {
 			isBiteMode_ = false;
 			isSlipped_ = true;
@@ -421,6 +432,16 @@ void Player::HeadPosUpdate()
 		pHeadPoses_[i] = cgToV2;
 	}
 
+}
+
+void Player::StartPlayerSet() {
+	isBiteMode_ = true;
+	pHeadLength_[currentHead_]=5.f;
+	pHeads_[currentHead_]->StartPlayerHeadBite();
+}
+
+int Player::GetCurHead() const {
+	return currentHead_;
 }
 
 

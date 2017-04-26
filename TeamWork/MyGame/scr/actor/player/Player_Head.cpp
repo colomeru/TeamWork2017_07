@@ -3,6 +3,7 @@
 #include "../../input/Keyboard.h"
 #include "../../conv/DXConverter.h"
 #include "../../graphic/Model.h"
+#include"../Field/Clothes/Clothes.h"
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
 	:Actor(world, targetP)
@@ -169,6 +170,17 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 		return;
 	}
 
+	//当たった服の種類をリセットする条件が整った時には、服の種類を再度セットする
+	if (player_->GetIsReSetClothesType_()) {
+		if (dynamic_cast<Clothes*>(&other) != nullptr) {
+			Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
+			player_->SetOtherClothesID_(otherClothes->GetClothesID());
+			//服の種類の再セットを終了する(再度発生しないようにする)
+			player_->SetIsReSetClothesType_(false);
+		}
+
+	}
+
 	if (isHit_ || (player_->GetIsShootMode() != 2 && player_->GetIsShootMode() != 4))return;
 
 	isHit_ = true;
@@ -176,6 +188,12 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	stopPos_ = position_;
 
 	player_->CurHeadBite(stopPos_);
+	
+	if (dynamic_cast<Clothes*>(&other) != nullptr) {
+		Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
+
+		player_->SetOtherClothesID_(otherClothes->GetClothesID());
+	}
 }
 
 void Player_Head::OnMessage(EventMessage message, void * param)

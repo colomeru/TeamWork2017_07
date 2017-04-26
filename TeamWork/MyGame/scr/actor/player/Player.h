@@ -60,10 +60,9 @@ public:
 		if (currentHead_ < 0)currentHead_ = pHeads_.size() - 1;
 		headChangeTime_ = -defHeadChangeTime;
 	}
-
-	int GetCurHead()const {
-		return currentHead_;
-	}
+	//プレイヤーの開始時の状態設定
+	void StartPlayerSet();
+	int GetCurHead()const;
 	bool GetPHeadDead(int pHeadNum)const {
 		return pHeadDead_[pHeadNum];
 	}
@@ -74,6 +73,9 @@ public:
 		//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
 		rot_ = 135;
 		rot_spd_ = -3.0f;
+	}
+	void SetOtherClothesID_(CLOTHES_ID cId) {
+		otherClothesID_ = cId;
 	}
 	//噛み付ける状態かを返す
 	bool GetIsBiteMode()const {
@@ -111,7 +113,12 @@ public:
 		laneChangeCoolTime_ = defLaneChangeCoolTime_;
 		isCanChangeLane_ = isCanChange;
 	}
-
+	bool GetIsReSetClothesType_()const {
+		return isReSetClothesType_;
+	}
+	void SetIsReSetClothesType_(bool isReset) {
+		isReSetClothesType_ = isReset;
+	}
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
@@ -131,6 +138,9 @@ private:
 
 		laneNum_ += updateNum;
 		laneNum_ = MathHelper::Clamp(laneNum_, 0, 2);
+
+		//移動先の服の種類に再設定する
+		isReSetClothesType_ = true;
 
 		worldSetMyDatas();
 	}
@@ -190,5 +200,13 @@ private:
 	int laneAddNum_;
 	bool isCanChangeLane_;
 
+	bool isReSetClothesType_;
+
 	int laneChangeCoolTime_;
+
+	CLOTHES_ID otherClothesID_;
+
+	//滑る時間の倍数(服毎)
+	std::map<CLOTHES_ID, float> slipCountMult_;
+
 };

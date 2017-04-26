@@ -20,11 +20,39 @@ public:
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 
+	//virtual void SetOtherClothesType(CLOTHES_ID type) override{
+	//	//現在使用している頭の時のみ当たった服の種類をセット
+	//	if (!getIsCurrentHead())return;
+	//
+	//	player_->SetOtherClothesID_(type);
+	//}
+
+	void StartPlayerHeadBite() {
+		isHit_ = true;
+		isBitePoint_ = false;
+
+		auto basePos = player_->GetHeadPos(myNumber_);
+		Vector2 vel = basePos - player_->GetPosition();
+
+
+		Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
+
+		position_ = basePos + bPlusLngPos;
+
+		stopPos_ = position_;
+
+		player_->CurHeadBite(stopPos_);
+
+	}
+
 	bool getIsHit()const{
 		return isHit_;
 	}
 	bool getIsBitePoint()const{
 		return isBitePoint_;
+	}
+	bool getIsCurrentHead()const {
+		return player_->GetCurHead() == myNumber_;
 	}
 	void SetPosAddVect(const Vector2& posAV) {
 		posAddVect_ = posAV;

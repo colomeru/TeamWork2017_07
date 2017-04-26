@@ -17,6 +17,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("circle.png", SPRITE_ID::CIRCLE_SPRITE);
 	sprite.Load("sphere.png", SPRITE_ID::SPHERE_SPRITE);
 	sprite.Load("êl.png", SPRITE_ID::HITO_SPRITE);
+	sprite.Load("snake.png", SPRITE_ID::SNAKE_SPRITE);
 	sprite.Load("head.bmp", SPRITE_ID::PLAYER_HEAD_SPRITE);
 	sprite.Load("headFatigue.bmp", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
 	sprite.Load("baseClothes.bmp", SPRITE_ID::BASE_CLOTHES_SPRITE);

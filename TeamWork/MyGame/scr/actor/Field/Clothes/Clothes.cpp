@@ -5,7 +5,7 @@
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 	:Actor(world)
 	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
-	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.5f), length_(200.0f), gravity_(0.3f), friction_(1.0f)
+	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.5f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
 {
 }
 

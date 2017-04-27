@@ -9,6 +9,7 @@
 #include"../actor/player/Player.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
 #include"../actor/Field/Clothes/TestClothes.h"
+#include"../actor/Field/ClothesLine.h"
 
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"
@@ -52,6 +53,10 @@ void GamePlayScene::Initialize()
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 
+	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, Vector2(0.f, -150.f)));
+	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, Vector2(0.f, -150.f)));
+	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, Vector2(0.f, -150.f)));
+
 	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test")));
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage2);
@@ -87,6 +92,18 @@ void GamePlayScene::Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
 
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+		world_->sendMessage(EventMessage::BEGIN_WIND);
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
+		world_->sendMessage(EventMessage::STRONG_WIND);
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
+		world_->sendMessage(EventMessage::ATTENUATE_WIND);
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
+		world_->sendMessage(EventMessage::END_WIND);
+	}
 
 	//Camera::GetInstance().Position.Set(camera_pos_);
 	//Camera::GetInstance().Target.Set(target_);

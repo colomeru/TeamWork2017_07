@@ -173,19 +173,23 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	//}
 
 	//当たった服の種類をリセットする条件が整った時には、服の種類を再度セットする
-	if (player_->GetIsReSetClothesType_()) {
-		if (dynamic_cast<Clothes*>(&other) != nullptr) {
-			Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
-			player_->SetOtherClothesID_(otherClothes->GetClothesID());
-			//服の種類の再セットを終了する(再度発生しないようにする)
-			player_->SetIsReSetClothesType_(false);
-		}
+	//if (player_->GetIsReSetClothesType_()) {
+	//	if (dynamic_cast<Clothes*>(&other) != nullptr) {
+	//		Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
+	//		player_->SetOtherClothesID_(otherClothes->GetClothesID());
+	//		//服の種類の再セットを終了する(再度発生しないようにする)
+	//		player_->SetIsReSetClothesType_(false);
+	//	}
 
-	}
+	//}
 	Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
 
 	if (otherClothes != nullptr) {
-		if (otherClothes->GetIsWind())return;
+		//服が風に吹かれていたらくっつかない
+		if (otherClothes->GetIsWind()) {
+			player_->SetIsBiteMode(false);
+			return;
+		}
 	}
 
 	if (isHit_ || (player_->GetIsShootMode() != 2 && player_->GetIsShootMode() != 4))return;

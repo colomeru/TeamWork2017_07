@@ -16,17 +16,7 @@ Actor::Actor(IWorld * world, Actor * parent) :
 	isUpdate_(true),
 	spriteAlpha_(1.f)
 {
-	//colFunc_[COL_ID::TEST_COL] = std::bind(&Actor::IsHit_Circle_Circle, this, std::placeholders::_1);
-	//colFunc_[COL_ID::BOX_SEGMENT_COL] = std::bind(&Actor::IsHit_OBB_Segment, this, std::placeholders::_1);
-	//colFunc_[COL_ID::BOX_CLOTHES_COL] = std::bind(&Actor::IsHit_OBB_Clothes, this, std::placeholders::_1);
-	//colFunc_[COL_ID::CLOTHES_BOX_COL] = std::bind(&Actor::IsHit_Clothes_OBB, this, std::placeholders::_1);
-	//colFunc_[COL_ID::BOX_BOX_COL] = std::bind(&Actor::IsHit_OBB_OBB, this, std::placeholders::_1);
 
-	// 以下関数宣言は各種アクターで必要なものだけにする
-	colFuncMap_[COL_ID::BOX_SEGMENT_COL] = std::bind(&CollisionFunction::IsHit_OBB_Segment, colFunc_, std::placeholders::_1, std::placeholders::_2);
-	colFuncMap_[COL_ID::BOX_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_OBB_Clothes, colFunc_, std::placeholders::_1, std::placeholders::_2);
-	colFuncMap_[COL_ID::CLOTHES_BOX_COL] = std::bind(&CollisionFunction::IsHit_Clothes_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 Actor::~Actor()

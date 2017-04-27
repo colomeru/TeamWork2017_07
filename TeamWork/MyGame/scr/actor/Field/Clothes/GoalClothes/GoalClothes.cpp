@@ -20,7 +20,7 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [&, this](const Actor& other) {
 		player_ = const_cast<Actor*>(&other);
 	});
-
+	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 GoalClothes::~GoalClothes()
@@ -30,9 +30,6 @@ GoalClothes::~GoalClothes()
 void GoalClothes::Update()
 {
 	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
-	if (laneNum_ == world_->GetKeepDatas().nextLane_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
 	}
 

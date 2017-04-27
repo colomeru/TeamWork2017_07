@@ -11,7 +11,7 @@ static const float defHeadLength = 2.f;
 static const float defPGravPow = 0.05f;
 static const float defGravAddPow = 0.2f;
 static const float HeadShootMult = 0.5f;
-static const float defSlipCount = 5.f;
+static const float defSlipCount = 8.f;
 static const int defLaneChangeCoolTime_ = 60;
 
 
@@ -108,11 +108,11 @@ public:
 		nextLane_ = laneNum_ + updateNum;
 
 	}
-	void SetIsCanChangeLane(bool isCanChange) {
-		if (laneChangeCoolTime_ > 0)return;
-		laneChangeCoolTime_ = defLaneChangeCoolTime_;
-		isCanChangeLane_ = isCanChange;
-	}
+	//void SetIsCanChangeLane(bool isCanChange) {
+	//	if (laneChangeCoolTime_ > 0)return;
+	//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
+	//	isCanChangeLane_ = isCanChange;
+	//}
 	bool GetIsReSetClothesType_()const {
 		return isReSetClothesType_;
 	}
@@ -134,18 +134,44 @@ private:
 	void CurPHeadLengPlus(float addPow);
 
 	void UpdateLaneNum(int updateNum) {
-		isCanChangeLane_ = false;
+		//isCanChangeLane_ = false;
+
+		if (laneNum_+updateNum > 2 || laneNum_ + updateNum<0)return;
+		
+		//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
+		Vector2 nextVel_;
+		if (updateNum < 0) {
+			nextVel_ = Vector2(0, -35.f);
+			pGrav_ = 0.f;
+			position_.y += 400;
+		}
+		else if (updateNum > 0) {
+			nextVel_ = Vector2(0, 0.f);
+			pGrav_ = 2.f;
+			position_.y += -500;
+		}
 
 		laneNum_ += updateNum;
+		//レーン最大範囲を超えたらVectの補正を行わない
+
 		laneNum_ = MathHelper::Clamp(laneNum_, 0, 2);
 
+		//velocity_ = nextVel_;
+		pendulumVect_ = nextVel_;
+
+		isBiteMode_ = false;
 		//移動先の服の種類に再設定する
-		isReSetClothesType_ = true;
+		//isReSetClothesType_ = true;
+
+		PHeadLengthReset();
+		changeHead();
 
 		worldSetMyDatas();
 	}
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
+
+	float spdLimit;
 
 	//衝突しているか
 	bool isHit_;
@@ -161,6 +187,8 @@ private:
 	float length_;
 	//重力加速度
 	float gravity_;
+	//振り子移動の摩擦
+	float friction;
 	//振り子移動によるベクトルを作り出す
 	Vector2 pendulumVect_;
 
@@ -198,11 +226,14 @@ private:
 
 	int nextLane_;
 	int laneAddNum_;
-	bool isCanChangeLane_;
+	//bool isCanChangeLane_;
 
 	bool isReSetClothesType_;
 
 	int laneChangeCoolTime_;
+	
+	//Head回転をロックする(スティックを0に戻す事でリセット)
+	bool isCanNextHeadRot;
 
 	CLOTHES_ID otherClothesID_;
 

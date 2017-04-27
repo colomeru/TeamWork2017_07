@@ -50,9 +50,11 @@ void Player_Head::Update()
 		}
 		isHitOnce = false;
 	}
+	//
 	auto basePos = player_->GetHeadPos(myNumber_);
+	
+	//プレイヤーから各ヘッドまでの長さ、(32,32のLength)*自分の首の長さ
 	Vector2 vel = basePos - player_->GetPosition();
-
 
 	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
 
@@ -145,7 +147,7 @@ void Player_Head::Draw() const
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", angle_);
 	//if (myNumber_ == player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
 	//if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
-	//DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
+	DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
 
 	DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
 }
@@ -165,10 +167,10 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	if (player_->GetCurHead() != myNumber_) {
 		return;
 	}
-	else if (other.GetLaneNum() != laneNum_) {
-		player_->SetIsCanChangeLane(true);
-		return;
-	}
+	//else if (other.GetLaneNum() != laneNum_) {
+	//	player_->SetIsCanChangeLane(true);
+	//	return;
+	//}
 
 	//当たった服の種類をリセットする条件が整った時には、服の種類を再度セットする
 	if (player_->GetIsReSetClothesType_()) {

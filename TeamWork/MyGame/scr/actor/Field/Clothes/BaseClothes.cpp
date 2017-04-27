@@ -27,6 +27,7 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
+	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 BaseClothes::~BaseClothes()
@@ -38,9 +39,6 @@ void BaseClothes::Update()
 	ShakesClothes();
 
 	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
-	if (laneNum_ == world_->GetKeepDatas().nextLane_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
 	}
 

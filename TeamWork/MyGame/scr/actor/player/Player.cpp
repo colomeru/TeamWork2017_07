@@ -6,6 +6,7 @@
 #include"Player_Head.h"
 #include"../../math/Matrix.h"
 #include"../../math/MyFuncionList.h"
+#include"../../input/GamePad.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -15,8 +16,9 @@ Player::Player(IWorld * world)
 	:Actor(world),
 	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.5f), currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(0), isNextPushKey_(true),
-	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false), nextLane_(999), isCanChangeLane_(false), laneChangeCoolTime_(0),
-	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), isReSetClothesType_(false)
+	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false), nextLane_(999),/* isCanChangeLane_(false),*/ laneChangeCoolTime_(0),
+	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), isReSetClothesType_(false),friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true)
+
 {
 	laneNum_ = 1;
 
@@ -67,9 +69,9 @@ Player::~Player()
 
 void Player::Update()
 {
-	if (isCanChangeLane_) {
-		UpdateLaneNum(laneAddNum_);
-	}
+	//if (isCanChangeLane_) {
+	//	UpdateLaneNum(laneAddNum_);
+	//}
 	//レーン変更のクールタイムを設定
 	laneChangeCoolTime_--;
 
@@ -170,11 +172,12 @@ void Player::Draw() const
 	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
 	//DrawFormatString(0, 100, GetColor(255, 255, 255), "%d", laneNum_);
+	DrawFormatString(50, 100, GetColor(255, 255, 255), "%f", rot_);
 	//DrawFormatString(400, 100, GetColor(255, 255, 255), "%f",angle_);
 	//if (isShootMode_>=1)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
 	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
 	//DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
-	//DrawFormatString(400, 100, GetColor(255, 255, 255), "%f:%f",pendulumVect_.x,pendulumVect_.y);
+	DrawFormatString(400, 100, GetColor(255, 255, 255), "%f:%f",GamePad::GetInstance().Stick().x, GamePad::GetInstance().Stick().y);
 
 	//int count = 0;
 	//for (auto sgT : pHeadLength_) {
@@ -210,11 +213,15 @@ void Player::Pendulum(Vector2 fulcrum, float length)
 	//変更前のpositionを保存
 	Vector2 curdefPos = position_;
 	//摩擦を設定
-	float friction = 0.998f;
+	//float friction = 1.f;
 	//それぞれの首の移動先座標を格納可能に
 	std::array<Vector2, 8> outPos;
 	//自身の半径を設定
 	float r = parameter_.radius;
+	float r1 = rot_;
+	float r2 = 0.0f;
+	bool rotDirection = true;
+
 	//それぞれの首の長さを設定
 	std::vector<float> neckLen = pHeadLength_;
 	////支点を格納可能に
@@ -242,12 +249,12 @@ void Player::Pendulum(Vector2 fulcrum, float length)
 	if (sub > 180.0f) sub -= 360.0f;
 	rot_spd_ += sub;
 
+	//if (rot_spd_ < 1.5f)friction = 1.f;
 	//摩擦
 	rot_spd_ *= friction;
-
 	//角度に角速度を加算
 	rot_ += rot_spd_;
-
+	//rot_ = MathHelper::Clamp(rot_, -45.f, 225.f);
 	//新しい重りの位置
 	px = fx + MathHelper::Cos(rot_) * length;
 	py = fy + MathHelper::Sin(rot_) * length;
@@ -281,8 +288,61 @@ void Player::Pendulum(Vector2 fulcrum, float length)
 
 	angle_ = (angleDtData * 180) / 2;
 
+
+	//1フレーム前のrotと比較
+	r2 = rot_;
+	if (r1 < r2) //右に回っていれば
+	{
+		rotDirection = true;
+		r1 = rot_;
+	}
+	else if (r1 > r2) //左に回っていれば
+	{
+		rotDirection = false;
+		r1 = rot_;
+	}
+
+	//circleの当たり判定
+	if (
+		(rot_spd_ < 0 && !rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::D) || GamePad::GetInstance().Stick().x>0.01f)) ||
+		(rot_spd_ > 0 && rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) || GamePad::GetInstance().Stick().x<-0.01f)))
+	{
+		friction = 1.015f; //摩擦を減らす
+	}
+	else
+	{
+		friction = 0.985f; //摩擦を戻す
+	}
+	//Vector2::Up;
+
+	//if (rot_ < 0.f) {
+
+	//	friction = (1.f - ((0 - rot_) / 90.f))*1.4f;
+	//	friction = MathHelper::Clamp(friction, 0.f, 1.f);
+	//}
+	//else if (rot_>180.f)
+	//{
+	//	friction = (1.f - ((rot_ - 180) / 90.f))*1.4f;
+	//	friction = MathHelper::Clamp(friction, 0.f, 1.f);
+	//}
+
+	if (pHeads_[currentHead_]->GetPosition().y > position_.y) {
+		friction = 0.945f; //摩擦を戻す
+	}
+	//スピード制限
+	//
+	spdLimit = sqrt(2 * g * (MathHelper::Sin(90.0f) * pHDist.Length())) / ((pHDist.Length()) * 0.02f);
+	//spdLimit = sqrt(3.f) / ((pHDist.Length()) * 0.05f);
+	rot_spd_ = MathHelper::Clamp(rot_spd_, -spdLimit, spdLimit);
+
+	//頂点で正規化
+	if (rot_ > 270.0f) rot_ = -90.0f;
+	if (rot_ < -90) rot_ = 270.0f;
+
+
 	pendulumVect_ = (position_ - curdefPos);
 	pendulumVect_.x = pendulumVect_.x*jumpShotPower_;
+	pendulumVect_.y = pendulumVect_.y*jumpShotPower_;
 
 	////circleの当たり判定
 	//Vector2 absA = spherePos - arrowPos;
@@ -478,7 +538,7 @@ void Player::PlayerInputControl()
 		velocity_.y -= 20.0f;
 	}
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::DOWN)) {
-		velocity_.y += 20.0f;
+		//velocity_.y += 20.0f;
 	}
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT)) {
 		velocity_.x += 20.0f;
@@ -487,13 +547,23 @@ void Player::PlayerInputControl()
 		velocity_.x -= 20.0f;
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)) {
-		//UpdateLaneNum(-1);
-		SetNextLane(-1);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S)) {
-		//UpdateLaneNum(1);
-		SetNextLane(1);
+	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1)&&isBiteMode_) {
+		if (GamePad::GetInstance().Stick().y>0.1f) {
+			UpdateLaneNum(1);
+		}
+		else if (rot_<0.f || rot_>180.f) {
+			UpdateLaneNum(-1);
+			//SetNextLane(-1);
+		}
+		//SetNextLane(1);
 	}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A)) {
+	//	rot_spd_ += 1.f;
+	//}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::D)) {
+	//	rot_spd_-=1.f;
+	//}
 	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Q)) {
 	//	jumpShotPower_ -= 1.f;
 	//}
@@ -502,22 +572,26 @@ void Player::PlayerInputControl()
 	//}
 
 	SetAllHeadLaneNum();
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z) && !isBiteMode_) {
+	if (GamePad::GetInstance().Stick().x<-0.5f && !isBiteMode_&&isCanNextHeadRot) {
 		isShootMode_ = 0;
 		isBiteMode_ = false;
 		//キーを押し直したかの判断
 		PHeadLengthReset();
 		changeHead();
+		isCanNextHeadRot = false;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::X) && !isBiteMode_) {
+	if (GamePad::GetInstance().Stick().x>0.5f && !isBiteMode_&&isCanNextHeadRot) {
 		isShootMode_ = 0;
 		isBiteMode_ = false;
 		//キーを押し直したかの判断
 		PHeadLengthReset();
 		backChangeHead();
+		isCanNextHeadRot = false;
 	}
-
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+	if (MathHelper::Abs(GamePad::GetInstance().Stick().x)<0.5f && !isBiteMode_) {
+		isCanNextHeadRot = true;
+	}
+	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		if (isSlipped_) {
 			isBiteMode_ = false;
 			//場所を戻してから
@@ -528,25 +602,33 @@ void Player::PlayerInputControl()
 		}
 		isNextPushKey_ = true;
 		if (isBiteMode_) {
-			isBiteMode_ = false;
-			//場所を戻してから
-			PHeadLengthReset();
-			//Headを交代する
-			changeHead();
-			isNextPushKey_ = false;
+			//if (rot_<0.f || rot_>180.f) {
+			//	UpdateLaneNum(-1);
+			//	//SetNextLane(-1);
+			//	isNextPushKey_ = false;
+			//}
+			//else {
+				isBiteMode_ = false;
+				//場所を戻してから
+				PHeadLengthReset();
+				//Headを交代する
+				changeHead();
+				isNextPushKey_ = false;
+			//}
+				isCanNextHeadRot = false;
 		}
 		if (!isBiteMode_&&isNextPushKey_) {
 			isShootMode_ = 1;
 			isNextPushKey_ = false;
 		}
 	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+	if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
 		if (!isBiteMode_&&isShootMode_ == 1)CurPHeadLengPlus(headShotPower);
 	}
-	else if (Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M) && (isShootMode_ == 1)) {
+	else if (GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) && (isShootMode_ == 1)) {
 		isShootMode_ = 2;
 	}
-	else if (Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M) && (isShootMode_ == 3)) {
+	else if (GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) && (isShootMode_ == 3)) {
 		isShootMode_ = 4;
 	}
 	else {

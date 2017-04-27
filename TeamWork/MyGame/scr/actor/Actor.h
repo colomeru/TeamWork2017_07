@@ -1,6 +1,7 @@
 #pragma once
 #include "ActorParameter.h"
 #include "ActorPtr.h"
+#include "../collision/CollisionFunction.h"
 #include "../collision/CollisionParameter.h"
 #include "../game/EventMessage.h"
 #include "../game/ID.h"
@@ -125,17 +126,17 @@ protected:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
-	CollisionParameter Test_Col(const Actor& other) const;
+	//CollisionParameter Test_Col(const Actor& other) const;
 
-	// スプライトの当たり判定（２次元のOBB vs OBB）
-	CollisionParameter IsHit_OBB_OBB(const Actor& sprite2);
-	CollisionParameter IsHit_OBB_Segment(const Actor& sprite2);
-	CollisionParameter IsHit_Segment_Segment(const Actor& sprite2);
-	CollisionParameter IsHit_Circle_Circle(const Actor& sprite2);
-	CollisionParameter IsHit_Circle_Segment(const Actor& sprite2);
-	CollisionParameter IsHit_OBB_Circle(const Actor& sprite2);
-	CollisionParameter IsHit_OBB_Clothes(const Actor & sprite2);
-	CollisionParameter IsHit_Clothes_OBB(const Actor & sprite2);
+	//// スプライトの当たり判定（２次元のOBB vs OBB）
+	//CollisionParameter IsHit_OBB_OBB(const Actor& sprite2);
+	//CollisionParameter IsHit_OBB_Segment(const Actor& sprite2);
+	//CollisionParameter IsHit_Segment_Segment(const Actor& sprite2);
+	//CollisionParameter IsHit_Circle_Circle(const Actor& sprite2);
+	//CollisionParameter IsHit_Circle_Segment(const Actor& sprite2);
+	//CollisionParameter IsHit_OBB_Circle(const Actor& sprite2);
+	//CollisionParameter IsHit_OBB_Clothes(const Actor & sprite2);
+	//CollisionParameter IsHit_Clothes_OBB(const Actor & sprite2);
 
 	/* コピー禁止 */
 	Actor(const Actor& other) = delete;
@@ -147,9 +148,11 @@ protected:
 	SPRITE_ID spriteId_;
 	float spriteAlpha_;
 	// ワールド
-	IWorld*			world_;
+	IWorld*				world_;
+	// コリジョンファンクション
+	CollisionFunction	colFunc_;
 	// 親
-	Actor*			parent_;
+	Actor*				parent_;
 
 	// パラメータ
 	ActorParameter	parameter_;
@@ -165,7 +168,8 @@ protected:
 	int				laneNum_;
 
 	float			angle_;
-private:
+
 	// ファンクションマップ
-	std::map<COL_ID, std::function<CollisionParameter(const Actor& sprite2)>> colFunc_;
+	std::map<COL_ID, std::function<CollisionParameter(const Actor&, const Actor&)>> colFuncMap_;
+	//std::map<COL_ID, std::function<CollisionParameter(const Actor& sprite2)>> colFuncMap_;
 };

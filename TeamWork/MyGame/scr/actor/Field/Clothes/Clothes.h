@@ -18,13 +18,17 @@ public:
 	CLOTHES_ID GetClothesID() const {
 		return clothes_ID;
 	}
+	//風を受けているかの取得
+	bool GetIsWind() const {
+		return isWind_;
+	}
 
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param) override;
 
-	//振り子運動
+	//振り子運動(風用)
 	void Pendulum(Vector2 fulcrum, float length);
 	//風による服揺らし
 	void ShakesClothes();
@@ -43,7 +47,9 @@ protected:
 	//振り子フラグ
 	bool isPendulum_;
 	//摩擦が増加か減衰か
-	bool isFriction;
+	bool isFriction_;
+	//風を受けているか
+	bool isWind_;
 	//支点座標
 	Vector2 fulcrum_;
 	//角度
@@ -56,4 +62,6 @@ protected:
 	float gravity_;
 	//振り子前の固定位置
 	Vector2 basePosition_;
+	//摩擦
+	float friction_;
 };

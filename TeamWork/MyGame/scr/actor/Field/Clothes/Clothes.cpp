@@ -1,12 +1,12 @@
 #include "Clothes.h"
+#include "../MyGame/scr/math/MyFuncionList.h"
 
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 	:Actor(world)
-	,isHit_(false), isPendulum_(false), isFriction(true)
-	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.0f), length_(200.0f), gravity_(0.3f)
+	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
+	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.5f), length_(200.0f), gravity_(0.3f), friction_(1.0f)
 {
-	isHit_ = true;
 }
 
 //当たり判定処理
@@ -22,18 +22,15 @@ void Clothes::OnMessage(EventMessage message, void * param)
 
 void Clothes::Pendulum(Vector2 fulcrum, float length)
 {
-	float friction = 1.0f;						//摩擦
-	if (isFriction) {
-		friction = 1.007f;						//増加
-	}
-	else {
-		friction = 0.995f;						//減衰
-	}
-	auto initialRot = rot_;						//角速度を加算する前の角度
+	//支点Posの設定
+	float fx = fulcrum.x;
+	float fy = fulcrum.y;
+
+	//float initialRot = rot_;					//角速度を加算する前の角度
 
 	//現在の重りの位置
-	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
-	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
+	//position_.x = fx + MathHelper::Cos(rot_) * length;
+	//position_.y = fy + MathHelper::Sin(rot_) * length;
 
 	//重力移動量を反映した重りの位置
 	auto length_vec = position_ - fulcrum;
@@ -49,13 +46,16 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	sub -= std::floor(sub / 360.0f) * 360.0f;
 	if (sub < -180.0f) sub += 360.0f;
 	if (sub > 180.0f) sub -= 360.0f;
-	rot_spd_ += sub;
+
+	auto temp = rot_spd_ + sub;
+	if (sign(rot_spd_) != sign(temp) && isFriction_) {
+		friction_ *= 0.997f;
+	}
+	rot_spd_ = temp;
+	//rot_spd_ += sub;
 
 	//摩擦
-	rot_ *= friction;
-
-	//角速度の制限
-	rot_spd_ = MathHelper::Clamp(rot_spd_, -1.5f, 2.0f);
+	rot_ *= friction_;
 
 	//角度に角速度を加算
 	rot_ += rot_spd_;

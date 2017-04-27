@@ -16,8 +16,6 @@ public:
 	virtual void AddStage() = 0;
 	//ステージサイズ取得
 	virtual Vector2 GetStageSize() const = 0;
-	//ゴールフラグ取得
-	virtual bool GetGoalFlag() const = 0;
 
 private:
 	//コピー禁止
@@ -34,7 +32,7 @@ protected:
 	//ステージサイズ
 	Vector2 stageSize_;
 	//ステージの1マスのサイズ
-	const int STAGE_TIP_SIZE = 32;
+	const int STAGE_TIP_SIZE;
 
 };
 

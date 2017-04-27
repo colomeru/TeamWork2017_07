@@ -172,9 +172,11 @@
     <ClCompile Include="scr\actor\player\Player3.cpp" />
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
+    <ClCompile Include="scr\actor\UI\GoalUI.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
     <ClCompile Include="scr\collision\Collision.cpp" />
     <ClCompile Include="scr\collision\CollisionDX.cpp" />
+    <ClCompile Include="scr\collision\CollisionFunction.cpp" />
     <ClCompile Include="scr\conv\DXConverter.cpp" />
     <ClCompile Include="scr\fade\FadePanel.cpp" />
     <ClCompile Include="scr\game\Content.cpp" />
@@ -236,10 +238,12 @@
     <ClInclude Include="scr\actor\player\Player3.h" />
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
+    <ClInclude Include="scr\actor\UI\GoalUI.h" />
     <ClInclude Include="scr\AllInclude.h" />
     <ClInclude Include="scr\camera\Camera.h" />
     <ClInclude Include="scr\collision\Collision.h" />
     <ClInclude Include="scr\collision\CollisionDX.h" />
+    <ClInclude Include="scr\collision\CollisionFunction.h" />
     <ClInclude Include="scr\collision\CollisionParameter.h" />
     <ClInclude Include="scr\collision\MyCol.h" />
     <ClInclude Include="scr\Def.h" />
@@ -272,6 +276,8 @@
     <ClInclude Include="scr\math\Quaternion.h" />
     <ClInclude Include="scr\math\Vector2.h" />
     <ClInclude Include="scr\math\Vector3.h" />
+    <ClInclude Include="scr\myData\MyTestCamera.h" />
+    <ClInclude Include="scr\myData\MyTestCol.h" />
     <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />
     <ClInclude Include="scr\scene\EndingScene.h" />

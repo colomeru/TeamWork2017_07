@@ -15,6 +15,7 @@ GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 
 	laneNum_ = laneNum;
 
 	position_ = pos;
+	fulcrum_ = position_ - Vector2(0, length_);
 }
 
 GumClothes::~GumClothes()
@@ -23,6 +24,8 @@ GumClothes::~GumClothes()
 
 void GumClothes::Update()
 {
+	ShakesClothes();
+
 	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
 	}
@@ -69,4 +72,28 @@ void GumClothes::OnCollide(Actor * other, CollisionParameter colpara)
 
 void GumClothes::OnMessage(EventMessage message, void * param)
 {
+	switch (message)
+	{
+	case EventMessage::BEGIN_WIND:
+		basePosition_ = position_;
+		isPendulum_ = true;
+		break;
+	case EventMessage::STRONG_WIND:
+		rot_spd_ = 2.8f;
+		isWind_ = true;
+		break;
+	case EventMessage::ATTENUATE_WIND:
+		rot_spd_ = 0.0f;
+		isFriction_ = true;
+		break;
+	case EventMessage::END_WIND:
+		rot_spd_ = 0.5f;
+		rot_ = 90.0f;
+		friction_ = 1.0f;
+		position_ = basePosition_;
+		isPendulum_ = false;
+		isFriction_ = false;
+		isWind_ = false;
+		break;
+	}
 }

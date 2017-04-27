@@ -20,9 +20,6 @@ public:
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 
-	bool GetGoalFlag() {
-		return isHit_;
-	}
-
 private:
+	Actor* player_;
 };

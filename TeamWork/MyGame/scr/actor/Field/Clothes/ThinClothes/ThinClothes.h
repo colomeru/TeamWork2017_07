@@ -1,7 +1,7 @@
 #pragma once
 #include "../Clothes.h"
 
-//ƒSƒ€‚Ì•
+//”–‚¢¶’n‚Ì•
 class ThinClothes : public Clothes, public std::enable_shared_from_this<ThinClothes>
 {
 public:

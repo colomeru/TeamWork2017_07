@@ -15,7 +15,6 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	laneNum_ = laneNum;
-
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 
@@ -79,17 +78,23 @@ void TestClothes::OnMessage(EventMessage message, void * param)
 	case EventMessage::BEGIN_WIND:
 		basePosition_ = position_;
 		isPendulum_ = true;
-		isFriction = true;
+		break;
+	case EventMessage::STRONG_WIND:
+		rot_spd_ = 2.8f;
+		isWind_ = true;
 		break;
 	case EventMessage::ATTENUATE_WIND:
 		rot_spd_ = 0.0f;
-		isFriction = false;
+		isFriction_ = true;
 		break;
 	case EventMessage::END_WIND:
-		rot_spd_ = 0.0f;
+		rot_spd_ = 0.5f;
 		rot_ = 90.0f;
+		friction_ = 1.0f;
 		position_ = basePosition_;
 		isPendulum_ = false;
+		isFriction_ = false;
+		isWind_ = false;
 		break;
 	}
 }

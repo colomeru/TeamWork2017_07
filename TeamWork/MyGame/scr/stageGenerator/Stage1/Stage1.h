@@ -18,12 +18,6 @@ public:
 	virtual Vector2 GetStageSize() const override {
 		return stageSize_;
 	}
-	//ƒS[ƒ‹ƒtƒ‰ƒOŽæ“¾
-	virtual bool GetGoalFlag() const override {
-		return goal_->GetGoalFlag();
-	}
 
 private:
-	using GoalPtr = std::shared_ptr<GoalClothes>;
-	GoalPtr			goal_;
 };

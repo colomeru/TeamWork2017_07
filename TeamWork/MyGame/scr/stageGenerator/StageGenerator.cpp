@@ -7,3 +7,4 @@ StageGenerator::StageGenerator(IWorld * world, const std::string & fileName)
 	,STAGE_TIP_SIZE(128)
 {
 }
+  

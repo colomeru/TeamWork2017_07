@@ -182,6 +182,11 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 		}
 
 	}
+	Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
+
+	if (otherClothes != nullptr) {
+		if (otherClothes->GetIsWind())return;
+	}
 
 	if (isHit_ || (player_->GetIsShootMode() != 2 && player_->GetIsShootMode() != 4))return;
 
@@ -191,8 +196,8 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 
 	player_->CurHeadBite(stopPos_);
 	
-	if (dynamic_cast<Clothes*>(&other) != nullptr) {
-		Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
+	if (otherClothes != nullptr) {
+		//Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
 
 		player_->SetOtherClothesID_(otherClothes->GetClothesID());
 	}

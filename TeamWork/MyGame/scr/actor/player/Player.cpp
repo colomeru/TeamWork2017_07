@@ -94,7 +94,13 @@ void Player::Update()
 	//ì¸óÕÇ…ÇÊÇÈìÆçÏÇÇ‹Ç∆ÇﬂÇΩä÷êî
 	PlayerInputControl();
 
-
+	if (otherClothesID_ == CLOTHES_ID::FLUFFY_CLOTHES && (MathHelper::Abs(GamePad::GetInstance().Stick().x > 0.01f)||
+		Keyboard::GetInstance().KeyStateDown(KEYCODE::D)|| 
+		Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) &&
+		MathHelper::Abs(rot_spd_) <= 0.01f&&
+		pHeads_[currentHead_]->GetPosition().y < position_.y) {
+			rot_spd_ += (spdLimit);
+	}
 
 
 
@@ -167,7 +173,7 @@ void Player::Draw() const
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawCircle(drawPos_.x, drawPos_.y, pHDist.Length(), GetColor(255, 255, 255));
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
-	Sprite::GetInstance().Draw(spriteId_, drawPos_, crcOrigin, spriteAlpha_, Vector2::One);
+	Sprite::GetInstance().Draw(spriteId_, GetDrawPosVect(position_), crcOrigin, spriteAlpha_, Vector2::One);
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
 	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
@@ -178,7 +184,6 @@ void Player::Draw() const
 	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
 	//DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
 	DrawFormatString(400, 100, GetColor(255, 255, 255), "%f:%f",GamePad::GetInstance().Stick().x, GamePad::GetInstance().Stick().y);
-
 	//int count = 0;
 	//for (auto sgT : pHeadLength_) {
 	//DrawFormatString(300, 300 + (30 * count),GetColor(255,255,255),"%f",sgT );
@@ -308,6 +313,7 @@ void Player::Pendulum(Vector2 fulcrum, float length)
 		(rot_spd_ > 0 && rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) || GamePad::GetInstance().Stick().x<-0.01f)))
 	{
 		friction = 1.015f; //ñÄéCÇå∏ÇÁÇ∑
+		
 	}
 	else
 	{
@@ -548,8 +554,8 @@ void Player::PlayerInputControl()
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)) {
 	}
-	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1)&&isBiteMode_) {
-		if (GamePad::GetInstance().Stick().y>0.1f) {
+	if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1)||Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))&&isBiteMode_) {
+		if (GamePad::GetInstance().Stick().y>0.5f||Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 			UpdateLaneNum(1);
 		}
 		else if (rot_<0.f || rot_>180.f) {
@@ -572,7 +578,8 @@ void Player::PlayerInputControl()
 	//}
 
 	SetAllHeadLaneNum();
-	if (GamePad::GetInstance().Stick().x<-0.5f && !isBiteMode_&&isCanNextHeadRot) {
+	if ((GamePad::GetInstance().Stick().x<-0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT))) && !isBiteMode_&&isCanNextHeadRot&&
+		(isShootMode_==0|| isShootMode_ == 2|| isShootMode_ == 4)) {
 		isShootMode_ = 0;
 		isBiteMode_ = false;
 		//ÉLÅ[ÇâüÇµíºÇµÇΩÇ©ÇÃîªíf
@@ -580,7 +587,8 @@ void Player::PlayerInputControl()
 		changeHead();
 		isCanNextHeadRot = false;
 	}
-	if (GamePad::GetInstance().Stick().x>0.5f && !isBiteMode_&&isCanNextHeadRot) {
+	if ((GamePad::GetInstance().Stick().x>0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT))) && !isBiteMode_&&isCanNextHeadRot&& 
+		(isShootMode_ == 0 || isShootMode_ == 2 || isShootMode_ == 4)) {
 		isShootMode_ = 0;
 		isBiteMode_ = false;
 		//ÉLÅ[ÇâüÇµíºÇµÇΩÇ©ÇÃîªíf
@@ -588,10 +596,10 @@ void Player::PlayerInputControl()
 		backChangeHead();
 		isCanNextHeadRot = false;
 	}
-	if (MathHelper::Abs(GamePad::GetInstance().Stick().x)<0.5f && !isBiteMode_) {
+	if ((MathHelper::Abs(GamePad::GetInstance().Stick().x)<0.3f&&(Keyboard::GetInstance().KeyStateUp(KEYCODE::RIGHT)&& Keyboard::GetInstance().KeyStateUp(KEYCODE::LEFT))) && !isBiteMode_) {
 		isCanNextHeadRot = true;
 	}
-	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)||Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 		if (isSlipped_) {
 			isBiteMode_ = false;
 			//èÍèäÇñﬂÇµÇƒÇ©ÇÁ
@@ -622,13 +630,13 @@ void Player::PlayerInputControl()
 			isNextPushKey_ = false;
 		}
 	}
-	if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
+	if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)|| Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
 		if (!isBiteMode_&&isShootMode_ == 1)CurPHeadLengPlus(headShotPower);
 	}
-	else if (GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) && (isShootMode_ == 1)) {
+	else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2)|| Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M)) && (isShootMode_ == 1)) {
 		isShootMode_ = 2;
 	}
-	else if (GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) && (isShootMode_ == 3)) {
+	else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2)|| Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M)) && (isShootMode_ == 3)) {
 		isShootMode_ = 4;
 	}
 	else {

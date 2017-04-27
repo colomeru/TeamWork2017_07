@@ -16,7 +16,7 @@
 #include "DxLib.h"
 
 static const float alphaSetter[2] = { 1.f,0.5f };
-static const int cutSize[2] = { 500,1800 };
+static const int cutSize[2] = { 600,2200 };
 class Actor
 {
 public:
@@ -85,7 +85,25 @@ public:
 			spriteAlpha_ = alphaSetter[drawLane];
 		}
 	}
+	Vector2 GetDrawPosVect(const Vector2& pos)const{
+		Vector2 retPos;
 
+		Vector3 cmpos3d = Vector3(pos.x, pos.y, 0)*world_->GetInv();
+		retPos = Vector2(cmpos3d.x, cmpos3d.y);
+		
+		int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
+		if (drawLane >= 2) {
+			//isDraw_ = false;
+		}
+		else {
+			//isDraw_ = true;
+			retPos.y += defDrawLinePosY[drawLane + 1];
+
+			//drawLane = MathHelper::Abs(drawLane);
+			//spriteAlpha_ = alphaSetter[drawLane];
+		}
+		return retPos;
+	}
 	// ©•ªæ“¾
 	Actor* GetActor() const;
 	// eæ“¾

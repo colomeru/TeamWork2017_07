@@ -48,8 +48,6 @@ void EndingScene::Initialize()
 	particlePos = Vector2(200.0f, 200.0f);
 	circlePos = Vector2(400.0f, 200.0f);
 	turn = false;
-	x1 = 0.0f;
-	x2 = 0.0f;
 	rotDirection = true;
 	r1 = rot;
 	r2 = 0.0f;
@@ -85,6 +83,8 @@ void EndingScene::Initialize()
 	meterLen = 800.0f;
 	meterPos = Vector2(200.0f, 100.0f);
 
+	dRot = 0.0f;
+	dRot_spd = 0.0f;
 }
 
 void EndingScene::Update()
@@ -120,6 +120,7 @@ void EndingScene::Update()
 
 
 	Pendulum();
+	Double(spherePos);
 	
 }
 
@@ -143,20 +144,12 @@ void EndingScene::Draw() const
 	if (rotDirection && rot < 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "左に加速できます！");
 	else if (!rotDirection && rot > 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "右に加速できます！");
 	else DrawFormatString(0, 420, GetColor(255, 255, 255), "加速できません！");
-
+	DrawFormatString(0, 440, GetColor(255, 255, 255), "dRot:%f", dRot);
+	DrawFormatString(0, 460, GetColor(255, 255, 255), "dRot_spd:%f", dRot_spd);
 
 	// 描画
 	world_->Draw();
 
-	//DrawCapsule3D(VGet(0.0f, 0.0f, 0.0f), VGet(0.0f, 0.0f, 0.0f), size, 4, GetColor(255, 0, 0), GetColor(0, 0, 255), false);
-
-	//DrawLine3D(VGet(10.0f, 0.0f, 0.0f), VGet(-10.0f, 0.0f, 0.0f), GetColor(0, 255, 0));
-
-	//DrawTriangle3D(VGet(-5.0f, 5.0f, 0.0f), VGet(5.0f, 5.0f, 0.0f), VGet(0.0f, -5.0f, 0.0f), GetColor(0, 0, 255), false);
-
-	//DrawSphere3D(VGet(5.0f, 0.0f, 0.0f), size, 4, GetColor(255, 0, 0), GetColor(0, 0, 255), false);
-
-	//DrawCone3D(VGet(-5.0f, 5.0f, 0.0f), VGet(-5.0f, -2.0f, 0.0f), 2.0f, 4, GetColor(0, 255, 0), GetColor(255, 255, 255), false);
 
 	//Sprite::GetInstance().Draw(SPRITE_ID::TEST2_SPRITE, Vector2(0, 400));
 	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, particlePos, alpha);
@@ -180,6 +173,13 @@ void EndingScene::Draw() const
 
 	DrawLine(spherePos.x, spherePos.y, v1.x, v1.y, GetColor(0, 255, 0), 1);
 	DrawLine(fx, fy, v2.x, v2.y, GetColor(0, 255, 0), 1);
+
+	//ここからDouble
+	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, doublePos, Vector2(16, 32), Vector2::One, rot2 + lineRot[2]);
+	DrawCircle(doublePos.x, doublePos.y, (int)r, GetColor(255, 255, 255), 0, 1);
+	DrawLine(spherePos.x, spherePos.y, doublePos.x, doublePos.y, GetColor(239, 117, 188), 1); //ピンク
+	//DrawCircle(fx, fy, 16, GetColor(255, 0, 0), 0, 1); //支点に円を表示
+
 }
 
 bool EndingScene::IsEnd() const
@@ -292,19 +292,25 @@ void EndingScene::Pendulum()
 	{
 		aAlpha = 0.5f; //circleに当たっていれば半透明
 		friction = 1.015f; //摩擦を減らす
+		dFriction = 1.015f;
 	}
 	else
 	{
 		aAlpha = 1.0f; //circleに当たっていなければ不透明
 		friction = 0.985f; //摩擦を戻す
+		dFriction = 0.985f;
+	}
+
+	if (spherePos.y < fy)
+	{
+		friction = 0.985;
 	}
 
 	//スピード制限
-	//spdLimit = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
+	spdLimit = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
+	//spdLimit = 3.0f / (neckLen[vec] * ((neckLen[vec] * 800.0f) * 0.0002f));
 	//rot_spd = 3.0f;
 	rot_spd = MathHelper::Clamp(rot_spd, -spdLimit, spdLimit);
-	//if (rot_spd > 4.0f) rot_spd = 2.0f;
-	//if (rot_spd < -4.0f) rot_spd = -2.0f;
 
 	//支点を移動
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
@@ -342,7 +348,6 @@ void EndingScene::Pendulum()
 	if (rot > 270.0f) rot = -90.0f;
 	if (rot < -90) rot = 270.0f;
 
-
 	//LB/RBで左右どちらかの首を伸ばし、もう片方の首を縮ませる
 	if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6))
 	{
@@ -376,4 +381,121 @@ void EndingScene::Pendulum()
 			else neckLen[vec + 1] -= 5.0f;
 		}
 	}
+
+	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM4))
+	{
+		rot_spd += spdLimit;
+	}
+}
+
+void EndingScene::Double(Vector2 fPos)
+{
+	//振り子
+	//現在の重りの位置
+
+	auto px = fPos.x + MathHelper::Cos(dRot) * length;
+	auto py = fPos.y + MathHelper::Sin(dRot) * length;
+
+	//重力移動量を反映した重りの位置
+	auto vx = px - fPos.x;
+	auto vy = py - fPos.y;
+	auto t = -(vy * g) / (vx * vx + vy * vy);
+	auto gx = px + t * vx;
+	auto gy = py + g + t * vy;
+
+	//２つの重りの位置の確度差
+	auto rDiff = MathHelper::ATan(gy - fPos.y, gx - fPos.x);
+
+	//角度差を角速度に加算
+	auto sub = rDiff - dRot;
+	sub -= std::floor(sub / 360.0f) * 360.0f;
+	if (sub < -180.0f) sub += 360.0f;
+	if (sub > 180.0f) sub -= 360.0f;
+	dRot_spd = dRot_spd + sub;
+
+	//上の振り子との角度差を角速度に加算
+	auto bind = 0.5f;
+	auto dDiff = rot - dRot;
+	auto dSub = rDiff - dRot;
+	dSub -= std::floor(dSub / 360.0f) * 360.0f;
+	if (dSub < -180.0f) dSub += 360.0f;
+	if (dSub > 180.0f) dSub -= 360.0f;
+	dRot_spd = dRot_spd + (dSub * bind);
+
+	//摩擦
+	//float dFriction;
+	//if (doublePos.y < spherePos.y) dFriction = 0.985;
+	//else dFriction = friction;
+	dRot_spd *= dFriction;
+
+	//スピード制限
+	float dLimit = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
+	dRot_spd = MathHelper::Clamp(dRot_spd, -dLimit, dLimit);
+
+	//角度に角速度を加算
+	dRot += dRot_spd;
+	//dRot += rot;
+
+	//新しい重りの位置
+	px = fPos.x + MathHelper::Cos(dRot + rot2) * length;
+	py = fPos.y + MathHelper::Sin(dRot + rot2) * length;
+
+	//重りの座標
+	doublePos.x = px;
+	doublePos.y = py;
+
+	//頂点で正規化
+	if (dRot > 270.0f) dRot = -90.0f;
+	if (dRot < -90) dRot = 270.0f;
+
+	//支点を移動
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
+	{
+		dRot -= 45.0f;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
+	{
+		dRot += 45.0f;
+	}
+
+	//角度調整
+	//rot2 = rot - 90.0f;
+
+	//首の内側と外側の座標を求め、外側の座標を支点に設定する
+	//for (int i = 0; i < 8; i++)
+	//{
+	//	inPos[i].x = spherePos.x + MathHelper::Cos(lineRot[i] + rot2);
+	//	inPos[i].y = spherePos.y + MathHelper::Sin(lineRot[i] + rot2);
+	//	outPos[i].x = inPos[i].x + MathHelper::Cos(lineRot[i] + rot2) * neckLen[i];
+	//	outPos[i].y = inPos[i].y + MathHelper::Sin(lineRot[i] + rot2) * neckLen[i];
+	//	fulcrum[i] = outPos[i];
+	//}
+
+	//1フレーム前のrotと比較
+	//r2 = rot;
+	//if (r1 < r2) //右に回っていれば
+	//{
+	//	rotDirection = true;
+	//	r1 = rot;
+	//}
+	//else if (r1 > r2) //左に回っていれば
+	//{
+	//	rotDirection = false;
+	//	r1 = rot;
+	//}
+
+	//左右キー(左右ボタン)で加減速
+	//if ((rot_spd < 0 && !rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::RIGHT))) ||
+	//	(rot_spd > 0 && rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::LEFT))))
+	//{
+	//	aAlpha = 0.5f; //circleに当たっていれば半透明
+	//	friction = 1.015f; //摩擦を減らす
+	//}
+	//else
+	//{
+	//	aAlpha = 1.0f; //circleに当たっていなければ不透明
+	//	friction = 0.985f; //摩擦を戻す
+	//}
 }

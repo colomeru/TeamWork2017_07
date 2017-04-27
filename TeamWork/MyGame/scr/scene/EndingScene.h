@@ -30,8 +30,10 @@ public:
 	virtual void End() override;
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
-	//振り子
+	//単振り子
 	virtual void Pendulum();
+	//二重振り子
+	virtual void Double(Vector2 fPos);
 
 private:
 	float size;
@@ -57,8 +59,6 @@ private:
 	bool turn;
 	vector<int> v;
 	float friction; //摩擦
-	float x1; //支点のｘ座標
-	float x2; //支点のy座標
 
 	//ここから振り子
 	float fx; //支点x座標
@@ -83,7 +83,8 @@ private:
 	std::array<float, 8> lineRot; //それぞれの首の角度
 	std::array<float, 8> neckLen; //それぞれの首の長さ
 	int vec; //現在の首番号
-	const float spdLimit = 2.75f; //
+	//const float spdLimit = 2.75f; //
+	float spdLimit; //
 	bool rotDirection;; //回転方向：trueなら右回り、falseなら左回り
 	int r1; //1フレーム前のrot
 	int r2; //1フレーム後のrot
@@ -91,6 +92,11 @@ private:
 	Vector2 v1;
 	Vector2 v2;
 	float f;
+
+	Vector2 doublePos;
+	float dRot;
+	float dRot_spd;
+	float dFriction;
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;

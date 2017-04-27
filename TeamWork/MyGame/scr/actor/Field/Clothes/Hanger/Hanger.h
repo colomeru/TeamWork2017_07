@@ -22,5 +22,5 @@ public:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
-
+	Actor* player_;
 };

@@ -27,7 +27,7 @@ TestClothes::~TestClothes()
 
 void TestClothes::Update()
 {
-	ShakesClothes();
+	//ShakesClothes();
 
 	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
@@ -89,6 +89,7 @@ void TestClothes::OnMessage(EventMessage message, void * param)
 		rot_spd_ = 0.5f;
 		rot_ = 90.0f;
 		friction_ = 1.0f;
+		angle_ = 0;
 		position_ = basePosition_;
 		isPendulum_ = false;
 		isFriction_ = false;

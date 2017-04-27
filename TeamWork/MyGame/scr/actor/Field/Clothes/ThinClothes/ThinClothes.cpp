@@ -88,6 +88,7 @@ void ThinClothes::OnMessage(EventMessage message, void * param)
 		rot_spd_ = 0.5f;
 		rot_ = 90.0f;
 		friction_ = 1.0f;
+		angle_ = 0;
 		position_ = basePosition_;
 		isPendulum_ = false;
 		isFriction_ = false;

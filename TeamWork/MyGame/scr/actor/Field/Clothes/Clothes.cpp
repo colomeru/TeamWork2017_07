@@ -22,15 +22,11 @@ void Clothes::OnMessage(EventMessage message, void * param)
 
 void Clothes::Pendulum(Vector2 fulcrum, float length)
 {
-	//Žx“_Pos‚ÌÝ’è
-	float fx = fulcrum.x;
-	float fy = fulcrum.y;
-
-	//float initialRot = rot_;					//Šp‘¬“x‚ð‰ÁŽZ‚·‚é‘O‚ÌŠp“x
+	float initialRot = rot_;					//Šp‘¬“x‚ð‰ÁŽZ‚·‚é‘O‚ÌŠp“x
 
 	//Œ»Ý‚Ìd‚è‚ÌˆÊ’u
-	//position_.x = fx + MathHelper::Cos(rot_) * length;
-	//position_.y = fy + MathHelper::Sin(rot_) * length;
+	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
+	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
 
 	//d—ÍˆÚ“®—Ê‚ð”½‰f‚µ‚½d‚è‚ÌˆÊ’u
 	auto length_vec = position_ - fulcrum;
@@ -57,6 +53,9 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	//–€ŽC
 	rot_ *= friction_;
 
+	//Šp‘¬“x‚Ì§ŒÀ
+	//rot_spd_ = MathHelper::Clamp(rot_spd_, -2.8f, 2.8f);
+
 	//Šp“x‚ÉŠp‘¬“x‚ð‰ÁŽZ
 	rot_ += rot_spd_;
 
@@ -65,13 +64,8 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
 
 	//Šp“x‚ð‰æ‘œ‚É”½‰f
-	//auto angle = MathHelper::ToRadians(rot_);
-	//if (rot_ > initialRot) {
-	//	angle_ = angle;
-	//}
-	//else {
-	//	angle_ = -angle;
-	//}
+	auto angle = rot_ - 90;
+	angle_ = angle;
 	
 }
 

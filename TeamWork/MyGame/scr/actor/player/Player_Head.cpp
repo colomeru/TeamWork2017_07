@@ -4,6 +4,7 @@
 #include "../../conv/DXConverter.h"
 #include "../../graphic/Model.h"
 #include"../Field/Clothes/Clothes.h"
+#include"../Field/ClothesPin.h"
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
 	:Actor(world, targetP)
@@ -161,7 +162,6 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	if (player_->GetPHeadDead(myNumber_))return;
 
 	isBitePoint_ = true;
-	isHitOnce = true;
 
 
 	if (player_->GetCurHead() != myNumber_) {
@@ -182,15 +182,28 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	//	}
 
 	//}
+
+	if (dynamic_cast<ClothesPin*>(&other)!=nullptr) {
+		player_->ResurrectHead();
+		dynamic_cast<ClothesPin*>(&other)->ClearThis();
+	}
+
 	Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
 
 	if (otherClothes != nullptr) {
 		//•ž‚ª•—‚É‚©‚ê‚Ä‚¢‚½‚ç‚­‚Á‚Â‚©‚È‚¢
 		if (otherClothes->GetIsWind()) {
-			player_->SetIsBiteMode(false);
-			return;
+			if (!isHitOnce) {
+				player_->SetIsBiteMode(false);
+				return;
+			}
+		}
+		else {
+			isHitOnce = true;
 		}
 	}
+	
+	
 
 	if (isHit_ || (player_->GetIsShootMode() != 2 && player_->GetIsShootMode() != 4))return;
 

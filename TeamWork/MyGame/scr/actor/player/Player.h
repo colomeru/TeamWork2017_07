@@ -13,6 +13,7 @@ static const float defGravAddPow = 0.2f;
 static const float HeadShootMult = 0.5f;
 static const float defSlipCount = 8.f;
 static const int defLaneChangeCoolTime_ = 60;
+static const int defChainLockCoolTime_ = 10;
 
 
 class Player : public Actor, public std::enable_shared_from_this<Player>
@@ -74,6 +75,17 @@ public:
 		rot_ = 135;
 		rot_spd_ = -3.0f;
 	}
+	void ResurrectHead() {
+		for (int i = currentHead_; i < pHeads_.size() + currentHead_; i++) {
+			int trgNum = i;
+			if (trgNum>=pHeads_.size()) {
+				trgNum = trgNum - pHeads_.size();
+			}
+			if (!pHeadDead_[trgNum])continue;
+			pHeadDead_[trgNum] = false;
+			break;
+		}
+	}
 	void SetOtherClothesID_(CLOTHES_ID cId) {
 		otherClothesID_ = cId;
 	}
@@ -124,6 +136,8 @@ private:
 	void PlayerInputControl();
 
 	void PHeadLengthReset() {
+		chainAddLength_ = 0.f;
+		chainAddLengthMath_ =0.f;
 		//チェーンのロックをリセットする
 		chainLock_ = false;
 		for (auto& pHL : pHeadLength_) {
@@ -196,6 +210,10 @@ private:
 	std::vector<Vector2> pHeadPoses_;
 	//各Headのチェーンの長さ
 	std::vector<float> pHeadLength_;
+	//首が外れた時に追加で伸びるチェーンの長さ
+	float chainAddLength_;
+	//首を追加で伸ばす際の補間値
+	float chainAddLengthMath_;
 	std::vector<bool> pHeadDead_;
 
 	int currentHead_;
@@ -231,6 +249,7 @@ private:
 	bool isReSetClothesType_;
 
 	int laneChangeCoolTime_;
+	int chainLockCoolTime_;
 	
 	//Head回転をロックする(スティックを0に戻す事でリセット)
 	bool isCanNextHeadRot;

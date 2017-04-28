@@ -17,7 +17,8 @@ Player::Player(IWorld * world)
 	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.5f), currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(0), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false), nextLane_(999),/* isCanChangeLane_(false),*/ laneChangeCoolTime_(0),
-	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), isReSetClothesType_(false),friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true)
+	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), isReSetClothesType_(false),friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
+	chainAddLengthMath_(0)
 
 {
 	laneNum_ = 1;
@@ -69,6 +70,8 @@ Player::~Player()
 
 void Player::Update()
 {
+	chainLockCoolTime_--;
+	chainLockCoolTime_ = MathHelper::Clamp(chainLockCoolTime_, 0, defChainLockCoolTime_);
 	//if (isCanChangeLane_) {
 	//	UpdateLaneNum(laneAddNum_);
 	//}
@@ -133,6 +136,10 @@ void Player::Update()
 		slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
 		if (slipCount_ <= 0.f) {
 			isBiteMode_ = false;
+			//首を殺して
+			pHeadDead_[currentHead_] = true;
+			//スティックをロックする
+			isCanNextHeadRot = false;
 			isSlipped_ = true;
 			//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
 			pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
@@ -178,19 +185,19 @@ void Player::Draw() const
 	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
 	//DrawFormatString(0, 100, GetColor(255, 255, 255), "%d", laneNum_);
-	DrawFormatString(50, 100, GetColor(255, 255, 255), "%f", rot_);
+	DrawFormatString(50, 100, GetColor(255, 255, 255), "%d", chainLockCoolTime_);
 	//DrawFormatString(400, 100, GetColor(255, 255, 255), "%f",angle_);
 	//if (isShootMode_>=1)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
 	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
 	//DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
 	DrawFormatString(400, 100, GetColor(255, 255, 255), "%f:%f",GamePad::GetInstance().Stick().x, GamePad::GetInstance().Stick().y);
-	//int count = 0;
-	//for (auto sgT : pHeadLength_) {
-	//DrawFormatString(300, 300 + (30 * count),GetColor(255,255,255),"%f",sgT );
+	int count = 0;
+	for (auto sgT : pHeadLength_) {
+	DrawFormatString(300, 300 + (30 * count),GetColor(255,255,255),"%f",sgT );
 	//if (pHeadDead_[count])DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "true");
 	//else DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "false");
-	//count++;
-	//}
+	count++;
+	}
 
 
 }
@@ -578,7 +585,7 @@ void Player::PlayerInputControl()
 	//}
 
 	SetAllHeadLaneNum();
-	if ((GamePad::GetInstance().Stick().x<-0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT))) && !isBiteMode_&&isCanNextHeadRot&&
+	if ((GamePad::GetInstance().Stick().x<-0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && !isBiteMode_&&isCanNextHeadRot&&
 		(isShootMode_==0|| isShootMode_ == 2|| isShootMode_ == 4)) {
 		isShootMode_ = 0;
 		isBiteMode_ = false;
@@ -587,7 +594,7 @@ void Player::PlayerInputControl()
 		changeHead();
 		isCanNextHeadRot = false;
 	}
-	if ((GamePad::GetInstance().Stick().x>0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT))) && !isBiteMode_&&isCanNextHeadRot&& 
+	if ((GamePad::GetInstance().Stick().x>0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && !isBiteMode_&&isCanNextHeadRot&& 
 		(isShootMode_ == 0 || isShootMode_ == 2 || isShootMode_ == 4)) {
 		isShootMode_ = 0;
 		isBiteMode_ = false;
@@ -596,7 +603,7 @@ void Player::PlayerInputControl()
 		backChangeHead();
 		isCanNextHeadRot = false;
 	}
-	if ((MathHelper::Abs(GamePad::GetInstance().Stick().x)<0.3f&&(Keyboard::GetInstance().KeyStateUp(KEYCODE::RIGHT)&& Keyboard::GetInstance().KeyStateUp(KEYCODE::LEFT))) && !isBiteMode_) {
+	if ((MathHelper::Abs(GamePad::GetInstance().Stick().x)<0.3f&&(Keyboard::GetInstance().KeyStateUp(KEYCODE::D)&& Keyboard::GetInstance().KeyStateUp(KEYCODE::A))) && !isBiteMode_) {
 		isCanNextHeadRot = true;
 	}
 	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)||Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
@@ -678,28 +685,58 @@ void Player::PlayerInputControl()
 
 void Player::CurPHeadLengPlus(float addPow) {
 
-	if (pHeadLength_[currentHead_] >= 16.f) {
-		pHeadLength_[currentHead_] = 16.f;
+	float fSaveAddNum = 0.2f;
+	if (pHeadLength_[currentHead_] > 16.f+ fSaveAddNum) {
+		pHeadLength_[currentHead_] = 16.f+ fSaveAddNum + chainAddLength_- chainAddLengthMath_;
 
-		if (!chainLock_) {
-			chainLock_ = true;
-			isShootMode_ = 3;
-			return;
+		//if (!chainLock_) {
+		//	chainLock_ = true;
+		//	isShootMode_ = 3;
+		//	return;
+		//}
+
+		//int nextNum = currentHead_ + 1;
+		//if (nextNum>7) {
+		//	nextNum = nextNum - 8;
+		//}
+		//pHeadDead_[nextNum] = true;
+		chainAddLengthMath_ -= 0.4f;
+		chainAddLengthMath_ = max(chainAddLengthMath_, 0.f);
+
+		for (int i = currentHead_; i > -(int)pHeads_.size() + currentHead_; i--) {
+			int trgNum = i;
+			if (trgNum<0) {
+				trgNum = trgNum + pHeads_.size();
+			}
+
+			if (pHeadDead_[trgNum])continue;
+
+			if (pHeadLength_[trgNum] <= 0.1f) {
+				if (chainLockCoolTime_>0) {
+					//chainLock_ = true;
+					//isShootMode_ = 3;
+					break;
+				}
+				chainLockCoolTime_ = defChainLockCoolTime_;
+				//chainLock_ = false;
+				chainAddLength_ += 2.f;
+				chainAddLengthMath_ += 2.f;
+				pHeadDead_[trgNum] = true;
+			}
+			else {
+				//pHeadDead_[i] = false;
+			}
 		}
 
-		int nextNum = currentHead_ + 1;
-		if (nextNum>7) {
-			nextNum = nextNum - 8;
-		}
-		pHeadDead_[nextNum] = true;
 		return;
 	}
-
 	//現在のHead以外の長さを伸ばした分だけマイナスする
-	pHeadLength_[currentHead_] += addPow;
+	pHeadLength_[currentHead_] += addPow;// +chainAddLength_ - chainAddLengthMath_;
 	//チェーンの長さの最大値を超えたら、最大値に補正する
-	if (pHeadLength_[currentHead_] > 16.f)pHeadLength_[currentHead_] = 16.f;
-
+	//if (pHeadLength_[currentHead_] > 16.0f)
+	//{
+	//	pHeadLength_[currentHead_] = 16.0f + chainAddLength_ - chainAddLengthMath_;
+	//}
 	//左隣がターゲット
 	int targetNum = currentHead_ - 1;
 
@@ -734,22 +771,30 @@ void Player::CurPHeadLengPlus(float addPow) {
 		if (pHeadLength_[targetNum] < 0)pHeadLength_[targetNum] = 0;
 
 
-		for (int i = 0; i < pHeads_.size(); i++) {
-			if (pHeadDead_[i])continue;
-
-			if (pHeadLength_[i] <= 0.1f) {
-				if (!chainLock_) {
-					chainLock_ = true;
-					isShootMode_ = 3;
-					break;
-				}
-				chainLock_ = false;
-				pHeadDead_[i] = true;
-			}
-			else {
-				//pHeadDead_[i] = false;
-			}
-		}
 		break;
 	}
+	//for (int i = currentHead_; i > -(int)pHeads_.size() +currentHead_; i--) {
+	//	int trgNum=i;
+	//	if (trgNum<0) {
+	//		trgNum = trgNum + pHeads_.size();
+	//	}
+
+	//	if (pHeadDead_[trgNum])continue;
+
+	//	if (pHeadLength_[trgNum] <= 0.1f) {
+	//		if (chainLockCoolTime_>0) {
+	//			//chainLock_ = true;
+	//			//isShootMode_ = 3;
+	//			break;
+	//		}
+	//		chainLockCoolTime_ = defChainLockCoolTime_;
+	//		//chainLock_ = false;
+	//		chainAddLength_+=2.f;
+	//		chainAddLengthMath_+= 2.f;
+	//		pHeadDead_[trgNum] = true;
+	//	}
+	//	else {
+	//		//pHeadDead_[i] = false;
+	//	}
+	//}
 }

@@ -10,6 +10,7 @@
 #include"../actor/Field/Clothes/BaseClothes.h"
 #include"../actor/Field/Clothes/TestClothes.h"
 #include"../actor/Field/ClothesLine.h"
+#include"../actor/Field/ClothesPin.h"
 
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"
@@ -61,6 +62,7 @@ void GamePlayScene::Initialize()
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage2);
 
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 1, Vector2(200.f, 0.f)));
 
 	ply1 = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);

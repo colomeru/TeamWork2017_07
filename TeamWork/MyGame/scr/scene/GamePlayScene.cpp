@@ -62,7 +62,7 @@ void GamePlayScene::Initialize()
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage2);
 
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 1, Vector2(200.f, 0.f)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 
 	ply1 = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
@@ -116,7 +116,7 @@ void GamePlayScene::Update()
 void GamePlayScene::Draw() const
 {
 	//DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
-	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	//DrawFormatString(700, 600, GetColor(255, 255, 255), "%f", ply1->GetAngle());
 

@@ -38,23 +38,21 @@ public:
 	Vector2 GetHeadPos(int headNum)const {
 		return pHeadPoses_[headNum];
 	}
-	//Headのデータ上の長さを返す
-	float GetHeadLength(int headNum) const {
-		return pHeadLength_[headNum];
-	}
 	//Headの長さを実際のゲームに反映される値に変換して返す
 	float GetHeadLengthChangeToPosMult(int headNum) const {
 		return pHeadLength_[headNum] * HeadShootMult;
 	}
 	void HeadPosUpdate();
+	//使用する頭を右隣の物に変更
 	void changeHead() {
 		//回転した時点でSlip状態を直す
 		isSlipped_ = false;
 		//pHeadLength_[currentHead_] = defHeadLength*HeadShootMult;
 		currentHead_++;
-		if (currentHead_ >= 8)currentHead_ = 0;
+		if (currentHead_ >= (int)pHeads_.size())currentHead_ = 0;
 		headChangeTime_ = defHeadChangeTime;
 	}
+	//使用する頭を左隣の物に変更
 	void backChangeHead() {
 		//pHeadLength_[currentHead_] = defHeadLength*HeadShootMult;
 		currentHead_--;
@@ -125,19 +123,15 @@ public:
 	//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
 	//	isCanChangeLane_ = isCanChange;
 	//}
-	bool GetIsReSetClothesType_()const {
-		return isReSetClothesType_;
-	}
-	void SetIsReSetClothesType_(bool isReset) {
-		isReSetClothesType_ = isReset;
-	}
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
 
 	void PHeadLengthReset() {
+		//長さの補間をリセットする
 		chainAddLength_ = 0.f;
 		chainAddLengthMath_ =0.f;
+
 		//チェーンのロックをリセットする
 		chainLock_ = false;
 		for (auto& pHL : pHeadLength_) {
@@ -174,8 +168,6 @@ private:
 		pendulumVect_ = nextVel_;
 
 		isBiteMode_ = false;
-		//移動先の服の種類に再設定する
-		//isReSetClothesType_ = true;
 
 		PHeadLengthReset();
 		changeHead();
@@ -245,8 +237,6 @@ private:
 	int nextLane_;
 	int laneAddNum_;
 	//bool isCanChangeLane_;
-
-	bool isReSetClothesType_;
 
 	int laneChangeCoolTime_;
 	int chainLockCoolTime_;

@@ -17,7 +17,7 @@ Player::Player(IWorld * world)
 	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.5f), currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), isBiteMode_(false), isShootMode_(0), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false), nextLane_(999),/* isCanChangeLane_(false),*/ laneChangeCoolTime_(0),
-	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), isReSetClothesType_(false),friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
+	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES),friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
 	chainAddLengthMath_(0)
 
 {
@@ -185,19 +185,19 @@ void Player::Draw() const
 	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
 	//DrawFormatString(0, 100, GetColor(255, 255, 255), "%d", laneNum_);
-	DrawFormatString(50, 100, GetColor(255, 255, 255), "%d", chainLockCoolTime_);
+	//DrawFormatString(50, 100, GetColor(255, 255, 255), "%d", chainLockCoolTime_);
 	//DrawFormatString(400, 100, GetColor(255, 255, 255), "%f",angle_);
 	//if (isShootMode_>=1)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
 	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
 	//DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
-	DrawFormatString(400, 100, GetColor(255, 255, 255), "%f:%f",GamePad::GetInstance().Stick().x, GamePad::GetInstance().Stick().y);
-	int count = 0;
-	for (auto sgT : pHeadLength_) {
-	DrawFormatString(300, 300 + (30 * count),GetColor(255,255,255),"%f",sgT );
-	//if (pHeadDead_[count])DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "true");
-	//else DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "false");
-	count++;
-	}
+	//DrawFormatString(400, 100, GetColor(255, 255, 255), "%f:%f",GamePad::GetInstance().Stick().x, GamePad::GetInstance().Stick().y);
+	//int count = 0;
+	//for (auto sgT : pHeadLength_) {
+	//DrawFormatString(300, 300 + (30 * count),GetColor(255,255,255),"%f",sgT );
+	////if (pHeadDead_[count])DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "true");
+	////else DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "false");
+	//count++;
+	//}
 
 
 }
@@ -685,10 +685,13 @@ void Player::PlayerInputControl()
 
 void Player::CurPHeadLengPlus(float addPow) {
 
+	//floatの誤差と、addPowによるLengthのズレを補正するための値、首の長さの値に補正が発生した場合は、この補正値をそこに加算する事で、長さの違和感を解決する
 	float fSaveAddNum = 0.2f;
 	if (pHeadLength_[currentHead_] > 16.f+ fSaveAddNum) {
 		pHeadLength_[currentHead_] = 16.f+ fSaveAddNum + chainAddLength_- chainAddLengthMath_;
-
+		//長さの上昇に対する補間値
+		chainAddLengthMath_ -= 0.4f;
+		chainAddLengthMath_ = max(chainAddLengthMath_, 0.f);
 		//if (!chainLock_) {
 		//	chainLock_ = true;
 		//	isShootMode_ = 3;
@@ -700,8 +703,6 @@ void Player::CurPHeadLengPlus(float addPow) {
 		//	nextNum = nextNum - 8;
 		//}
 		//pHeadDead_[nextNum] = true;
-		chainAddLengthMath_ -= 0.4f;
-		chainAddLengthMath_ = max(chainAddLengthMath_, 0.f);
 
 		for (int i = currentHead_; i > -(int)pHeads_.size() + currentHead_; i--) {
 			int trgNum = i;
@@ -743,7 +744,7 @@ void Player::CurPHeadLengPlus(float addPow) {
 
 	float LengthKeepNum = 1.01f;
 	if (targetNum<0) {
-		targetNum = targetNum + 8;
+		targetNum = targetNum + (int)pHeads_.size();
 	}
 	for (;;) {
 		if (LengthKeepNum < 0.f)break;
@@ -753,7 +754,7 @@ void Player::CurPHeadLengPlus(float addPow) {
 			targetNum--;
 
 			if (targetNum<0) {
-				targetNum = targetNum + 8;
+				targetNum = targetNum + (int)pHeads_.size();
 			}
 
 			if (targetNum == currentHead_) {
@@ -761,7 +762,7 @@ void Player::CurPHeadLengPlus(float addPow) {
 				targetNum--;
 
 				if (targetNum<0) {
-					targetNum = targetNum + 8;
+					targetNum = targetNum + (int)pHeads_.size();
 				}
 			}
 

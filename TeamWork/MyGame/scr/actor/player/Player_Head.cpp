@@ -8,7 +8,7 @@
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
 	:Actor(world, targetP)
-	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0)
+	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false)
 {
 	spriteId_ = SPRITE_ID::PLAYER_HEAD_SPRITE;
 
@@ -35,14 +35,18 @@ Player_Head::~Player_Head()
 
 void Player_Head::Update()
 {
+	//自分が死んでたら更新を行わない
 	if (player_->GetPHeadDead(myNumber_))return;
+	//服を噛んでいる時は、頭の色を赤く、離すと元の色に戻していく
 	if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
 	else {
 		fatigueCheckColor_ -= 2;
 		fatigueCheckColor_ = max(fatigueCheckColor_, 0);
 	}
 	//Vector2 posAddP = position_;
-
+	
+	//風に吹かれた服に当たってかつ吹かれていない服につかめてない場合のみ落ちる
+	if(isBiteSlipWind_)player_->SetIsBiteMode(false);
 
 	//毎フレーム、1度でも当たったかを調べる
 	{
@@ -56,46 +60,23 @@ void Player_Head::Update()
 	
 	//プレイヤーから各ヘッドまでの長さ、(32,32のLength)*自分の首の長さ
 	Vector2 vel = basePos - player_->GetPosition();
-
+	//自分の首の向き*自分の首に設定されている長さ
 	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
-
+	//スリップしたかを調べて
 	if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()) {
+		//Playerがスリップ状態に入った時点でposAddVectを指定してもらい、その位置に首を固定する
 		position_ = basePos + posAddVect_;
 	}
 	else {
+		//通常時は首の長さに対応した位置に補正する
 		position_ = basePos + bPlusLngPos;
 	}
-	//自分,相手のID,Colの種類
-	//world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
 
-	//velocity_ = Vector2::Zero;
-	//float speed = 0.0f;
-	//isHit_ = false;
-	//auto pos = parameter_.mat.Translation();
 
-	//world_->SetCollideSelect(shared_from_this(), ACTOR_ID::ENEMY_ACTOR, COL_ID::TEST_COL);
-
-	////行列にangleをかける
-	//parameter_.mat += Matrix::CreateRotationZ(angle_);
-	//parameter_.mat.NormalizeRotationMatrix();
-
-	////正面への移動量を追加(DXライブラリだからZにマイナス)
-	////velocity_ += parameter_.mat.Backward() * speed;
-	////velocity_ += parameter_.mat.Up() * jumpVec;
-	////velocityをpositionに追加
-	//pos += Vector3(velocity_.x, velocity_.y);
-
-	////if (pos.y < 0)pos.y = 0;
-
-	//position_ += velocity_;
-	//parameter_.mat.Translation(pos);
 	if (player_->GetCurHead() == myNumber_) {
 		if (isHit_) {
 			position_ = stopPos_;
 		}
-		//else if (player_->GetIsSlipped()) {
-		//	position_.x = posAddP.x;
-		//}
 	}
 	else {
 		isHit_ = false;
@@ -148,7 +129,7 @@ void Player_Head::Draw() const
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", angle_);
 	//if (myNumber_ == player_->GetCurHead())DrawFormatString(250, 250, GetColor(255, 255, 255), "%d", fatigueCheckColor_);
 	//if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
-	DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
+	//DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
 
 	DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
 }
@@ -159,6 +140,11 @@ void Player_Head::OnUpdate()
 
 void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
+	if (dynamic_cast<ClothesPin*>(&other) != nullptr) {
+		player_->ResurrectHead();
+		dynamic_cast<ClothesPin*>(&other)->ClearThis();
+	}
+
 	if (player_->GetPHeadDead(myNumber_))return;
 
 	isBitePoint_ = true;
@@ -167,26 +153,7 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	if (player_->GetCurHead() != myNumber_) {
 		return;
 	}
-	//else if (other.GetLaneNum() != laneNum_) {
-	//	player_->SetIsCanChangeLane(true);
-	//	return;
-	//}
 
-	//当たった服の種類をリセットする条件が整った時には、服の種類を再度セットする
-	//if (player_->GetIsReSetClothesType_()) {
-	//	if (dynamic_cast<Clothes*>(&other) != nullptr) {
-	//		Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
-	//		player_->SetOtherClothesID_(otherClothes->GetClothesID());
-	//		//服の種類の再セットを終了する(再度発生しないようにする)
-	//		player_->SetIsReSetClothesType_(false);
-	//	}
-
-	//}
-
-	if (dynamic_cast<ClothesPin*>(&other)!=nullptr) {
-		player_->ResurrectHead();
-		dynamic_cast<ClothesPin*>(&other)->ClearThis();
-	}
 
 	Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
 
@@ -194,11 +161,12 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 		//服が風に吹かれていたらくっつかない
 		if (otherClothes->GetIsWind()) {
 			if (!isHitOnce) {
-				player_->SetIsBiteMode(false);
+				isBiteSlipWind_ = true;
 				return;
 			}
 		}
 		else {
+			isBiteSlipWind_ = false;
 			isHitOnce = true;
 		}
 	}

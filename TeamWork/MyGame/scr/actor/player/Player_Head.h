@@ -62,6 +62,7 @@ private:
 	bool isHit_;
 	//Õ“ËˆÊ’u‚É‚¢‚ÄA‚©‚ÂŠš‚İ•t‚¢‚Ä‚¢‚È‚¢‚©
 	bool isBitePoint_;
+	bool isBiteSlipWind_;
 	Player* player_;
 
 	Vector2 stopPos_;

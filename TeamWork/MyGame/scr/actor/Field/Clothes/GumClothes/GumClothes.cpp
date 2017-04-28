@@ -1,4 +1,5 @@
 #include "GumClothes.h"
+#include "../MyGame/scr/game/Random.h"
 
 GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
@@ -73,26 +74,13 @@ void GumClothes::OnMessage(EventMessage message, void * param)
 	switch (message)
 	{
 	case EventMessage::BEGIN_WIND:
+	{
+		if (!isUpdate_) break;
+		int rand = Random::GetInstance().Range(0, 100);
+		if (rand > 70) return;
 		basePosition_ = position_;
 		isPendulum_ = true;
 		break;
-	case EventMessage::STRONG_WIND:
-		rot_spd_ = 2.8f;
-		isWind_ = true;
-		break;
-	case EventMessage::ATTENUATE_WIND:
-		rot_spd_ = 0.0f;
-		isFriction_ = true;
-		break;
-	case EventMessage::END_WIND:
-		rot_spd_ = 0.5f;
-		rot_ = 90.0f;
-		friction_ = 1.0f;
-		angle_ = 0;
-		position_ = basePosition_;
-		isPendulum_ = false;
-		isFriction_ = false;
-		isWind_ = false;
-		break;
+	}
 	}
 }

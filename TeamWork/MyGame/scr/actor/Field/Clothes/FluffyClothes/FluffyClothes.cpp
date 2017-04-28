@@ -1,4 +1,5 @@
 #include "FluffyClothes.h"
+#include "../MyGame/scr/game/Random.h"
 
 FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
@@ -56,7 +57,12 @@ void FluffyClothes::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 104), TRUE);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::FLUFFY_SPRITE) / 2;
+	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
+	Vector2 hangPos = GetDrawPosVect(fulcrum_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 104), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 
 }
@@ -71,29 +77,18 @@ void FluffyClothes::OnCollide(Actor * other, CollisionParameter colpara)
 
 void FluffyClothes::OnMessage(EventMessage message, void * param)
 {
+
+
 	switch (message)
 	{
 	case EventMessage::BEGIN_WIND:
+	{
+		if (!isUpdate_) break;
+		int rand = Random::GetInstance().Range(0, 100);
+		if (rand > 70) return;
 		basePosition_ = position_;
 		isPendulum_ = true;
 		break;
-	case EventMessage::STRONG_WIND:
-		rot_spd_ = 2.8f;
-		isWind_ = true;
-		break;
-	case EventMessage::ATTENUATE_WIND:
-		rot_spd_ = 0.0f;
-		isFriction_ = true;
-		break;
-	case EventMessage::END_WIND:
-		rot_spd_ = 0.5f;
-		rot_ = 90.0f;
-		friction_ = 1.0f;
-		angle_ = 0;
-		position_ = basePosition_;
-		isPendulum_ = false;
-		isFriction_ = false;
-		isWind_ = false;
-		break;
+	}
 	}
 }

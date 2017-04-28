@@ -66,15 +66,6 @@ void CreditScene::Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
 		world_->sendMessage(EventMessage::BEGIN_WIND);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
-		world_->sendMessage(EventMessage::STRONG_WIND);
-	}	
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
-		world_->sendMessage(EventMessage::ATTENUATE_WIND);
-	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
-		world_->sendMessage(EventMessage::END_WIND);
-	}
 
 	//Camera::GetInstance().Position.Set(camera_pos_);
 	//Camera::GetInstance().Target.Set(target_);

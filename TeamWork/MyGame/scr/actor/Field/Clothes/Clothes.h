@@ -64,4 +64,6 @@ protected:
 	Vector2 basePosition_;
 	//摩擦
 	float friction_;
+	//振り子カウント
+	int count_;
 };

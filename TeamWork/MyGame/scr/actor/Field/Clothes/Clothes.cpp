@@ -1,11 +1,13 @@
 #include "Clothes.h"
 #include "../MyGame/scr/math/MyFuncionList.h"
+#include "../MyGame/scr/game/Random.h"
 
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 	:Actor(world)
 	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
 	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.5f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
+	,count_(0)
 {
 }
 
@@ -45,7 +47,7 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 	auto temp = rot_spd_ + sub;
 	if (sign(rot_spd_) != sign(temp) && isFriction_) {
-		friction_ *= 0.997f;
+		friction_ *= 0.995f;
 	}
 	rot_spd_ = temp;
 	//rot_spd_ += sub;
@@ -67,11 +69,36 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	auto angle = rot_ - 90;
 	angle_ = angle;
 	
+	count_++;
 }
 
 void Clothes::ShakesClothes()
 {
-	if (isPendulum_) {
+	if (isPendulum_ && isDraw_) {
 		Pendulum(fulcrum_, length_);
+
+		switch (count_)
+		{
+		case 300:
+			rot_spd_ = 2.8f;
+			isWind_ = true;
+			break;
+		case 600:
+			isFriction_ = true;
+			break;
+		case 1200:
+			rot_spd_ = 0.5f;
+			rot_ = 90.0f;
+			friction_ = 1.0f;
+			angle_ = 0;
+			position_ = basePosition_;
+			isFriction_ = false;
+			isWind_ = false;
+			count_ = 0;
+			isPendulum_ = false;
+			break;
+		default:
+			break;
+		}
 	}
 }

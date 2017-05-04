@@ -4,6 +4,17 @@
 
 class Clothes : public Actor
 {
+protected:
+	enum ClothesState
+	{
+		BEGIN_WIND,				//風の吹き始め
+		BEGIN_STRONG_WIND,		//強い風の吹き始め
+		STRONG_WIND,			//強い風が吹いている
+		ATTENUATE_WIND,			//風の威力の減衰
+		POSSIBLE_BITE,			//プレイヤーが噛めるようになる
+		END_WIND,				//風が終了
+	};
+
 public:
 	//コンストラクタ
 	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum);
@@ -66,4 +77,6 @@ protected:
 	float friction_;
 	//振り子カウント
 	int count_;
+	//服の状態
+	ClothesState clothesState_;
 };

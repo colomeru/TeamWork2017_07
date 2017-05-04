@@ -166,6 +166,7 @@
     <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GumClothes\GumClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\Hairball\Hairball.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Hanger\Hanger.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp" />
@@ -234,6 +235,7 @@
     <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GumClothes\GumClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\Hairball\Hairball.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Hanger\Hanger.h" />
     <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h" />

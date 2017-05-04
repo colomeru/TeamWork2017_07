@@ -74,7 +74,7 @@ void GoalClothes::OnUpdate()
 	
 }
 
-void GoalClothes::OnCollide(Actor * other, CollisionParameter colpara)
+void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 }
 

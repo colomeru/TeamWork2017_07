@@ -57,7 +57,12 @@ void GumClothes::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 153, 0), TRUE);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GUM_SPRITE) / 2;
+	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
+	Vector2 hangPos = GetDrawPosVect(fulcrum_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::GUM_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 153, 0), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 }
 
@@ -65,7 +70,7 @@ void GumClothes::OnUpdate()
 {
 }
 
-void GumClothes::OnCollide(Actor * other, CollisionParameter colpara)
+void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 }
 
@@ -75,9 +80,9 @@ void GumClothes::OnMessage(EventMessage message, void * param)
 	{
 	case EventMessage::BEGIN_WIND:
 	{
-		if (!isUpdate_) break;
+		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > 70) return;
+		if (rand > 30) return;
 		basePosition_ = position_;
 		isPendulum_ = true;
 		break;

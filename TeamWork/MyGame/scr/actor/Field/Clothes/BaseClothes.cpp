@@ -79,8 +79,6 @@ void BaseClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-	DrawFormatString(500, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", position_.x, position_.y);
-	DrawFormatString(500, 80, GetColor(255, 255, 255), "angle %f", angle_);
 
 }
 
@@ -88,7 +86,7 @@ void BaseClothes::OnUpdate()
 {
 }
 
-void BaseClothes::OnCollide(Actor * other, CollisionParameter colpara)
+void BaseClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 }
 
@@ -98,9 +96,9 @@ void BaseClothes::OnMessage(EventMessage message, void * param)
 	{
 	case EventMessage::BEGIN_WIND:
 	{
-		if (!isUpdate_) break;
+		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > 70) return;
+		if (rand > 30) return;
 		basePosition_ = position_;
 		isPendulum_ = true;
 		break;

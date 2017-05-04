@@ -65,7 +65,7 @@ void ThinClothes::OnUpdate()
 {
 }
 
-void ThinClothes::OnCollide(Actor * other, CollisionParameter colpara)
+void ThinClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 }
 
@@ -75,9 +75,9 @@ void ThinClothes::OnMessage(EventMessage message, void * param)
 	{
 	case EventMessage::BEGIN_WIND:
 	{
-		if (!isUpdate_) break;
+		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > 70) return;
+		if (rand > 30) return;
 		basePosition_ = position_;
 		isPendulum_ = true;
 		break;

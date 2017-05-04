@@ -54,6 +54,7 @@ enum SPRITE_ID
 	TEST_GOAL_SPRITE,
 	HANGER_SPRITE,
 	FLUFFY_SPRITE,
+	GUM_SPRITE,
 	END_SPRITE
 };
 
@@ -92,4 +93,5 @@ enum CLOTHES_ID
 	THIN_CLOTHES,		//薄い生地
 	HANGER,				//ハンガー
 	GOAL_CLOTHES,		//ゴール
+	HAIRBALL,			//毛玉
 };

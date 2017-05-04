@@ -1,14 +1,14 @@
 #pragma once
 #include "../Clothes.h"
+#include "../MyGame/scr/actor/player/Player_Head.h"
 
-//ゴムの服
-class GumClothes : public Clothes, public std::enable_shared_from_this<GumClothes>
+class Hairball : public Clothes, public std::enable_shared_from_this<Hairball>
 {
 public:
 	//コンストラクタ
-	GumClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
+	Hairball(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
 	//デストラクタ
-	~GumClothes();
+	~Hairball();
 	//更新
 	virtual void Update() override;
 	//描画
@@ -21,5 +21,6 @@ public:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
-
+	Player* player_;
+	Player_Head* player_Head_;
 };

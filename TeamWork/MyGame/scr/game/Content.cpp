@@ -25,6 +25,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("goal.bmp", SPRITE_ID::TEST_GOAL_SPRITE);
 	sprite.Load("hanger.png", SPRITE_ID::HANGER_SPRITE);
 	sprite.Load("fluffyClothes.png", SPRITE_ID::FLUFFY_SPRITE);
+	sprite.Load("gumClothes.png", SPRITE_ID::GUM_SPRITE);
 
 }
 

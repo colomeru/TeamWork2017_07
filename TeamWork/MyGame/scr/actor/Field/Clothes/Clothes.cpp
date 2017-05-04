@@ -7,14 +7,13 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 	:Actor(world)
 	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
 	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.5f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
-	,count_(0)
+	,count_(0),clothesState_(ClothesState::BEGIN_WIND)
 {
 }
 
 //当たり判定処理
 void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	isHit_ = true;
 }
 
 //メッセージ処理
@@ -70,6 +69,24 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	angle_ = angle;
 	
 	count_++;
+
+	switch (count_)
+	{
+	case 300:
+		clothesState_ = ClothesState::BEGIN_STRONG_WIND;
+		break;
+	case 600:
+		clothesState_ = ClothesState::ATTENUATE_WIND;
+		break;
+	case 900:
+		clothesState_ = ClothesState::POSSIBLE_BITE;
+		break;
+	case 1200:
+		clothesState_ = ClothesState::END_WIND;
+		break;
+	default:
+		break;
+	}
 }
 
 void Clothes::ShakesClothes()
@@ -77,23 +94,26 @@ void Clothes::ShakesClothes()
 	if (isPendulum_ && isDraw_) {
 		Pendulum(fulcrum_, length_);
 
-		switch (count_)
+		switch (clothesState_)
 		{
-		case 300:
+		case ClothesState::BEGIN_STRONG_WIND:
 			rot_spd_ = 2.8f;
 			isWind_ = true;
+			clothesState_ = ClothesState::STRONG_WIND;
 			break;
-		case 600:
+		case ClothesState::ATTENUATE_WIND:
 			isFriction_ = true;
 			break;
-		case 1200:
+		case ClothesState::POSSIBLE_BITE:
+			isWind_ = false;
+			break;
+		case ClothesState::END_WIND:
 			rot_spd_ = 0.5f;
 			rot_ = 90.0f;
 			friction_ = 1.0f;
 			angle_ = 0;
 			position_ = basePosition_;
 			isFriction_ = false;
-			isWind_ = false;
 			count_ = 0;
 			isPendulum_ = false;
 			break;

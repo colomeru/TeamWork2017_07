@@ -1,4 +1,6 @@
 #include "Hanger.h"
+#include "../MyGame/scr/actor/player/Player_Head.h"
+#include "../MyGame/scr/game/Random.h"
 
 Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
@@ -20,10 +22,6 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
-
-	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [&, this](const Actor& other) {
-		player_ = const_cast<Actor*>(&other);
-	});
 }
 
 Hanger::~Hanger()
@@ -37,6 +35,25 @@ void Hanger::Update()
 	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
 	}
+
+	if (parent_ == nullptr || player_ == nullptr) return;
+	//Hanger‚ð‚Â‚©‚ñ‚¾Û‚ÌPlayer‚ÌˆÚ“®ˆ—
+	if (player_->GetIsBiteMode()) {
+		velocity_ = Vector2(10.0f, 0.0f);
+		Vector2 pos = parent_->GetPosition() + velocity_;
+		Vector3 velo = Vector3(velocity_.x, velocity_.y, 0);
+		Vector3 pPos = Vector3(parent_->GetPosition().x, parent_->GetPosition().y, 0);
+		Matrix mat = Matrix::CreateTranslation(pPos) * Matrix::CreateTranslation(velo);
+		parent_->SetPose(mat);
+		//player_head_->SetPosAddVect(pos);
+		//position_ += velocity_;
+	}
+	//if (position_.x < player_->GetPosition().x - 400
+	//	|| position_.x > player_->GetPosition().x + 1600)
+	//	parameter_.isDead = true;
+
+	//parent_ = nullptr;
+	//player_ = nullptr;
 
 }
 
@@ -65,14 +82,29 @@ void Hanger::Draw() const
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 
+	if (parent_ == nullptr) return;
+	DrawFormatString(700, 100, GetColor(255, 255, 255), "pos x:%f y:%f", parent_->GetPosition().x, parent_->GetPosition().y);
+	DrawFormatString(700, 120, GetColor(255, 255, 255), "pos x:%f y:%f", parent_->GetPrevPosition().x, parent_->GetPrevPosition().y);
+	DrawFormatString(700, 140, GetColor(255, 255, 255), "pos x:%f y:%f", 
+		parent_->GetPosition().x - parent_->GetPrevPosition().x, parent_->GetPosition().y - parent_->GetPrevPosition().y);
 }
 
 void Hanger::OnUpdate()
 {
 }
 
-void Hanger::OnCollide(Actor * other, CollisionParameter colpara)
+void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 {
+	player_head_ = static_cast<Player_Head*>(&other);
+	parent_ = static_cast<Player_Head*>(&other);	
+	player_ = static_cast<Player*>(parent_->GetParent());
+
+	//if (player->GetIsBiteMode()) {
+	//	//velocity_ = Vector2(10.0f, 0.0f);
+	//	Vector2 headPos = parent_->GetPosition() + velocity_;
+	//	parent_->SetPosAddVect(headPos);
+	//}
+
 }
 
 void Hanger::OnMessage(EventMessage message, void * param)
@@ -80,27 +112,14 @@ void Hanger::OnMessage(EventMessage message, void * param)
 	switch (message)
 	{
 	case EventMessage::BEGIN_WIND:
+	{
+		if (!isUpdate_ || isPendulum_) break;
+		int rand = Random::GetInstance().Range(0, 100);
+		if (rand > 30) return;
 		basePosition_ = position_;
 		isPendulum_ = true;
 		break;
-	case EventMessage::STRONG_WIND:
-		rot_spd_ = 2.8f;
-		isWind_ = true;
-		break;
-	case EventMessage::ATTENUATE_WIND:
-		rot_spd_ = 0.0f;
-		isFriction_ = true;
-		break;
-	case EventMessage::END_WIND:
-		rot_spd_ = 0.5f;
-		rot_ = 90.0f;
-		friction_ = 1.0f;
-		angle_ = 0;
-		position_ = basePosition_;
-		isPendulum_ = false;
-		isFriction_ = false;
-		isWind_ = false;
-		break;
+	}
 	}
 }
 

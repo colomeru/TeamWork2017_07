@@ -46,8 +46,10 @@ void Player_Head::Update()
 	//Vector2 posAddP = position_;
 	
 	//風に吹かれた服に当たってかつ吹かれていない服につかめてない場合のみ落ちる
-	if(isBiteSlipWind_)player_->SetIsBiteMode(false);
-
+	if (isBiteSlipWind_) {
+		player_->SetMode(MODE_SHOOT);
+		isBiteSlipWind_ = false;
+	}
 	//毎フレーム、1度でも当たったかを調べる
 	{
 		if (!isHitOnce) {
@@ -82,6 +84,10 @@ void Player_Head::Update()
 		isHit_ = false;
 	}
 	if (!player_->GetIsBiteMode())isHit_ = false;
+
+	Vector3 toMatPos = Vector3(position_.x, position_.y, 0);
+
+	parameter_.mat.Translation(toMatPos);
 }
 
 void Player_Head::Draw() const
@@ -171,9 +177,7 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 		}
 	}
 	
-	
-
-	if (isHit_ || (player_->GetIsShootMode() != 2 && player_->GetIsShootMode() != 4))return;
+	if (isHit_ || !(player_->GetIsShootModeEnd()))return;
 
 	isHit_ = true;
 	isBitePoint_ = false;

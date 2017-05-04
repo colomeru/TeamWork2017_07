@@ -40,7 +40,7 @@ void GamePlayScene::Initialize()
 
 	// フェードパネル初期化
 	FadePanel::GetInstance().Initialize();
-
+	world_->Initialize();
 	// アクター生成
 	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
 

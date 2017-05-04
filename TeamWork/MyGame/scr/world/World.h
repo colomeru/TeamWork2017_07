@@ -7,15 +7,18 @@
 #include <stack>
 
 static const float defDrawLinePosY[3] = { 0,400,1000 };
+static const float defDrawLineChangePosY[5] = { -400,0,400,1000,1500 };
 
 //World内で、アクター全員が取得出来るデータ
 struct KeepDatas {
 	//playerの現在のレーン
 	int playerLane_;
+	//次のレーンの方向を代入する(-1～1)
 	int nextLane_;
 	Vector2 playerPos_;
+	float changeLaneLerpPos_;
 
-	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero, int nextLane = 999) :playerLane_(lane), playerPos_(pos), nextLane_(nextLane) {}
+	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero, int nextLane = 0) :playerLane_(lane), playerPos_(pos), nextLane_(nextLane), changeLaneLerpPos_(0.f){}
 
 	//playerの現レーンを更新する
 	void SetPlayerLane(const int& pLane) {
@@ -29,7 +32,9 @@ struct KeepDatas {
 	void SetPlayerNextLane(const int& pNLane) {
 		nextLane_ = pNLane;
 	}
-
+	void SetChangeLaneLerpPos_(float lNum) {
+		changeLaneLerpPos_ = lNum;
+	}
 };
 
 static const Vector2 playerScreenPos_ = Vector2(300, 0);
@@ -99,6 +104,16 @@ public:
 	virtual KeepDatas& GetCanChangedKeepDatas() override {
 		return keepDatas_;
 	}
+	virtual void ChangeCamMoveMode(int addNum) override{
+		isChangeCam_ = true;
+		addNum_ = addNum;
+	}
+	virtual bool GetIsCamChangeMode()const override {
+		return isChangeCam_;
+	}
+	virtual bool isChangeFrame()const {
+		return isChangeFrame_;
+	}
 
 private:
 	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
@@ -116,6 +131,11 @@ private:
 	}
 
 private:
+	//カメラ更新用のUpdateへ移行する
+	bool isChangeCam_;
+	int addNum_;
+	bool isChangeFrame_;
+	std::map<bool, std::function<void()>> updateFunctionMap_;
 
 	Matrix inv_;
 	Matrix resInv_;

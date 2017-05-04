@@ -3,8 +3,11 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_()
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false)
 {
+	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
+	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
+
 }
 
 // デストラクタ
@@ -17,20 +20,37 @@ World::~World()
 void World::Initialize()
 {
 	Clear();
+	keepDatas_ = KeepDatas();
+	isChangeCam_ = false;
+	addNum_ = 0;
+	isChangeFrame_ = false;
 }
 
 // 更新
 void World::Update()
 {
-	if (targetAct_ != nullptr) {
+	if (targetAct_ != nullptr&&!isChangeCam_) {
 		inv(targetMat_);
 		//targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
 		targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
 		//*Matrix::CreateRotationZ(targetAct_->GetAngle());
 	}
 
-	actors_.Update();
-
+	isChangeFrame_ = false;
+	if (isChangeCam_) {
+		keepDatas_.SetPlayerNextLane(addNum_);
+		keepDatas_.SetChangeLaneLerpPos_(keepDatas_.changeLaneLerpPos_ + 0.04f);
+	}
+	else
+	{
+	}
+	if (keepDatas_.changeLaneLerpPos_ >= 1.0f) {
+		isChangeCam_ = false;
+		isChangeFrame_ = true;
+		keepDatas_.SetChangeLaneLerpPos_(0.0f);
+	}
+	//actors_.Update();
+	updateFunctionMap_[isChangeCam_]();
 	// 受動更新
 	if (!manualStackActor_.empty())
 		manualStackActor_.top()->OnUpdate();
@@ -44,7 +64,8 @@ void World::Update()
 void World::Draw(const int laneCount, const int playerLane) const
 {
 	//DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
-	actors_.Draw(laneCount, playerLane);
+	if(!isChangeFrame_)actors_.Draw(laneCount, playerLane);
+	DrawFormatString(0,600,GetColor(255,255,255),"%f", keepDatas_.changeLaneLerpPos_);
 }
 
 // クリア
@@ -134,7 +155,7 @@ void World::inv(const Matrix & mat)
 	Matrix playerMat;
 	playerMat = mat;
 
-	//最大最小値の指定(マジックナンバー0,999999は後で消そう)
+	//最大最小値の指定(0,999999は後で消そう)
 	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, 0, 999999);
 	float clampPosY = MathHelper::Clamp((int)playerMat.Translation().y, 0, 999999);
 

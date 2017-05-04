@@ -10,7 +10,7 @@ WorldActor::~WorldActor()
 }
 
 // 更新
-void WorldActor::Update()
+bool WorldActor::Update()
 {
 	// 全キャラアップデート
 	EachActor([&](ActorManager& manager) { manager.Update(); });
@@ -25,6 +25,16 @@ void WorldActor::Update()
 
 	// 死亡キャラ削除
 	EachActor([](ActorManager& manager) { manager.Remove(); });
+
+	return false;
+}
+
+bool WorldActor::ChangeLaneUpdate()
+{
+	bool isCLaneEnd_=false;
+	EachActor([&](ActorManager& manager) { isCLaneEnd_=manager.CamMoveUpdate(); });
+
+	return isCLaneEnd_;
 }
 
 // 描画

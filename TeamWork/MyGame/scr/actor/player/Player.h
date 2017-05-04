@@ -2,6 +2,8 @@
 #include "../Actor.h"
 #include<vector>
 #include"../../math/MathHelper.h"
+#include"../../math/MyFuncionList.h"
+
 class Player_Head;
 
 static const Vector2 pHDist = Vector2(32, 32);
@@ -15,6 +17,14 @@ static const float defSlipCount = 8.f;
 static const int defLaneChangeCoolTime_ = 60;
 static const int defChainLockCoolTime_ = 10;
 
+enum {
+	MODE_FALL = 0,
+	MODE_SHOOT = 1,
+	MODE_SHOOT_END = 2,
+	MODE_BITE = 3,
+	MODE_SLIP = 4
+};
+
 
 class Player : public Actor, public std::enable_shared_from_this<Player>
 {
@@ -25,6 +35,8 @@ public:
 	~Player();
 	//更新
 	virtual void Update() override;
+	virtual void FastUpdate() override {
+	}
 	//描画
 	virtual void Draw() const override;
 	//受動更新
@@ -66,7 +78,7 @@ public:
 		return pHeadDead_[pHeadNum];
 	}
 	void CurHeadBite(const Vector2& target) {
-		isBiteMode_ = true;
+		playerMode_ = MODE_BITE;
 		pGrav_ = defPGravPow;
 		//角度を求める
 		//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
@@ -89,19 +101,25 @@ public:
 	}
 	//噛み付ける状態かを返す
 	bool GetIsBiteMode()const {
-		return isBiteMode_;
+		return playerMode_==MODE_BITE;
 	}
+	//噛み付き状態にするかをセット、
 	void SetIsBiteMode(bool ismode) {
-		isBiteMode_ = ismode;
+		int setMode = (ismode) ? MODE_BITE : MODE_SHOOT;
+		playerMode_ = setMode;
 	}
-	int GetIsShootMode()const {
-		return isShootMode_;
+	void SetMode(int pMode) {
+		playerMode_ = pMode;
+	}
+	//シュート終了の瞬間かどうかを取る
+	bool GetIsShootModeEnd()const {
+		return playerMode_==2;
 	}
 	float GetSlipCount()const {
 		return slipCount_;
 	}
 	bool GetIsSlipped()const {
-		return isSlipped_;
+		return playerMode_==MODE_SLIP;
 	}
 	//Headのレーンを本体のレーンに合わせる
 	void SetMyHeadLaneNum(int targetNum);
@@ -110,22 +128,23 @@ public:
 	//worldの共有データに自分の情報を代入する
 	void worldSetMyDatas();
 
-	//新しいレーンの値を入力して、そのレーンに行けるかを調べる
-	void SetNextLane(int updateNum) {
-		if (laneChangeCoolTime_ > 0)return;
-
-		laneAddNum_ = updateNum;
-		nextLane_ = laneNum_ + updateNum;
-
-	}
 	//void SetIsCanChangeLane(bool isCanChange) {
 	//	if (laneChangeCoolTime_ > 0)return;
 	//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
 	//	isCanChangeLane_ = isCanChange;
 	//}
+	void SetNextLane(int addNum) {
+		if (laneNum_ + addNum > 2 || laneNum_ + addNum<0)return;
+		world_->ChangeCamMoveMode(addNum);
+	}
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
+	//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
+	void PHeadChanger(int rot=0) {
+		PHeadLengthReset();
+		(sign(rot)==1)? backChangeHead():changeHead();
+	}
 
 	void PHeadLengthReset() {
 		//長さの補間をリセットする
@@ -142,8 +161,7 @@ private:
 	void CurPHeadLengPlus(float addPow);
 
 	void UpdateLaneNum(int updateNum) {
-		//isCanChangeLane_ = false;
-
+		if (updateNum == 0)return;
 		if (laneNum_+updateNum > 2 || laneNum_ + updateNum<0)return;
 		
 		//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
@@ -151,12 +169,12 @@ private:
 		if (updateNum < 0) {
 			nextVel_ = Vector2(0, -35.f);
 			pGrav_ = 0.f;
-			position_.y += 400;
+			position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
 		}
 		else if (updateNum > 0) {
 			nextVel_ = Vector2(0, 0.f);
 			pGrav_ = 2.f;
-			position_.y += -500;
+			position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
 		}
 
 		laneNum_ += updateNum;
@@ -167,13 +185,20 @@ private:
 		//velocity_ = nextVel_;
 		pendulumVect_ = nextVel_;
 
-		isBiteMode_ = false;
-
-		PHeadLengthReset();
-		changeHead();
+		playerMode_ = MODE_FALL;
+		//頭の長さをリセット
+		PHeadChanger();
 
 		worldSetMyDatas();
 	}
+
+//プレイヤーの状態に応じた更新
+private:
+	void FallUpdate();
+	void ShootUpdate();
+	void ShootEndUpdate();
+	void BiteUpdate();
+	void SlipUpdate();
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
 
@@ -222,11 +247,10 @@ private:
 
 	bool isSlipped_;
 
-	//噛んでいるか
-	bool isBiteMode_;
 
-	//0=false 1=start 2=end
-	int isShootMode_;
+	//0=滞空 1=発射時 2=発射終了 3=噛み付き 4=滑り落ち
+	int playerMode_;
+	//キーロック
 	bool isNextPushKey_;
 	float jumpShotPower_;
 	bool chainLock_;
@@ -234,11 +258,9 @@ private:
 	//レーン移動したフレームで噛む対象があるかを調べる
 	bool isNextLaneBite_;
 
-	int nextLane_;
 	int laneAddNum_;
 	//bool isCanChangeLane_;
 
-	int laneChangeCoolTime_;
 	int chainLockCoolTime_;
 	
 	//Head回転をロックする(スティックを0に戻す事でリセット)
@@ -249,4 +271,5 @@ private:
 	//滑る時間の倍数(服毎)
 	std::map<CLOTHES_ID, float> slipCountMult_;
 
+	std::map<int, std::function<void()>> updateFunctionMap_;
 };

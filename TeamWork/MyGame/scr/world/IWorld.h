@@ -44,4 +44,7 @@ public:
 	virtual void SetKeepDatas(KeepDatas data) = 0;
 	virtual KeepDatas GetKeepDatas() const = 0;
 	virtual KeepDatas& GetCanChangedKeepDatas() = 0;
+	virtual void ChangeCamMoveMode(int addNum) = 0;
+	virtual bool GetIsCamChangeMode()const = 0;
+	virtual bool isChangeFrame()const = 0;
 };

@@ -21,7 +21,8 @@ public:
 	// デストラクタ
 	~WorldActor();
 	// 更新
-	void Update();
+	bool Update();
+	bool ChangeLaneUpdate();
 	// 描画
 	void Draw(const int laneCount=0,const int playerLane=0) const;
 	// 追加

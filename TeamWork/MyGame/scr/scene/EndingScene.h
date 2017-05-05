@@ -34,6 +34,8 @@ public:
 	virtual void Pendulum();
 	//二重振り子
 	virtual void Double(Vector2 fPos);
+	//多重振り子
+	virtual void Multiple();
 
 private:
 	float size;
@@ -76,8 +78,8 @@ private:
 	float meterLen; //進行度メーターの長さ
 	Vector2 meterPos; //進行度メーターの位置
 	StageGenerateManager stageManager;
-	
-	std::array<Vector2,8> fulcrum; //支点
+
+	std::array<Vector2, 8> fulcrum; //支点
 	std::array<Vector2, 8> inPos; //内側
 	std::array<Vector2, 8> outPos; //外側
 	std::array<float, 8> lineRot; //それぞれの首の角度
@@ -93,10 +95,27 @@ private:
 	Vector2 v2;
 	float f;
 
+	//2重振り子
 	Vector2 doublePos;
 	float dRot;
 	float dRot_spd;
 	float dFriction;
+	float dSub;
+
+	float any; //デバッグ表示用
+	float any1;
+	float any2;
+	Vector2 anyPos1;
+	array<Vector2, 8> anyPos2;
+
+	//多重振り子
+	std::array<Vector2, 5> fPos;
+	std::array<Vector2, 5> multiplePos;
+	float mRot;
+	std::array<float, 5> mRot_spd;
+	float mFriction;
+	float mSub;
+
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;

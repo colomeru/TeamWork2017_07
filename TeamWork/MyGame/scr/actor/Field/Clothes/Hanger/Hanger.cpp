@@ -6,7 +6,7 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::HANGER;
-	parameter_.ID = ACTOR_ID::HANGER_ACTOR;
+	//parameter_.ID = ACTOR_ID::HANGER_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(200, 200.f);
 	parameter_.mat
@@ -21,7 +21,6 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::BOX_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 }
@@ -32,37 +31,17 @@ Hanger::~Hanger()
 
 void Hanger::Update()
 {
-	//ShakesClothes();
-
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
-
 	if (parent_ == nullptr || player_ == nullptr) return;
 	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
-		cnt_ = 0;
 	}
 	//Hanger‚ð‚Â‚©‚ñ‚¾Û‚ÌPlayer‚ÌˆÚ“®ˆ—
 	if (player_->GetIsBiteMode()) {
 		velocity_ = Vector2(10.0f, 0.0f);
 		Vector2 pos = parent_->GetPosition() + velocity_;
-		//Vector3 velo = Vector3(velocity_.x, velocity_.y, 0);
-		//Vector3 pPos = Vector3(parent_->GetPosition().x, parent_->GetPosition().y, 0);
-		//Vector3 xPos = Vector3(pos.x + velo.x, pos.y + velo.y, 0);
-		//Matrix m = Matrix::CreateTranslation(xPos);
-		//Matrix mat = Matrix::CreateTranslation(pPos) * Matrix::CreateTranslation(velo);
-		//parent_->SetPose(mat);
-		//player_head_->SetPosAddVect(pos);
 		player_->setCurPHeadSPos(pos);
 		position_ += velocity_;
 	}
-	//if (position_.x < player_->GetPosition().x - 400
-	//	|| position_.x > player_->GetPosition().x + 1600)
-	//	parameter_.isDead = true;
-
-	//parent_ = nullptr;
-	//player_ = nullptr;
 	isHit_ = false;
 }
 
@@ -119,7 +98,8 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case COL_ID::BOX_CLOTHES_COL:
 	{
-		cnt_++;
+		auto size = (parameter_.size.x + other.GetParameter().size.x) / 2;
+		position_.x = other.GetPosition().x - size;
 		player_->SetMode(4);
 		parent_ = nullptr;
 		player_ = nullptr;
@@ -128,27 +108,6 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	default:
 		break;
 	}
-
-	//if (colpara.colID == COL_ID::BOX_BOX_COL) {
-	//	auto player = static_cast<Player*>(other.GetParent());
-	//	if (player->GetIsBiteMode()) {
-	//		parent_ = static_cast<Player_Head*>(&other);
-	//		player_ = player;
-	//	}
-	//}
-	//else if (colpara.colID == COL_ID::BOX_CLOTHES_COL) {
-	//	cnt_++;
-	//	player_->SetMode(4);
-	//	parent_ = nullptr;
-	//	player_ = nullptr;
-	//}
-
-	//if (player->GetIsBiteMode()) {
-	//	//velocity_ = Vector2(10.0f, 0.0f);
-	//	Vector2 headPos = parent_->GetPosition() + velocity_;
-	//	parent_->SetPosAddVect(headPos);
-	//}
-
 }
 
 void Hanger::OnMessage(EventMessage message, void * param)

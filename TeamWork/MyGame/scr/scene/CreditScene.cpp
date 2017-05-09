@@ -12,6 +12,7 @@
 #include "../actor/Field/Clothes/TestClothes.h"
 #include "../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../graphic/Sprite.h"
+#include "../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
 
 CreditScene::CreditScene() :
 nextScene_(Scene::Ending),
@@ -47,6 +48,7 @@ void CreditScene::Initialize()
 
 	player_ = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
+	world_->Add(ACTOR_ID::EFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get()));
 
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage1);

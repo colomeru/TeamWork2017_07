@@ -6,7 +6,7 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::HANGER;
-	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
+	parameter_.ID = ACTOR_ID::HANGER_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(200, 200.f);
 	parameter_.mat
@@ -22,6 +22,8 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::BOX_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+
 }
 
 Hanger::~Hanger()
@@ -32,21 +34,28 @@ void Hanger::Update()
 {
 	//ShakesClothes();
 
-	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
+	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
 	}
 
 	if (parent_ == nullptr || player_ == nullptr) return;
+	if (isCheckCol_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
+		cnt_ = 0;
+	}
 	//Hanger‚ð‚Â‚©‚ñ‚¾Û‚ÌPlayer‚ÌˆÚ“®ˆ—
 	if (player_->GetIsBiteMode()) {
 		velocity_ = Vector2(10.0f, 0.0f);
 		Vector2 pos = parent_->GetPosition() + velocity_;
-		Vector3 velo = Vector3(velocity_.x, velocity_.y, 0);
-		Vector3 pPos = Vector3(parent_->GetPosition().x, parent_->GetPosition().y, 0);
-		Matrix mat = Matrix::CreateTranslation(pPos) * Matrix::CreateTranslation(velo);
-		parent_->SetPose(mat);
+		//Vector3 velo = Vector3(velocity_.x, velocity_.y, 0);
+		//Vector3 pPos = Vector3(parent_->GetPosition().x, parent_->GetPosition().y, 0);
+		//Vector3 xPos = Vector3(pos.x + velo.x, pos.y + velo.y, 0);
+		//Matrix m = Matrix::CreateTranslation(xPos);
+		//Matrix mat = Matrix::CreateTranslation(pPos) * Matrix::CreateTranslation(velo);
+		//parent_->SetPose(mat);
 		//player_head_->SetPosAddVect(pos);
-		//position_ += velocity_;
+		player_->setCurPHeadSPos(pos);
+		position_ += velocity_;
 	}
 	//if (position_.x < player_->GetPosition().x - 400
 	//	|| position_.x > player_->GetPosition().x + 1600)
@@ -54,7 +63,7 @@ void Hanger::Update()
 
 	//parent_ = nullptr;
 	//player_ = nullptr;
-
+	isHit_ = false;
 }
 
 void Hanger::Draw() const
@@ -82,6 +91,8 @@ void Hanger::Draw() const
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 
+	DrawFormatString(700, 80, GetColor(255, 255, 255), "pos x:%f y:%f", parameter_.mat.Translation().x, parameter_.mat.Translation().y);
+
 	if (parent_ == nullptr) return;
 	DrawFormatString(700, 100, GetColor(255, 255, 255), "pos x:%f y:%f", parent_->GetPosition().x, parent_->GetPosition().y);
 	DrawFormatString(700, 120, GetColor(255, 255, 255), "pos x:%f y:%f", parent_->GetPrevPosition().x, parent_->GetPrevPosition().y);
@@ -95,9 +106,42 @@ void Hanger::OnUpdate()
 
 void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	player_head_ = static_cast<Player_Head*>(&other);
-	parent_ = static_cast<Player_Head*>(&other);	
-	player_ = static_cast<Player*>(parent_->GetParent());
+	switch (colpara.colID)
+	{
+	case COL_ID::BOX_BOX_COL:
+	{
+		auto player = static_cast<Player*>(other.GetParent());
+		if (player->GetIsBiteMode()) {
+			parent_ = static_cast<Player_Head*>(&other);
+			player_ = player;
+		}
+		break;
+	}
+	case COL_ID::BOX_CLOTHES_COL:
+	{
+		cnt_++;
+		player_->SetMode(4);
+		parent_ = nullptr;
+		player_ = nullptr;
+		break;
+	}
+	default:
+		break;
+	}
+
+	//if (colpara.colID == COL_ID::BOX_BOX_COL) {
+	//	auto player = static_cast<Player*>(other.GetParent());
+	//	if (player->GetIsBiteMode()) {
+	//		parent_ = static_cast<Player_Head*>(&other);
+	//		player_ = player;
+	//	}
+	//}
+	//else if (colpara.colID == COL_ID::BOX_CLOTHES_COL) {
+	//	cnt_++;
+	//	player_->SetMode(4);
+	//	parent_ = nullptr;
+	//	player_ = nullptr;
+	//}
 
 	//if (player->GetIsBiteMode()) {
 	//	//velocity_ = Vector2(10.0f, 0.0f);

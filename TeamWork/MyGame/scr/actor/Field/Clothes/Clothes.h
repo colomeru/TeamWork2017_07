@@ -1,6 +1,7 @@
 #pragma once
 #include "../../Actor.h"
 #include "../MyGame/scr/game/ID.h"
+#include "../../player/Player_Head.h"
 
 class Clothes : public Actor
 {
@@ -43,6 +44,8 @@ public:
 	void Pendulum(Vector2 fulcrum, float length);
 	//風による服揺らし
 	void ShakesClothes();
+	//
+	void WindSwing();
 
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
@@ -53,6 +56,8 @@ protected:
 	bool isHit_;
 	//服ID
 	CLOTHES_ID clothes_ID;
+	//プレイヤー
+	Player_Head* player_Head_;
 
 	//振り子関連(服用)
 	//振り子フラグ

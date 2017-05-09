@@ -14,6 +14,10 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 //当たり判定処理
 void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
+	//if (!isWind_) {
+	//	player_Head_ = static_cast<Player_Head*>(&other);
+	//	player_Head_->setIsBiteSlipWind(false);
+	//}
 }
 
 //メッセージ処理
@@ -116,9 +120,20 @@ void Clothes::ShakesClothes()
 			isFriction_ = false;
 			count_ = 0;
 			isPendulum_ = false;
+			clothesState_ = ClothesState::BEGIN_WIND;
 			break;
 		default:
 			break;
 		}
 	}
+}
+
+void Clothes::WindSwing()
+{
+	//if (player_Head_ == nullptr) return;
+
+	//if (clothesState_ == ClothesState::STRONG_WIND) {
+	//	player_Head_->setIsBiteSlipWind(true);
+	//	player_Head_ = nullptr;
+	//}
 }

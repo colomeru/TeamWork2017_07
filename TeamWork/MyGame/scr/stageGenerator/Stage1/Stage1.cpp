@@ -45,7 +45,7 @@ void Stage1::AddStage()
 				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 3:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 4:
 				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GumClothes>(world_, CLOTHES_ID::GUM_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));

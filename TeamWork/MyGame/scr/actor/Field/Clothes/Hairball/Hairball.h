@@ -1,6 +1,6 @@
 #pragma once
 #include "../Clothes.h"
-#include "../MyGame/scr/actor/player/Player_Head.h"
+#include "../MyGame/scr/actor/player/Player.h"
 
 class Hairball : public Clothes, public std::enable_shared_from_this<Hairball>
 {
@@ -22,5 +22,5 @@ public:
 
 private:
 	Player* player_;
-	Player_Head* player_Head_;
+	Actor* player_Head_;
 };

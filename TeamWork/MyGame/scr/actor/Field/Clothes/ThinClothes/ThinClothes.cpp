@@ -27,8 +27,9 @@ ThinClothes::~ThinClothes()
 void ThinClothes::Update()
 {
 	ShakesClothes();
+	WindSwing();
 
-	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
+	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
 	}
 

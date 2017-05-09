@@ -24,6 +24,5 @@ public:
 
 private:
 	Player* player_;
-
-	Player_Head* player_head_;
+	int cnt_;
 };

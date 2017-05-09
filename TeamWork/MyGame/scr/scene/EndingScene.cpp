@@ -59,8 +59,8 @@ void EndingScene::Initialize()
 	particleSize = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE);
 	circleSize = Sprite::GetInstance().GetSize(SPRITE_ID::CIRCLE_SPRITE);
 
-	stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
-	stageManager.SetStage(Stage::Stage1);
+	//stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
+	//stageManager.SetStage(Stage::Stage1);
 
 	//êUÇËéq
 	for (int i = 0; i < 8; i++)
@@ -79,7 +79,7 @@ void EndingScene::Initialize()
 	friction = 0.995f;
 	vec = 0;
 	lineRot[0] = -90.0f;
-	stageLen = stageManager.GetStageSize(Stage::Stage1).x;
+	//stageLen = stageManager.GetStageSize(Stage::Stage1).x;
 	meterLen = 800.0f;
 	meterPos = Vector2(200.0f, 100.0f);
 
@@ -203,8 +203,8 @@ void EndingScene::Draw() const
 	DrawLine(inPos[6].x, inPos[6].y, outPos[6].x, outPos[6].y, GetColor(255, 165, 0), 1); //ÉIÉåÉìÉW
 	DrawLine(inPos[7].x, inPos[7].y, outPos[7].x, outPos[7].y, GetColor(255, 255, 255), 1); //îí
 
-	DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
-	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
+	//DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
+	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
 
 	DrawLine(spherePos.x, spherePos.y, v1.x, v1.y, GetColor(0, 255, 0), 1);
 	DrawLine(fx, fy, v2.x, v2.y, GetColor(0, 255, 0), 1);

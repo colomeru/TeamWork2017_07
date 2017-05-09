@@ -60,6 +60,10 @@ public:
 	void setPHeadStopPos(const Vector2& sPos){
 		stopPos_=sPos;
 	}
+	//“ª‚ªŠŠ‚è—‚¿‚é‚©‚Ç‚¤‚©‚ğƒZƒbƒg‚·‚é
+	void setIsBiteSlipWind(bool isSlip) {
+		isBiteSlipWind_ = isSlip;
+	}
 private:
 	//Õ“Ë‚µ‚Ä‚¢‚é‚©
 	bool isHit_;

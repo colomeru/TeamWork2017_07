@@ -68,10 +68,11 @@ void GamePlayScene::Initialize()
 
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 
-	ply1 = std::make_shared<Player>(world_.get());
+	ply1 = std::make_shared<Player>(world_.get(),5);
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 3, Vector2(200, 100)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 4, Vector2(200, 100)));
 
 	//–{”Ô—p
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));

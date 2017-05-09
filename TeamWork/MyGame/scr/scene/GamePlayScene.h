@@ -3,8 +3,10 @@
 #include <map>
 #include"../actor/CameraAct/TPSCamera.h"
 #include"../stageGenerator/StageGeneratorManager.h"
+#include"addScreen/GameOverScreen.h"
 
 class Player;
+
 class GamePlayScene : public IScene
 {	
 public:
@@ -44,6 +46,7 @@ private:
 	PlayerPtr ply1;
 
 	StageGenerateManager stageGeneratorManager;
+	GameOverScreen gameOverScreen_;
 	//Vector3 posit;
 
 	//Vector3 camera_pos_;
@@ -53,4 +56,5 @@ private:
 	//そのステージのレーンの最大数
 	int maxLaneCount;
 
+	bool isPlayerDead_;
 };

@@ -112,6 +112,7 @@ void Player::Update()
 	HeadPosUpdate();
 
 	worldSetMyDatas();
+
 }
 
 void Player::Draw() const

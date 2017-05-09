@@ -3,6 +3,7 @@
 #include<vector>
 #include"../../math/MathHelper.h"
 #include"../../math/MyFuncionList.h"
+#include"../../Def.h"
 
 class Player_Head;
 
@@ -144,6 +145,15 @@ public:
 	}
 	//現在の頭に対して滑るかどうかをセットする
 	void curPHeadSlip(bool isSlip);
+	//プレイヤーが死んでるか
+	bool isPlayerDead()const {
+		if(position_.y >= WINDOW_HEIGHT)return true;
+
+		for (auto pHD : pHeadDead_) {
+			if (!pHD)return false;
+		}
+		return true;
+	}
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
@@ -183,7 +193,6 @@ private:
 			pGrav_ = 2.f;
 			position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
 		}
-
 		laneNum_ += updateNum;
 		//レーン最大範囲を超えたらVectの補正を行わない
 

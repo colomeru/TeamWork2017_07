@@ -21,7 +21,7 @@
 //風が吹くまでの基本時間
 static const int defWindTime_ = 200;
 GamePlayScene::GamePlayScene() :
-	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
+	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3), isPlayerDead_(false), gameOverScreen_()//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 
 {
 	// ワールド生成
@@ -40,7 +40,12 @@ GamePlayScene::~GamePlayScene()
 void GamePlayScene::Initialize()
 {
 	isEnd_ = false;
-
+	//シーン遷移系の初期化
+	{
+		isPlayerDead_ = false;
+		nextScene_ = Scene::Credit;
+		gameOverScreen_.Init();
+	}
 	// フェードパネル初期化
 	FadePanel::GetInstance().Initialize();
 	world_->Initialize();
@@ -96,6 +101,14 @@ void GamePlayScene::Initialize()
 
 void GamePlayScene::Update()
 {
+	if (isPlayerDead_) {
+		if (gameOverScreen_.Update(nextScene_))isEnd_ = true;
+
+		if (nextScene_ == Scene::GamePlay) {
+			Initialize();
+		}
+		return;
+	}
 	// 更新
 	world_->Update();
 	// 終了
@@ -129,11 +142,12 @@ void GamePlayScene::Update()
 	//Camera::GetInstance().Position.Set(camera_pos_);
 	//Camera::GetInstance().Target.Set(target_);
 	//Camera::GetInstance().Update();
-
+	if (ply1->isPlayerDead())isPlayerDead_ = true;
 }
 
 void GamePlayScene::Draw() const
 {
+
 	//DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
@@ -158,6 +172,9 @@ void GamePlayScene::Draw() const
 
 	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
 
+	if (isPlayerDead_) {
+		gameOverScreen_.Draw();
+	}
 }
 
 bool GamePlayScene::IsEnd() const

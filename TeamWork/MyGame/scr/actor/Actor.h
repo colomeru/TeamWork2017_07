@@ -64,7 +64,12 @@ public:
 	}
 	void FastComUpdate() {
 		drawAddPos_ = Vector2::Zero;
-		isUpdate_ = (world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[1]);
+		if (world_->isChangeFrame()) { 
+			isUpdate_ = true;
+		}
+		else {
+			isUpdate_ = (world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[1]);
+		}
 	}
 	virtual void LateUpdate() {
 
@@ -95,6 +100,9 @@ public:
 
 		isCheckCol_ =	(world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[2] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[3])
 						&&laneNum_ == world_->GetKeepDatas().playerLane_;
+		if (world_->isChangeFrame()) {
+
+		}
 	}
 	bool CamMoveUpdate() {
 		spriteAlpha_ = 0.5f;

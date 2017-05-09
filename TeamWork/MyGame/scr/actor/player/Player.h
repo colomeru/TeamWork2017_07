@@ -16,6 +16,8 @@ static const float HeadShootMult = 0.5f;
 static const float defSlipCount = 8.f;
 static const int defLaneChangeCoolTime_ = 60;
 static const int defChainLockCoolTime_ = 10;
+//レーンの本数
+static const int maxLaneSize = 4;
 
 enum {
 	MODE_FALL = 0,
@@ -134,9 +136,10 @@ public:
 	//	isCanChangeLane_ = isCanChange;
 	//}
 	void SetNextLane(int addNum) {
-		if (laneNum_ + addNum > 2 || laneNum_ + addNum<0)return;
+		if (laneNum_ + addNum > (maxLaneSize-1) || laneNum_ + addNum<0)return;
 		world_->ChangeCamMoveMode(addNum);
 	}
+	void setCurPHeadSPos(const Vector2& sPos);
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
@@ -162,7 +165,7 @@ private:
 
 	void UpdateLaneNum(int updateNum) {
 		if (updateNum == 0)return;
-		if (laneNum_+updateNum > 2 || laneNum_ + updateNum<0)return;
+		if (laneNum_+updateNum > (maxLaneSize-1) || laneNum_ + updateNum<0)return;
 		
 		//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
 		Vector2 nextVel_;
@@ -180,7 +183,7 @@ private:
 		laneNum_ += updateNum;
 		//レーン最大範囲を超えたらVectの補正を行わない
 
-		laneNum_ = MathHelper::Clamp(laneNum_, 0, 2);
+		laneNum_ = MathHelper::Clamp(laneNum_, 0, (maxLaneSize - 1));
 
 		//velocity_ = nextVel_;
 		pendulumVect_ = nextVel_;

@@ -29,6 +29,7 @@ void Actor::Collide(COL_ID id, Actor & other)
 {
 
 	CollisionParameter colpara = colFuncMap_[id](*this, other);
+	colpara.colID = id;
 	if (colpara.colFrag)
 	{
 		OnCollide(other, colpara);

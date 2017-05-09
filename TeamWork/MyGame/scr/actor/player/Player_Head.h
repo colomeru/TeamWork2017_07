@@ -57,6 +57,9 @@ public:
 	void SetPosAddVect(const Vector2& posAV) {
 		posAddVect_ = posAV;
 	}
+	void setPHeadStopPos(const Vector2& sPos){
+		stopPos_=sPos;
+	}
 private:
 	//è’ìÀÇµÇƒÇ¢ÇÈÇ©
 	bool isHit_;

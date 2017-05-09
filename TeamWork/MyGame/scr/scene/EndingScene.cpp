@@ -65,7 +65,7 @@ void EndingScene::Initialize()
 	//振り子
 	for (int i = 0; i < 8; i++)
 	{
-		neckLen[i] = Random::GetInstance().Range(360.0f, 362.0f);
+		neckLen[i] = Random::GetInstance().Range(100.0f, 102.0f);
 	}
 
 	fx = 200.0f;
@@ -85,6 +85,12 @@ void EndingScene::Initialize()
 
 	dRot = 0.0f;
 	dRot_spd = 0.0f;
+
+	mRot = 0.0f;
+	for (int i = 0; i < 5; i++)
+	{
+		mRot_spd[i] = 0.0f;
+	}
 }
 
 void EndingScene::Update()
@@ -120,8 +126,20 @@ void EndingScene::Update()
 
 
 	Pendulum();
+	//Double(Vector2(outPos[3].x,outPos[3].y));
+
+	//for (int i = 0; i < 8; i++)
+	//{
+	//	Double(outPos[i]);
+	//}
 	Double(spherePos);
-	
+
+	//Double(Vector2(200,200));
+	//Double(Vector2(500,200));
+
+	Multiple();
+
+
 }
 
 void EndingScene::Draw() const
@@ -146,6 +164,19 @@ void EndingScene::Draw() const
 	else DrawFormatString(0, 420, GetColor(255, 255, 255), "加速できません！");
 	DrawFormatString(0, 440, GetColor(255, 255, 255), "dRot:%f", dRot);
 	DrawFormatString(0, 460, GetColor(255, 255, 255), "dRot_spd:%f", dRot_spd);
+	DrawFormatString(0, 480, GetColor(255, 255, 255), "dFriction:%f", dFriction);
+	DrawFormatString(0, 500, GetColor(255, 255, 255), "dSub:%f", dSub);
+	DrawFormatString(0, 520, GetColor(255, 255, 255), "any:%f", any);
+	DrawFormatString(0, 540, GetColor(255, 255, 255), "any1:%f", any1);
+	DrawFormatString(0, 560, GetColor(255, 255, 255), "any2:%f", any2);
+	for (int i = 0; i < 8; i++)
+	{
+		DrawFormatString(0, 580 + 20 * i, GetColor(255, 255, 255), "outPos%d:%f %f", i, outPos[i].x, outPos[i].y);
+	}
+	for (int i = 0; i < 5; i++)
+	{
+		DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "multiplePos%d:%f %f", i, multiplePos[i].x, anyPos2[i].y);
+	}
 
 	// 描画
 	world_->Draw();
@@ -175,10 +206,18 @@ void EndingScene::Draw() const
 	DrawLine(fx, fy, v2.x, v2.y, GetColor(0, 255, 0), 1);
 
 	//ここからDouble
-	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, doublePos, Vector2(16, 32), Vector2::One, rot2 + lineRot[2]);
+	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, doublePos, Vector2(16, 32), Vector2::One, lineRot[2] + rot2/*dRot - 90.0f*/);
 	DrawCircle(doublePos.x, doublePos.y, (int)r, GetColor(255, 255, 255), 0, 1);
-	DrawLine(spherePos.x, spherePos.y, doublePos.x, doublePos.y, GetColor(239, 117, 188), 1); //ピンク
+	DrawLine(anyPos1.x, anyPos1.y, doublePos.x, doublePos.y, GetColor(239, 117, 188), 1); //ピンク
 	//DrawCircle(fx, fy, 16, GetColor(255, 0, 0), 0, 1); //支点に円を表示
+
+	//ここからMultiple
+	for (int i = 0; i < 5; i++)
+	{
+		Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, multiplePos[i], Vector2(16, 32), Vector2::One, lineRot[2] + rot2/*dRot - 90.0f*/);
+		DrawCircle(multiplePos[i].x, multiplePos[i].y, (int)r, GetColor(255, 255, 255), 0, 1);
+		DrawLine(fPos[i].x, fPos[i].y, multiplePos[i].x, multiplePos[i].y, GetColor(239, 117, 188), 1); //ピンク
+	}
 
 }
 
@@ -292,13 +331,11 @@ void EndingScene::Pendulum()
 	{
 		aAlpha = 0.5f; //circleに当たっていれば半透明
 		friction = 1.015f; //摩擦を減らす
-		dFriction = 1.015f;
 	}
 	else
 	{
 		aAlpha = 1.0f; //circleに当たっていなければ不透明
 		friction = 0.985f; //摩擦を戻す
-		dFriction = 0.985f;
 	}
 
 	if (spherePos.y < fy)
@@ -345,8 +382,8 @@ void EndingScene::Pendulum()
 	}
 
 	//頂点で正規化
-	if (rot > 270.0f) rot = -90.0f;
-	if (rot < -90) rot = 270.0f;
+	if (rot > 270.0f) rot -= 360.0f;
+	if (rot < -90) rot += 360.0f;
 
 	//LB/RBで左右どちらかの首を伸ばし、もう片方の首を縮ませる
 	if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6))
@@ -392,7 +429,7 @@ void EndingScene::Double(Vector2 fPos)
 {
 	//振り子
 	//現在の重りの位置
-
+	dRot = rot;
 	auto px = fPos.x + MathHelper::Cos(dRot) * length;
 	auto py = fPos.y + MathHelper::Sin(dRot) * length;
 
@@ -413,28 +450,33 @@ void EndingScene::Double(Vector2 fPos)
 	if (sub > 180.0f) sub -= 360.0f;
 	dRot_spd = dRot_spd + sub;
 
-	//上の振り子との角度差を角速度に加算
-	auto bind = 0.5f;
-	auto dDiff = rot - dRot;
-	auto dSub = rDiff - dRot;
-	dSub -= std::floor(dSub / 360.0f) * 360.0f;
-	if (dSub < -180.0f) dSub += 360.0f;
-	if (dSub > 180.0f) dSub -= 360.0f;
-	dRot_spd = dRot_spd + (dSub * bind);
+	////上の振り子との角度差を角速度に加算
+	//auto dSub = rot - dRot;
+	//dSub -= std::floor(dSub / 360.0f) * 360.0f;
+	//if (dSub < -180.0f) dSub += 360.0f;
+	//if (dSub > 180.0f) dSub -= 360.0f;	
+	//dRot_spd = dRot_spd + dSub;
+
+	any = rot - dRot;
+	any1 = rot;
+	any2 = dRot;
+	anyPos1 = fPos;
 
 	//摩擦
-	//float dFriction;
-	//if (doublePos.y < spherePos.y) dFriction = 0.985;
-	//else dFriction = friction;
+	//if (doublePos.y < spherePos.y) dFriction = 0.985; //上の振り子の重りより高く上がったら摩擦を増やす
+	if (dRot <45.0f || dRot > 135.0f) dFriction = 0.985; //上の振り子より45度以上大きく振れたら摩擦を増やす
+	else dFriction = friction; //上記以外は上の振り子の摩擦を代入
 	dRot_spd *= dFriction;
 
 	//スピード制限
 	float dLimit = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
-	dRot_spd = MathHelper::Clamp(dRot_spd, -dLimit, dLimit);
+	//dRot_spd = MathHelper::Clamp(dRot_spd, -dLimit, dLimit);
+	dRot_spd = rot_spd;
+	//if (dRot_spd > spdLimit) dRot_spd = spdLimit;
+	//if (dRot_spd < -dRot_spd) dRot_spd = -spdLimit;
 
 	//角度に角速度を加算
 	dRot += dRot_spd;
-	//dRot += rot;
 
 	//新しい重りの位置
 	px = fPos.x + MathHelper::Cos(dRot + rot2) * length;
@@ -445,32 +487,19 @@ void EndingScene::Double(Vector2 fPos)
 	doublePos.y = py;
 
 	//頂点で正規化
-	if (dRot > 270.0f) dRot = -90.0f;
-	if (dRot < -90) dRot = 270.0f;
+	if (dRot > 270.0f) dRot -= 360.0f;
+	if (dRot < -90) dRot += 360.0f;
 
 	//支点を移動
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
-	{
-		dRot -= 45.0f;
-	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
-	{
-		dRot += 45.0f;
-	}
-
-	//角度調整
-	//rot2 = rot - 90.0f;
-
-	//首の内側と外側の座標を求め、外側の座標を支点に設定する
-	//for (int i = 0; i < 8; i++)
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
 	//{
-	//	inPos[i].x = spherePos.x + MathHelper::Cos(lineRot[i] + rot2);
-	//	inPos[i].y = spherePos.y + MathHelper::Sin(lineRot[i] + rot2);
-	//	outPos[i].x = inPos[i].x + MathHelper::Cos(lineRot[i] + rot2) * neckLen[i];
-	//	outPos[i].y = inPos[i].y + MathHelper::Sin(lineRot[i] + rot2) * neckLen[i];
-	//	fulcrum[i] = outPos[i];
+	//	dRot -= 45.0f;
+	//}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
+	//{
+	//	dRot += 45.0f;
 	//}
 
 	//1フレーム前のrotと比較
@@ -485,17 +514,92 @@ void EndingScene::Double(Vector2 fPos)
 	//	rotDirection = false;
 	//	r1 = rot;
 	//}
+}
 
-	//左右キー(左右ボタン)で加減速
-	//if ((rot_spd < 0 && !rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::RIGHT))) ||
-	//	(rot_spd > 0 && rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::LEFT))))
+void EndingScene::Multiple()
+{
+	//振り子
+	fPos[0] = spherePos;
+
+	//現在の重りの位置
+	for (int i = 0; i < 5; i++)
+	{
+		auto px = fPos[i].x + MathHelper::Cos(mRot) * length;
+		auto py = fPos[i].y + MathHelper::Sin(mRot) * length;
+
+		//重力移動量を反映した重りの位置
+		auto vx = px - fPos[i].x;
+		auto vy = py - fPos[i].y;
+		auto t = -(vy * g) / (vx * vx + vy * vy);
+		auto gx = px + t * vx;
+		auto gy = py + g + t * vy;
+
+		//２つの重りの位置の確度差
+		auto rDiff = MathHelper::ATan(gy - fPos[i].y, gx - fPos[i].x);
+
+		//角度差を角速度に加算
+		auto sub = rDiff - mRot;
+		sub -= std::floor(sub / 360.0f) * 360.0f;
+		if (sub < -180.0f) sub += 360.0f;
+		if (sub > 180.0f) sub -= 360.0f;
+		if (i > 0) mRot_spd[i] = mRot_spd[i - 1] + 0.5f;
+		mRot_spd[i] = mRot_spd[i] + sub;
+
+		//上の振り子との角度差を角速度に加算
+		//auto mSub = rot - mRot;
+		//mSub -= std::floor(mSub / 360.0f) * 360.0f;
+		//if (mSub < -180.0f) mSub += 360.0f;
+		//if (mSub > 180.0f) mSub -= 360.0f;
+		//mRot_spd = mRot_spd + mSub;
+
+		//any = rot - mRot;
+		//any1 = rot;
+		//any2 = mRot;
+
+		anyPos2[i] = fPos[i];
+
+		//スピード制限
+		std::array<float, 5> mLimit;
+		mLimit[0] = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
+		if (i > 0) mLimit[i] = mLimit[i - 1] + 0.5f;
+		//mRot_spd[i] = MathHelper::Clamp(mRot_spd, -mLimit, mLimit);
+		if (mRot_spd[i] > mLimit[i]) mRot_spd[i] = mLimit[i];
+		if (mRot_spd[i] < -mLimit[i]) mRot_spd[i] = -mLimit[i];
+
+		//角度に角速度を加算
+		mRot += mRot_spd[i];
+
+		//新しい重りの位置
+		px = fPos[i].x + MathHelper::Cos(mRot + rot2) * length;
+		py = fPos[i].y + MathHelper::Sin(mRot + rot2) * length;
+
+		//重りの座標
+		multiplePos[i].x = px;
+		multiplePos[i].y = py;
+
+		//頂点で正規化
+		if (mRot > 270.0f) mRot -= 360.0f;
+		if (mRot < -90) mRot += 360.0f;
+
+		if (i > 0) fPos[i] = multiplePos[i - 1];
+
+		//摩擦
+		if (multiplePos[i].y < spherePos.y) mFriction = 0.985; //上の振り子の重りより高く上がったら摩擦を増やす
+		//if (mRot <45.0f || mRot > 135.0f) mFriction = 0.985; //上の振り子より45度以上大きく振れたら摩擦を増やす
+		else mFriction = friction; //上記以外は上の振り子の摩擦を代入
+		mRot_spd[i] *= mFriction;
+	}
+
+
+	//支点を移動
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
 	//{
-	//	aAlpha = 0.5f; //circleに当たっていれば半透明
-	//	friction = 1.015f; //摩擦を減らす
+	//	mRot -= 45.0f;
 	//}
-	//else
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
 	//{
-	//	aAlpha = 1.0f; //circleに当たっていなければ不透明
-	//	friction = 0.985f; //摩擦を戻す
+	//	mRot += 45.0f;
 	//}
 }

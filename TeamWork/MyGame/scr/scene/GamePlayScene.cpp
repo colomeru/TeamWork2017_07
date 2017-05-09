@@ -15,10 +15,14 @@
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"
 #include"../stageGenerator/Stage1/Stage1.h"
+#include"../game/Random.h"
 
+//描画されるレーン数
 static const int maxLaneCount = 3;
+//風が吹くまでの基本時間
+static const int defWindTime_ = 200;
 GamePlayScene::GamePlayScene() :
-	nextScene_(Scene::Credit)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
+	nextScene_(Scene::Credit), windTime_(defWindTime_)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 
 {
 	// ワールド生成
@@ -67,7 +71,7 @@ void GamePlayScene::Initialize()
 	ply1 = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 
-	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 2, Vector2(200, 100)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 3, Vector2(200, 100)));
 
 	//本番用
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
@@ -94,18 +98,28 @@ void GamePlayScene::Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+	int randT = Random::GetInstance().Range(0, 3);
+	windTime_ -= randT;
+	if (windTime_ <= 0) {
 		world_->sendMessage(EventMessage::BEGIN_WIND);
+		windTime_ = defWindTime_;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
-		world_->sendMessage(EventMessage::STRONG_WIND);
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+		Vector2 pss = Vector2(200, 200);
+		ply1->setCurPHeadSPos(pss);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
-		world_->sendMessage(EventMessage::ATTENUATE_WIND);
-	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
-		world_->sendMessage(EventMessage::END_WIND);
-	}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+	//	world_->sendMessage(EventMessage::BEGIN_WIND);
+	//}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
+	//	world_->sendMessage(EventMessage::STRONG_WIND);
+	//}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
+	//	world_->sendMessage(EventMessage::ATTENUATE_WIND);
+	//}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
+	//	world_->sendMessage(EventMessage::END_WIND);
+	//}
 
 	//Camera::GetInstance().Position.Set(camera_pos_);
 	//Camera::GetInstance().Target.Set(target_);

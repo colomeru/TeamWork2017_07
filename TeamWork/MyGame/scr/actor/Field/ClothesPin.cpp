@@ -16,7 +16,7 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos)
 	laneNum_ = laneNum;
 	position_ = pos;
 	
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 }
 
@@ -28,8 +28,8 @@ ClothesPin::~ClothesPin()
 void ClothesPin::Update()
 {
 	//ShakesClothes();
-	if (laneNum_ == world_->GetKeepDatas().playerLane_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	if (isCheckCol_ && isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::PLAYER_PIN_COL);
 	}
 
 }

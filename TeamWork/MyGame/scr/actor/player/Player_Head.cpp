@@ -146,9 +146,9 @@ void Player_Head::OnUpdate()
 
 void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
-	if (dynamic_cast<ClothesPin*>(&other) != nullptr) {
+	if (colpara.colID == COL_ID::PLAYER_PIN_COL) {
 		player_->ResurrectHead();
-		dynamic_cast<ClothesPin*>(&other)->ClearThis();
+		static_cast<ClothesPin*>(&other)->ClearThis();
 	}
 
 	if (player_->GetPHeadDead(myNumber_))return;
@@ -161,11 +161,11 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	}
 
 
-	Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
+	//Clothes* otherClothes = static_cast<Clothes*>(&other);
 
-	if (otherClothes != nullptr) {
+	if (colpara.colID==COL_ID::BOX_BOX_COL) {
 		//•ž‚ª•—‚É‚©‚ê‚Ä‚¢‚½‚ç‚­‚Á‚Â‚©‚È‚¢
-		if (otherClothes->GetIsWind()) {
+		if (static_cast<Clothes*>(&other)->GetIsWind()) {
 			if (!isHitOnce) {
 				isBiteSlipWind_ = true;
 				return;
@@ -185,10 +185,10 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 
 	player_->CurHeadBite(stopPos_);
 	
-	if (otherClothes != nullptr) {
+	if (colpara.colID == COL_ID::BOX_BOX_COL) {
 		//Clothes* otherClothes = dynamic_cast<Clothes*>(&other);
 
-		player_->SetOtherClothesID_(otherClothes->GetClothesID());
+		player_->SetOtherClothesID_(static_cast<Clothes*>(&other)->GetClothesID());
 	}
 }
 

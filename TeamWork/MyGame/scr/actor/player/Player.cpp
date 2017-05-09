@@ -370,6 +370,10 @@ void Player::worldSetMyDatas() {
 	world_->GetCanChangedKeepDatas().SetPlayerPos(position_);
 }
 
+void Player::setCurPHeadSPos(const Vector2 & sPos) {
+	pHeads_[currentHead_]->setPHeadStopPos(sPos);
+}
+
 void Player::PlayerInputControl()
 {
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::UP)) {

@@ -37,6 +37,7 @@ public:
 	//多重振り子
 	virtual void Multiple();
 
+
 private:
 	float size;
 	float vertical;
@@ -111,10 +112,13 @@ private:
 	//多重振り子
 	std::array<Vector2, 5> fPos;
 	std::array<Vector2, 5> multiplePos;
-	float mRot;
+	std::array<float, 5> mRot;
 	std::array<float, 5> mRot_spd;
 	float mFriction;
 	float mSub;
+	std::array<float, 5> mLimit;
+
+
 
 private:
 	// ワールド用シェアドポインタ

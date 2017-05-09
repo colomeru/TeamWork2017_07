@@ -70,7 +70,7 @@ void EndingScene::Initialize()
 
 	fx = 200.0f;
 	fy = 100.0f;
-	rot = 0.0f;
+	rot = 90.0f;
 	rot_spd = 0.0f;
 	r = 32.0f;
 	vec = 0;
@@ -83,12 +83,12 @@ void EndingScene::Initialize()
 	meterLen = 800.0f;
 	meterPos = Vector2(200.0f, 100.0f);
 
-	dRot = 0.0f;
+	dRot = 90.0f;
 	dRot_spd = 0.0f;
 
-	mRot = 0.0f;
 	for (int i = 0; i < 5; i++)
 	{
+		mRot[i] = 0.0f;
 		mRot_spd[i] = 0.0f;
 	}
 }
@@ -175,8 +175,12 @@ void EndingScene::Draw() const
 	}
 	for (int i = 0; i < 5; i++)
 	{
-		DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "multiplePos%d:%f %f", i, multiplePos[i].x, anyPos2[i].y);
+		DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "mLimit%d:%f", i, mLimit[i]);
+		DrawFormatString(0, 840 + 20 * i, GetColor(255, 255, 255), "mRot_spd%d:%f", i, mRot_spd[i]);
+		DrawFormatString(1500, 0 + 20 * i, GetColor(255, 255, 255), "mRot%d:%f", i, mRot[i]);
+
 	}
+
 
 	// 描画
 	world_->Draw();
@@ -451,11 +455,11 @@ void EndingScene::Double(Vector2 fPos)
 	dRot_spd = dRot_spd + sub;
 
 	////上の振り子との角度差を角速度に加算
-	//auto dSub = rot - dRot;
-	//dSub -= std::floor(dSub / 360.0f) * 360.0f;
-	//if (dSub < -180.0f) dSub += 360.0f;
-	//if (dSub > 180.0f) dSub -= 360.0f;	
-	//dRot_spd = dRot_spd + dSub;
+	auto dSub = rot - dRot;
+	dSub -= std::floor(dSub / 360.0f) * 360.0f;
+	if (dSub < -180.0f) dSub += 360.0f;
+	if (dSub > 180.0f) dSub -= 360.0f;
+	dRot_spd = dRot_spd + dSub;
 
 	any = rot - dRot;
 	any1 = rot;
@@ -519,13 +523,14 @@ void EndingScene::Double(Vector2 fPos)
 void EndingScene::Multiple()
 {
 	//振り子
-	fPos[0] = spherePos;
+	//fPos[0] = spherePos;
+	fPos[0] = Vector2(800.0f, 300.0f);
 
 	//現在の重りの位置
 	for (int i = 0; i < 5; i++)
 	{
-		auto px = fPos[i].x + MathHelper::Cos(mRot) * length;
-		auto py = fPos[i].y + MathHelper::Sin(mRot) * length;
+		auto px = fPos[i].x + MathHelper::Cos(mRot[i]) * length;
+		auto py = fPos[i].y + MathHelper::Sin(mRot[i]) * length;
 
 		//重力移動量を反映した重りの位置
 		auto vx = px - fPos[i].x;
@@ -538,68 +543,85 @@ void EndingScene::Multiple()
 		auto rDiff = MathHelper::ATan(gy - fPos[i].y, gx - fPos[i].x);
 
 		//角度差を角速度に加算
-		auto sub = rDiff - mRot;
+		auto sub = rDiff - mRot[i];
 		sub -= std::floor(sub / 360.0f) * 360.0f;
 		if (sub < -180.0f) sub += 360.0f;
 		if (sub > 180.0f) sub -= 360.0f;
-		if (i > 0) mRot_spd[i] = mRot_spd[i - 1] + 0.5f;
-		mRot_spd[i] = mRot_spd[i] + sub;
+		//if (i > 0) mRot_spd[i] = mRot_spd[i - 1] + 1.5f;
+		if (i == 0)
+			mRot_spd[i] = mRot_spd[i] + sub;
+		else
+			//mRot_spd[i] = 0.5f * i;
+			//mRot_spd[i] = mRot_spd[i] + sub;
+			mRot_spd[i] = mRot_spd[i - 1] * 1.8f;
 
-		//上の振り子との角度差を角速度に加算
-		//auto mSub = rot - mRot;
-		//mSub -= std::floor(mSub / 360.0f) * 360.0f;
-		//if (mSub < -180.0f) mSub += 360.0f;
-		//if (mSub > 180.0f) mSub -= 360.0f;
-		//mRot_spd = mRot_spd + mSub;
-
-		//any = rot - mRot;
-		//any1 = rot;
-		//any2 = mRot;
 
 		anyPos2[i] = fPos[i];
 
 		//スピード制限
-		std::array<float, 5> mLimit;
-		mLimit[0] = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
-		if (i > 0) mLimit[i] = mLimit[i - 1] + 0.5f;
+		//mLimit[0] = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
+		//mLimit[0] = rot_spd;
 		//mRot_spd[i] = MathHelper::Clamp(mRot_spd, -mLimit, mLimit);
-		if (mRot_spd[i] > mLimit[i]) mRot_spd[i] = mLimit[i];
-		if (mRot_spd[i] < -mLimit[i]) mRot_spd[i] = -mLimit[i];
+		//if (mRot_spd[i] > mLimit[i]) mRot_spd[i] = mLimit[i];
+		//if (mRot_spd[i] < -mLimit[i]) mRot_spd[i] = -mLimit[i];
+		//if (mRot[0] < 90.0f && mRot_spd[i] > mRot_spd[0]) mRot_spd[i] = mRot_spd[0];
+		//if (mRot[0] > 90.0f && mRot_spd[i] < mRot_spd[0]) mRot_spd[i] = mRot_spd[0];
+
 
 		//角度に角速度を加算
-		mRot += mRot_spd[i];
+		if (i == 0)
+			mRot[i] += mRot_spd[i];
+		else 
+		{
+			//mRot[i] = mRot[0];
+			//mRot[i] += mRot_spd[i];
+			mRot[i] = mRot[0] + mRot_spd[i];
+
+		}
 
 		//新しい重りの位置
-		px = fPos[i].x + MathHelper::Cos(mRot + rot2) * length;
-		py = fPos[i].y + MathHelper::Sin(mRot + rot2) * length;
+		px = fPos[i].x + MathHelper::Cos(mRot[i] /*+ rot2*/) * length;
+		py = fPos[i].y + MathHelper::Sin(mRot[i] /*+ rot2*/) * length;
 
 		//重りの座標
 		multiplePos[i].x = px;
 		multiplePos[i].y = py;
 
 		//頂点で正規化
-		if (mRot > 270.0f) mRot -= 360.0f;
-		if (mRot < -90) mRot += 360.0f;
+		if (mRot[i] > 270.0f) mRot[i] -= 360.0f;
+		if (mRot[i] < -90) mRot[i] += 360.0f;
 
 		if (i > 0) fPos[i] = multiplePos[i - 1];
 
 		//摩擦
-		if (multiplePos[i].y < spherePos.y) mFriction = 0.985; //上の振り子の重りより高く上がったら摩擦を増やす
-		//if (mRot <45.0f || mRot > 135.0f) mFriction = 0.985; //上の振り子より45度以上大きく振れたら摩擦を増やす
-		else mFriction = friction; //上記以外は上の振り子の摩擦を代入
+		//if (multiplePos[i].y < spherePos.y) mFriction = 0.985; //上の振り子の重りより高く上がったら摩擦を増やす
+		//else if (i > 0 && (multiplePos[i].y < multiplePos[i - 1].y)) mFriction = friction;
+		//////if (mRot <45.0f || mRot > 135.0f) mFriction = 0.985; //上の振り子より45度以上大きく振れたら摩擦を増やす
+		//else mFriction = friction; //上記以外は上の振り子の摩擦を代入
+		////mFriction = friction;
+
+		if ((mRot_spd[0] < 0 /*&& !rotDirection*/ && (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::RIGHT))) ||
+			(mRot_spd[0] > 0 /*&& rotDirection*/ && (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::LEFT))))
+		{
+			mFriction = 1.015f; //摩擦を減らす
+		}
+		else
+		{
+			mFriction = 0.985f; //摩擦を戻す
+		}
+
 		mRot_spd[i] *= mFriction;
+
+		//支点を移動
+		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
+			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
+		{
+			mRot[0] -= 45.0f;
+		}
+		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
+			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
+		{
+			mRot[0] += 45.0f;
+		}
 	}
-
-
-	//支点を移動
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
-	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
-	//{
-	//	mRot -= 45.0f;
-	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
-	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
-	//{
-	//	mRot += 45.0f;
-	//}
 }

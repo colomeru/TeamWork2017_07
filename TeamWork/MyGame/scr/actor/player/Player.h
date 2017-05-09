@@ -17,7 +17,6 @@ static const float defSlipCount = 8.f;
 static const int defLaneChangeCoolTime_ = 60;
 static const int defChainLockCoolTime_ = 10;
 //レーンの本数
-static const int maxLaneSize = 4;
 
 enum {
 	MODE_FALL = 0,
@@ -33,6 +32,7 @@ class Player : public Actor, public std::enable_shared_from_this<Player>
 public:
 	//コンストラクタ
 	Player(IWorld* world);
+	Player(IWorld* world,int maxLaneSize);
 	//デストラクタ
 	~Player();
 	//更新
@@ -136,10 +136,13 @@ public:
 	//	isCanChangeLane_ = isCanChange;
 	//}
 	void SetNextLane(int addNum) {
-		if (laneNum_ + addNum > (maxLaneSize-1) || laneNum_ + addNum<0)return;
+		if (laneNum_ + addNum > (maxLaneSize_-1) || laneNum_ + addNum<0)return;
 		world_->ChangeCamMoveMode(addNum);
 	}
 	void setCurPHeadSPos(const Vector2& sPos);
+	void setMaxLaneSize(int size) {
+		maxLaneSize_ = size;
+	}
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
@@ -165,7 +168,7 @@ private:
 
 	void UpdateLaneNum(int updateNum) {
 		if (updateNum == 0)return;
-		if (laneNum_+updateNum > (maxLaneSize-1) || laneNum_ + updateNum<0)return;
+		if (laneNum_+updateNum > (maxLaneSize_-1) || laneNum_ + updateNum<0)return;
 		
 		//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
 		Vector2 nextVel_;
@@ -183,7 +186,7 @@ private:
 		laneNum_ += updateNum;
 		//レーン最大範囲を超えたらVectの補正を行わない
 
-		laneNum_ = MathHelper::Clamp(laneNum_, 0, (maxLaneSize - 1));
+		laneNum_ = MathHelper::Clamp(laneNum_, 0, (maxLaneSize_ - 1));
 
 		//velocity_ = nextVel_;
 		pendulumVect_ = nextVel_;
@@ -204,6 +207,8 @@ private:
 	void SlipUpdate();
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
+	//ステージの最大レーン数
+	int maxLaneSize_;
 
 	float spdLimit;
 

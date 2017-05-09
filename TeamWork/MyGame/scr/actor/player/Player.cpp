@@ -18,7 +18,7 @@ Player::Player(IWorld * world)
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false),/* isCanChangeLane_(false),*/
 	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES),friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
-	chainAddLengthMath_(0)
+	chainAddLengthMath_(0), maxLaneSize_(3)
 
 {
 	laneNum_ = 1;
@@ -43,6 +43,63 @@ Player::Player(IWorld * world)
 		= 1.f;
 	slipCountMult_[CLOTHES_ID::FLUFFY_CLOTHES] = 0.f;
 	slipCountMult_[CLOTHES_ID::HANGER] = 1.5f;	
+	slipCountMult_[CLOTHES_ID::THIN_CLOTHES] = 2.f;
+
+	pHeads_.resize(8);
+	for (int i = 0; i < 8; i++)
+	{
+		//8•ûŒü‚Ì‚¤‚¿AŠe“ª‚É‘Î‰ž‚µ‚½ˆÊ’u‚ðì¬
+		Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ((i + headAngleSetter) * 45);
+		Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
+		pHeadPoses_.push_back(cgToV2);
+		pHeadLength_.push_back(defHeadLength);
+		pHeadDead_.push_back(false);
+
+		pHeads_[i] = (std::make_shared<Player_Head>(world, this, pHeadPoses_[i], i));
+		world_->Add(ACTOR_ID::PLAYER_HEAD_ACTOR, pHeads_[i]);
+
+		SetMyHeadLaneNum(i);
+	}
+	updateFunctionMap_[MODE_FALL] = std::bind(&Player::FallUpdate, this);
+	updateFunctionMap_[MODE_SHOOT] = std::bind(&Player::ShootUpdate, this);
+	updateFunctionMap_[MODE_SHOOT_END] = std::bind(&Player::ShootEndUpdate, this);
+	updateFunctionMap_[MODE_BITE] = std::bind(&Player::BiteUpdate, this);
+	updateFunctionMap_[MODE_SLIP] = std::bind(&Player::SlipUpdate, this);
+
+	worldSetMyDatas();
+	StartPlayerSet();
+}
+Player::Player(IWorld * world,int maxLaneSize)
+	:Actor(world),
+	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.5f), currentHead_(0),
+	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL), isNextPushKey_(true),
+	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false),/* isCanChangeLane_(false),*/
+	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
+	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize)
+
+{
+	laneNum_ = 1;
+
+	spriteId_ = SPRITE_ID::CIRCLE_SPRITE;
+
+	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
+	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2;
+	parameter_.size = Sprite::GetInstance().GetSize(spriteId_);
+	parameter_.HP = 10;
+	parameter_.mat
+		= Matrix::CreateScale(Vector3::One)
+		* Matrix::CreateRotationZ(0.0f)
+		* Matrix::CreateTranslation(Vector3::Zero);
+
+	position_ = Vector2(0, 200);
+
+	slipCountMult_[CLOTHES_ID::BASE_CLOTHES]
+		= slipCountMult_[CLOTHES_ID::GOAL_CLOTHES]
+		= slipCountMult_[CLOTHES_ID::GUM_CLOTHES]
+		= slipCountMult_[CLOTHES_ID::TEST_CLOTHES]
+		= 1.f;
+	slipCountMult_[CLOTHES_ID::FLUFFY_CLOTHES] = 0.f;
+	slipCountMult_[CLOTHES_ID::HANGER] = 1.5f;
 	slipCountMult_[CLOTHES_ID::THIN_CLOTHES] = 2.f;
 
 	pHeads_.resize(8);

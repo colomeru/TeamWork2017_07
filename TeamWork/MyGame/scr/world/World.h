@@ -108,7 +108,7 @@ public:
 	virtual void ChangeCamMoveMode(int addNum) override{
 		isChangeCam_ = true;
 		addNum_ = addNum;
-		if (addNum > 0) camShootSpd_ = 5.f;
+		if (addNum > 0) camShootSpd_ = 2.33f;
 		else camShootSpd_ = 0.f;
 	}
 	virtual bool GetIsCamChangeMode()const override {

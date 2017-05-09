@@ -28,10 +28,11 @@ struct KeepDatas {
 	void SetPlayerPos(const Vector2& pPos) {
 		playerPos_ = pPos;
 	}
-	//プレイヤーが次に行くレーンを指定する
+	//プレイヤーが次に行くレーンを(+下-上)
 	void SetPlayerNextLane(const int& pNLane) {
 		nextLane_ = pNLane;
 	}
+	//レーン移動時の位置(割合0～1)
 	void SetChangeLaneLerpPos_(float lNum) {
 		changeLaneLerpPos_ = lNum;
 	}
@@ -107,6 +108,8 @@ public:
 	virtual void ChangeCamMoveMode(int addNum) override{
 		isChangeCam_ = true;
 		addNum_ = addNum;
+		if (addNum > 0) camShootSpd_ = 5.f;
+		else camShootSpd_ = 0.f;
 	}
 	virtual bool GetIsCamChangeMode()const override {
 		return isChangeCam_;
@@ -131,6 +134,7 @@ private:
 	}
 
 private:
+	float camShootSpd_;
 	//カメラ更新用のUpdateへ移行する
 	bool isChangeCam_;
 	int addNum_;

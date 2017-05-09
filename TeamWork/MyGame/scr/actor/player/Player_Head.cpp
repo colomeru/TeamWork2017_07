@@ -27,6 +27,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 
 	stopPos_ = position_;
 
+	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 Player_Head::~Player_Head()
@@ -88,6 +89,11 @@ void Player_Head::Update()
 	Vector3 toMatPos = Vector3(position_.x, position_.y, 0);
 
 	parameter_.mat.Translation(toMatPos);
+
+	if (player_->GetIsShootModeEnd()) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
+	}
+
 }
 
 void Player_Head::Draw() const

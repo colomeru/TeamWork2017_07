@@ -3,7 +3,7 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false)
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f)
 {
 	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
 	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
@@ -39,7 +39,11 @@ void World::Update()
 	isChangeFrame_ = false;
 	if (isChangeCam_) {
 		keepDatas_.SetPlayerNextLane(addNum_);
-		keepDatas_.SetChangeLaneLerpPos_(keepDatas_.changeLaneLerpPos_ + 0.04f);
+		//camShootSpd_ += 0.1f;
+		if (addNum_ > 0) camShootSpd_ -= 0.1f;
+		else camShootSpd_ += 0.1f;
+		camShootSpd_ = max(camShootSpd_, 0.1f);
+		keepDatas_.SetChangeLaneLerpPos_(keepDatas_.changeLaneLerpPos_ + 0.04f*camShootSpd_);
 	}
 	else
 	{
@@ -64,6 +68,7 @@ void World::Update()
 void World::Draw(const int laneCount, const int playerLane) const
 {
 	//DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
+	//actors_.Draw(laneCount, playerLane);
 	if(!isChangeFrame_)actors_.Draw(laneCount, playerLane);
 	DrawFormatString(0,600,GetColor(255,255,255),"%f", keepDatas_.changeLaneLerpPos_);
 }

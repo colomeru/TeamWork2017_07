@@ -27,7 +27,7 @@ Actor::~Actor()
 
 void Actor::Collide(COL_ID id, Actor & other)
 {
-
+	if (laneNum_ != other.GetLaneNum())return;
 	CollisionParameter colpara = colFuncMap_[id](*this, other);
 	colpara.colID = id;
 	if (colpara.colFrag)

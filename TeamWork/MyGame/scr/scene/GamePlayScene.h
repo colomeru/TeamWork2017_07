@@ -49,4 +49,8 @@ private:
 	//Vector3 camera_pos_;
 	//Vector3 target_;
 	int windTime_;
+
+	//そのステージのレーンの最大数
+	int maxLaneCount;
+
 };

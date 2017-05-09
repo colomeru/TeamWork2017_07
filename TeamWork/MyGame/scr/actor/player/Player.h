@@ -31,8 +31,7 @@ class Player : public Actor, public std::enable_shared_from_this<Player>
 {
 public:
 	//コンストラクタ
-	Player(IWorld* world);
-	Player(IWorld* world,int maxLaneSize);
+	Player(IWorld* world,int maxLaneSize=3,int startLane=1);
 	//デストラクタ
 	~Player();
 	//更新
@@ -143,6 +142,8 @@ public:
 	void setMaxLaneSize(int size) {
 		maxLaneSize_ = size;
 	}
+	//現在の頭に対して滑るかどうかをセットする
+	void curPHeadSlip(bool isSlip);
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
@@ -197,7 +198,6 @@ private:
 
 		worldSetMyDatas();
 	}
-
 //プレイヤーの状態に応じた更新
 private:
 	void FallUpdate();

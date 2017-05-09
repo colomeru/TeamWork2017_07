@@ -87,7 +87,7 @@ public:
 		drawPos_ = GetDrawPosVect(position_);
 
 		int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
-		if (drawLane >= 2) {
+		if (MathHelper::Abs(drawLane) >= 2) {
 			isDraw_ = false;
 		}
 		else {
@@ -130,7 +130,7 @@ public:
 		retPos = Vector2(cmpos3d.x, cmpos3d.y);
 		
 		int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
-		if (drawLane >= 2) {
+		if (MathHelper::Abs (drawLane) >= 2) {
 			//isDraw_ = false;
 			retPos.y = -500;
 		}

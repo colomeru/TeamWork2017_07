@@ -18,11 +18,10 @@
 #include"../game/Random.h"
 
 //描画されるレーン数
-static const int maxLaneCount = 3;
 //風が吹くまでの基本時間
 static const int defWindTime_ = 200;
 GamePlayScene::GamePlayScene() :
-	nextScene_(Scene::Credit), windTime_(defWindTime_)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
+	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3)//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 
 {
 	// ワールド生成
@@ -68,12 +67,16 @@ void GamePlayScene::Initialize()
 
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 
-	ply1 = std::make_shared<Player>(world_.get(),5);
+	//ステージの最大レーン数(後々MapGeneratorからレーン数を受け取れるようにする)
+	int stageLaneSize = 5;
+
+	ply1 = std::make_shared<Player>(world_.get(), stageLaneSize,2);
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 3, Vector2(200, 100)));
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 4, Vector2(200, 100)));
 
+	maxLaneCount = stageLaneSize;
 	//本番用
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
 	//テスト用
@@ -106,8 +109,9 @@ void GamePlayScene::Update()
 		windTime_ = defWindTime_;
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
-		Vector2 pss = Vector2(200, 200);
-		ply1->setCurPHeadSPos(pss);
+		//Vector2 pss = Vector2(200, 200);
+		//ply1->setCurPHeadSPos(pss);
+		ply1->curPHeadSlip(true);
 	}
 	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
 	//	world_->sendMessage(EventMessage::BEGIN_WIND);

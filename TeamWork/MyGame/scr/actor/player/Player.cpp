@@ -18,7 +18,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false),/* isCanChangeLane_(false),*/
 	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
-	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize)
+	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), isPlayerFallLane_(false)
 
 {
 	laneNum_ = startLane;

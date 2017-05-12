@@ -21,7 +21,9 @@
 //風が吹くまでの基本時間
 static const int defWindTime_ = 200;
 GamePlayScene::GamePlayScene() :
-	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3), isPlayerDead_(false), gameOverScreen_()//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
+	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3), isPlayerDead_(false),
+	gameOverScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(200.0f, 100.0f))
+	//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 
 {
 	// ワールド生成
@@ -31,6 +33,9 @@ GamePlayScene::GamePlayScene() :
 	{
 		handleMessage(msg, param);
 	});
+
+	updateFunctionMap_[true] = std::bind(&GamePlayScene::clearUpdate, this);
+	updateFunctionMap_[false] = std::bind(&GamePlayScene::baseUpdate, this);
 }
 
 GamePlayScene::~GamePlayScene()
@@ -69,6 +74,7 @@ void GamePlayScene::Initialize()
 	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test")));
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage2);
+	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
 
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 
@@ -101,48 +107,51 @@ void GamePlayScene::Initialize()
 
 void GamePlayScene::Update()
 {
-	if (isPlayerDead_) {
-		if (gameOverScreen_.Update(nextScene_))isEnd_ = true;
+	updateFunctionMap_[isPlayerDead_]();
 
-		if (nextScene_ == Scene::GamePlay) {
-			Initialize();
-		}
-		return;
-	}
-	// 更新
-	world_->Update();
-	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
-		isEnd_ = true;
+	//if (isPlayerDead_) {
+	//	if (gameOverScreen_.Update(nextScene_)) {
+	//		isEnd_ = true;
+	//		if (nextScene_ == Scene::GamePlay) {
+	//			Initialize();
+	//		}
+	//	}
+	//	return;
+	//}
+	//// 更新
+	//world_->Update();
+	//// 終了
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
+	//	isEnd_ = true;
 
-	int randT = Random::GetInstance().Range(0, 3);
-	windTime_ -= randT;
-	if (windTime_ <= 0) {
-		world_->sendMessage(EventMessage::BEGIN_WIND);
-		windTime_ = defWindTime_;
-	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
-		//Vector2 pss = Vector2(200, 200);
-		//ply1->setCurPHeadSPos(pss);
-		ply1->curPHeadSlip(true);
-	}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+	//int randT = Random::GetInstance().Range(0, 3);
+	//windTime_ -= randT;
+	//if (windTime_ <= 0) {
 	//	world_->sendMessage(EventMessage::BEGIN_WIND);
+	//	windTime_ = defWindTime_;
 	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
-	//	world_->sendMessage(EventMessage::STRONG_WIND);
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+	//	//Vector2 pss = Vector2(200, 200);
+	//	//ply1->setCurPHeadSPos(pss);
+	//	ply1->curPHeadSlip(true);
 	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
-	//	world_->sendMessage(EventMessage::ATTENUATE_WIND);
-	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
-	//	world_->sendMessage(EventMessage::END_WIND);
-	//}
+	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+	////	world_->sendMessage(EventMessage::BEGIN_WIND);
+	////}
+	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
+	////	world_->sendMessage(EventMessage::STRONG_WIND);
+	////}
+	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
+	////	world_->sendMessage(EventMessage::ATTENUATE_WIND);
+	////}
+	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
+	////	world_->sendMessage(EventMessage::END_WIND);
+	////}
 
-	//Camera::GetInstance().Position.Set(camera_pos_);
-	//Camera::GetInstance().Target.Set(target_);
-	//Camera::GetInstance().Update();
-	if (ply1->isPlayerDead())isPlayerDead_ = true;
+	////Camera::GetInstance().Position.Set(camera_pos_);
+	////Camera::GetInstance().Target.Set(target_);
+	////Camera::GetInstance().Update();
+	//if (ply1->isPlayerDead())isPlayerDead_ = true;
 }
 
 void GamePlayScene::Draw() const
@@ -171,6 +180,8 @@ void GamePlayScene::Draw() const
 	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);
 
 	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
+	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
+	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(ply1->GetPosition().x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
 
 	if (isPlayerDead_) {
 		gameOverScreen_.Draw();
@@ -195,4 +206,38 @@ void GamePlayScene::End()
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
 {
+}
+
+void GamePlayScene::baseUpdate()
+{
+	// 更新
+	world_->Update();
+	// 終了
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
+		isEnd_ = true;
+
+	int randT = Random::GetInstance().Range(0, 3);
+	windTime_ -= randT;
+	if (windTime_ <= 0) {
+		world_->sendMessage(EventMessage::BEGIN_WIND);
+		windTime_ = defWindTime_;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
+		//Vector2 pss = Vector2(200, 200);
+		//ply1->setCurPHeadSPos(pss);
+		ply1->curPHeadSlip(true);
+	}
+	if (ply1->isPlayerDead())isPlayerDead_ = true;
+
+}
+
+void GamePlayScene::clearUpdate()
+{
+	if (gameOverScreen_.Update(nextScene_)) {
+		isEnd_ = true;
+		if (nextScene_ == Scene::GamePlay) {
+			Initialize();
+		}
+	}
+
 }

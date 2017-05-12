@@ -34,12 +34,12 @@ void GameOverScreen::Init()
 
 bool GameOverScreen::Update(Scene& nextScene)
 {
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y < -0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;
 
 		sinCount_ = defSinC;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y > 0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
 		inputCount_--;
 
 		sinCount_ = defSinC;

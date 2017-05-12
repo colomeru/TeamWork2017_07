@@ -31,7 +31,8 @@ public:
 	void handleMessage(EventMessage message, void* param);
 	
 private:
-
+	void baseUpdate();
+	void clearUpdate();
 
 private:
 	// ワールド用シェアドポインタ
@@ -55,6 +56,12 @@ private:
 
 	//そのステージのレーンの最大数
 	int maxLaneCount;
+	float stageLen_;
+	float meterLen_;
+	Vector2 meterPos_;
 
 	bool isPlayerDead_;
+
+	std::map<bool, std::function<void()>> updateFunctionMap_;
+
 };

@@ -147,7 +147,8 @@ public:
 	void curPHeadSlip(bool isSlip);
 	//プレイヤーが死んでるか
 	bool isPlayerDead()const {
-		if(position_.y >= WINDOW_HEIGHT)return true;
+		//if(laneNum_==maxLaneSize_&&position_.y >= WINDOW_HEIGHT)return true;
+		if (position_.y >= WINDOW_HEIGHT)return true;
 
 		for (auto pHD : pHeadDead_) {
 			if (!pHD)return false;
@@ -263,6 +264,8 @@ private:
 	float slipCount_;
 
 	bool isSlipped_;
+
+	bool isPlayerFallLane_;
 
 
 	//0=滞空 1=発射時 2=発射終了 3=噛み付き 4=滑り落ち

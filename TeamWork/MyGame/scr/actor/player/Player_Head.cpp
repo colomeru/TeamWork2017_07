@@ -12,7 +12,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 {
 	spriteId_ = SPRITE_ID::PLAYER_HEAD_SPRITE;
 
-	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
+	parameter_.ID = ACTOR_ID::PLAYER_HEAD_ACTOR;
 	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2;
 	parameter_.size = Sprite::GetInstance().GetSize(spriteId_);
 	parameter_.HP = 10;
@@ -27,8 +27,8 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 
 	stopPos_ = position_;
 
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_PHead_Clothes, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::BOX_HANGER_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 Player_Head::~Player_Head()
@@ -48,10 +48,10 @@ void Player_Head::Update()
 	//Vector2 posAddP = position_;
 	
 	//風に吹かれた服に当たってかつ吹かれていない服につかめてない場合のみ落ちる
-	if (isBiteSlipWind_) {
-		player_->SetMode(MODE_SHOOT);
-		isBiteSlipWind_ = false;
-	}
+	//if (isBiteSlipWind_) {
+	//	player_->SetMode(MODE_SHOOT);
+	//	isBiteSlipWind_ = false;
+	//}
 	//毎フレーム、1度でも当たったかを調べる
 	{
 		if (!isHitOnce) {
@@ -93,7 +93,7 @@ void Player_Head::Update()
 
 	if (player_->GetIsShootModeEnd()&&player_->GetCurHead()==myNumber_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::HANGER_ACTOR, COL_ID::BOX_BOX_COL);
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::HANGER_ACTOR, COL_ID::BOX_HANGER_COL);
 	}
 
 }
@@ -154,6 +154,7 @@ void Player_Head::OnUpdate()
 
 void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
+	//結構いらなくなってるから消せるとこけす
 	if (colpara.colID == COL_ID::PLAYER_PIN_COL) {
 		player_->ResurrectHead();
 		static_cast<ClothesPin*>(&other)->ClearThis();
@@ -192,7 +193,7 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	isBitePoint_ = false;
 	stopPos_ = position_;
 
-	player_->CurHeadBite(stopPos_);
+	//player_->CurHeadBite(stopPos_);
 	
 
 	player_->SetOtherClothesID_(static_cast<Clothes*>(&other)->GetClothesID());

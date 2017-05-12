@@ -45,7 +45,7 @@ public:
 	virtual void FastUpdate() override {
 		if (!world_->GetIsCamChangeMode()) {
 			int nexLane = world_->GetKeepDatas().nextLane_;
-			UpdateLaneNum(nexLane);
+			UpdateLaneNum(nexLane, changeType_);
 			world_->GetCanChangedKeepDatas().SetPlayerNextLane(0);
 		}
 
@@ -146,8 +146,10 @@ public:
 	//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
 	//	isCanChangeLane_ = isCanChange;
 	//}
-	void SetNextLane(int addNum) {
+	void SetNextLane(int addNum,LaneChangeType changeType=LaneChangeType::LaneChange_Normal) {
 		if (laneNum_ + addNum > (maxLaneSize_-1) || laneNum_ + addNum<0)return;
+		
+		changeType_ = changeType;
 		world_->ChangeCamMoveMode(addNum);
 	}
 	void setCurPHeadSPos(const Vector2& sPos);
@@ -189,7 +191,7 @@ private:
 	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
 
-	void UpdateLaneNum(int updateNum) {
+	void UpdateLaneNum(int updateNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal) {
 		if (updateNum == 0)return;
 		if (laneNum_+updateNum > (maxLaneSize_-1) || laneNum_ + updateNum<0)return;
 		
@@ -203,7 +205,9 @@ private:
 		else if (updateNum > 0) {
 			nextVel_ = Vector2(0, 0.f);
 			pGrav_ = 2.f;
-			position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
+			float lCPos = 0;
+			if (changeType == LaneChangeType::LaneChange_Fall)lCPos = -1380;
+			position_.y += defDrawLinePosY[0] - defDrawLinePosY[1] + lCPos;
 		}
 		laneNum_ += updateNum;
 		//レーン最大範囲を超えたらVectの補正を行わない
@@ -298,7 +302,7 @@ private:
 	bool isCanNextHeadRot;
 
 	CLOTHES_ID otherClothesID_;
-
+	LaneChangeType changeType_;
 	//滑る時間の倍数(服毎)
 	std::map<CLOTHES_ID, float> slipCountMult_;
 

@@ -76,6 +76,7 @@ Player::~Player()
 
 void Player::Update()
 {
+
 	chainLockCoolTime_--;
 	chainLockCoolTime_ = MathHelper::Clamp(chainLockCoolTime_, 0, defChainLockCoolTime_);
 	//レーン変更のクールタイムを設定
@@ -99,6 +100,10 @@ void Player::Update()
 	PlayerInputControl();
 	//自分の状態に応じた更新
 	updateFunctionMap_[playerMode_]();
+
+	if (position_.y >= WINDOW_HEIGHT) {
+		SetNextLane(1);
+	}
 	//Headの表示レーンを本体に合わせる
 	SetAllHeadLaneNum();
 
@@ -575,11 +580,6 @@ void Player::ShootEndUpdate()
 void Player::BiteUpdate()
 {
 	Pendulum(pHeads_[currentHead_]->GetPosition(), length_);
-	if (!world_->GetIsCamChangeMode()) {
-		int nexLane = world_->GetKeepDatas().nextLane_;
-		UpdateLaneNum(nexLane);
-		world_->GetCanChangedKeepDatas().SetPlayerNextLane(0);
-	}
 		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y>0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 				SetNextLane(1);

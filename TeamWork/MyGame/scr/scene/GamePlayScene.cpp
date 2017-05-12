@@ -73,16 +73,16 @@ void GamePlayScene::Initialize()
 
 	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test")));
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
-	stageGeneratorManager.SetStage(Stage::Stage2);
 	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
-
-	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 
 	//ステージの最大レーン数(後々MapGeneratorからレーン数を受け取れるようにする)
 	int stageLaneSize = 5;
-
-	ply1 = std::make_shared<Player>(world_.get(), stageLaneSize,2);
+	ply1 = std::make_shared<Player>(world_.get(), stageLaneSize, 2);
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
+
+	stageGeneratorManager.SetStage(Stage::Stage2);
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
+
 
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 3, Vector2(200, 100)));
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 4, Vector2(200, 100)));

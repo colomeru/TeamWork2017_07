@@ -5,7 +5,7 @@ class HairballGenerator : public Actor
 {
 public:
 	// コンストラクタ
-	HairballGenerator(IWorld* world);
+	HairballGenerator(IWorld* world, int lane_num);
 	// デストラクタ
 	~HairballGenerator();
 	// 更新

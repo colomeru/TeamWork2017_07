@@ -28,7 +28,7 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 BaseClothes::~BaseClothes()
@@ -40,9 +40,9 @@ void BaseClothes::Update()
 	ShakesClothes();
 	WindSwing();
 
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
 
 	isHit_ = false;
 }
@@ -80,6 +80,9 @@ void BaseClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
+
+	if (player_Head_ == nullptr && player_Head_->GetParameter().ID == ACTOR_ID::PLAYER_HEAD_ACTOR)
+		DrawFormatString(100, 300, GetColor(255, 255, 255), "player_Head");
 
 }
 

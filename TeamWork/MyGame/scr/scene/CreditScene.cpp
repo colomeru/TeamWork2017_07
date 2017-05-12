@@ -48,7 +48,7 @@ void CreditScene::Initialize()
 
 	player_ = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
-	world_->Add(ACTOR_ID::EFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get()));
+	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<HairballGenerator>(world_.get()));
 
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
 	stageGeneratorManager.SetStage(Stage::Stage1);

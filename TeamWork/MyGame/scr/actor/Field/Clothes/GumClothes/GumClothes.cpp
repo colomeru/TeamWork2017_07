@@ -3,6 +3,8 @@
 
 GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
+	,player_(nullptr)
+	,player_Head_(nullptr)
 {
 	clothes_ID = CLOTHES_ID::GUM_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -17,7 +19,7 @@ GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 GumClothes::~GumClothes()
@@ -29,8 +31,16 @@ void GumClothes::Update()
 	ShakesClothes();
 	WindSwing();
 
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
+
+	if (player_Head_ == nullptr || player_ == nullptr)return;
+
+	if (player_->GetIsSlipped()) {
+		player_Head_->SetPosAddVect(Vector2(10.0f, 0.0f));
+		player_ = nullptr;
+		player_Head_ = nullptr;
 	}
 
 	isHit_ = false;
@@ -69,6 +79,12 @@ void GumClothes::Draw() const
 
 void GumClothes::OnUpdate()
 {
+}
+
+void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
+{
+	player_ = static_cast<Player*>(other.GetParent());
+	player_Head_ = static_cast<Player_Head*>(&other);
 }
 
 void GumClothes::OnMessage(EventMessage message, void * param)

@@ -54,10 +54,12 @@ public:
 protected:
 	//衝突しているか
 	bool isHit_;
+	//テスト
+	bool is_Test_;
 	//服ID
 	CLOTHES_ID clothes_ID;
 	//プレイヤー
-	Player_Head* player_Head_;
+	Actor* player_Head_;
 
 	//振り子関連(服用)
 	//振り子フラグ

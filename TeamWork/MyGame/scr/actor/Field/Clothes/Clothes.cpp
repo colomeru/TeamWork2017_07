@@ -1,6 +1,8 @@
 #include "Clothes.h"
 #include "../MyGame/scr/math/MyFuncionList.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../../player/Player.h"
+#include "Hanger\Hanger.h"
 
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
@@ -14,10 +16,21 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 //当たり判定処理
 void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	//if (!isWind_) {
-	//	player_Head_ = static_cast<Player_Head*>(&other);
-	//	player_Head_->setIsBiteSlipWind(false);
-	//}
+	switch (other.GetParameter().ID)
+	{
+	case ACTOR_ID::PLAYER_HEAD_ACTOR:
+		{
+			if (!isWind_) {
+				parent_ = &other;
+				static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
+				static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+			}
+		break;
+		}
+	default:
+		break;
+	}
+
 }
 
 //メッセージ処理
@@ -63,6 +76,12 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 	//角度に角速度を加算
 	rot_ += rot_spd_;
+
+	//当たり判定確認用
+	//if (initialRot > rot_) {
+	//	rot_ -= rot_spd_;
+	//	return;
+	//}
 
 	//新しい重りの位置
 	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
@@ -120,7 +139,7 @@ void Clothes::ShakesClothes()
 			isFriction_ = false;
 			count_ = 0;
 			isPendulum_ = false;
-			clothesState_ = ClothesState::BEGIN_WIND;
+			clothesState_ = ClothesState::BEGIN_STRONG_WIND;
 			break;
 		default:
 			break;
@@ -130,10 +149,11 @@ void Clothes::ShakesClothes()
 
 void Clothes::WindSwing()
 {
-	//if (player_Head_ == nullptr) return;
+	if (parent_ == nullptr) return;
 
-	//if (clothesState_ == ClothesState::STRONG_WIND) {
-	//	player_Head_->setIsBiteSlipWind(true);
-	//	player_Head_ = nullptr;
-	//}
+	if (clothesState_ == ClothesState::STRONG_WIND) {
+		static_cast<Player*>(parent_->GetParent())->SetMode(MODE_SHOOT);
+		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
+		parent_ = nullptr;
+	}
 }

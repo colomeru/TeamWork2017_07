@@ -17,7 +17,7 @@ FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Ve
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 FluffyClothes::~FluffyClothes()
@@ -29,9 +29,9 @@ void FluffyClothes::Update()
 	ShakesClothes();
 	WindSwing();
 
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
 
 	isHit_ = false;
 }

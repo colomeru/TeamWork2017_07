@@ -4,7 +4,7 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::HAIRBALL;
-	parameter_.ID = ACTOR_ID::EFECT_ACTOR;
+	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(50, 50.f);
 	parameter_.mat
@@ -59,8 +59,7 @@ void Hairball::OnUpdate()
 
 void Hairball::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	if(&other == player_Head_)
-		parameter_.isDead = true;
+	parameter_.isDead = true;
 }
 
 void Hairball::OnMessage(EventMessage message, void * param)

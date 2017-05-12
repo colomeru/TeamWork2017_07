@@ -207,6 +207,7 @@
     <ClCompile Include="scr\math\Quaternion.cpp" />
     <ClCompile Include="scr\math\Vector2.cpp" />
     <ClCompile Include="scr\math\Vector3.cpp" />
+    <ClCompile Include="scr\scene\addScreen\GameOverScreen.cpp" />
     <ClCompile Include="scr\scene\CreditScene.cpp" />
     <ClCompile Include="scr\scene\DemoScene.cpp" />
     <ClCompile Include="scr\scene\EndingScene.cpp" />
@@ -286,6 +287,7 @@
     <ClInclude Include="scr\math\Vector3.h" />
     <ClInclude Include="scr\myData\MyTestCamera.h" />
     <ClInclude Include="scr\myData\MyTestCol.h" />
+    <ClInclude Include="scr\scene\addScreen\GameOverScreen.h" />
     <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />
     <ClInclude Include="scr\scene\EndingScene.h" />

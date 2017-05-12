@@ -24,4 +24,5 @@ public:
 
 private:
 	Player* player_;
+	bool isStop_;		//ハンガーの機能が生きているかどうか
 };

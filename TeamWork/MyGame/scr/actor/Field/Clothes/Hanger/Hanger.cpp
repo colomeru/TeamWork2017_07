@@ -4,6 +4,7 @@
 
 Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
+	,isStop_(false)
 {
 	clothes_ID = CLOTHES_ID::HANGER;
 	//parameter_.ID = ACTOR_ID::HANGER_ACTOR;
@@ -31,17 +32,16 @@ Hanger::~Hanger()
 
 void Hanger::Update()
 {
+	if (isStop_)return;
 	if (parent_ == nullptr || player_ == nullptr) return;
 	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
 	}
 	//Hanger‚ð‚Â‚©‚ñ‚¾Û‚ÌPlayer‚ÌˆÚ“®ˆ—
-	if (player_->GetIsBiteMode()) {
-		velocity_ = Vector2(10.0f, 0.0f);
-		Vector2 pos = parent_->GetPosition() + velocity_;
-		player_->setCurPHeadSPos(pos);
-		position_ += velocity_;
-	}
+	velocity_ = Vector2(10.0f, 0.0f);
+	Vector2 pos = parent_->GetPosition() + velocity_;
+	player_->setCurPHeadSPos(pos);
+	position_ += velocity_;
 	isHit_ = false;
 }
 
@@ -69,14 +69,6 @@ void Hanger::Draw() const
 
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-
-	DrawFormatString(700, 80, GetColor(255, 255, 255), "pos x:%f y:%f", parameter_.mat.Translation().x, parameter_.mat.Translation().y);
-
-	if (parent_ == nullptr) return;
-	DrawFormatString(700, 100, GetColor(255, 255, 255), "pos x:%f y:%f", parent_->GetPosition().x, parent_->GetPosition().y);
-	DrawFormatString(700, 120, GetColor(255, 255, 255), "pos x:%f y:%f", parent_->GetPrevPosition().x, parent_->GetPrevPosition().y);
-	DrawFormatString(700, 140, GetColor(255, 255, 255), "pos x:%f y:%f", 
-		parent_->GetPosition().x - parent_->GetPrevPosition().x, parent_->GetPosition().y - parent_->GetPrevPosition().y);
 }
 
 void Hanger::OnUpdate()
@@ -85,22 +77,29 @@ void Hanger::OnUpdate()
 
 void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	switch (colpara.colID)
+	switch (other.GetParameter().ID)
 	{
-	case COL_ID::BOX_BOX_COL:
+	case ACTOR_ID::PLAYER_HEAD_ACTOR:
 	{
-		auto player = static_cast<Player*>(other.GetParent());
-		if (player->GetIsBiteMode()) {
-			parent_ = static_cast<Player_Head*>(&other);
-			player_ = player;
-		}
+		parent_ = &other;
+		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
+		player_ = static_cast<Player*>(parent_->GetParent());
+		player_->CurHeadBite(other.GetPosition());
+		//auto player = static_cast<Player*>(other.GetParent());
+		//if (player->GetIsBiteMode()) {
+			//parent_ = static_cast<Player_Head*>(&other);
+			//player_ = player;
+		//}
 		break;
 	}
-	case COL_ID::BOX_CLOTHES_COL:
+	case ACTOR_ID::STAGE_ACTOR:
 	{
-		auto size = (parameter_.size.x + other.GetParameter().size.x) / 2;
-		position_.x = other.GetPosition().x - size;
-		player_->SetMode(4);
+		//auto size = (parameter_.size.x + other.GetParameter().size.x) / 2;
+		//position_.x = other.GetPosition().x - size;
+		if (isStop_) return;
+		static_cast<Player*>(parent_->GetParent())->SetMode(4);
+		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
+		isStop_ = true;
 		parent_ = nullptr;
 		player_ = nullptr;
 		break;

@@ -6,6 +6,7 @@
 #include "../../actor/Field/Clothes/GumClothes/GumClothes.h"
 #include "../../actor/Field/Clothes/FluffyClothes/FluffyClothes.h"
 #include "../../actor/Field/Clothes/ThinClothes/ThinClothes.h"
+#include "../../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
 
 //コンストラクタ
 Stage1::Stage1(IWorld * world, std::string & fileName)
@@ -35,30 +36,32 @@ void Stage1::AddStage()
 	for (int i = 0; i < row; i++) {
 		for (int j = 0; j < col; j++) {
 			auto data = csvReader_.geti(i, j);
-			auto lane_num = i / 4;
+			auto laneNum = i / 4;
 			switch (data)
 			{
 			case 1:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_, CLOTHES_ID::BASE_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_, CLOTHES_ID::BASE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 2:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 3:
-				world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 4:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GumClothes>(world_, CLOTHES_ID::GUM_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GumClothes>(world_, CLOTHES_ID::GUM_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 5:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<FluffyClothes>(world_, CLOTHES_ID::FLUFFY_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<FluffyClothes>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 6:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ThinClothes>(world_, CLOTHES_ID::THIN_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ThinClothes>(world_, CLOTHES_ID::THIN_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
 			case 7:
-				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, lane_num, Vector2(j, 0) * STAGE_TIP_SIZE));
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 				break;
+			case 8:
+				world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<HairballGenerator>(world_, laneNum));
 			default:
 				break;
 			}

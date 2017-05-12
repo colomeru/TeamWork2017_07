@@ -29,9 +29,9 @@ GoalClothes::~GoalClothes()
 
 void GoalClothes::Update()
 {
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
 
 	float pPosX = player_->GetPosition().x;
 	float gPosx = position_.x;

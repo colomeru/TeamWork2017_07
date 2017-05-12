@@ -12,6 +12,9 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(-100.f, 100.f));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(0.f, 100.f));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(100.f, 100.f));
 
 	laneNum_ = laneNum;
 
@@ -63,10 +66,6 @@ void ThinClothes::Draw() const
 }
 
 void ThinClothes::OnUpdate()
-{
-}
-
-void ThinClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 }
 

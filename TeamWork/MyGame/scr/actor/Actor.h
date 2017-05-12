@@ -121,7 +121,8 @@ public:
 		laneLerpNum = min(1.f, laneLerpNum);
 		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
 		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum-1], laneLerpNum)- defDrawLineChangePosY[targetNum];
-
+		
+		LaneChangeFall();
 	}
 	Vector2 GetDrawPosVect(const Vector2& pos)const{
 		Vector2 retPos;
@@ -182,7 +183,8 @@ protected:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara);
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param);
-
+	//落ちる時のレーン変更
+	virtual void LaneChangeFall() {}
 private:
 	//CollisionParameter Test_Col(const Actor& other) const;
 

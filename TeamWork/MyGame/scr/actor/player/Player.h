@@ -58,6 +58,13 @@ public:
 	virtual void OnCollide(Actor&, CollisionParameter colpara) override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
+	virtual void LaneChangeFall() override{
+		if (changeType_ != LaneChangeType::LaneChange_Fall)return;
+
+
+
+	}
+
 	//振り子運動
 	void Pendulum(Vector2 fulcrum, float length);
 	Vector2 GetHeadPos(int headNum)const {
@@ -168,14 +175,14 @@ public:
 		}
 		return true;
 	}
+	void PHeadChanger(int rot = 0) {
+		PHeadLengthReset();
+		(sign(rot) == 1) ? backChangeHead() : changeHead();
+	}
 private:
 	//入力による動作をまとめる
 	void PlayerInputControl();
 	//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
-	void PHeadChanger(int rot=0) {
-		PHeadLengthReset();
-		(sign(rot)==1)? backChangeHead():changeHead();
-	}
 
 	void PHeadLengthReset() {
 		//長さの補間をリセットする

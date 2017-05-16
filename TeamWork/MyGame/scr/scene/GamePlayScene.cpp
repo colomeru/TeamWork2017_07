@@ -68,9 +68,9 @@ void GamePlayScene::Initialize()
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, Vector2(0.f, -150.f)));
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, Vector2(0.f, -150.f)));
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, Vector2(0.f, -150.f)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, 1, Vector2(0, 0)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, 5, Vector2(0, 0)));
+	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, 3, Vector2(0, 0)));
 
 	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test")));
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));

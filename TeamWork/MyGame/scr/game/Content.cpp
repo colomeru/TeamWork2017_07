@@ -30,6 +30,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("gameoverText.png", SPRITE_ID::GAMEOVER_TEXT_SPRITE);
 	sprite.Load("retry.png", SPRITE_ID::RETRY_TEXT_SPRITE);
 	sprite.Load("backtitle.png", SPRITE_ID::BACKTITLE_TEXT_SPRITE);
+	sprite.Load("laneSP.bmp", SPRITE_ID::LANE_SPRITE);
 
 }
 

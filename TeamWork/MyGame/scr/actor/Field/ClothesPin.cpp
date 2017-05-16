@@ -76,8 +76,8 @@ void ClothesPin::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_ - Vector2(50,50));
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_ - Vector2(50,50));
+	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
 	DrawFormatString(100, 100, GetColor(255, 255, 255), "pos x:%f y:%f", position_.x, position_.y);
 }
 

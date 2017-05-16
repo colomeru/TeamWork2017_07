@@ -2,6 +2,7 @@
 #include "Scene.h"
 #include "../world/World.h"
 #include "../input/Keyboard.h"
+#include "../input/GamePad.h"
 
 // シーンインターフェース
 class IScene

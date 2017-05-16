@@ -3,7 +3,7 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f)
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isGameClear_(false)
 {
 	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
 	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
@@ -24,6 +24,7 @@ void World::Initialize()
 	isChangeCam_ = false;
 	addNum_ = 0;
 	isChangeFrame_ = false;
+	isGameClear_ = false;
 }
 
 // 更新

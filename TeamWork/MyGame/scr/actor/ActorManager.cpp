@@ -18,7 +18,7 @@ void ActorManager::Update()
 
 bool ActorManager::CamMoveUpdate()
 {
-	bool isCLaneEnd_;
+	bool isCLaneEnd_=false;
 	for (auto& actor : actorPtr)
 	{
 		isCLaneEnd_=actor->CamMoveUpdate();

@@ -1,13 +1,13 @@
 #pragma once
 #include "../Actor.h"
 
-class GoalUI : public Actor
+class StartUI : public Actor
 {
 public:
 	// コンストラクタ
-	GoalUI(IWorld* world, Vector2 pos);
+	StartUI(IWorld* world, Vector2 pos);
 	// デストラクタ
-	~GoalUI();
+	~StartUI();
 	// 更新
 	virtual void Update() override;
 	// 描画

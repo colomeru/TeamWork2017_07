@@ -114,10 +114,15 @@ public:
 	virtual void StartOnlyUpdate() {
 
 	}
+	virtual void StartOnlyLateUpdate() {
+
+	}
 	bool StartModeUpdate() {
 		StartOnlyUpdate();
 		isDraw_ = (world_->GetKeepDatas().startPointPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().startPointPos_.x < cutSize[1]);
 		isUpdate_ = true;
+
+		StartOnlyLateUpdate();
 		return false;
 	}
 	void CamMoveUp() {

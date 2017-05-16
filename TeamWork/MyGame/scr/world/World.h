@@ -122,6 +122,13 @@ public:
 		return isChangeFrame_;
 	}
 	virtual void StartModeUpdate()override;
+	
+	virtual void SetIsGameClear(bool isGameClear)override {
+		isGameClear_ = isGameClear;
+	}
+	virtual bool GetIsGameClear()const override {
+		return isGameClear_;
+	}
 private:
 	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
 	{
@@ -143,6 +150,7 @@ private:
 	bool isChangeCam_;
 	int addNum_;
 	bool isChangeFrame_;
+	bool isGameClear_;
 	std::map<bool, std::function<void()>> updateFunctionMap_;
 
 	Matrix inv_;

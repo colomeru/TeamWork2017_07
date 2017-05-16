@@ -17,6 +17,7 @@ public:
 	virtual void OnUpdate() override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
+	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 
 private:
 	Actor* player_;

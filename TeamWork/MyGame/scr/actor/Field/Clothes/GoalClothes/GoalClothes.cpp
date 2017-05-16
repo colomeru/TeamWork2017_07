@@ -86,3 +86,7 @@ void GoalClothes::OnMessage(EventMessage message, void * param)
 		break;
 	}
 }
+
+void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
+{
+}

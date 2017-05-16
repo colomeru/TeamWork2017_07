@@ -33,8 +33,9 @@ void ClothesLine::LateUpdate()
 	isDraw_ = true;
 	isUpdate_ = true;
 }
-void ClothesLine::StartOnlyUpdate()
+void ClothesLine::StartOnlyLateUpdate()
 {
+	isDraw_ = true;
 	//position_.x = (world_->GetKeepDatas().startPointPos_.x - 200.f) + (WINDOW_WIDTH / 2.f);
 }
 void ClothesLine::Draw() const

@@ -1,4 +1,4 @@
-#include "GameOverScreen.h"
+#include "PauseScreen.h"
 #include"../../graphic/Sprite.h"
 #include"../../Def.h"
 #include"../../input/Keyboard.h"
@@ -6,7 +6,7 @@
 #include"../../math/MathHelper.h"
 #include"../GamePlayDefine.h"
 
-GameOverScreen::GameOverScreen() :inputCount_(0), sinCount_(defSinC)
+PauseScreen::PauseScreen() :inputCount_(0), sinCount_(defSinC)
 {
 	changeSceneList_.push_back(Scene::GamePlay);
 	changeSceneList_.push_back(Scene::Title);
@@ -18,7 +18,7 @@ GameOverScreen::GameOverScreen() :inputCount_(0), sinCount_(defSinC)
 	textSizeList_.push_back(1.f);
 }
 
-void GameOverScreen::Init()
+void PauseScreen::Init()
 {
 	inputCount_ = 0;
 	sinCount_ = defSinC;
@@ -31,7 +31,7 @@ void GameOverScreen::Init()
 
 }
 
-bool GameOverScreen::Update(Scene& nextScene)
+bool PauseScreen::Update(Scene& nextScene)
 {
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;
@@ -43,7 +43,7 @@ bool GameOverScreen::Update(Scene& nextScene)
 
 		sinCount_ = defSinC;
 	}
-	inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size()-1);
+	inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 
 	drawUpdate();
 
@@ -54,34 +54,34 @@ bool GameOverScreen::Update(Scene& nextScene)
 	return false;
 }
 
-void GameOverScreen::Draw() const
+void PauseScreen::Draw() const
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
 	DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(128, 128, 128), TRUE);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	Vector2 GOposit = Vector2(WINDOW_WIDTH / 2.f, 300.f);
-	Vector2 GOorig = Sprite::GetInstance().GetSize(SPRITE_ID::GAMEOVER_TEXT_SPRITE)/2;
-	Sprite::GetInstance().Draw(SPRITE_ID::GAMEOVER_TEXT_SPRITE, GOposit, GOorig, 1.f, Vector2::One);
+	Vector2 GOorig = Sprite::GetInstance().GetSize(SPRITE_ID::PAUSE_TEXT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::PAUSE_TEXT_SPRITE, GOposit, GOorig, 1.f, Vector2::One);
 
 	Vector2 RTposit = Vector2(WINDOW_WIDTH / 2, 600.f);
-	Vector2 RTorig = Sprite::GetInstance().GetSize(SPRITE_ID::RETRY_TEXT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::RETRY_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One*textSizeList_[0]);
+	Vector2 RTorig = Sprite::GetInstance().GetSize(SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One*textSizeList_[0]);
 
 	Vector2 BTposit = Vector2(WINDOW_WIDTH / 2, 800.f);
-	Vector2 BTorig = Sprite::GetInstance().GetSize(SPRITE_ID::BACKTITLE_TEXT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[1], Vector2::One*textSizeList_[1]);
+	Vector2 BTorig = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[1], Vector2::One*textSizeList_[1]);
 
 }
 
-void GameOverScreen::drawUpdate()
+void PauseScreen::drawUpdate()
 {
-	sinCount_+=3;
+	sinCount_ += 3;
 	if (sinCount_ > 360)sinCount_ = 0;
 
 	for (int i = 0; i < changeSceneList_.size(); i++) {
-		textAlphaList_[i]=1.f;
-		textSizeList_[i]=1.f;
+		textAlphaList_[i] = 1.f;
+		textSizeList_[i] = 1.f;
 	}
 	textAlphaList_[inputCount_] = MathHelper::Sin(sinCount_);
 	textSizeList_[inputCount_] = mxmSize;

@@ -2,6 +2,8 @@
 #include"../../graphic/Sprite.h"
 #include"../../world/IWorld.h"
 #include"screenSupport/StartCameraPointAct.h"
+#include"../../actor/UI/StartUI.h"
+#include"../../Def.h"
 
 StartScreen::StartScreen(World* world,int maxLaneCount) :world_(world), maxLaneCount_(maxLaneCount)
 {
@@ -23,7 +25,13 @@ bool StartScreen::Update()
 {
 	world_->StartModeUpdate();
 
-	return (cameraPointActor_->isArrivePoint());
+	if ((cameraPointActor_->isArrivePoint())) {
+		Vector2 sUIPos = Vector2(WINDOW_WIDTH, WINDOW_HEIGHT) / 2.f;
+		world_->Add(ACTOR_ID::UI_ACTOR, std::make_shared<StartUI>(world_, sUIPos));
+		
+		return true;
+	}
+	return false;
 }
 
 void StartScreen::Draw() const

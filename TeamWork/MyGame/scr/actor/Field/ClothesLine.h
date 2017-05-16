@@ -13,7 +13,7 @@ public:
 	//更新
 	virtual void Update() override;
 	virtual void LateUpdate() override;
-	virtual void StartOnlyUpdate()override;
+	virtual void StartOnlyLateUpdate()override;
 	//描画
 	virtual void Draw() const override;
 	//受動更新

@@ -9,7 +9,7 @@ BackgroundPill::BackgroundPill(IWorld* world, const Vector2& position):
 
 void BackgroundPill::Update()
 {
-	position_.x -= 10.f;
+	position_.x -= 30.f;
 	//position_.y += 3.f;
 
 	if (position_.x <= -400.f) {
@@ -20,7 +20,7 @@ void BackgroundPill::Update()
 void BackgroundPill::Draw() const
 {
 	Vector2 drawPos = GetDrawPosVect(position_);
-	Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos);
+	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, drawPos);
 }
 
 void BackgroundPill::Del()

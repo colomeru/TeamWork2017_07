@@ -3,10 +3,12 @@
 #include"../../graphic/Sprite.h"
 #include"screenSupport/BGCharas/BackgroundPill.h"
 #include"../../game/Random.h"
+#include"../../Def.h"
 
 static const int defTimeCount_ = 60;
 static const int defGenerateCharaCount = 10;
 
+static const int defDrawPointYAdd[3] = {0,30,60};
 
 BackgroundScreen::BackgroundScreen(World * world) :world_(world)
 {
@@ -55,9 +57,19 @@ void BackgroundScreen::Update()
 
 void BackgroundScreen::Draw() const
 {
+	float myds=world_->GetKeepDatas().changeLaneLerpPos_;
+	Vector2 addpos=Vector2::Lerp(Vector2::Zero,Vector2(0,30),myds) *world_->GetKeepDatas().nextLane_;
+	Vector2 bgPos = Vector2(0,Sprite::GetInstance().GetSize(SPRITE_ID::BACKGROUND_SPRITE).y-WINDOW_HEIGHT) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, bgPos);
+
+	Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0,defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
+
+
 	for (auto& bgC : characters_) {
 		bgC->Draw();
 	}
+	DrawFormatString(700, 700, GetColor(255, 255, 255), "%f", myds);
 }
 
 void BackgroundScreen::End()

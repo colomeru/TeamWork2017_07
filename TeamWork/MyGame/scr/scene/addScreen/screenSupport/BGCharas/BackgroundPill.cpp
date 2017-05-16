@@ -10,7 +10,7 @@ BackgroundPill::BackgroundPill(IWorld* world, const Vector2& position):
 void BackgroundPill::Update()
 {
 	position_.x -= 10.f;
-	position_.y += 3.f;
+	//position_.y += 3.f;
 
 	if (position_.x <= -400.f) {
 		isDead_ = true;

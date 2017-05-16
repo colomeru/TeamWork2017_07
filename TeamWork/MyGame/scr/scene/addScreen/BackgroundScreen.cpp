@@ -10,12 +10,12 @@ static const int defGenerateCharaCount = 10;
 
 BackgroundScreen::BackgroundScreen(World * world) :world_(world)
 {
-	Vector2 cPos = Vector2(2000,-600);
+	Vector2 cPos = Vector2(2000,0);
 	for (int i = 0; i < defGenerateCharaCount;i++) {
 		charactersPosition_.push_back(cPos);
 		isCharactersPositionUsed_.push_back(false);
 
-		cPos.x += 100;
+		cPos.x += 180;
 		cPos.y += 150;
 	}
 }
@@ -72,7 +72,9 @@ void BackgroundScreen::addBGCharacters()
 	//if (timeCount_ <= 0) {
 	//	timeCount_ = defTimeCount_;
 		
-	isCharactersPositionUsed_.resize(defGenerateCharaCount, false);
+	for (auto& isC : isCharactersPositionUsed_) {
+		isC = false;
+	}
 
 		Vector2 pPos = world_->GetKeepDatas().playerPos_;
 
@@ -81,12 +83,15 @@ void BackgroundScreen::addBGCharacters()
 			if (isCharactersPositionUsed_[i])continue;
 
 			int rand = Random::GetInstance().Range(0, 100);
-			if (rand > 70) continue;
+			if (rand > 90) continue;
+
+			int yPos = Random::GetInstance().Range(0, 9);
+
 
 			//charactersPosition_[i];
 			isCharactersPositionUsed_[i]=true;
 
-			characters_.push_back(new BackgroundPill(world_, Vector2(2000+(i*200),charactersPosition_[i].y)+pPos));
+			characters_.push_back(new BackgroundPill(world_, Vector2(2000+(i*100),charactersPosition_[yPos].y)+pPos));
 
 		}
 

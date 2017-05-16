@@ -33,7 +33,10 @@ Hanger::~Hanger()
 void Hanger::Update()
 {
 	if (parent_ == nullptr || player_ == nullptr) return;
-	if (!player_->GetIsBiteMode()) parent_ = nullptr;
+	if (!player_->GetIsBiteMode()) {
+		parent_ = nullptr;
+		return;
+	}
 	if (isStop_) return;
 
 	if (isCheckCol_ && isUpdate_) {

@@ -24,6 +24,7 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 				parent_ = &other;
 				static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 				static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+				static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
 			}
 		break;
 		}

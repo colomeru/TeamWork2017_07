@@ -74,10 +74,6 @@ void GoalClothes::OnUpdate()
 	
 }
 
-void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
-{
-}
-
 void GoalClothes::OnMessage(EventMessage message, void * param)
 {
 	switch (message)

@@ -3,8 +3,8 @@
 
 GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
-	,player_(nullptr)
-	,player_Head_(nullptr)
+	//,player_(nullptr)
+	//,player_Head_(nullptr)
 {
 	clothes_ID = CLOTHES_ID::GUM_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -35,13 +35,13 @@ void GumClothes::Update()
 	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
 	//}
 
-	if (player_Head_ == nullptr || player_ == nullptr)return;
+	//if (player_Head_ == nullptr || player_ == nullptr)return;
 
-	if (player_->GetIsSlipped()) {
-		player_Head_->SetPosAddVect(Vector2(10.0f, 0.0f));
-		player_ = nullptr;
-		player_Head_ = nullptr;
-	}
+	//if (player_->GetIsSlipped()) {
+	//	player_Head_->SetPosAddVect(Vector2(10.0f, 0.0f));
+	//	player_ = nullptr;
+	//	player_Head_ = nullptr;
+	//}
 
 	isHit_ = false;
 }
@@ -83,8 +83,12 @@ void GumClothes::OnUpdate()
 
 void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	player_ = static_cast<Player*>(other.GetParent());
-	player_Head_ = static_cast<Player_Head*>(&other);
+	if (!isWind_) {
+		parent_ = &other;
+		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
+		static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+		static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
+	}
 }
 
 void GumClothes::OnMessage(EventMessage message, void * param)

@@ -71,6 +71,11 @@ void Hanger::Draw() const
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos_, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 
+	//if (parent_ == nullptr)
+	//	DrawFormatString(100, 100, GetColor(255, 255, 255), "null");
+	//else
+	//	DrawFormatString(100, 100, GetColor(255, 255, 255), "null‚¶‚á‚Ë‚¦");
+
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 }
@@ -94,7 +99,7 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	case ACTOR_ID::STAGE_ACTOR:
 	{
 		if (isStop_) return;
-		player_->SetMode(4);
+		player_->SetMode(MODE_SLIP);
 		player_->PHeadChanger();
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
 		isStop_ = true;

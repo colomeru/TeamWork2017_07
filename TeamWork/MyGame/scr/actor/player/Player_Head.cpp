@@ -186,7 +186,7 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 
 	//player_->CurHeadBite(stopPos_);
 	
-
+	//if(colpara.colID == COL_ID::BOX_BOX_COL|| colpara.colID == COL_ID::BOX_HANGER_COL)
 	//player_->SetOtherClothesID_(static_cast<Clothes*>(&other)->GetClothesID());
 	
 }

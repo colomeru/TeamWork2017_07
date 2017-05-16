@@ -1,4 +1,7 @@
 #include "StartCameraPointAct.h"
+#include"../../../input/GamePad.h"
+#include"../../../input/Keyboard.h"
+#include"../../GamePlayDefine.h"
 
 StartCameraPointAct::StartCameraPointAct(IWorld * world, float startPosx):
 	Actor(world)
@@ -18,7 +21,11 @@ void StartCameraPointAct::Update()
 
 void StartCameraPointAct::StartOnlyUpdate()
 {
-	position_.x -= 20.f;
+	position_.x -= startBaseSpeed;
+
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M)||GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
+		position_.x  -= startAddSpeed;
+	}
 
 	world_->GetCanChangedKeepDatas().SetStartPointPos(position_);
 

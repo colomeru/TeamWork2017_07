@@ -72,6 +72,8 @@ void BackgroundScreen::addBGCharacters()
 	//if (timeCount_ <= 0) {
 	//	timeCount_ = defTimeCount_;
 		
+	isCharactersPositionUsed_.resize(defGenerateCharaCount, false);
+
 		Vector2 pPos = world_->GetKeepDatas().playerPos_;
 
 		for (int i = 0; i < defGenerateCharaCount; i++) {
@@ -82,9 +84,9 @@ void BackgroundScreen::addBGCharacters()
 			if (rand > 70) continue;
 
 			//charactersPosition_[i];
-			isCharactersPositionUsed_[i];
+			isCharactersPositionUsed_[i]=true;
 
-			characters_.push_back(new BackgroundPill(world_, charactersPosition_[i]+pPos));
+			characters_.push_back(new BackgroundPill(world_, Vector2(2000+(i*200),charactersPosition_[i].y)+pPos));
 
 		}
 

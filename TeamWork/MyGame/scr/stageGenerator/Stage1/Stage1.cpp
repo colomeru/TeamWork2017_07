@@ -86,12 +86,16 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 	switch (data)
 	{
 	case 1: {
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<BaseClothes>(world_, CLOTHES_ID::BASE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front()));
+		auto base = std::make_shared<BaseClothes>(world_, CLOTHES_ID::BASE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, base);
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), base.get(), base->GetFulcrum()));
 		pin_list.pop();
 		break;
 	}
 	case 2: {
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front()));
+		auto test = std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, test);
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), test.get(), test->GetFulcrum()));
 		pin_list.pop();
 		break;
 	}
@@ -100,17 +104,23 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 4: {
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GumClothes>(world_, CLOTHES_ID::GUM_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front()));
+		auto gum = std::make_shared<GumClothes>(world_, CLOTHES_ID::GUM_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, gum);
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), gum.get(), gum->GetFulcrum()));
 		pin_list.pop();
 		break;
 	}
 	case 5: {
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<FluffyClothes>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front()));
+		auto fluffy = std::make_shared<FluffyClothes>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, fluffy);
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), fluffy.get(), fluffy->GetFulcrum()));
 		pin_list.pop();
 		break;
 	}
 	case 6: {
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ThinClothes>(world_, CLOTHES_ID::THIN_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front()));
+		auto thin = std::make_shared<ThinClothes>(world_, CLOTHES_ID::THIN_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, thin);
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), thin.get(), thin->GetFulcrum()));
 		pin_list.pop();
 		break;
 	}

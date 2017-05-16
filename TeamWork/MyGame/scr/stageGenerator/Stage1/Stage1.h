@@ -1,7 +1,5 @@
 #pragma once
 #include "../StageGenerator.h"
-#include "../MyGame/scr/actor/Field/Clothes/GoalClothes/GoalClothes.h"
-
 class Stage1 : public StageGenerator
 {
 public:

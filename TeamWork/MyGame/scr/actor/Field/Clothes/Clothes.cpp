@@ -152,7 +152,7 @@ void Clothes::WindSwing()
 	if (parent_ == nullptr) return;
 
 	if (clothesState_ == ClothesState::STRONG_WIND) {
-		static_cast<Player*>(parent_->GetParent())->SetMode(MODE_SHOOT);
+		static_cast<Player*>(parent_->GetParent())->SetMode(MODE_RESIST);
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
 		parent_ = nullptr;
 	}

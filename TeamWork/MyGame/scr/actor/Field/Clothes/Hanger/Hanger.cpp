@@ -9,7 +9,7 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	clothes_ID = CLOTHES_ID::HANGER;
 	//parameter_.ID = ACTOR_ID::HANGER_ACTOR;
 	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(200, 200.f);
+	parameter_.size = Vector2(150, 80.f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -32,8 +32,7 @@ Hanger::~Hanger()
 
 void Hanger::Update()
 {
-	if (isStop_)return;
-	if (parent_ == nullptr || player_ == nullptr) return;
+	if (isStop_ || parent_ == nullptr || player_ == nullptr) return;
 	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
 	}
@@ -42,6 +41,7 @@ void Hanger::Update()
 	Vector2 pos = parent_->GetPosition() + velocity_;
 	player_->setCurPHeadSPos(pos);
 	position_ += velocity_;
+
 	isHit_ = false;
 }
 
@@ -49,7 +49,7 @@ void Hanger::Draw() const
 {
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
-	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
+	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 4));
 
 	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
 	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
@@ -67,7 +67,10 @@ void Hanger::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
+	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
+	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos_, hangOrigin, spriteAlpha_, Vector2::One, angle_);
+
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 }
 
@@ -85,19 +88,13 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 		player_ = static_cast<Player*>(parent_->GetParent());
 		player_->CurHeadBite(other.GetPosition());
-		//auto player = static_cast<Player*>(other.GetParent());
-		//if (player->GetIsBiteMode()) {
-			//parent_ = static_cast<Player_Head*>(&other);
-			//player_ = player;
-		//}
 		break;
 	}
 	case ACTOR_ID::STAGE_ACTOR:
 	{
-		//auto size = (parameter_.size.x + other.GetParameter().size.x) / 2;
-		//position_.x = other.GetPosition().x - size;
 		if (isStop_) return;
-		static_cast<Player*>(parent_->GetParent())->SetMode(4);
+		player_->SetMode(4);
+		player_->PHeadChanger();
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
 		isStop_ = true;
 		parent_ = nullptr;

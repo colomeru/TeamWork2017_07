@@ -1,12 +1,13 @@
 #include "BaseClothes.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../ClothesPin.h"
 
 #include "../../../input/Keyboard.h"
 #include "../../../conv/DXConverter.h"
 #include "../../../graphic/Model.h"
 #include "../../../graphic/Sprite.h"
 
-BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
@@ -28,6 +29,10 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
+
+	if (is_Pin)
+		world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
+
 	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 

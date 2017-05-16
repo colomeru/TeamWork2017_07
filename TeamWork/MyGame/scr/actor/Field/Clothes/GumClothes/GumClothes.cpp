@@ -1,7 +1,8 @@
 #include "GumClothes.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../../ClothesPin.h"
 
-GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
 	:Clothes(world, clothes, laneNum)
 	//,player_(nullptr)
 	//,player_Head_(nullptr)
@@ -19,6 +20,10 @@ GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
+
+	if (is_Pin)
+		world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
+
 	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
@@ -75,6 +80,8 @@ void GumClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::GUM_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 153, 0), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
+
+	//DrawFormatString(100, 120, GetColor(255, 255, 255), "lanenum %d", laneNum_);
 }
 
 void GumClothes::OnUpdate()

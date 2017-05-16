@@ -1,7 +1,8 @@
 #include "FluffyClothes.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../../ClothesPin.h"
 
-FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::FLUFFY_CLOTHES;
@@ -17,6 +18,10 @@ FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Ve
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
+
+	if (is_Pin)
+		world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
+
 	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 

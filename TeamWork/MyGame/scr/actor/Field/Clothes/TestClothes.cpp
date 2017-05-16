@@ -2,8 +2,9 @@
 #include "../MyGame/scr/graphic/Sprite.h"
 #include "../MyGame/scr/input/Keyboard.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../ClothesPin.h"
 
-TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::TEST_CLOTHES;
@@ -18,6 +19,9 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	laneNum_ = laneNum;
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
+
+	if (is_Pin)
+		world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
 
 	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
@@ -60,7 +64,7 @@ void TestClothes::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), TRUE);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), FALSE);
 }
 
 void TestClothes::OnUpdate()

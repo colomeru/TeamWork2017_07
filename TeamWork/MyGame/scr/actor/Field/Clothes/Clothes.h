@@ -34,6 +34,9 @@ public:
 	bool GetIsWind() const {
 		return isWind_;
 	}
+	Vector2 GetFulcrum() const {
+		return fulcrum_;
+	}
 
 	// “–‚½‚è”»’èˆ—
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;

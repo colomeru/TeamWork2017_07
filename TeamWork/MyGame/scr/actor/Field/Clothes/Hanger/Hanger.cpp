@@ -32,7 +32,10 @@ Hanger::~Hanger()
 
 void Hanger::Update()
 {
-	if (isStop_ || parent_ == nullptr || player_ == nullptr) return;
+	if (parent_ == nullptr || player_ == nullptr) return;
+	if (!player_->GetIsBiteMode()) parent_ = nullptr;
+	if (isStop_) return;
+
 	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
 	}

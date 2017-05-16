@@ -18,7 +18,6 @@ public:
 	// •`‰æ
 	void Draw() const;
 	void End();
-private:
 	void addBGCharacters();
 private:
 	World* world_;
@@ -26,4 +25,7 @@ private:
 	int timeCount_;
 
 	std::vector<BackgroundCharacters*> characters_;
+
+	std::vector<Vector2> charactersPosition_;
+	std::vector<bool> isCharactersPositionUsed_;
 };

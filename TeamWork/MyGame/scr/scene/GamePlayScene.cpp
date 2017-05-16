@@ -16,10 +16,8 @@
 #include"../collision/MyCol.h"
 #include"../stageGenerator/Stage1/Stage1.h"
 #include"../game/Random.h"
+#include"GamePlayDefine.h"
 
-//•`‰æ‚³‚ê‚éƒŒ[ƒ“”
-//•—‚ª‚­‚Ü‚Å‚ÌŠî–{ŠÔ
-static const int defWindTime_ = 200;
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3),
 	gameOverScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(200.0f, 100.0f)), gamePlayMode_(0)
@@ -230,6 +228,7 @@ void GamePlayScene::baseUpdate()
 	windTime_ -= randT;
 	if (windTime_ <= 0) {
 		world_->sendMessage(EventMessage::BEGIN_WIND);
+		bgScreen_.addBGCharacters();
 		windTime_ = defWindTime_;
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {

@@ -40,6 +40,7 @@ void Hanger::Update()
 	velocity_ = Vector2(10.0f, 0.0f);
 	Vector2 pos = parent_->GetPosition() + velocity_;
 	player_->setCurPHeadSPos(pos);
+	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
 	position_ += velocity_;
 
 	isHit_ = false;

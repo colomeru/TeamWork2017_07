@@ -47,4 +47,6 @@ public:
 	virtual void ChangeCamMoveMode(int addNum) = 0;
 	virtual bool GetIsCamChangeMode()const = 0;
 	virtual bool isChangeFrame()const = 0;
+	
+	virtual void StartModeUpdate()=0;
 };

@@ -45,9 +45,7 @@ void World::Update()
 		camShootSpd_ = max(camShootSpd_, 0.1f);
 		keepDatas_.SetChangeLaneLerpPos_(keepDatas_.changeLaneLerpPos_ + 0.04f*camShootSpd_);
 	}
-	else
-	{
-	}
+
 	if (keepDatas_.changeLaneLerpPos_ >= 1.0f) {
 		isChangeCam_ = false;
 		isChangeFrame_ = true;
@@ -208,4 +206,11 @@ Matrix World::InitializeInv(Vector2 position)
 	//ˆÚ“®—Ê‚ðŒvŽZ
 	//mVelo = mPrePos - mCurPos;
 	return inv_;
+}
+
+void World::StartModeUpdate()
+{
+	inv(targetMat_);
+	targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+	actors_.StartModeUpdate();
 }

@@ -19,6 +19,18 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara)override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
+	virtual void LaneChangeFall() override {
+
+		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
+		laneLerpNum = min(1.f, laneLerpNum);
+		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
+		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+
+		if (player_->isLaneChangeFall()) {
+			//drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
+		}
+	}
 
 	//virtual void SetOtherClothesType(CLOTHES_ID type) override{
 	//	//現在使用している頭の時のみ当たった服の種類をセット
@@ -63,6 +75,7 @@ public:
 	//頭が滑り落ちるかどうかをセットする
 	void setIsBiteSlipWind(bool isSlip) {
 		isBiteSlipWind_ = isSlip;
+
 	}
 private:
 	//衝突しているか

@@ -4,6 +4,8 @@
 #include"../actor/CameraAct/TPSCamera.h"
 #include"../stageGenerator/StageGeneratorManager.h"
 #include"addScreen/GameOverScreen.h"
+#include"addScreen/StartScreen.h"
+#include"addScreen/BackgroundScreen.h"
 
 class Player;
 
@@ -33,6 +35,7 @@ public:
 private:
 	void baseUpdate();
 	void clearUpdate();
+	void startUpdate();
 
 private:
 	// ワールド用シェアドポインタ
@@ -47,7 +50,9 @@ private:
 	PlayerPtr ply1;
 
 	StageGenerateManager stageGeneratorManager;
+	StartScreen startScreen_;
 	GameOverScreen gameOverScreen_;
+	BackgroundScreen bgScreen_;
 	//Vector3 posit;
 
 	//Vector3 camera_pos_;
@@ -60,8 +65,9 @@ private:
 	float meterLen_;
 	Vector2 meterPos_;
 
-	bool isPlayerDead_;
+	//0=Start,1=Gameplay,2=Gameover
+	int	gamePlayMode_;
 
-	std::map<bool, std::function<void()>> updateFunctionMap_;
+	std::map<int, std::function<void()>> updateFunctionMap_;
 
 };

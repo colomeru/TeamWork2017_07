@@ -52,14 +52,8 @@ void Player_Head::Update()
 	//	player_->SetMode(MODE_SHOOT);
 	//	isBiteSlipWind_ = false;
 	//}
-	//毎フレーム、1度でも当たったかを調べる
-	{
-		if (!isHitOnce) {
-			isBitePoint_ = false;
-		}
-		isHitOnce = false;
-	}
 	//
+	stopPos_ = position_;
 	auto basePos = player_->GetHeadPos(myNumber_);
 	
 	//プレイヤーから各ヘッドまでの長さ、(32,32のLength)*自分の首の長さ
@@ -78,14 +72,11 @@ void Player_Head::Update()
 
 
 	if (player_->GetCurHead() == myNumber_) {
-		if (isHit_) {
-			position_ = stopPos_;
-		}
+		if (player_->GetIsBiteMode())	position_ = stopPos_;
 	}
 	else {
 		isHit_ = false;
 	}
-	if (!player_->GetIsBiteMode())isHit_ = false;
 
 	Vector3 toMatPos = Vector3(position_.x, position_.y, 0);
 
@@ -145,6 +136,7 @@ void Player_Head::Draw() const
 	//if (myNumber_ == player_->GetCurHead())DrawFormatString(350, 350, GetColor(255, 255, 255), "%f:%f", stopPos_.x,stopPos_.y);
 	//DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
 
+
 	DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
 }
 
@@ -186,17 +178,16 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 	//		isHitOnce = true;
 	//	}
 	//}
-	
-	if (isHit_ || !(player_->GetIsShootModeEnd()))return;
 
-	isHit_ = true;
-	isBitePoint_ = false;
-	stopPos_ = position_;
+	//if (isHit_ || !(player_->GetIsShootModeEnd()))return;
+
+	//isHit_ = true;
+	//isBitePoint_ = false;
 
 	//player_->CurHeadBite(stopPos_);
 	
 
-	player_->SetOtherClothesID_(static_cast<Clothes*>(&other)->GetClothesID());
+	//player_->SetOtherClothesID_(static_cast<Clothes*>(&other)->GetClothesID());
 	
 }
 

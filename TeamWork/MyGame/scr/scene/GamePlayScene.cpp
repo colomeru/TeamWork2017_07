@@ -21,10 +21,9 @@
 //風が吹くまでの基本時間
 static const int defWindTime_ = 200;
 GamePlayScene::GamePlayScene() :
-	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3), isPlayerDead_(false),
-	gameOverScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(200.0f, 100.0f))
+	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3),
+	gameOverScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(200.0f, 100.0f)), gamePlayMode_(0)
 	//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
-
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -34,8 +33,11 @@ GamePlayScene::GamePlayScene() :
 		handleMessage(msg, param);
 	});
 
-	updateFunctionMap_[true] = std::bind(&GamePlayScene::clearUpdate, this);
-	updateFunctionMap_[false] = std::bind(&GamePlayScene::baseUpdate, this);
+	updateFunctionMap_[2] = std::bind(&GamePlayScene::clearUpdate, this);
+	updateFunctionMap_[1] = std::bind(&GamePlayScene::baseUpdate, this);
+	updateFunctionMap_[0] = std::bind(&GamePlayScene::startUpdate, this);
+
+	bgScreen_=BackgroundScreen(world_.get());
 }
 
 GamePlayScene::~GamePlayScene()
@@ -47,9 +49,10 @@ void GamePlayScene::Initialize()
 	isEnd_ = false;
 	//シーン遷移系の初期化
 	{
-		isPlayerDead_ = false;
+		gamePlayMode_ = 0;
 		nextScene_ = Scene::Credit;
 		gameOverScreen_.Init();
+		bgScreen_.Init();
 	}
 	// フェードパネル初期化
 	FadePanel::GetInstance().Initialize();
@@ -73,14 +76,14 @@ void GamePlayScene::Initialize()
 
 	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test")));
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
-	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
 
 	//ステージの最大レーン数(後々MapGeneratorからレーン数を受け取れるようにする)
-	int stageLaneSize = 5;
-	ply1 = std::make_shared<Player>(world_.get(), stageLaneSize, 2);
+	int stageLaneSize = 3;
+	ply1 = std::make_shared<Player>(world_.get(), stageLaneSize, 1);
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 
 	stageGeneratorManager.SetStage(Stage::Stage2);
+	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 
 
@@ -101,13 +104,18 @@ void GamePlayScene::Initialize()
 	//Camera::GetInstance().Target.Set(target_);
 	//Camera::GetInstance().Update();
 
-	world_->InitializeInv(Vector2(ply1->GetPosition().x, ply1->GetPosition().y));
-	world_->SetTarget(ply1.get());
+	//world_->InitializeInv(Vector2(ply1->GetPosition().x, ply1->GetPosition().y));
+	//world_->SetTarget(ply1.get());
+	
+	startScreen_ = StartScreen(world_.get(), maxLaneCount);
+	
+	startScreen_.Init(stageLen_);
 }
 
 void GamePlayScene::Update()
 {
-	updateFunctionMap_[isPlayerDead_]();
+	updateFunctionMap_[gamePlayMode_]();
+
 
 	//if (isPlayerDead_) {
 	//	if (gameOverScreen_.Update(nextScene_)) {
@@ -156,7 +164,7 @@ void GamePlayScene::Update()
 
 void GamePlayScene::Draw() const
 {
-
+	if(gamePlayMode_==1)bgScreen_.Draw();
 	//DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
@@ -183,7 +191,7 @@ void GamePlayScene::Draw() const
 	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(ply1->GetPosition().x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
 
-	if (isPlayerDead_) {
+	if (gamePlayMode_==2) {
 		gameOverScreen_.Draw();
 	}
 }
@@ -202,6 +210,8 @@ void GamePlayScene::End()
 {
 	// 初期化
 	world_->Clear();
+
+	bgScreen_.End();
 }
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
@@ -227,7 +237,9 @@ void GamePlayScene::baseUpdate()
 		//ply1->setCurPHeadSPos(pss);
 		ply1->curPHeadSlip(true);
 	}
-	if (ply1->isPlayerDead())isPlayerDead_ = true;
+	if (ply1->isPlayerDead())gamePlayMode_=2;
+
+	bgScreen_.Update();
 
 }
 
@@ -240,4 +252,12 @@ void GamePlayScene::clearUpdate()
 		}
 	}
 
+}
+
+void GamePlayScene::startUpdate()
+{
+	if (startScreen_.Update()) {
+		gamePlayMode_ = 1;
+		world_->SetTarget(ply1.get());
+	}
 }

@@ -7,8 +7,8 @@ void ActorManager::Update()
 {
 	for (auto& actor : actorPtr)
 	{
-		actor->FastUpdate();
 		actor->FastComUpdate();
+		actor->FastUpdate();
 		actor->CommonUpdate();
 		actor->UpdateList();
 		actor->LateComUpdate();
@@ -24,6 +24,16 @@ bool ActorManager::CamMoveUpdate()
 		isCLaneEnd_=actor->CamMoveUpdate();
 	}
 	return isCLaneEnd_;
+}
+
+bool ActorManager::StartModeUpdate()
+{
+	for (auto& actor : actorPtr)
+	{
+		actor->LateComUpdate();
+		actor->StartModeUpdate();
+	}
+	return false;
 }
 
 // •`‰æ

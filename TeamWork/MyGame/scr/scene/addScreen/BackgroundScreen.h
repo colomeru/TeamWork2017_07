@@ -2,20 +2,28 @@
 #include <vector>
 #include"../Scene.h"
 #include"../../math/Vector2.h"
+#include"screenSupport\BackgroundCharacters.h"
 
-class IWorld;
+
+class World;
 class BackgroundScreen
 {
 public:
 	// コンストラクタ
-	BackgroundScreen(IWorld* world);
+	BackgroundScreen() {}
+	BackgroundScreen(World* world);
 
 	void Init();
 	void Update();
 	// 描画
 	void Draw() const;
+	void End();
 private:
-	IWorld* world_;
+	void addBGCharacters();
+private:
+	World* world_;
 
-	Vector2 drawPos_;
+	int timeCount_;
+
+	std::vector<BackgroundCharacters*> characters_;
 };

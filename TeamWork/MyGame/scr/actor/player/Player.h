@@ -17,6 +17,10 @@ static const float HeadShootMult = 0.5f;
 static const float defSlipCount = 8.f;
 static const int defLaneChangeCoolTime_ = 60;
 static const int defChainLockCoolTime_ = 10;
+//落ちた後のposition加算値
+static const float fallAddPosMult = 3.4f;
+//落ちるまでの最大時間
+static const float defResistTime = 0.5f;
 //レーンの本数
 
 enum {
@@ -24,7 +28,8 @@ enum {
 	MODE_SHOOT = 1,
 	MODE_SHOOT_END = 2,
 	MODE_BITE = 3,
-	MODE_SLIP = 4
+	MODE_SLIP = 4,
+	MODE_RESIST = 5,
 };
 
 
@@ -58,13 +63,21 @@ public:
 	virtual void OnCollide(Actor&, CollisionParameter colpara) override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
-	virtual void LaneChangeFall() override{
-		if (changeType_ != LaneChangeType::LaneChange_Fall)return;
+	virtual void LaneChangeFall() override {
 
+		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
+		laneLerpNum = min(1.f, laneLerpNum);
+		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
+		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 
-
+		if (changeType_ == LaneChangeType::LaneChange_Fall) {
+			//drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
+		}
 	}
-
+	bool isLaneChangeFall() const{
+		return changeType_ == LaneChangeType::LaneChange_Fall;
+	}
 	//振り子運動
 	void Pendulum(Vector2 fulcrum, float length);
 	Vector2 GetHeadPos(int headNum)const {
@@ -119,9 +132,9 @@ public:
 	void SetOtherClothesID_(CLOTHES_ID cId) {
 		otherClothesID_ = cId;
 	}
-	//噛み付ける状態かを返す
+	//噛み付ける状態かを返す(レジスト含む)
 	bool GetIsBiteMode()const {
-		return playerMode_==MODE_BITE;
+		return playerMode_==MODE_BITE||playerMode_==MODE_RESIST;
 	}
 	//噛み付き状態にするかをセット、
 	void SetIsBiteMode(bool ismode) {
@@ -167,7 +180,7 @@ public:
 	void curPHeadSlip(bool isSlip);
 	//プレイヤーが死んでるか
 	bool isPlayerDead()const {
-		if(laneNum_==maxLaneSize_-1&&position_.y >= WINDOW_HEIGHT)return true;
+		if(laneNum_==(maxLaneSize_-1)&&position_.y >= WINDOW_HEIGHT)return true;
 		//if (position_.y >= WINDOW_HEIGHT)return true;
 
 		for (auto pHD : pHeadDead_) {
@@ -210,11 +223,10 @@ private:
 			position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
 		}
 		else if (updateNum > 0) {
-			nextVel_ = Vector2(0, 0.f);
-			pGrav_ = 2.f;
-			float lCPos = 0;
-			if (changeType == LaneChangeType::LaneChange_Fall)lCPos = -1380;
-			position_.y += defDrawLinePosY[0] - defDrawLinePosY[1] + lCPos;
+			nextVel_ = pendulumVect_/2;
+			pGrav_ *= 0.3f;
+			if (changeType == LaneChangeType::LaneChange_Fall) position_.y += (defDrawLinePosY[0] - defDrawLinePosY[1])*fallAddPosMult;
+			else position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
 		}
 		laneNum_ += updateNum;
 		//レーン最大範囲を超えたらVectの補正を行わない
@@ -237,6 +249,7 @@ private:
 	void ShootEndUpdate();
 	void BiteUpdate();
 	void SlipUpdate();
+	void ResistUpdate();
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
 	//ステージの最大レーン数
@@ -288,6 +301,9 @@ private:
 	bool isSlipped_;
 
 	bool isPlayerFallLane_;
+
+	//滑り落ちるまでの時間
+	float slipResistTime_;
 
 
 	//0=滞空 1=発射時 2=発射終了 3=噛み付き 4=滑り落ち

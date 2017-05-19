@@ -8,4 +8,5 @@ enum class EventMessage
 	END_WIND,			//風が終了
 
 	GOAL_FLAG,			//ゴールフラグ
+	GAME_CLEAR_FLAG,	//ステージ終了フラグ
 };

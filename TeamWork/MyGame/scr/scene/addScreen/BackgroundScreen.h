@@ -24,8 +24,9 @@ private:
 
 	int timeCount_;
 
-	std::vector<BackgroundCharacters*> characters_;
+	//std::vector<BackgroundCharacters*> characters_;
 
 	std::vector<Vector2> charactersPosition_;
 	std::vector<bool> isCharactersPositionUsed_;
+	std::map<int, Vector2> createWindTimeAndPos_;
 };

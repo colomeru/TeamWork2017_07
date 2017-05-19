@@ -25,7 +25,6 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 
 	position_ = pos;
 
-	stopPos_ = position_;
 
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_PHead_Clothes, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::BOX_HANGER_COL] = std::bind(&CollisionFunction::IsHit_PHead_Hanger, colFunc_, std::placeholders::_1, std::placeholders::_2);
@@ -53,7 +52,8 @@ void Player_Head::Update()
 	//	isBiteSlipWind_ = false;
 	//}
 	//
-	stopPos_ = position_;
+	//stopPos_ = position_;
+	if (player_->GetCurHead() == myNumber_)player_->SetStopPos(position_);
 	auto basePos = player_->GetHeadPos(myNumber_);
 	
 	//プレイヤーから各ヘッドまでの長さ、(32,32のLength)*自分の首の長さ
@@ -72,7 +72,7 @@ void Player_Head::Update()
 
 
 	if (player_->GetCurHead() == myNumber_) {
-		if (player_->GetIsBiteMode())	position_ = stopPos_;
+		if (player_->GetIsBiteMode())	position_ = player_->GetStopPos();
 	}
 	else {
 		isHit_ = false;

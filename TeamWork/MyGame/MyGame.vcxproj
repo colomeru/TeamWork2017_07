@@ -177,6 +177,7 @@
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
     <ClCompile Include="scr\actor\UI\GoalUI.cpp" />
+    <ClCompile Include="scr\actor\UI\StartUI.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
     <ClCompile Include="scr\collision\Collision.cpp" />
     <ClCompile Include="scr\collision\CollisionDX.cpp" />
@@ -201,6 +202,7 @@
     <ClCompile Include="scr\input\Keyboard.cpp" />
     <ClCompile Include="scr\main.cpp" />
     <ClCompile Include="scr\math\Color.cpp" />
+    <ClCompile Include="scr\math\Easing.cpp" />
     <ClCompile Include="scr\math\MathHelper.cpp" />
     <ClCompile Include="scr\math\Matrix.cpp" />
     <ClCompile Include="scr\math\Point.cpp" />
@@ -208,7 +210,9 @@
     <ClCompile Include="scr\math\Vector2.cpp" />
     <ClCompile Include="scr\math\Vector3.cpp" />
     <ClCompile Include="scr\scene\addScreen\BackgroundScreen.cpp" />
+    <ClCompile Include="scr\scene\addScreen\GameClearScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\GameOverScreen.cpp" />
+    <ClCompile Include="scr\scene\addScreen\PauseScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.cpp" />
     <ClCompile Include="scr\scene\addScreen\StartScreen.cpp" />
@@ -252,6 +256,7 @@
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
     <ClInclude Include="scr\actor\UI\GoalUI.h" />
+    <ClInclude Include="scr\actor\UI\StartUI.h" />
     <ClInclude Include="scr\AllInclude.h" />
     <ClInclude Include="scr\camera\Camera.h" />
     <ClInclude Include="scr\collision\Collision.h" />
@@ -282,6 +287,7 @@
     <ClInclude Include="scr\input\GamePad.h" />
     <ClInclude Include="scr\input\Keyboard.h" />
     <ClInclude Include="scr\math\Color.h" />
+    <ClInclude Include="scr\math\Easing.h" />
     <ClInclude Include="scr\math\MathHelper.h" />
     <ClInclude Include="scr\math\Matrix.h" />
     <ClInclude Include="scr\math\MyFuncionList.h" />
@@ -292,7 +298,9 @@
     <ClInclude Include="scr\myData\MyTestCamera.h" />
     <ClInclude Include="scr\myData\MyTestCol.h" />
     <ClInclude Include="scr\scene\addScreen\BackgroundScreen.h" />
+    <ClInclude Include="scr\scene\addScreen\GameClearScreen.h" />
     <ClInclude Include="scr\scene\addScreen\GameOverScreen.h" />
+    <ClInclude Include="scr\scene\addScreen\PauseScreen.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BackgroundCharacters.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.h" />

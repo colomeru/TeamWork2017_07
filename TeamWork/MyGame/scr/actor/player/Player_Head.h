@@ -51,9 +51,9 @@ public:
 
 		position_ = basePos + bPlusLngPos;
 
-		stopPos_ = position_;
-
-		player_->CurHeadBite(stopPos_);
+		//stopPos_ = position_;
+		player_->SetStopPos(position_);
+		player_->SetMode(MODE_BITE);
 
 	}
 
@@ -69,9 +69,9 @@ public:
 	void SetPosAddVect(const Vector2& posAV) {
 		posAddVect_ = posAV;
 	}
-	void setPHeadStopPos(const Vector2& sPos){
-		stopPos_=sPos;
-	}
+	//void setPHeadStopPos(const Vector2& sPos){
+	//	stopPos_=sPos;
+	//}
 	//“ª‚ªŠŠ‚è—Ž‚¿‚é‚©‚Ç‚¤‚©‚ðƒZƒbƒg‚·‚é
 	void setIsBiteSlipWind(bool isSlip) {
 		isBiteSlipWind_ = isSlip;
@@ -85,7 +85,7 @@ private:
 	bool isBiteSlipWind_;
 	Player* player_;
 
-	Vector2 stopPos_;
+	//Vector2 stopPos_;
 
 	int myNumber_;
 

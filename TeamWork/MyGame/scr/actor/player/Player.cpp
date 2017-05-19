@@ -100,7 +100,7 @@ void Player::Update()
 	//入力による動作をまとめた関数
 	PlayerInputControl();
 	//自分の状態に応じた更新
-	updateFunctionMap_[playerMode_]();
+	//updateFunctionMap_[playerMode_]();
 
 	if (position_.y >= WINDOW_HEIGHT) {
 		SetNextLane(1,LaneChangeType::LaneChange_Fall);
@@ -180,6 +180,8 @@ void Player::Draw() const
 
 void Player::OnUpdate()
 {
+	updateFunctionMap_[playerMode_]();
+
 }
 
 void Player::OnCollide(Actor& other, CollisionParameter colpara)
@@ -383,7 +385,8 @@ void Player::worldSetMyDatas() {
 }
 
 void Player::setCurPHeadSPos(const Vector2 & sPos) {
-	pHeads_[currentHead_]->setPHeadStopPos(sPos);
+	//pHeads_[currentHead_]->setPHeadStopPos(sPos);
+	stopPos_ = sPos;
 }
 
 void Player::curPHeadSlip(bool isSlip) {
@@ -544,14 +547,14 @@ void Player::ShootUpdate()
 
 void Player::ShootEndUpdate()
 {
+	playerMode_ = MODE_FALL;
 	pGrav_ += defPGravPow;
 	if ((GamePad::GetInstance().Stick().x<-0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
-		playerMode_ = MODE_FALL;
 		PHeadChanger();
 		isCanNextHeadRot = false;
 	}
 	if ((GamePad::GetInstance().Stick().x>0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)))&& isCanNextHeadRot) {
-		playerMode_ = MODE_FALL;
+		//playerMode_ = MODE_FALL;
 		//キーを押し直したかの判断
 		PHeadChanger(1);
 		isCanNextHeadRot = false;
@@ -565,7 +568,7 @@ void Player::ShootEndUpdate()
 	else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
 	}
 	else {
-		playerMode_ = MODE_FALL;
+	//	playerMode_ = MODE_FALL;
 	}
 
 	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
@@ -636,22 +639,34 @@ void Player::SlipUpdate()
 {
 	pGrav_ += defPGravPow;
 
-	if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
-	}
-	else{
-		playerMode_ = MODE_FALL;
-	}
+	//if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+	//}
+	//else{
+	//	playerMode_ = MODE_FALL;
+	//}
 
 	if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-		if (GetIsSlipped()) {
-			MODE_SLIP;
+		//if (GetIsSlipped()) {
+			//MODE_SLIP;
 			//Headを交代する
 			PHeadChanger();
-		}
+		//}
 		playerMode_ = MODE_SHOOT;
 		isNextPushKey_ = false;
 		
 	}
+	if ((GamePad::GetInstance().Stick().x<-0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
+		playerMode_ = MODE_FALL;
+		PHeadChanger();
+		isCanNextHeadRot = false;
+	}
+	if ((GamePad::GetInstance().Stick().x>0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
+		playerMode_ = MODE_FALL;
+		//キーを押し直したかの判断
+		PHeadChanger(1);
+		isCanNextHeadRot = false;
+	}
+
 		position_ += velocity_ + pendulumVect_;
 
 		slipCount_ = defSlipCount;

@@ -11,9 +11,9 @@ public:
 	static int Abs(int value);
 	// 実数を渡し、絶対値を返す
 	static float Abs(float value);
-	// 2つの整数値の差の絶対値を計算します
+	// ２つの整数値の差の絶対値を計算します
 	static int Distance(int n1, int n2);
-	// 2つの実数値の差の絶対値を計算します
+	// ２つの実数値の差の絶対値を計算します
 	static float Distance(float n1, float n2);
 	// ２つの整数を渡し、小さいほうを返す
 	static int Min(int value1, int value2);
@@ -23,6 +23,14 @@ public:
 	static int Max(int value1, int value2);
 	// ２つの実数を渡し、大きいほうを返す
 	static float Max(float value1, float value2);
+	// 整数の符号を求める
+	static int Sign(int value);
+	// 実数の符号を求める
+	static int Sign(float value);
+	// 整数の平方根を返す
+	static float Sqrt(int value);
+	// 実数の平方根を返す
+	static float Sqrt(float value);
 
 	// 整数値を指定された範囲内に制限します
 	static int Clamp(int value, int min, int max);

@@ -111,8 +111,11 @@ public:
 		return pHeadDead_[pHeadNum];
 	}
 	void CurHeadBite(const Vector2& target) {
+		if (playerMode_ != MODE_SHOOT_END)return;
+
 		playerMode_ = MODE_BITE;
 		pGrav_ = defPGravPow;
+		//stopPos_ = target;
 		//角度を求める
 		//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
 		rot_ = 135;
@@ -146,7 +149,7 @@ public:
 	}
 	//シュート終了の瞬間かどうかを取る
 	bool GetIsShootModeEnd()const {
-		return playerMode_==2;
+		return playerMode_==MODE_SHOOT_END;
 	}
 	float GetSlipCount()const {
 		return slipCount_;
@@ -171,6 +174,8 @@ public:
 		
 		changeType_ = changeType;
 		world_->ChangeCamMoveMode(addNum);
+
+		SetMode(MODE_FALL);
 	}
 	void setCurPHeadSPos(const Vector2& sPos);
 	void setMaxLaneSize(int size) {
@@ -191,6 +196,12 @@ public:
 	void PHeadChanger(int rot = 0) {
 		PHeadLengthReset();
 		(sign(rot) == 1) ? backChangeHead() : changeHead();
+	}
+	void SetStopPos(Vector2 target) {
+		stopPos_ = target;
+	}
+	Vector2 GetStopPos()const {
+		return stopPos_;
 	}
 private:
 	//入力による動作をまとめる
@@ -276,6 +287,9 @@ private:
 	//振り子移動によるベクトルを作り出す
 	Vector2 pendulumVect_;
 
+	//Headが静止する位置を格納する
+	Vector2 stopPos_;
+
 	std::vector<PHeadPtr> pHeads_;
 	std::vector<Vector2> pHeadPoses_;
 	//各Headのチェーンの長さ
@@ -304,7 +318,6 @@ private:
 
 	//滑り落ちるまでの時間
 	float slipResistTime_;
-
 
 	//0=滞空 1=発射時 2=発射終了 3=噛み付き 4=滑り落ち
 	int playerMode_;

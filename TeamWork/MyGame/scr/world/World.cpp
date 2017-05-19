@@ -3,7 +3,7 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isGameClear_(false)
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f)
 {
 	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
 	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
@@ -24,7 +24,6 @@ void World::Initialize()
 	isChangeCam_ = false;
 	addNum_ = 0;
 	isChangeFrame_ = false;
-	isGameClear_ = false;
 }
 
 // 更新
@@ -55,7 +54,7 @@ void World::Update()
 	//actors_.Update();
 	updateFunctionMap_[isChangeCam_]();
 	// 受動更新
-	if (!manualStackActor_.empty())
+	if (!manualStackActor_.empty()&&!isChangeCam_)
 		manualStackActor_.top()->OnUpdate();
 
 	// カメラ更新

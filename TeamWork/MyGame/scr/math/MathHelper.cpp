@@ -53,6 +53,26 @@ float MathHelper::Max(float value1, float value2)
 	return std::max(value1, value2);
 }
 
+int MathHelper::Sign(int value)
+{
+	return (value > 0) - (value < 0);
+}
+
+int MathHelper::Sign(float value)
+{
+	return static_cast<int>((value > 0) - (value < 0));
+}
+
+float MathHelper::Sqrt(int value)
+{
+	return sqrtf(static_cast<float>(value));
+}
+
+float MathHelper::Sqrt(float value)
+{
+	return sqrtf(value);
+}
+
 // ®”’l‚ğw’è‚³‚ê‚½”ÍˆÍ“à‚É§ŒÀ‚µ‚Ü‚·
 int MathHelper::Clamp(int value, int min, int max)
 {

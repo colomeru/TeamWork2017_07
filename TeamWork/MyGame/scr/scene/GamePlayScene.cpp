@@ -193,7 +193,7 @@ void GamePlayScene::Draw() const
 	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
 	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(ply1->GetPosition().x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
-
+	
 	if (gamePlayMode_ == 2) {
 		gameOverScreen_.Draw();
 	}

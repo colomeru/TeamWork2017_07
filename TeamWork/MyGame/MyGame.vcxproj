@@ -1,5 +1,5 @@
 ﻿<?xml version="1.0" encoding="utf-8"?>
-<Project DefaultTargets="Build" ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+<Project DefaultTargets="Build" ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <ItemGroup Label="ProjectConfigurations">
     <ProjectConfiguration Include="Debug|Win32">
       <Configuration>Debug</Configuration>
@@ -28,26 +28,26 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>true</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'" Label="Configuration">
     <ConfigurationType>Application</ConfigurationType>
     <UseDebugLibraries>false</UseDebugLibraries>
-    <PlatformToolset>v140</PlatformToolset>
+    <PlatformToolset>v141</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
     <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
@@ -177,6 +177,7 @@
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
     <ClCompile Include="scr\actor\UI\GoalUI.cpp" />
+    <ClCompile Include="scr\actor\UI\StartUI.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
     <ClCompile Include="scr\collision\Collision.cpp" />
     <ClCompile Include="scr\collision\CollisionDX.cpp" />
@@ -208,7 +209,9 @@
     <ClCompile Include="scr\math\Vector2.cpp" />
     <ClCompile Include="scr\math\Vector3.cpp" />
     <ClCompile Include="scr\scene\addScreen\BackgroundScreen.cpp" />
+    <ClCompile Include="scr\scene\addScreen\GameClearScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\GameOverScreen.cpp" />
+    <ClCompile Include="scr\scene\addScreen\PauseScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.cpp" />
     <ClCompile Include="scr\scene\addScreen\StartScreen.cpp" />
@@ -252,6 +255,7 @@
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
     <ClInclude Include="scr\actor\UI\GoalUI.h" />
+    <ClInclude Include="scr\actor\UI\StartUI.h" />
     <ClInclude Include="scr\AllInclude.h" />
     <ClInclude Include="scr\camera\Camera.h" />
     <ClInclude Include="scr\collision\Collision.h" />
@@ -292,7 +296,9 @@
     <ClInclude Include="scr\myData\MyTestCamera.h" />
     <ClInclude Include="scr\myData\MyTestCol.h" />
     <ClInclude Include="scr\scene\addScreen\BackgroundScreen.h" />
+    <ClInclude Include="scr\scene\addScreen\GameClearScreen.h" />
     <ClInclude Include="scr\scene\addScreen\GameOverScreen.h" />
+    <ClInclude Include="scr\scene\addScreen\PauseScreen.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BackgroundCharacters.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.h" />

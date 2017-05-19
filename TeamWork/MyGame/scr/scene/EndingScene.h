@@ -110,15 +110,16 @@ private:
 	array<Vector2, 8> anyPos2;
 
 	//多重振り子
-	std::array<Vector2, 5> fPos;
-	std::array<Vector2, 5> multiplePos;
-	std::array<float, 5> mRot;
-	std::array<float, 5> mRot_spd;
+	int fNum;
+	std::array<Vector2, 99> fPos;
+	std::array<Vector2, 99> multiplePos;
+	std::array<float, 99> mRot;
+	std::array<float, 99> mRot_spd;
 	float mFriction;
 	float mSub;
-	std::array<float, 5> mLimit;
+	std::array<float, 99> mLimit;
 
-
+	
 
 private:
 	// ワールド用シェアドポインタ

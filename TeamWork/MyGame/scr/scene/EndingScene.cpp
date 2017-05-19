@@ -10,7 +10,7 @@
 #include "../stageGenerator/Stage1/Stage1.h"
 #include "../input//GamePad.h"
 #include "../game//Random.h"
-
+#include "../scene/MenuScene.h"
 
 EndingScene::EndingScene() :
 	nextScene_(Scene::Title)
@@ -86,11 +86,17 @@ void EndingScene::Initialize()
 	dRot = 90.0f;
 	dRot_spd = 0.0f;
 
-	for (int i = 0; i < 5; i++)
+	fNum = 7;
+	for (int i = 0; i < fNum; i++)
 	{
 		mRot[i] = 0.0f;
 		mRot_spd[i] = 0.0f;
+
+		mLimit[i] = 0.0f;
+		fPos[i] = Vector2(0.0f,0.0f);
+		multiplePos[i] = Vector2(0.0f,0.0f);
 	}
+
 }
 
 void EndingScene::Update()
@@ -139,7 +145,6 @@ void EndingScene::Update()
 
 	Multiple();
 
-
 }
 
 void EndingScene::Draw() const
@@ -173,7 +178,7 @@ void EndingScene::Draw() const
 	{
 		DrawFormatString(0, 580 + 20 * i, GetColor(255, 255, 255), "outPos%d:%f %f", i, outPos[i].x, outPos[i].y);
 	}
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < fNum; i++)
 	{
 		DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "mLimit%d:%f", i, mLimit[i]);
 		DrawFormatString(0, 840 + 20 * i, GetColor(255, 255, 255), "mRot_spd%d:%f", i, mRot_spd[i]);
@@ -205,6 +210,7 @@ void EndingScene::Draw() const
 
 	//DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
 	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
+	//DrawBox(100, 100, 700, 200, GetColor(0, 255, 0), 1);
 
 	DrawLine(spherePos.x, spherePos.y, v1.x, v1.y, GetColor(0, 255, 0), 1);
 	DrawLine(fx, fy, v2.x, v2.y, GetColor(0, 255, 0), 1);
@@ -216,7 +222,7 @@ void EndingScene::Draw() const
 	//DrawCircle(fx, fy, 16, GetColor(255, 0, 0), 0, 1); //支点に円を表示
 
 	//ここからMultiple
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < fNum; i++)
 	{
 		Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, multiplePos[i], Vector2(16, 32), Vector2::One, lineRot[2] + rot2/*dRot - 90.0f*/);
 		DrawCircle(multiplePos[i].x, multiplePos[i].y, (int)r, GetColor(255, 255, 255), 0, 1);
@@ -527,7 +533,7 @@ void EndingScene::Multiple()
 	fPos[0] = Vector2(800.0f, 300.0f);
 
 	//現在の重りの位置
-	for (int i = 0; i < 5; i++)
+	for (int i = 0; i < fNum; i++)
 	{
 		auto px = fPos[i].x + MathHelper::Cos(mRot[i]) * length;
 		auto py = fPos[i].y + MathHelper::Sin(mRot[i]) * length;
@@ -547,37 +553,17 @@ void EndingScene::Multiple()
 		sub -= std::floor(sub / 360.0f) * 360.0f;
 		if (sub < -180.0f) sub += 360.0f;
 		if (sub > 180.0f) sub -= 360.0f;
-		//if (i > 0) mRot_spd[i] = mRot_spd[i - 1] + 1.5f;
-		if (i == 0)
-			mRot_spd[i] = mRot_spd[i] + sub;
-		else
-			//mRot_spd[i] = 0.5f * i;
-			//mRot_spd[i] = mRot_spd[i] + sub;
-			mRot_spd[i] = mRot_spd[i - 1] * 1.8f;
+
+		if (i == 0)mRot_spd[i] = mRot_spd[i] + sub;
+		else mRot_spd[i] = (mRot_spd[i - 1] + sub) * 0.8f;
 
 
 		anyPos2[i] = fPos[i];
 
-		//スピード制限
-		//mLimit[0] = sqrt(2 * g * (MathHelper::Sin(90.0f) * neckLen[vec])) / (neckLen[vec] * 0.02f);
-		//mLimit[0] = rot_spd;
-		//mRot_spd[i] = MathHelper::Clamp(mRot_spd, -mLimit, mLimit);
-		//if (mRot_spd[i] > mLimit[i]) mRot_spd[i] = mLimit[i];
-		//if (mRot_spd[i] < -mLimit[i]) mRot_spd[i] = -mLimit[i];
-		//if (mRot[0] < 90.0f && mRot_spd[i] > mRot_spd[0]) mRot_spd[i] = mRot_spd[0];
-		//if (mRot[0] > 90.0f && mRot_spd[i] < mRot_spd[0]) mRot_spd[i] = mRot_spd[0];
-
 
 		//角度に角速度を加算
-		if (i == 0)
-			mRot[i] += mRot_spd[i];
-		else 
-		{
-			//mRot[i] = mRot[0];
-			//mRot[i] += mRot_spd[i];
-			mRot[i] = mRot[0] + mRot_spd[i];
-
-		}
+		if (i == 0) mRot[i] += mRot_spd[i];
+		else mRot[i] = mRot[0] + mRot_spd[i];
 
 		//新しい重りの位置
 		px = fPos[i].x + MathHelper::Cos(mRot[i] /*+ rot2*/) * length;
@@ -616,12 +602,14 @@ void EndingScene::Multiple()
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RSHIFT) ||
 			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))
 		{
-			mRot[0] -= 45.0f;
+			//mRot[0] -= 45.0f;
+			fNum++;
 		}
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
 			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM3))
 		{
-			mRot[0] += 45.0f;
+			//mRot[0] += 45.0f;
+			fNum--;
 		}
 	}
 }

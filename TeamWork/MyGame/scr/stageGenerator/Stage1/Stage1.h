@@ -1,6 +1,6 @@
 #pragma once
 #include "../StageGenerator.h"
-#include "../MyGame/scr/actor/Field/Clothes/GoalClothes/GoalClothes.h"
+#include <queue>
 
 class Stage1 : public StageGenerator
 {
@@ -20,4 +20,9 @@ public:
 	}
 
 private:
+	void Pin_Add(int i, int j, int data, int laneNum);
+	void Clothes_Add(int i, int j, int data, int laneNum);
+
+private:
+	std::queue<bool> pin_list;
 };

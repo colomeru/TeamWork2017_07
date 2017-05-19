@@ -34,6 +34,9 @@ public:
 	bool GetIsWind() const {
 		return isWind_;
 	}
+	Vector2 GetFulcrum() const {
+		return fulcrum_;
+	}
 
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
@@ -54,10 +57,12 @@ public:
 protected:
 	//衝突しているか
 	bool isHit_;
+	//テスト
+	bool is_Test_;
 	//服ID
 	CLOTHES_ID clothes_ID;
 	//プレイヤー
-	Player_Head* player_Head_;
+	Actor* player_Head_;
 
 	//振り子関連(服用)
 	//振り子フラグ

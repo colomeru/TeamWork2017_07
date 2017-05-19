@@ -30,7 +30,17 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("gameoverText.png", SPRITE_ID::GAMEOVER_TEXT_SPRITE);
 	sprite.Load("retry.png", SPRITE_ID::RETRY_TEXT_SPRITE);
 	sprite.Load("backtitle.png", SPRITE_ID::BACKTITLE_TEXT_SPRITE);
-
+	sprite.Load("laneSP.bmp", SPRITE_ID::LANE_SPRITE);
+	sprite.Load("gameclearText.png", SPRITE_ID::GAMECLEAR_TEXT_SPRITE);
+	sprite.Load("nextstage.png", SPRITE_ID::CHANGE_NEXTSTAGE_TEXT_SPRITE);
+	sprite.Load("stageselect.png", SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE);
+	sprite.Load("background.png", SPRITE_ID::BACKGROUND_SPRITE);
+	sprite.Load("fence.png", SPRITE_ID::FENCE_SPRITE);
+	sprite.Load("wind.png", SPRITE_ID::WIND_SPRITE);
+	sprite.Load("gamestartText.png", SPRITE_ID::GAME_START_TEXT_SPRITE);
+	sprite.Load("pauseText.png", SPRITE_ID::PAUSE_TEXT_SPRITE);
+	sprite.Load("backgameplay.png", SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE);
+	
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ

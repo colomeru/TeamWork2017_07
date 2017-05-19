@@ -4,6 +4,10 @@
 #include"../actor/CameraAct/TPSCamera.h"
 #include"../stageGenerator/StageGeneratorManager.h"
 #include"addScreen/GameOverScreen.h"
+#include"addScreen/StartScreen.h"
+#include"addScreen/BackgroundScreen.h"
+#include"addScreen/GameClearScreen.h"
+#include"addScreen/PauseScreen.h"
 
 class Player;
 
@@ -31,7 +35,31 @@ public:
 	void handleMessage(EventMessage message, void* param);
 	
 private:
-
+	void setNextMode(int mode) {
+		gamePlayMode_ = mode;
+		switch (gamePlayMode_)
+		{
+		case 2: {
+			gameOverScreen_.Init();
+			break;
+		}
+		case 3: {
+			gameClearScreen_.Init();
+			break;
+		}
+		case 4: {
+			pauseScreen_.Init();
+		}
+		default:
+			break;
+		}
+	}
+private:
+	void startUpdate();
+	void baseUpdate();
+	void pauseUpdate();
+	void overUpdate();
+	void clearUpdate();
 
 private:
 	// ワールド用シェアドポインタ
@@ -46,7 +74,11 @@ private:
 	PlayerPtr ply1;
 
 	StageGenerateManager stageGeneratorManager;
+	StartScreen startScreen_;
+	PauseScreen pauseScreen_;
 	GameOverScreen gameOverScreen_;
+	GameClearScreen gameClearScreen_;
+	BackgroundScreen bgScreen_;
 	//Vector3 posit;
 
 	//Vector3 camera_pos_;
@@ -55,6 +87,13 @@ private:
 
 	//そのステージのレーンの最大数
 	int maxLaneCount;
+	float stageLen_;
+	float meterLen_;
+	Vector2 meterPos_;
 
-	bool isPlayerDead_;
+	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
+	int	gamePlayMode_;
+
+	std::map<int, std::function<void()>> updateFunctionMap_;
+
 };

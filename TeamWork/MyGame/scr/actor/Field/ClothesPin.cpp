@@ -1,9 +1,11 @@
 #include "ClothesPin.h"
 #include "../MyGame/scr/graphic/Sprite.h"
 #include "../MyGame/scr/input/Keyboard.h"
+#include "../../graphic/Sprite.h"
+#include "Clothes\Clothes.h"
 
-ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos)
-	:Actor(world)
+ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum)
+	:Actor(world, clothes)
 {
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 32.0f;
@@ -15,7 +17,18 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos)
 
 	laneNum_ = laneNum;
 	position_ = pos;
+
+	pos_ = pos;
+	fulcrum_ = static_cast<Clothes*>(parent_)->GetFulcrum();
+
+	//マトリクス情報
+	Matrix mat =
+		Matrix::CreateTranslation(Vector3(pos_.x, pos_.y, 0))
+		* Matrix::CreateRotationZ(parent_->GetAngle())
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
 	
+	SetPose(mat);
+
 	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 }
@@ -27,11 +40,18 @@ ClothesPin::~ClothesPin()
 
 void ClothesPin::Update()
 {
-	//ShakesClothes();
 	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::PLAYER_PIN_COL);
 	}
 
+	angle_ = parent_->GetAngle();
+	//マトリクス情報
+	Matrix mat =
+		Matrix::CreateTranslation(Vector3(pos_.x, pos_.y, 0))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+
+	SetPose(mat);
 }
 
 void ClothesPin::Draw() const
@@ -56,7 +76,9 @@ void ClothesPin::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
+	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_ - Vector2(50,50));
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+	DrawFormatString(100, 100, GetColor(255, 255, 255), "pos x:%f y:%f", position_.x, position_.y);
 }
 
 void ClothesPin::OnUpdate()
@@ -69,29 +91,4 @@ void ClothesPin::OnCollide(Actor * other, CollisionParameter colpara)
 
 void ClothesPin::OnMessage(EventMessage message, void * param)
 {
-	//switch (message)
-	//{
-	//case EventMessage::BEGIN_WIND:
-	//	basePosition_ = position_;
-	//	isPendulum_ = true;
-	//	break;
-	//case EventMessage::STRONG_WIND:
-	//	rot_spd_ = 2.8f;
-	//	isWind_ = true;
-	//	break;
-	//case EventMessage::ATTENUATE_WIND:
-	//	rot_spd_ = 0.0f;
-	//	isFriction_ = true;
-	//	break;
-	//case EventMessage::END_WIND:
-	//	rot_spd_ = 0.5f;
-	//	rot_ = 90.0f;
-	//	friction_ = 1.0f;
-	//	angle_ = 0;
-	//	position_ = basePosition_;
-	//	isPendulum_ = false;
-	//	isFriction_ = false;
-	//	isWind_ = false;
-	//	break;
-	//}
 }

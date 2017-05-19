@@ -15,6 +15,7 @@ public:
 	// XV
 	void Update();
 	bool CamMoveUpdate();
+	bool StartModeUpdate();
 	// •`‰æ
 	void ActorManager::Draw(const int laneCount=0, const int playerLane=0) const;
 	// ’Ç‰Á

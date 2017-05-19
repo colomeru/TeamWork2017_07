@@ -5,7 +5,7 @@ class ClothesPin : public Actor, public std::enable_shared_from_this<Actor>
 {
 public:
 	//コンストラクタ
-	ClothesPin(IWorld* world, int laneNum, Vector2 pos);
+	ClothesPin(IWorld* world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum);
 	//デストラクタ
 	~ClothesPin();
 	//更新
@@ -23,4 +23,6 @@ public:
 		parameter_.isDead = true;
 	}
 private:
+	Vector2 pos_;
+	Vector2 fulcrum_;
 };

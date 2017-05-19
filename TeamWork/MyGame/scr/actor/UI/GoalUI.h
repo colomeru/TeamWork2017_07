@@ -20,6 +20,6 @@ public:
 	virtual void OnMessage(EventMessage message, void* param) override;
 
 private:
-	
+	int timeCount_;
 };
 

@@ -1,8 +1,11 @@
 #include "GumClothes.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../../ClothesPin.h"
 
-GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
 	:Clothes(world, clothes, laneNum)
+	//,player_(nullptr)
+	//,player_Head_(nullptr)
 {
 	clothes_ID = CLOTHES_ID::GUM_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -17,7 +20,11 @@ GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+
+	//if (is_Pin)
+	//	world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
+
+	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 GumClothes::~GumClothes()
@@ -29,9 +36,17 @@ void GumClothes::Update()
 	ShakesClothes();
 	WindSwing();
 
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
+
+	//if (player_Head_ == nullptr || player_ == nullptr)return;
+
+	//if (player_->GetIsSlipped()) {
+	//	player_Head_->SetPosAddVect(Vector2(10.0f, 0.0f));
+	//	player_ = nullptr;
+	//	player_Head_ = nullptr;
+	//}
 
 	isHit_ = false;
 }
@@ -65,10 +80,22 @@ void GumClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::GUM_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 153, 0), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
+
+	//DrawFormatString(100, 120, GetColor(255, 255, 255), "lanenum %d", laneNum_);
 }
 
 void GumClothes::OnUpdate()
 {
+}
+
+void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
+{
+	if (!isWind_) {
+		parent_ = &other;
+		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
+		static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+		static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
+	}
 }
 
 void GumClothes::OnMessage(EventMessage message, void * param)

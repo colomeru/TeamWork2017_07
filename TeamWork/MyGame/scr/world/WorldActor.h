@@ -23,6 +23,7 @@ public:
 	// XV
 	bool Update();
 	bool ChangeLaneUpdate();
+	bool StartModeUpdate();
 	// •`‰æ
 	void Draw(const int laneCount=0,const int playerLane=0) const;
 	// ’Ç‰Á

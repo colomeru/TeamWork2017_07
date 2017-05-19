@@ -33,6 +33,8 @@ protected:
 	Vector2 stageSize_;
 	//ステージの1マスのサイズ
 	const int STAGE_TIP_SIZE;
+	//ステージ上のピンの座標の補正値
+	const Vector2 STAGE_PIN_POS_CV;
 
 };
 

@@ -37,6 +37,12 @@ bool WorldActor::ChangeLaneUpdate()
 	return isCLaneEnd_;
 }
 
+bool WorldActor::StartModeUpdate()
+{
+	EachActor([&](ActorManager& manager) { manager.StartModeUpdate(); });
+	return false;
+}
+
 // •`‰æ
 void WorldActor::Draw(const int laneCount,const int playerLane) const
 {

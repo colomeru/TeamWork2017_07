@@ -1,12 +1,13 @@
 #include "BaseClothes.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../ClothesPin.h"
 
 #include "../../../input/Keyboard.h"
 #include "../../../conv/DXConverter.h"
 #include "../../../graphic/Model.h"
 #include "../../../graphic/Sprite.h"
 
-BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
@@ -28,7 +29,11 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+
+	//if (is_Pin)
+	//	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(50, 50), this, fulcrum_));
+
+	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 BaseClothes::~BaseClothes()
@@ -40,9 +45,9 @@ void BaseClothes::Update()
 	ShakesClothes();
 	WindSwing();
 
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
 
 	isHit_ = false;
 }
@@ -75,11 +80,14 @@ void BaseClothes::Draw() const
 
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_SPRITE) / 2;
-	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
+	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 12);
 	Vector2 hangPos = GetDrawPosVect(fulcrum_);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
+
+	//if (player_Head_ == nullptr && player_Head_->GetParameter().ID == ACTOR_ID::PLAYER_HEAD_ACTOR)
+	//	DrawFormatString(100, 300, GetColor(255, 255, 255), "player_Head");
 
 }
 

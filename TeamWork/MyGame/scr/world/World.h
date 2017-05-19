@@ -16,9 +16,10 @@ struct KeepDatas {
 	//次のレーンの方向を代入する(-1～1)
 	int nextLane_;
 	Vector2 playerPos_;
+	Vector2 startPointPos_;
 	float changeLaneLerpPos_;
 
-	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero, int nextLane = 0) :playerLane_(lane), playerPos_(pos), nextLane_(nextLane), changeLaneLerpPos_(0.f){}
+	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero,Vector2 sPPos=Vector2::Zero, int nextLane = 0) :playerLane_(lane), playerPos_(pos),startPointPos_(sPPos), nextLane_(nextLane), changeLaneLerpPos_(0.f){}
 
 	//playerの現レーンを更新する
 	void SetPlayerLane(const int& pLane) {
@@ -27,6 +28,9 @@ struct KeepDatas {
 	//playerの現レーンを変更する
 	void SetPlayerPos(const Vector2& pPos) {
 		playerPos_ = pPos;
+	}
+	void SetStartPointPos(const Vector2& sPPos) {
+		startPointPos_ = sPPos;
 	}
 	//プレイヤーが次に行くレーンを(+下-上)
 	void SetPlayerNextLane(const int& pNLane) {
@@ -117,7 +121,14 @@ public:
 	virtual bool isChangeFrame()const {
 		return isChangeFrame_;
 	}
-
+	virtual void StartModeUpdate()override;
+	
+	virtual void SetIsGameClear(bool isGameClear)override {
+		isGameClear_ = isGameClear;
+	}
+	virtual bool GetIsGameClear()const override {
+		return isGameClear_;
+	}
 private:
 	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
 	{
@@ -139,6 +150,7 @@ private:
 	bool isChangeCam_;
 	int addNum_;
 	bool isChangeFrame_;
+	bool isGameClear_;
 	std::map<bool, std::function<void()>> updateFunctionMap_;
 
 	Matrix inv_;

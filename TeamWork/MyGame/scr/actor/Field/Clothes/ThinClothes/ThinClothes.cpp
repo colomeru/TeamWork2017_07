@@ -1,7 +1,8 @@
 #include "ThinClothes.h"
 #include "../MyGame/scr/game/Random.h"
+#include "../../ClothesPin.h"
 
-ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::THIN_CLOTHES;
@@ -12,12 +13,19 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(-100.f, 100.f));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(0.f, 100.f));
+	parameter_.ClothSegmentPoints_.push_back(Vector2(100.f, 100.f));
 
 	laneNum_ = laneNum;
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+
+	//if (is_Pin)
+	//	world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
+
+	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 ThinClothes::~ThinClothes()
@@ -29,9 +37,9 @@ void ThinClothes::Update()
 	ShakesClothes();
 	WindSwing();
 
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
 
 	isHit_ = false;
 }
@@ -63,10 +71,6 @@ void ThinClothes::Draw() const
 }
 
 void ThinClothes::OnUpdate()
-{
-}
-
-void ThinClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 }
 

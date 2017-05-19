@@ -6,7 +6,7 @@ class ThinClothes : public Clothes, public std::enable_shared_from_this<ThinClot
 {
 public:
 	//コンストラクタ
-	ThinClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
+	ThinClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin = false);
 	//デストラクタ
 	~ThinClothes();
 	//更新
@@ -15,8 +15,6 @@ public:
 	virtual void Draw() const override;
 	//受動更新
 	virtual void OnUpdate() override;
-	//衝突時のアクション
-	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 

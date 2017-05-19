@@ -3,7 +3,7 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f)
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isGameClear_(false)
 {
 	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
 	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
@@ -24,6 +24,7 @@ void World::Initialize()
 	isChangeCam_ = false;
 	addNum_ = 0;
 	isChangeFrame_ = false;
+	isGameClear_ = false;
 }
 
 // 更新
@@ -45,9 +46,7 @@ void World::Update()
 		camShootSpd_ = max(camShootSpd_, 0.1f);
 		keepDatas_.SetChangeLaneLerpPos_(keepDatas_.changeLaneLerpPos_ + 0.04f*camShootSpd_);
 	}
-	else
-	{
-	}
+
 	if (keepDatas_.changeLaneLerpPos_ >= 1.0f) {
 		isChangeCam_ = false;
 		isChangeFrame_ = true;
@@ -208,4 +207,11 @@ Matrix World::InitializeInv(Vector2 position)
 	//移動量を計算
 	//mVelo = mPrePos - mCurPos;
 	return inv_;
+}
+
+void World::StartModeUpdate()
+{
+	inv(targetMat_);
+	targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+	actors_.StartModeUpdate();
 }

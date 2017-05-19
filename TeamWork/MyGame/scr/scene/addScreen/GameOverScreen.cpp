@@ -4,9 +4,8 @@
 #include"../../input/Keyboard.h"
 #include"../../input/GamePad.h"
 #include"../../math/MathHelper.h"
+#include"../GamePlayDefine.h"
 
-static const float mxmSize = 1.5f;
-static const int defSinC = 90;
 GameOverScreen::GameOverScreen() :inputCount_(0), sinCount_(defSinC)
 {
 	changeSceneList_.push_back(Scene::GamePlay);
@@ -34,12 +33,12 @@ void GameOverScreen::Init()
 
 bool GameOverScreen::Update(Scene& nextScene)
 {
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y < -0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;
 
 		sinCount_ = defSinC;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y > 0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
 		inputCount_--;
 
 		sinCount_ = defSinC;

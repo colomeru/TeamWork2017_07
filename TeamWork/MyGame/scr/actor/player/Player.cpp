@@ -18,7 +18,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false),/* isCanChangeLane_(false),*/
 	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
-	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize)
+	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), isPlayerFallLane_(false), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime)
 
 {
 	laneNum_ = startLane;
@@ -65,6 +65,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	updateFunctionMap_[MODE_SHOOT_END] = std::bind(&Player::ShootEndUpdate, this);
 	updateFunctionMap_[MODE_BITE] = std::bind(&Player::BiteUpdate, this);
 	updateFunctionMap_[MODE_SLIP] = std::bind(&Player::SlipUpdate, this);
+	updateFunctionMap_[MODE_RESIST] = std::bind(&Player::ResistUpdate, this);
 
 	worldSetMyDatas();
 	StartPlayerSet();
@@ -76,6 +77,7 @@ Player::~Player()
 
 void Player::Update()
 {
+
 	chainLockCoolTime_--;
 	chainLockCoolTime_ = MathHelper::Clamp(chainLockCoolTime_, 0, defChainLockCoolTime_);
 	//レーン変更のクールタイムを設定
@@ -99,6 +101,10 @@ void Player::Update()
 	PlayerInputControl();
 	//自分の状態に応じた更新
 	updateFunctionMap_[playerMode_]();
+
+	if (position_.y >= WINDOW_HEIGHT) {
+		SetNextLane(1,LaneChangeType::LaneChange_Fall);
+	}
 	//Headの表示レーンを本体に合わせる
 	SetAllHeadLaneNum();
 
@@ -575,11 +581,6 @@ void Player::ShootEndUpdate()
 void Player::BiteUpdate()
 {
 	Pendulum(pHeads_[currentHead_]->GetPosition(), length_);
-	if (!world_->GetIsCamChangeMode()) {
-		int nexLane = world_->GetKeepDatas().nextLane_;
-		UpdateLaneNum(nexLane);
-		world_->GetCanChangedKeepDatas().SetPlayerNextLane(0);
-	}
 		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y>0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 				SetNextLane(1);
@@ -592,13 +593,13 @@ void Player::BiteUpdate()
 		}
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-			if (GetIsBiteMode()) {
+			//if (GetIsBiteMode()) {
 				playerMode_ = MODE_FALL;
 				//Headを交代する
 				PHeadChanger();
 				isNextPushKey_ = false;
 				isCanNextHeadRot = false;
-			}
+		//	}
 		}
 
 		//下へのベクトルと現在のプレイヤーの位置ベクトルのなす角を取る
@@ -655,4 +656,17 @@ void Player::SlipUpdate()
 
 		slipCount_ = defSlipCount;
 
+}
+
+void Player::ResistUpdate()
+{
+	slipResistTime_ -= 0.016f;
+
+	if (slipResistTime_ <= 0.f) {
+		slipResistTime_ = defResistTime;
+		playerMode_ = MODE_FALL;
+		return;
+	}
+
+	BiteUpdate();
 }

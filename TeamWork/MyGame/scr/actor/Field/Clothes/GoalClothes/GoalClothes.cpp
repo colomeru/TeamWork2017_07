@@ -29,9 +29,9 @@ GoalClothes::~GoalClothes()
 
 void GoalClothes::Update()
 {
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+	//}
 
 	float pPosX = player_->GetPosition().x;
 	float gPosx = position_.x;
@@ -74,10 +74,6 @@ void GoalClothes::OnUpdate()
 	
 }
 
-void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
-{
-}
-
 void GoalClothes::OnMessage(EventMessage message, void * param)
 {
 	switch (message)
@@ -89,4 +85,8 @@ void GoalClothes::OnMessage(EventMessage message, void * param)
 	default:
 		break;
 	}
+}
+
+void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
+{
 }

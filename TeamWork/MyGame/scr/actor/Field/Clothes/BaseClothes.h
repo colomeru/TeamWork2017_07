@@ -5,7 +5,7 @@ class BaseClothes : public Clothes, public std::enable_shared_from_this<BaseClot
 {
 public:
 	//コンストラクタ
-	BaseClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
+	BaseClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin = false);
 	//デストラクタ
 	~BaseClothes();
 	//更新

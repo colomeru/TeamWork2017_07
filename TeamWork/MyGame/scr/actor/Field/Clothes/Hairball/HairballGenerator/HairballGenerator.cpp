@@ -1,9 +1,14 @@
 #include "HairballGenerator.h"
 #include "../Hairball.h"
+#include "../MyGame/scr/Def.h"
+#include "../MyGame/scr/game/Random.h"
 
-HairballGenerator::HairballGenerator(IWorld * world)
+HairballGenerator::HairballGenerator(IWorld * world, int laneNum, Vector2 pos)
 	:Actor(world)
 {
+	laneNum_ = laneNum;
+	position_ = pos;
+
 	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [&, this](const Actor& other) {
 		player_ = const_cast<Actor*>(&other);
 	});
@@ -15,12 +20,16 @@ HairballGenerator::~HairballGenerator()
 
 void HairballGenerator::Update()
 {
-	position_ = Vector2(player_->GetPosition().x + 1600, player_->GetPosition().y);
+	if (player_ == nullptr)return;
+
+	if (player_->GetLaneNum() == laneNum_)
+		position_ = Vector2(player_->GetPosition().x + WINDOW_WIDTH, player_->GetPosition().y);
+	else
+		position_.x = player_->GetPosition().x + WINDOW_WIDTH;
 }
 
 void HairballGenerator::Draw() const
 {
-	//DrawFormatString(700, 160, GetColor(255, 255, 255), "pos.x:%f pos.y:%f", position_.x, position_.y);
 }
 
 void HairballGenerator::OnMessage(EventMessage message, void * param)
@@ -29,7 +38,9 @@ void HairballGenerator::OnMessage(EventMessage message, void * param)
 	{
 	case EventMessage::BEGIN_WIND:
 	{
-		world_->Add(ACTOR_ID::EFECT_ACTOR, std::make_shared<Hairball>(world_, CLOTHES_ID::HAIRBALL, player_->GetLaneNum(), position_));
+		int rand = Random::GetInstance().Range(0, 100);
+		if (rand > 30) return;
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Hairball>(world_, CLOTHES_ID::HAIRBALL, laneNum_, position_));
 	}
 	default:
 		break;

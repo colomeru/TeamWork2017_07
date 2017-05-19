@@ -56,6 +56,7 @@ public:
 	virtual void SetPose(const Matrix& mat);
 	// 受動更新
 	virtual void OnUpdate();
+
 	void UpdateList() {
 		if (!isUpdate_)return;
 		Update();
@@ -110,6 +111,20 @@ public:
 		drawPos_ = GetDrawPosVect(position_);
 		return true;
 	}
+	virtual void StartOnlyUpdate() {
+
+	}
+	virtual void StartOnlyLateUpdate() {
+
+	}
+	bool StartModeUpdate() {
+		StartOnlyUpdate();
+		isDraw_ = (world_->GetKeepDatas().startPointPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().startPointPos_.x < cutSize[1]);
+		isUpdate_ = true;
+
+		StartOnlyLateUpdate();
+		return false;
+	}
 	void CamMoveUp() {
 		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
 		laneLerpNum = min(1.f, laneLerpNum);
@@ -117,11 +132,8 @@ public:
 		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum+1], laneLerpNum)- defDrawLineChangePosY[targetNum];
 	}
 	void CamMoveDown() {
-		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
-		laneLerpNum = min(1.f, laneLerpNum);
-		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
-		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum-1], laneLerpNum)- defDrawLineChangePosY[targetNum];
-
+		
+		LaneChangeFall();
 	}
 	Vector2 GetDrawPosVect(const Vector2& pos)const{
 		Vector2 retPos;
@@ -182,7 +194,13 @@ protected:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara);
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param);
-
+	//落ちる時のレーン変更
+	virtual void LaneChangeFall() {
+		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
+		laneLerpNum = min(1.f, laneLerpNum);
+		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
+		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+	}
 private:
 	//CollisionParameter Test_Col(const Actor& other) const;
 

@@ -60,4 +60,9 @@ public:
 	static int Mod(int value1, int value2);
 	// À”’l“¯m‚Ì—]‚è‚ğZo
 	static float Mod(float value1, float value2);
+
+	// ®”‚Ì‚×‚«æ‚ğ•Ô‚· (x‚Ìyæ)
+	static int Pow(int x, int y);
+	// À”‚Ì‚×‚«æ‚ğ•Ô‚· (x‚Ìyæ)
+	static float Pow(float x, float y);
 };

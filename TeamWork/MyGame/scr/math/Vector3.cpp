@@ -1,4 +1,5 @@
 #include "Vector3.h"
+#include "Vector2.h"
 #include "Matrix.h"
 #include "MathHelper.h"
 #include <cmath>
@@ -22,9 +23,14 @@ Vector3::Vector3(float x, float y, float z)
 {
 }
 
+Vector3::Vector3(Vector2 xy, float z)
+	:x(xy.x),y(xy.y),z(z)
+{
+}
+
 float Vector3::Length() const
 {
-	return std::sqrt(LengthSquared());
+	return MathHelper::Sqrt(LengthSquared());
 }
 
 float Vector3::LengthSquared() const

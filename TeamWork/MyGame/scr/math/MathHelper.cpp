@@ -53,21 +53,25 @@ float MathHelper::Max(float value1, float value2)
 	return std::max(value1, value2);
 }
 
+// ®”‚Ì•„†‚ğ‹‚ß‚é
 int MathHelper::Sign(int value)
 {
 	return (value > 0) - (value < 0);
 }
 
+// À”‚Ì•„†‚ğ‹‚ß‚é
 int MathHelper::Sign(float value)
 {
 	return static_cast<int>((value > 0) - (value < 0));
 }
 
+// ®”‚Ì•½•ûª‚ğ•Ô‚·
 float MathHelper::Sqrt(int value)
 {
 	return sqrtf(static_cast<float>(value));
 }
 
+// À”‚Ì•½•ûª‚ğ•Ô‚·
 float MathHelper::Sqrt(float value)
 {
 	return sqrtf(value);
@@ -149,4 +153,16 @@ int MathHelper::Mod(int value1, int value2)
 float MathHelper::Mod(float value1, float value2)
 {
 	return fmodf(value1, value2);
+}
+
+// ®”‚Ì‚×‚«æ‚ğ•Ô‚· (x‚Ìyæ)
+int MathHelper::Pow(int x, int y)
+{
+	return static_cast<int>(powf(x, y));
+}
+
+// À”‚Ì‚×‚«æ‚ğ•Ô‚· (x‚Ìyæ)
+float MathHelper::Pow(float x, float y)
+{
+	return powf(x, y);
 }

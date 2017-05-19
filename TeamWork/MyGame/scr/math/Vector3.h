@@ -1,5 +1,6 @@
 #pragma once
 
+struct Vector2;
 struct Matrix;
 
 // 3Dベクトル
@@ -10,6 +11,8 @@ struct Vector3 {
 
 	// コンストラクタ
 	Vector3(float x = 0.0f, float y = 0.0f, float z = 0.0f);
+	// コンストラクタ
+	Vector3(Vector2 xy, float z = 0.0f);
 	// ベクトルの長さを計算します
 	float Length() const;
 	// ベクトルの長さの平方を計算します

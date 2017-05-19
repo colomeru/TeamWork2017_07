@@ -11,6 +11,7 @@
 #include "../input//GamePad.h"
 #include "../game//Random.h"
 #include "../scene/MenuScene.h"
+#include "../scene/addScreen/MenuScreen.h"
 
 EndingScene::EndingScene() :
 	nextScene_(Scene::Title)
@@ -96,7 +97,6 @@ void EndingScene::Initialize()
 		fPos[i] = Vector2(0.0f,0.0f);
 		multiplePos[i] = Vector2(0.0f,0.0f);
 	}
-
 }
 
 void EndingScene::Update()
@@ -144,7 +144,6 @@ void EndingScene::Update()
 	//Double(Vector2(500,200));
 
 	Multiple();
-
 }
 
 void EndingScene::Draw() const
@@ -186,7 +185,6 @@ void EndingScene::Draw() const
 
 	}
 
-
 	// 描画
 	world_->Draw();
 
@@ -224,9 +222,13 @@ void EndingScene::Draw() const
 	//ここからMultiple
 	for (int i = 0; i < fNum; i++)
 	{
-		Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, multiplePos[i], Vector2(16, 32), Vector2::One, lineRot[2] + rot2/*dRot - 90.0f*/);
+		Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, multiplePos[i], Vector2(16, 32), Vector2::One, mRot[i] - 90.0f);
+		//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, multiplePos[i], Vector2(64, 25), Vector2::One, mRot[i]);
+
 		DrawCircle(multiplePos[i].x, multiplePos[i].y, (int)r, GetColor(255, 255, 255), 0, 1);
 		DrawLine(fPos[i].x, fPos[i].y, multiplePos[i].x, multiplePos[i].y, GetColor(239, 117, 188), 1); //ピンク
+		//DrawBox(fPos[i].x - 20.0f, fPos[i].y, multiplePos[i].x + 20.0f, multiplePos[i].y, GetColor(239, 117, 188), 1); //ピンク
+
 	}
 
 }

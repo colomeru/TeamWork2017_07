@@ -2,6 +2,7 @@
 #include "IScene.h"
 #include <map>
 #include "../Def.h"
+#include "../scene/addScreen/MenuScreen.h"
 
 class MenuScene : public IScene
 {
@@ -26,25 +27,8 @@ public:
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
 
-
-	struct PanelStruct
-	{
-		Vector2 position;
-		bool isDraw;
-		float alpha;
-	};
-
 private:
-	int stageNum = 0;
-	const float height = WINDOW_HEIGHT / 4.0f * 3.0f;
-	std::array<Vector2, 9> stagePos;
-
-	//
-	Vector2 pos;
-	Vector2 gPos;
-	Vector2 dir;
-	float dis;
-	float disN;
+	MenuScreen menu;
 
 private:
 	// ワールド用シェアドポインタ

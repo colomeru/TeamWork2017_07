@@ -72,9 +72,9 @@ void GamePlayScene::Initialize()
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, 1, Vector2(0, 0)));
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, 22, Vector2(0, 0)));
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, 3, Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, 1, Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, 22, Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, 3, Vector2(0, 0)));
 
 	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test")));
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
@@ -83,6 +83,7 @@ void GamePlayScene::Initialize()
 	int stageLaneSize = 3;
 	ply1 = std::make_shared<Player>(world_.get(), stageLaneSize, 1);
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
+	world_->PushStackActor(ply1);
 
 	stageGeneratorManager.SetStage(Stage::Stage2);
 	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
@@ -226,6 +227,15 @@ void GamePlayScene::End()
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
 {
+	switch (message) {
+	case EventMessage::GAME_CLEAR_FLAG:{
+		setNextMode(3);
+		world_->PopStackActor();
+		break;
+	}
+	default:
+		break;
+	}
 }
 
 void GamePlayScene::baseUpdate()
@@ -250,7 +260,7 @@ void GamePlayScene::baseUpdate()
 		setNextMode(4);
 	}
 	if (ply1->isPlayerDead())setNextMode(2);
-	if (world_->GetIsGameClear())setNextMode(3);
+	//if (world_->GetIsGameClear())setNextMode(3);
 
 	bgScreen_.Update();
 

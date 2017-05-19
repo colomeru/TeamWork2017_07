@@ -20,6 +20,7 @@ public:
 	WorldActor();
 	// デストラクタ
 	~WorldActor();
+	void Initialize();
 	// 更新
 	bool Update();
 	bool ChangeLaneUpdate();

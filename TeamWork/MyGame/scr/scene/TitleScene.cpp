@@ -1,15 +1,16 @@
-#include "TitleScene.h"
+ï»¿#include "TitleScene.h"
 #include "../Def.h"
 #include "../time/Time.h"
 #include "../camera/Camera.h"
 #include "../conv/DXConverter.h"
+#include "../graphic/Sprite.h"
 
 TitleScene::TitleScene() :
 nextScene_(Scene::Menu)
 {
-	// ƒ[ƒ‹ƒh¶¬
+	// Æ’ÂÂ[Æ’â€¹Æ’hÂÂ¶ÂÂ¬
 	world_ = std::make_shared<World>();
-	// ƒCƒxƒ“ƒgƒŠƒXƒi[“o˜^
+	// Æ’CÆ’xÆ’â€œÆ’gÆ’Å Æ’XÆ’iÂ[â€œoËœ^
 	world_->AddEventMessageListener([=](EventMessage msg, void* param)
 	{
 		handleMessage(msg, param);
@@ -33,25 +34,30 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	// XV
+	// ÂXÂV
 	world_->Update();
 
-	// I—¹
+	// ÂIâ€”Â¹
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
 	Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
 	Camera::GetInstance().Target.Set(Vector3(0,0,0));
 	Camera::GetInstance().Update();
+
 }
 
 void TitleScene::Draw() const
 {
-	auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
-	auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "TitleScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-	DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
-	// •`‰æ
+
+	// èª­ã¿ã“ã‚“ã ã‚°ãƒ©ãƒ•ã‚£ãƒƒã‚¯ã‚’ç”»é¢å·¦ä¸Šã«æç”»
+	//auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
+	//auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
+	DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, Vector2(0.0f, 0.0f));
+	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+	//DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
+	// â€¢`â€°Ã¦
+	
 	world_->Draw();
 }
 
@@ -67,7 +73,7 @@ Scene TitleScene::Next() const
 
 void TitleScene::End()
 {
-	// ‰Šú‰»
+	// Ââ€°Å Ãºâ€°Â»
 	world_->Clear();
 }
 

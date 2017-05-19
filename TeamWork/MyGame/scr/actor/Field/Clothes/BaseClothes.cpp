@@ -30,6 +30,28 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 
+	auto p1
+		= Matrix::CreateTranslation(Vector3(-60, 0 , 0 + length_))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p2
+		= Matrix::CreateTranslation(Vector3(-60, 100 + length_))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p3
+		= Matrix::CreateTranslation(Vector3(60, 100 + length_))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p4
+		= Matrix::CreateTranslation(Vector3(60, 0 + length_))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+
+	collisionPoints[0] = Vector2(p1.Translation().x, p1.Translation().y);
+	collisionPoints[1] = Vector2(p2.Translation().x, p2.Translation().y);
+	collisionPoints[2] = Vector2(p3.Translation().x, p3.Translation().y);
+	collisionPoints[3] = Vector2(p4.Translation().x, p4.Translation().y);
+
 	//if (is_Pin)
 	//	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(50, 50), this, fulcrum_));
 
@@ -42,12 +64,36 @@ BaseClothes::~BaseClothes()
 
 void BaseClothes::Update()
 {
+	if (parent_ != nullptr) {
+		if (!static_cast<Player*>(parent_)->GetIsBiteMode()) {
+			parent_ = nullptr;
+		}
+	}
+
 	ShakesClothes();
 	WindSwing();
 
-	//if (isCheckCol_ && isUpdate_) {
-	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	//}
+	auto p1
+		= Matrix::CreateTranslation(Vector3(-60, 0 + length_, 0))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p2
+		= Matrix::CreateTranslation(Vector3(-60, 100 + length_))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p3
+		= Matrix::CreateTranslation(Vector3(60, 100 + length_))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p4
+		= Matrix::CreateTranslation(Vector3(60, 0 + length_))
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+
+	collisionPoints[0] = Vector2(p1.Translation().x, p1.Translation().y);
+	collisionPoints[1] = Vector2(p2.Translation().x, p2.Translation().y);
+	collisionPoints[2] = Vector2(p3.Translation().x, p3.Translation().y);
+	collisionPoints[3] = Vector2(p4.Translation().x, p4.Translation().y);
 
 	isHit_ = false;
 }
@@ -85,6 +131,16 @@ void BaseClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
+
+	//DrawBox(drawPos_.x, drawPos_.y, drawPos_.x + 5, drawPos_.y + 5, GetColor(255, 0, 0), TRUE);
+	auto drawP1 = GetDrawPosVect(collisionPoints[0]);
+	auto drawP2 = GetDrawPosVect(collisionPoints[1]);
+	auto drawP3 = GetDrawPosVect(collisionPoints[2]);
+	auto drawP4 = GetDrawPosVect(collisionPoints[3]);
+	DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 0, 0));
+	DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 0, 0));
+	DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 0, 0));
+	DrawFormatString(100, 500, GetColor(255, 255, 255), "colx:%f coly:%f", collisionPoints[0].x, collisionPoints[0].y);
 
 	//if (player_Head_ == nullptr && player_Head_->GetParameter().ID == ACTOR_ID::PLAYER_HEAD_ACTOR)
 	//	DrawFormatString(100, 300, GetColor(255, 255, 255), "player_Head");

@@ -17,9 +17,8 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	position_ = pos;
 
-	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [&, this](const Actor& other) {
-		player_ = const_cast<Actor*>(&other);
-	});
+	isHit_ = false;
+
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
@@ -29,18 +28,12 @@ GoalClothes::~GoalClothes()
 
 void GoalClothes::Update()
 {
-	//if (isCheckCol_ && isUpdate_) {
-	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	//}
+	if (player_ == nullptr || parent_ == nullptr)return;
 
-	float pPosX = player_->GetPosition().x;
-	float gPosx = position_.x;
-
-	if (pPosX > gPosx) {
+	if (player_->GetIsBiteMode() && !isHit_) {
 		world_->sendMessage(EventMessage::GOAL_FLAG);
+		isHit_ = true;
 	}
-	isHit_ = false;
-
 }
 
 void GoalClothes::Draw() const
@@ -74,19 +67,26 @@ void GoalClothes::OnUpdate()
 	
 }
 
+void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
+{
+	if (!isWind_) {
+		parent_ = &other;
+		player_ = static_cast<Player*>(parent_->GetParent());
+		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
+		static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+		static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
+	}
+}
+
 void GoalClothes::OnMessage(EventMessage message, void * param)
 {
 	switch (message)
 	{
 	case EventMessage::GOAL_FLAG:
 		world_->Add(ACTOR_ID::UI_ACTOR, std::make_shared<GoalUI>(world_, position_));
-		parameter_.isDead = true;
 		break;
 	default:
 		break;
 	}
 }
 
-void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
-{
-}

@@ -32,6 +32,12 @@ TestClothes::~TestClothes()
 
 void TestClothes::Update()
 {
+	if (parent_ != nullptr) {
+		if (!static_cast<Player*>(parent_)->GetIsBiteMode()) {
+			parent_ = nullptr;
+		}
+	}
+
 	ShakesClothes();
 	WindSwing();
 

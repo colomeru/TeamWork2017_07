@@ -140,7 +140,7 @@ void Clothes::ShakesClothes()
 			isFriction_ = false;
 			count_ = 0;
 			isPendulum_ = false;
-			clothesState_ = ClothesState::BEGIN_STRONG_WIND;
+			clothesState_ = ClothesState::BEGIN_WIND;
 			break;
 		default:
 			break;

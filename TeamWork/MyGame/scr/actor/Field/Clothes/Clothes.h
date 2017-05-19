@@ -2,6 +2,7 @@
 #include "../../Actor.h"
 #include "../MyGame/scr/game/ID.h"
 #include "../../player/Player_Head.h"
+#include <array>
 
 class Clothes : public Actor
 {
@@ -37,6 +38,9 @@ public:
 	Vector2 GetFulcrum() const {
 		return fulcrum_;
 	}
+	std::array<Vector2, 4> GetCollisionPoints() const {
+		return collisionPoints;
+	}
 
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
@@ -54,6 +58,10 @@ public:
 	Clothes(const Clothes& other) = delete;
 	Clothes& operator = (const Clothes& other) = delete;
 
+
+public:
+
+
 protected:
 	//衝突しているか
 	bool isHit_;
@@ -61,8 +69,8 @@ protected:
 	bool is_Test_;
 	//服ID
 	CLOTHES_ID clothes_ID;
-	//プレイヤー
-	Actor* player_Head_;
+	//
+	std::array<Vector2, 4> collisionPoints;
 
 	//振り子関連(服用)
 	//振り子フラグ

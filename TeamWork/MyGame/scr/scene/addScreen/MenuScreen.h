@@ -6,6 +6,7 @@
 class MenuScreen
 {
 public:
+	//ステージパネル
 	struct PanelStruct
 	{
 		Vector2 position; //パネルの座標
@@ -27,13 +28,16 @@ public:
 	void Draw() const;
 	//
 	void Action();
-	//
-	void OpenNextStage();
+	//前のステージをクリアしているか？
+	bool CheckPreviousSrage(int sNum);
+	//次のステージの解放
+	void OpenNextStage(int sNum);
 	
 private:
 	int stageNum = 0; //ステージ番号
 	const float height = WINDOW_HEIGHT / 4.0f * 3.0f; //パネル１のy座標
 	Vector2 backPos; //戻るパネルの座標
+	bool backSelect; //戻るを選択しているか？
 	Vector2 cursorPos; //カーソルの座標
 	int panelNum, cursorNum; //パネル番号、カーソル番号
 	std::array<PanelStruct, 9> panel; //PanelStructをステージ数分生成

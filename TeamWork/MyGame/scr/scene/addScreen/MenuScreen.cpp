@@ -3,6 +3,7 @@
 #include "../../math/MathHelper.h"
 #include "../../graphic/Sprite.h"
 #include "../../input/Keyboard.h"
+#include "../../input/GamePad.h"
 
 //コンストラクタ
 MenuScreen::MenuScreen()
@@ -14,6 +15,7 @@ MenuScreen::MenuScreen()
 	}
 	backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
 	cursorPos = Vector2(panel[0].position.x - 350.0f, panel[0].position.y);
+	backSelect = false;
 
 	//
 	dis = disN = 0.0f;
@@ -29,11 +31,15 @@ MenuScreen::~MenuScreen()
 //更新
 void MenuScreen::Update()
 {
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP))
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP)) &&
+		backSelect == false) //戻るを選択していなければ
 	{
 		stageNum++;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN))
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN)) &&
+		backSelect == false) //戻るを選択していなければ
 	{
 		stageNum--;
 	}
@@ -41,34 +47,42 @@ void MenuScreen::Update()
 
 	//ステージ6からはパネルではなくカーソルを移動
 	if (stageNum < 5)
-	{
+	{ //ステージ5までは
 		panelNum = stageNum;
 		cursorNum = 0;
 	}
 	else
-	{
+	{ //ステージ6からは
 		panelNum = 4;
 		cursorNum = stageNum - 4;
 	}
 
 	//左を押すと「戻る」にカーソルを移動
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT))
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT))
 	{
 		cursorPos = Vector2(backPos.x + 300.0f, backPos.y);
+		backSelect = true;
 	}
-	else if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)
-		|| Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN))
+	else if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
+		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN))
 	{
 		cursorPos = Vector2(panel[cursorNum].position.x - 350.0f, panel[cursorNum].position.y);
+		backSelect = false;
 	}
 
 	//ステージをクリアしたら次のステージを解放する
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) && stageNum != 8)
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) &&
+		stageNum != 8 && //ステージ9以外
+		backSelect == false) //戻るを選択していなければ
 	{
-		OpenNextStage();
+		OpenNextStage(stageNum);
 	}
 
-	//
+	//カーソルの位置から目標位置へのベクトルを求める
 	gPos = cursorPos;
 	dir = gPos - pos;
 	dis = std::sqrt(dir.x * dir.x + dir.y * dir.y);
@@ -115,7 +129,7 @@ void MenuScreen::Draw() const
 
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M))
 	{
-		DrawFormatString(panel[cursorNum].position.x - 280, panel[cursorNum].position.y, GetColor(255, 0, 0), "ステージ%dを選択したよ！", stageNum + 1);
+		DrawFormatString(panel[cursorNum].position.x - 280, panel[cursorNum].position.y, GetColor(255, 0, 0), "ステージ%d", stageNum + 1);
 	}
 
 	//
@@ -129,9 +143,19 @@ void MenuScreen::Action()
 {
 }
 
-//次のステージの解放
-void MenuScreen::OpenNextStage()
+//前のステージをクリアしているか？
+bool MenuScreen::CheckPreviousSrage(int sNum)
 {
-	panel[stageNum + 1].isDraw = true;
-	panel[stageNum + 1].alpha = 1.0f;
+	if ((sNum > 0 && panel[sNum].isDraw == true) || sNum == 0) return true;
+	else return false;
+}
+
+//次のステージの解放
+void MenuScreen::OpenNextStage(int sNum)
+{
+	if (CheckPreviousSrage(sNum) == true)
+	{
+		panel[sNum + 1].isDraw = true;
+		panel[sNum + 1].alpha = 1.0f;
+	}
 }

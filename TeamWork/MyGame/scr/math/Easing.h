@@ -48,16 +48,12 @@ public:
 	static float EaseOutCirc(float t, float b, float c, float d);
 	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間
 	static float EaseInOutCirc(float t, float b, float c, float d);
-
-	// 未完成
-	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間
-	static float InBack(float t, float totaltime, float max, float min, float s);
-	// 未完成
-	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間
-	static float OutBack(float t, float totaltime, float max, float min, float s);
-	// 未完成
-	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間
-	static float InOutBack(float t, float totaltime, float max, float min, float s);
+	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間 / s > 1.0f
+	static float EaseInBack(float t, float b, float c, float d, float s);
+	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間 / s > 1.0f
+	static float EaseOutBack(float t, float b, float c, float d, float s);
+	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間 / s > 1.0f
+	static float EaseInOutBack(float t, float b, float c, float d, float s);
 
 	// t = 時間 / b = 開始点 / c = 移動量 / d = 終了時間
 	static float EaseOutBounce(float t, float b, float c, float d);

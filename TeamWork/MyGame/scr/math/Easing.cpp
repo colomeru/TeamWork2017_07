@@ -146,30 +146,25 @@ float Easing::EaseInOutCirc(float t, float b, float c, float d)
 
 
 
-float Easing::InBack(float t, float totaltime, float max, float min, float s)
+float Easing::EaseInBack(float t, float b, float c, float d, float s)
 {
-	max -= min;
-	t /= totaltime;
-	return max*t*t*((s + 1)*t - s) + min;
+	t /= d;
+	return c * t*t*((s + 1.0f)*t - s) + b;
 }
 
-float Easing::OutBack(float t, float totaltime, float max, float min, float s)
+float Easing::EaseOutBack(float t, float b, float c, float d, float s)
 {
-	max -= min;
-	t = t / totaltime - 1;
-	return max*(t*t*((s + 1)*t*s) + 1) + min;
+	t = t / d - 1.0f;
+	auto temp = c * (t*t*((s + 1.0f) * t*s) + 1.0f) + b;
+	return c * (t*t*((s + 1.0f) * t + s) + 1.0f) + b;
 }
 
-float Easing::InOutBack(float t, float totaltime, float max, float min, float s)
+float Easing::EaseInOutBack(float t, float b, float c, float d, float s)
 {
-	max -= min;
-	s *= 1.525;
-	if (t / 2 < 1)
-	{
-		return max*(t*t*((s + 1)*t - s)) + min;
-	}
-	t -= 2;
-	return max / 2 * (t*t*((s + 1)*t + s) + 2) + min;
+	s *= 1.525f;
+	if (t / 2.0f < 1.0f)	return c * (t*t*((s + 1.0f)*t)) + b;
+	t -= 2.0f;
+	return c / 2.0f * (t*t*((s + 1.0f)*t + s) + 2.0f) + b;
 }
 
 float Easing::EaseOutBounce(float t, float b, float c, float d)

@@ -29,5 +29,6 @@ public:
 		return position_.x <= 0;
 	}
 private:
-
+	float defPosx_;
+	float timeCount_;
 };

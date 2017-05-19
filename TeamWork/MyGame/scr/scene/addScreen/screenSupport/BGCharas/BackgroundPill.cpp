@@ -19,9 +19,10 @@ void BackgroundPill::Update()
 
 void BackgroundPill::Draw() const
 {
-	Vector2 drawPos = GetDrawPosVect(position_);
-	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, drawPos);
+	//Vector2 drawPos = GetDrawPosVect(position_);
+	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, drawPos_);
 }
+
 
 void BackgroundPill::Del()
 {

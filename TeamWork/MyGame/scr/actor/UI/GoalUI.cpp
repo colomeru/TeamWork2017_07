@@ -16,7 +16,9 @@ void GoalUI::Update()
 	timeCount_--;
 
 	if (timeCount_ == 0){
-		world_->SetIsGameClear(true);
+		world_->sendMessage(EventMessage::GAME_CLEAR_FLAG);
+		//world_->SetIsGameClear(true);
+		parameter_.isDead = true;
 	}
 }
 

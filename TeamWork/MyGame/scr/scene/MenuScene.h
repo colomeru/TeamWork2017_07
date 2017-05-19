@@ -1,6 +1,8 @@
 #pragma once
 #include "IScene.h"
 #include <map>
+#include "../Def.h"
+#include "../scene/addScreen/MenuScreen.h"
 
 class MenuScene : public IScene
 {
@@ -26,7 +28,7 @@ public:
 	void handleMessage(EventMessage message, void* param);
 
 private:
-
+	MenuScreen menu;
 
 private:
 	// ワールド用シェアドポインタ

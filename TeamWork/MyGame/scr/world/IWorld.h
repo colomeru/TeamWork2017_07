@@ -50,7 +50,4 @@ public:
 	
 	virtual void StartModeUpdate()=0;
 
-	virtual void SetIsGameClear(bool isGameClear)=0;
-	virtual bool GetIsGameClear()const =0;
-
 };

@@ -3,11 +3,14 @@
 #include"../../../math/Vector3.h"
 
 #include"../../../world/IWorld.h"
+#include"../../../actor/Actor.h"
 
-class BackgroundCharacters{
+class BackgroundCharacters:public Actor{
 public:
 	BackgroundCharacters(IWorld* world,const Vector2& position)
-		:world_(world),position_(position) {}
+		:Actor(world) {
+		position_=position;
+	}
 	virtual ~BackgroundCharacters() = default;
 
 	virtual void Update() = 0;
@@ -24,6 +27,4 @@ public:
 
 protected:
 	bool isDead_;
-	Vector2 position_;
-	IWorld* world_;
 };

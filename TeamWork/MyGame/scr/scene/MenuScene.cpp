@@ -1,8 +1,10 @@
 #include "MenuScene.h"
 #include "../time/Time.h"
+#include "../math/MathHelper.h"
+#include "../graphic//Sprite.h"
 
 MenuScene::MenuScene() :
-nextScene_(Scene::GamePlay)
+	nextScene_(Scene::GamePlay)
 {
 	// ƒ[ƒ‹ƒh¶¬
 	world_ = std::make_shared<World>();
@@ -30,12 +32,16 @@ void MenuScene::Update()
 	// I—¹
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
+
+	menu.Update();
 }
 
 void MenuScene::Draw() const
 {
 	DrawFormatString(0, 00, GetColor(255, 255, 255), "MenuScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+
+	menu.Draw();
 
 	// •`‰æ
 	world_->Draw();

@@ -94,9 +94,39 @@ void EndingScene::Initialize()
 		mRot_spd[i] = 0.0f;
 
 		mLimit[i] = 0.0f;
-		fPos[i] = Vector2(0.0f,0.0f);
-		multiplePos[i] = Vector2(0.0f,0.0f);
+		fPos[i] = Vector2(0.0f, 0.0f);
+		multiplePos[i] = Vector2(0.0f, 0.0f);
+
+
 	}
+
+	//ïœå`ï`âÊ
+	//gHandle = LoadGraph("res//Sprite//head.bmp");
+	gHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::PLAYER_HEAD_SPRITE);
+	gPos1[0] = Vector2(800, 400);
+	gPos1[1] = Vector2(gPos1[0].x + 50, gPos1[0].y);
+	gPos1[2] = Vector2(gPos1[0].x + 50, gPos1[0].y + 100);
+	gPos1[3] = Vector2(gPos1[0].x, gPos1[0].y + 100);
+
+	gPos2[0] = Vector2(gPos1[3].x, gPos1[3].y);
+	gPos2[1] = Vector2(gPos1[2].x, gPos1[2].y);
+	gPos2[2] = Vector2(gPos2[0].x + 50, gPos2[0].y + 100);
+	gPos2[3] = Vector2(gPos2[0].x, gPos2[0].y + 100);
+
+	posNum = 0;
+	for (int i = 0; i < fNum; i++) {
+		for (int j = 0; j < 4; j++) {
+			if (j < 2) {
+				pos[i][j].x = fPos[i].x + MathHelper::Cos(mRot[i]) * 25;
+				pos[i][j].y = fPos[i].y + MathHelper::Sin(mRot[i]) * 25;
+			}
+			else {
+				pos[i][j].x = multiplePos[i].x + MathHelper::Cos(mRot[i]) * 25;
+				pos[i][j].y = multiplePos[i].y + MathHelper::Sin(mRot[i]) * 25;
+			}
+		}
+	}
+
 }
 
 void EndingScene::Update()
@@ -144,6 +174,8 @@ void EndingScene::Update()
 	//Double(Vector2(500,200));
 
 	Multiple();
+
+	DeformationDraw();
 }
 
 void EndingScene::Draw() const
@@ -185,8 +217,19 @@ void EndingScene::Draw() const
 
 	}
 
-	// ï`âÊ
-	world_->Draw();
+	//baseClothes
+	DrawModiGraph(gPos1[0].x, gPos1[0].y, gPos1[1].x, gPos1[1].y, gPos1[2].x, gPos1[2].y, gPos1[3].x, gPos1[3].y, gHandle, true);
+	DrawModiGraph(gPos2[0].x, gPos2[0].y, gPos2[1].x, gPos2[1].y, gPos2[2].x, gPos2[2].y, gPos2[3].x, gPos2[3].y, gHandle, true);
+
+	for (int i = 0; i < fNum; i++) {
+		//for (int j = 0; j < 4; j++) {
+			//DrawModiGraph(pos[i][0].x, pos[i][0].y, pos[i][1].x, pos[i][1].y, pos[i][2].x, pos[i][2].y, pos[i][3].x, pos[i][3].y, gHandle, true);
+		//}
+	}
+
+	DrawCircle(gPos1[posNum].x, gPos1[posNum].y, 16, GetColor(255, 0, 0), 0, 1); //éxì_Ç…â~Çï\é¶
+	//DrawGraph(0, 0, gHandle, true);
+
 
 
 	//Sprite::GetInstance().Draw(SPRITE_ID::TEST2_SPRITE, Vector2(0, 400));
@@ -224,12 +267,15 @@ void EndingScene::Draw() const
 	{
 		Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, multiplePos[i], Vector2(16, 32), Vector2::One, mRot[i] - 90.0f);
 		//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, multiplePos[i], Vector2(64, 25), Vector2::One, mRot[i]);
+		DrawModiGraph(pos[i][0].x, pos[i][0].y, pos[i][1].x, pos[i][1].y, pos[i][2].x, pos[i][2].y, pos[i][3].x, pos[i][3].y, gHandle, true);
 
 		DrawCircle(multiplePos[i].x, multiplePos[i].y, (int)r, GetColor(255, 255, 255), 0, 1);
 		DrawLine(fPos[i].x, fPos[i].y, multiplePos[i].x, multiplePos[i].y, GetColor(239, 117, 188), 1); //ÉsÉìÉN
 		//DrawBox(fPos[i].x - 20.0f, fPos[i].y, multiplePos[i].x + 20.0f, multiplePos[i].y, GetColor(239, 117, 188), 1); //ÉsÉìÉN
 
 	}
+	// ï`âÊ
+	world_->Draw();
 
 }
 
@@ -532,7 +578,7 @@ void EndingScene::Multiple()
 {
 	//êUÇËéq
 	//fPos[0] = spherePos;
-	fPos[0] = Vector2(800.0f, 300.0f);
+	fPos[0] = Vector2(600.0f, 200.0f);
 
 	//åªç›ÇÃèdÇËÇÃà íu
 	for (int i = 0; i < fNum; i++)
@@ -615,3 +661,89 @@ void EndingScene::Multiple()
 		}
 	}
 }
+
+//ïœå`ï`âÊ
+void EndingScene::DeformationDraw()
+{
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM1)) {
+		posNum = 0;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM2)) {
+		posNum = 1;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM3)) {
+		posNum = 2;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM4)) {
+		posNum = 3;
+	}
+
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) {
+		gPos1[posNum].x -= 5;
+	}
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)) {
+		gPos1[posNum].x += 5;
+	}
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		gPos1[posNum].y -= 5;
+	}
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
+		gPos1[posNum].y += 5;
+	}
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::Z)) {
+		gPos1[2].x -= 5;
+		gPos1[3].x -= 5;
+	}
+	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::X)) {
+		gPos1[2].x += 5;
+		gPos1[3].x += 5;
+	}
+
+	gPos2[0] = Vector2(gPos1[3].x, gPos1[3].y);
+	gPos2[1] = Vector2(gPos1[2].x, gPos1[2].y);
+
+	//for (int i = 0; i < fNum; i++) {
+	//	for (int j = 0; j < 4; j++) {
+	//		if (j < 2) {
+	//			pos[i][j].x = fPos[i].x + MathHelper::Cos(0) * 25;
+	//			pos[i][j].y = fPos[i].y + MathHelper::Sin(0) * 25;
+	//		}
+	//		else {
+	//			pos[i][j].x = multiplePos[i].x + MathHelper::Cos(0) * 25;
+	//			pos[i][j].y = multiplePos[i].y + MathHelper::Sin(0) * 25;
+	//		}
+	//	}
+	//}
+
+	for (int i = 0; i < fNum; i++) {
+		if (i == 0) {
+			pos[i][0].x = fPos[i].x - MathHelper::Cos(mRot[i] - 90.0f) * 25;
+			pos[i][0].y = fPos[i].y - MathHelper::Sin(mRot[i] - 90.0f) * 25;
+			pos[i][1].x = fPos[i].x + MathHelper::Cos(mRot[i] - 90.0f) * 25;
+			pos[i][1].y = fPos[i].y + MathHelper::Sin(mRot[i] - 90.0f) * 25;
+			pos[i][2].x = multiplePos[i].x + MathHelper::Cos(((mRot[i] + mRot[i + 1]) / 2) - 90.0f) * 25;
+			pos[i][2].y = multiplePos[i].y + MathHelper::Sin(((mRot[i] + mRot[i + 1]) / 2) - 90.0f) * 25;
+			pos[i][3].x = multiplePos[i].x - MathHelper::Cos(((mRot[i] + mRot[i + 1]) / 2) - 90.0f) * 25;
+			pos[i][3].y = multiplePos[i].y - MathHelper::Sin(((mRot[i] + mRot[i + 1]) / 2) - 90.0f) * 25;
+		}
+		else {
+			pos[i][0] = pos[i - 1][3];
+			pos[i][1] = pos[i - 1][2];
+			pos[i][2].x = multiplePos[i].x + MathHelper::Cos(mRot[i] - 90.0f) * 25;
+			pos[i][2].y = multiplePos[i].y + MathHelper::Sin(mRot[i] - 90.0f) * 25;
+			pos[i][3].x = multiplePos[i].x - MathHelper::Cos(mRot[i] - 90.0f) * 25;
+			pos[i][3].y = multiplePos[i].y - MathHelper::Sin(mRot[i] - 90.0f) * 25;
+		}
+		//pos[i][0].x = fPos[i].x - MathHelper::Cos(mRot[i] - 90.0f) * 25;
+		//pos[i][0].y = fPos[i].y - MathHelper::Sin(mRot[i] - 90.0f) * 25;
+		//pos[i][1].x = fPos[i].x + MathHelper::Cos(mRot[i] - 90.0f) * 25;
+		//pos[i][1].y = fPos[i].y + MathHelper::Sin(mRot[i] - 90.0f) * 25;
+		//pos[i][2].x = multiplePos[i].x + MathHelper::Cos(mRot[i] - 90.0f) * 25;
+		//pos[i][2].y = multiplePos[i].y + MathHelper::Sin(mRot[i] - 90.0f) * 25;
+		//pos[i][3].x = multiplePos[i].x - MathHelper::Cos(mRot[i] - 90.0f) * 25;
+		//pos[i][3].y = multiplePos[i].y - MathHelper::Sin(mRot[i] - 90.0f) * 25;
+
+	}
+
+}
+

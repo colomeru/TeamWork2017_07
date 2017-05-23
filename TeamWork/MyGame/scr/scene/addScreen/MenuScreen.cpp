@@ -4,6 +4,7 @@
 #include "../../graphic/Sprite.h"
 #include "../../input/Keyboard.h"
 #include "../../input/GamePad.h"
+#include "../../math/Easing.h"
 
 //コンストラクタ
 MenuScreen::MenuScreen()
@@ -90,13 +91,16 @@ void MenuScreen::Update()
 	disN = 1.0f / dis;
 	dir.x *= disN;
 	dir.y *= disN;
+	//Easing計算
+	float ease = Easing::EaseOutExpo(10.0f, pos.y, pos.y - gPos.y, 10.0f);
+
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::V))
 	{
 		gPos.y -= 150.0f;
 	}
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::B) && (pos.x != gPos.x || pos.y != gPos.y))
 	{
-		pos = pos + dir * 10.0f;
+		pos = pos + dir * ease;
 	}
 }
 
@@ -109,7 +113,7 @@ void MenuScreen::Draw() const
 		std::string str;
 		if (panel[i].isDraw == true) str = "true";
 		else if (panel[i].isDraw == false) str = "false";
-		DrawFormatString(0, 240 - i * 20, GetColor(255, 255, 255), "ステージ%d %s", i + 1, str);
+		DrawFormatString(0, 240 - i * 20, GetColor(255, 255, 255), "ステージ%d %c", i + 1, str);
 	}
 
 	//ステージパネルを描画

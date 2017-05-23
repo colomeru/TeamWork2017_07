@@ -305,6 +305,11 @@ int Sprite::NumberFrame(int number, int digit, int maxdigit)
 	return score[maxdigit - digit] - '0';
 }
 
+int Sprite::GetHandle(const SPRITE_ID & id) const
+{
+	return m_sprites.at(id);
+}
+
 // ƒtƒ@ƒCƒ‹–¼‚Ì'.'‚©‚çŒã‚ğæ‚èœ‚­
 std::string Sprite::Split(std::string filename)
 {

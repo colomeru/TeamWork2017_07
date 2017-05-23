@@ -36,7 +36,8 @@ public:
 	virtual void Double(Vector2 fPos);
 	//多重振り子
 	virtual void Multiple();
-
+	//変形描画
+	virtual void DeformationDraw();
 
 private:
 	float size;
@@ -119,7 +120,13 @@ private:
 	float mSub;
 	std::array<float, 99> mLimit;
 
-	
+	//変形描画
+	int gHandle;
+	std::array<Vector2, 4> gPos1;
+	std::array<Vector2, 4> gPos2;
+	int posNum;
+	Vector2 pos[7][4];
+
 
 private:
 	// ワールド用シェアドポインタ

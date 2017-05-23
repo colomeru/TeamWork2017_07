@@ -175,6 +175,8 @@ public:
 		return size;
 	}
 
+	int GetHandle(const SPRITE_ID& id) const;
+
 private:
 	///<summary>
 	/// ƒtƒ@ƒCƒ‹–¼‚Ì'.'‚©‚çŒã‚ğæ‚èœ‚­

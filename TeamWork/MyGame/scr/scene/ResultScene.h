@@ -2,13 +2,13 @@
 
 #include "IScene.h"
 
-class TitleScene : public IScene
+class ResultScene : public IScene
 {
 public:
 	// コンストラクタ
-	TitleScene();
+	ResultScene();
 	// デストラクタ
-	~TitleScene();
+	~ResultScene();
 	// 初期化
 	virtual void Initialize() override;
 	// 更新
@@ -32,11 +32,6 @@ private:
 	using WorldPtr = std::shared_ptr<World>;
 	// ワールド
 	WorldPtr		world_;
-
-	int selectNum_;
-	float selectX_;
-	float selectY_;
-
 	// 次のシーン
 	Scene			nextScene_;
 };

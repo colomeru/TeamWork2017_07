@@ -15,6 +15,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("3219116.png", SPRITE_ID::TEST2_SPRITE);
 	sprite.Load("arrow.png",SPRITE_ID::ARROW_SPRITE);
 	sprite.Load("title_background.png", SPRITE_ID::TITLE_SPRITE);
+	sprite.Load("start.png", SPRITE_ID::TITLE_START_SPRITE);
+	sprite.Load("exit.png", SPRITE_ID::TITLE_EXIT_SPRITE);
 	sprite.Load("circle.png", SPRITE_ID::CIRCLE_SPRITE);
 	sprite.Load("sphere.png", SPRITE_ID::SPHERE_SPRITE);
 	sprite.Load("êl.png", SPRITE_ID::HITO_SPRITE);

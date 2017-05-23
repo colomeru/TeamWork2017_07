@@ -41,7 +41,7 @@ GumClothes::~GumClothes()
 void GumClothes::Update()
 {
 	if (parent_ != nullptr) {
-		if (!static_cast<Player*>(parent_)->GetIsBiteMode()) {
+		if (!static_cast<Player*>(parent_->GetParent())->GetIsBiteMode()) {
 			parent_ = nullptr;
 		}
 	}
@@ -123,21 +123,5 @@ void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 		static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
 		static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
-	}
-}
-
-void GumClothes::OnMessage(EventMessage message, void * param)
-{
-	switch (message)
-	{
-	case EventMessage::BEGIN_WIND:
-	{
-		if (!isUpdate_ || isPendulum_) break;
-		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > 30) return;
-		basePosition_ = position_;
-		isPendulum_ = true;
-		break;
-	}
 	}
 }

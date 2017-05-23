@@ -19,7 +19,7 @@ void GameFrame::Run()
 	SetWriteZBuffer3D(TRUE);
 	SetWaitVSyncFlag(TRUE);
 
-	ChangeWindowMode(TRUE);		// ウィンドウモード
+	ChangeWindowMode(FALSE);		// ウィンドウモード
 
 	if (DxLib_Init() == -1)		// DXライブラリ初期化処理
 	{

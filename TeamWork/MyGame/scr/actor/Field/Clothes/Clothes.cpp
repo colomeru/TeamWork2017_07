@@ -3,6 +3,7 @@
 #include "../MyGame/scr/game/Random.h"
 #include "../../player/Player.h"
 #include "Hanger\Hanger.h"
+#include "../MyGame/scr/scene/GamePlayDefine.h"
 
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
@@ -24,6 +25,7 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 				parent_ = &other;
 				static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 				static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+				static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
 				static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
 			}
 		break;
@@ -37,6 +39,18 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 //メッセージ処理
 void Clothes::OnMessage(EventMessage message, void * param)
 {
+	switch (message)
+	{
+	case EventMessage::BEGIN_WIND:
+	{
+		if (!isUpdate_ || isPendulum_) break;
+		int rand = Random::GetInstance().Range(0, 100);
+		if (rand > frequencyWind) return;
+		basePosition_ = position_;
+		isPendulum_ = true;
+		break;
+	}
+	}
 }
 
 void Clothes::Pendulum(Vector2 fulcrum, float length)
@@ -124,6 +138,7 @@ void Clothes::ShakesClothes()
 			rot_spd_ = 2.8f;
 			isWind_ = true;
 			clothesState_ = ClothesState::STRONG_WIND;
+			WindSwing();
 			break;
 		case ClothesState::ATTENUATE_WIND:
 			isFriction_ = true;

@@ -109,7 +109,7 @@ void MenuScreen::Draw() const
 		std::string str;
 		if (panel[i].isDraw == true) str = "true";
 		else if (panel[i].isDraw == false) str = "false";
-		DrawFormatString(0, 240 - i * 20, GetColor(255, 255, 255), "ステージ%d %s", i + 1, str);
+		DrawFormatString(0, 240 - i * 20, GetColor(255, 255, 255), "ステージ%d %c", i + 1, str);
 	}
 
 	//ステージパネルを描画

@@ -14,8 +14,6 @@ public:
 	virtual void Draw() const override;
 	//受動更新
 	virtual void OnUpdate() override;
-	//メッセージ取得
-	virtual void OnMessage(EventMessage message, void* param);
 
 private:
 

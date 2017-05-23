@@ -8,4 +8,5 @@ static const int defWindTime_ = 800;
 static const float startEase = 4.f;
 //ボタン押してるときに進める時間
 static const float startAddTime = 0.005f;
-
+//画面内の服が揺れる確率（％）
+static const int frequencyWind = 30;

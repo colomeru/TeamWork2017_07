@@ -45,12 +45,12 @@ void TitleScene::Update()
 	Camera::GetInstance().Update();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)) {
 		selectX_ = 850.0f;
-		selectY_ = 703.0f;
+		selectY_ = 803.0f;
 		selectNum_ = 0;
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN)) {
 		selectX_ = 850.0f;
-		selectY_ = 768.0f;
+		selectY_ = 868.0f;
 		selectNum_ = 1;
 	}
 
@@ -71,8 +71,8 @@ void TitleScene::Draw() const
 	//auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
 	//auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
 	//DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
-	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_START_SPRITE, Vector2(905.0f, 680.0f));
-	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_EXIT_SPRITE, Vector2(905.0f, 740.0f));
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_START_SPRITE, Vector2(905.0f, 780.0f));
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_EXIT_SPRITE, Vector2(905.0f, 840.0f));
 	Sprite::GetInstance().Draw(SPRITE_ID::SPHERE_SPRITE, Vector2(selectX_, selectY_));
 
 	DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");

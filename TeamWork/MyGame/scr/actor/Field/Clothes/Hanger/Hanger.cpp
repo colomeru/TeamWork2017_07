@@ -107,7 +107,7 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 		if (isStop_) return;
 		if (position_.x >= other.GetPosition().x) return;
 		player_->SetMode(MODE_SLIP);
-		player_->PHeadChanger();
+		//player_->PHeadChanger();
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
 		isStop_ = true;
 		parent_ = nullptr;

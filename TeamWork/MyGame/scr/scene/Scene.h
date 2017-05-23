@@ -9,5 +9,6 @@ enum class Scene
 	Menu,
 	GamePlay,
 	Credit,
-	Ending
+	Ending,
+	Result
 };

@@ -71,13 +71,14 @@ void TitleScene::Draw() const
 	//auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
 	//auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
 	//DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
-	auto drawpos = Vector2(WINDOW_WIDTH, WINDOW_HEIGHT) / 2;
-	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, drawpos, origin, Vector2::One);
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_START_SPRITE, Vector2(905.0f, 680.0f));
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_EXIT_SPRITE, Vector2(905.0f, 740.0f));
 	Sprite::GetInstance().Draw(SPRITE_ID::SPHERE_SPRITE, Vector2(selectX_, selectY_));
 
+	DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
+	auto drawpos = Vector2(WINDOW_WIDTH, WINDOW_HEIGHT) / 2;
+	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE)/2;
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE,drawpos,origin,Vector2::One);
 	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 	//DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
 	// •`‰æ
@@ -97,7 +98,6 @@ Scene TitleScene::Next() const
 
 void TitleScene::End()
 {
-	// ‰Šú‰»
 	world_->Clear();
 }
 

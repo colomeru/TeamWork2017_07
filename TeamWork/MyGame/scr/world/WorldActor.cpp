@@ -18,6 +18,7 @@ void WorldActor::Initialize()
 	managers_[ACTOR_ID::HANGER_ACTOR] = ActorManager();
 	managers_[ACTOR_ID::PLAYER_HEAD_ACTOR] = ActorManager();
 	managers_[ACTOR_ID::PLAYER_ACTOR] = ActorManager();
+	managers_[ACTOR_ID::EFECT_ACTOR] = ActorManager();
 	managers_[ACTOR_ID::UI_ACTOR] = ActorManager();
 
 }
@@ -68,6 +69,7 @@ void WorldActor::Draw(const int laneCount,const int playerLane) const
 	managers_.at(ACTOR_ID::HANGER_ACTOR).Draw(laneCount, playerLane);
 	managers_.at(ACTOR_ID::PLAYER_HEAD_ACTOR).Draw(laneCount, playerLane);
 	managers_.at(ACTOR_ID::PLAYER_ACTOR).Draw(laneCount, playerLane);
+	managers_.at(ACTOR_ID::EFECT_ACTOR).Draw(laneCount, playerLane);
 	managers_.at(ACTOR_ID::UI_ACTOR).Draw(laneCount, playerLane);
 }
 

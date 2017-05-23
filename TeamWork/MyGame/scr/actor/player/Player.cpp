@@ -18,12 +18,12 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false),/* isCanChangeLane_(false),*/
 	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
-	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), isPlayerFallLane_(false), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime)
+	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), isPlayerFallLane_(false), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero)
 
 {
 	laneNum_ = startLane;
 
-	spriteId_ = SPRITE_ID::CIRCLE_SPRITE;
+	spriteId_ = SPRITE_ID::PBODY_SPRITE;
 
 	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
 	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2;
@@ -100,7 +100,7 @@ void Player::Update()
 	//入力による動作をまとめた関数
 	PlayerInputControl();
 	//自分の状態に応じた更新
-	//updateFunctionMap_[playerMode_]();
+	updateFunctionMap_[playerMode_]();
 
 	if (position_.y >= WINDOW_HEIGHT) {
 		SetNextLane(1,LaneChangeType::LaneChange_Fall);
@@ -180,7 +180,6 @@ void Player::Draw() const
 
 void Player::OnUpdate()
 {
-	updateFunctionMap_[playerMode_]();
 
 }
 
@@ -365,6 +364,12 @@ int Player::GetCurHead() const {
 
 
 //Headのレーンを本体のレーンに合わせる
+
+void Player::SetMode(int pMode) {
+	playerMode_ = pMode;
+	//if (pMode == MODE_SLIP)
+		headPosAddVect_= Vector2::Normalize(pHeads_[currentHead_]->GetPosition() - position_)*Vector2(32.f,32.f).Length();
+}
 
 void Player::SetMyHeadLaneNum(int targetNum) {
 	pHeads_[targetNum]->SetLaneNum(laneNum_);
@@ -597,7 +602,7 @@ void Player::BiteUpdate()
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			//if (GetIsBiteMode()) {
-				playerMode_ = MODE_FALL;
+				SetMode(MODE_FALL);
 				//Headを交代する
 				PHeadChanger();
 				isNextPushKey_ = false;
@@ -621,7 +626,7 @@ void Player::BiteUpdate()
 
 		slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
 		if (slipCount_ <= 0.f) {
-			playerMode_ = MODE_SLIP;
+			SetMode(MODE_SLIP);
 			//首を殺して
 			pHeadDead_[currentHead_] = true;
 			//スティックをロックする

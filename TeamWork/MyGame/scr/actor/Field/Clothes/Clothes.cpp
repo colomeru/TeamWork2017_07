@@ -161,22 +161,18 @@ void Clothes::WindSwing()
 
 void Clothes::SetPointsUpdate()
 {
+	//ワールドマトリクス
+	Matrix mat = Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+
 	auto p1
-		= Matrix::CreateTranslation(localPoints[0])
-		* Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+		= Matrix::CreateTranslation(localPoints[0]) * mat;
 	auto p2
-		= Matrix::CreateTranslation(localPoints[1])
-		* Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+		= Matrix::CreateTranslation(localPoints[1]) * mat;
 	auto p3
-		= Matrix::CreateTranslation(localPoints[2])
-		* Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+		= Matrix::CreateTranslation(localPoints[2]) * mat;
 	auto p4
-		= Matrix::CreateTranslation(localPoints[3])
-		* Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+		= Matrix::CreateTranslation(localPoints[3]) * mat;
 
 	collisionPoints[0] = Vector2(p1.Translation().x, p1.Translation().y);
 	collisionPoints[1] = Vector2(p2.Translation().x, p2.Translation().y);

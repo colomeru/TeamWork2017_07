@@ -44,6 +44,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("pauseText.png", SPRITE_ID::PAUSE_TEXT_SPRITE);
 	sprite.Load("backgameplay.png", SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE);
 	sprite.Load("ceiling.png", SPRITE_ID::CEILING_SPRITE);
+	sprite.Load("pbody.png", SPRITE_ID::PBODY_SPRITE);
 	
 }
 

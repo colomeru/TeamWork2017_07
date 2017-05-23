@@ -225,7 +225,6 @@
     <ClCompile Include="scr\scene\EndingScene.cpp" />
     <ClCompile Include="scr\scene\GamePlayScene.cpp" />
     <ClCompile Include="scr\scene\MenuScene.cpp" />
-    <ClCompile Include="scr\scene\ResultScene.cpp" />
     <ClCompile Include="scr\scene\SceneManager.cpp" />
     <ClCompile Include="scr\scene\TitleScene.cpp" />
     <ClCompile Include="scr\stageGenerator\StageGenerator.cpp" />
@@ -318,7 +317,6 @@
     <ClInclude Include="scr\scene\IScene.h" />
     <ClInclude Include="scr\scene\ISceneMediator.h" />
     <ClInclude Include="scr\scene\MenuScene.h" />
-    <ClInclude Include="scr\scene\ResultScene.h" />
     <ClInclude Include="scr\scene\Scene.h" />
     <ClInclude Include="scr\scene\SceneManager.h" />
     <ClInclude Include="scr\scene\IScenePtr.h" />

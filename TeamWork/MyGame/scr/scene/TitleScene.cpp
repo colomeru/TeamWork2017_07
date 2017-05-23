@@ -8,15 +8,13 @@
 TitleScene::TitleScene() :
 nextScene_(Scene::Menu)
 {
-	// ƒ[ƒ‹ƒh¶¬
 	world_ = std::make_shared<World>();
-	// ƒCƒxƒ“ƒgƒŠƒXƒi[“o˜^
+	
 	world_->AddEventMessageListener([=](EventMessage msg, void* param)
 	{
 		handleMessage(msg, param);
 	});
 }
-
 TitleScene::~TitleScene()
 {
 }
@@ -30,6 +28,8 @@ void TitleScene::Initialize()
 	Camera::GetInstance().Target.Set(Vector3(0, 0, 0));
 	Camera::GetInstance().Update();
 	isEnd_ = false;
+	selectX_ = 850.0f;
+	selectY_ = 803.0f;
 }
 
 void TitleScene::Update()
@@ -38,8 +38,6 @@ void TitleScene::Update()
 	world_->Update();
 
 	// I—¹
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
-		isEnd_ = true;
 	Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
 	Camera::GetInstance().Target.Set(Vector3(0,0,0));
 	Camera::GetInstance().Update();
@@ -59,7 +57,7 @@ void TitleScene::Update()
 			isEnd_ = true;
 		}
 		else if (selectNum_ == 1) {
-			Escape;
+			//Escape
 		}
 	}
 }
@@ -92,7 +90,7 @@ bool TitleScene::IsEnd() const
 }
 
 Scene TitleScene::Next() const
-{
+{	
 	return nextScene_;
 }
 

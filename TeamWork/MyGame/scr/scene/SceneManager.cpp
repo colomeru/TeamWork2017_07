@@ -74,7 +74,7 @@ void SceneManager::Change(Scene name)
 
 	End();
 	mCurrentScene = mScenes[name];
-	mCurrentScene->Initialize();
+         	mCurrentScene->Initialize();
 }
 
 // ‰Šú‰»‚ğw’è‚·‚é

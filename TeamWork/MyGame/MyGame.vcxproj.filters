@@ -240,9 +240,6 @@
     <ClCompile Include="scr\scene\addScreen\MenuScreen.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\scene\ResultScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\AllInclude.h">
@@ -534,9 +531,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\scene\addScreen\MenuScreen.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\scene\ResultScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

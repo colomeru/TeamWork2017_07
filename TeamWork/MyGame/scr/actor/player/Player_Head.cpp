@@ -26,7 +26,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 	position_ = pos;
 
 
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_PHead_Clothes, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::PHEAD_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_Circle_Capsules, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::BOX_HANGER_COL] = std::bind(&CollisionFunction::IsHit_PHead_Hanger, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
@@ -39,7 +39,8 @@ void Player_Head::Update()
 	//自分が死んでたら更新を行わない
 	if (player_->GetPHeadDead(myNumber_))return;
 	//服を噛んでいる時は、頭の色を赤く、離すと元の色に戻していく
-	if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
+	if (player_->GetIsResistMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ += 10.0f;
+	else if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
 	else {
 		fatigueCheckColor_ -= 2;
 		fatigueCheckColor_ = max(fatigueCheckColor_, 0);
@@ -59,16 +60,20 @@ void Player_Head::Update()
 	//プレイヤーから各ヘッドまでの長さ、(32,32のLength)*自分の首の長さ
 	Vector2 vel = basePos - player_->GetPosition();
 	//自分の首の向き*自分の首に設定されている長さ
+	if (player_->GetCurHead() == myNumber_&&(player_->GetIsSlipped()|| world_->GetIsCamChangeMode())) {
+		vel = player_->GetHeadPosAddVect();
+	}
+
 	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
 	//スリップしたかを調べて
-	if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()) {
+	//if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()) {
 		//Playerがスリップ状態に入った時点でposAddVectを指定してもらい、その位置に首を固定する
-		position_ = basePos + posAddVect_;
-	}
-	else {
+		//position_ = basePos + posAddVect_;
+	//}
+	//else {
 		//通常時は首の長さに対応した位置に補正する
 		position_ = basePos + bPlusLngPos;
-	}
+	//}
 
 
 	if (player_->GetCurHead() == myNumber_) {
@@ -83,7 +88,7 @@ void Player_Head::Update()
 	parameter_.mat.Translation(toMatPos);
 
 	if (player_->GetIsShootModeEnd()&&player_->GetCurHead()==myNumber_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_BOX_COL);
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::PHEAD_CLOTHES_COL);
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::HANGER_ACTOR, COL_ID::BOX_HANGER_COL);
 	}
 

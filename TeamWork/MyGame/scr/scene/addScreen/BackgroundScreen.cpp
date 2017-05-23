@@ -40,7 +40,7 @@ void BackgroundScreen::Update()
 	if (createWindTimeAndPos_.find(timeCount_)!= createWindTimeAndPos_.end()) {
 		Vector2 pPos = world_->GetKeepDatas().playerPos_;
 		world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, createWindTimeAndPos_[timeCount_]+pPos));
-
+		OutputDebugString("deta");
 	}
 	//std::vector<BackgroundCharacters*>::iterator itr = characters_.begin();
 	//while (itr != characters_.end())

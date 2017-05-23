@@ -16,7 +16,6 @@ public:
 	virtual void Update() = 0;
 	virtual void Draw()const = 0;
 	virtual void Del() = 0;
-	bool isDead() { return isDead_; }
 	Vector2 GetDrawPosVect(const Vector2& pos)const {
 		Vector2 retPos;
 
@@ -26,5 +25,4 @@ public:
 	}
 
 protected:
-	bool isDead_;
 };

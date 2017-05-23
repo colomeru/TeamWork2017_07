@@ -53,6 +53,8 @@ public:
 	void ShakesClothes();
 	//
 	void WindSwing();
+	//服の当たり判定の設定
+	void SetPointsUpdate();
 
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
@@ -69,8 +71,11 @@ protected:
 	bool is_Test_;
 	//服ID
 	CLOTHES_ID clothes_ID;
-	//
+	//当たり判定のポイント
 	std::array<Vector2, 4> collisionPoints;
+	//当たり判定のポイントのローカル座標
+	std::array<Vector3, 4> localPoints;
+
 
 	//振り子関連(服用)
 	//振り子フラグ

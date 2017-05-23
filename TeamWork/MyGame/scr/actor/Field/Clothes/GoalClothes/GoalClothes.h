@@ -19,7 +19,7 @@ public:
 	//衝突時のアクション
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	//メッセージ取得
-	virtual void OnMessage(EventMessage message, void* param);
+	virtual void OnMessage(EventMessage message, void* param) override;
 
 private:
 	Player* player_;

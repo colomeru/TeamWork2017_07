@@ -9,7 +9,7 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 {
 	clothes_ID = CLOTHES_ID::TEST_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
-	parameter_.radius = 32.0f;
+	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(200, 200.f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
@@ -19,6 +19,14 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	laneNum_ = laneNum;
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
+
+	localPoints[0] = Vector3(-60, 0 + length_, 0);
+	localPoints[1] = Vector3(-60, 100 + length_, 0);
+	localPoints[2] = Vector3(60, 100 + length_, 0);
+	localPoints[3] = Vector3(60, 0 + length_, 0);
+
+	SetPointsUpdate();
+
 
 	//if (is_Pin)
 	//	world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
@@ -40,6 +48,8 @@ void TestClothes::Update()
 
 	ShakesClothes();
 	WindSwing();
+
+	SetPointsUpdate();
 
 	//if (isCheckCol_ && isUpdate_) {
 	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
@@ -70,7 +80,20 @@ void TestClothes::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), FALSE);
+	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), FALSE);
+
+	auto drawP1 = GetDrawPosVect(collisionPoints[0]);
+	auto drawP2 = GetDrawPosVect(collisionPoints[1]);
+	auto drawP3 = GetDrawPosVect(collisionPoints[2]);
+	auto drawP4 = GetDrawPosVect(collisionPoints[3]);
+	DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
+	DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
+	DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
+	DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
+	DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
+	DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
+	DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+
 }
 
 void TestClothes::OnUpdate()

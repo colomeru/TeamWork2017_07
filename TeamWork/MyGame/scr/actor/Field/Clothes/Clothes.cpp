@@ -158,3 +158,29 @@ void Clothes::WindSwing()
 		parent_ = nullptr;
 	}
 }
+
+void Clothes::SetPointsUpdate()
+{
+	auto p1
+		= Matrix::CreateTranslation(localPoints[0])
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p2
+		= Matrix::CreateTranslation(localPoints[1])
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p3
+		= Matrix::CreateTranslation(localPoints[2])
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+	auto p4
+		= Matrix::CreateTranslation(localPoints[3])
+		* Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+
+	collisionPoints[0] = Vector2(p1.Translation().x, p1.Translation().y);
+	collisionPoints[1] = Vector2(p2.Translation().x, p2.Translation().y);
+	collisionPoints[2] = Vector2(p3.Translation().x, p3.Translation().y);
+	collisionPoints[3] = Vector2(p4.Translation().x, p4.Translation().y);
+
+}

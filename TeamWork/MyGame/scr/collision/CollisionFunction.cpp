@@ -1,5 +1,6 @@
 #include "CollisionFunction.h"
 #include "../actor/Actor.h"
+#include "../actor/Field/Clothes/Clothes.h"
 #include "../collision/MyCol.h"
 
 CollisionFunction::CollisionFunction(IWorld * world) :
@@ -46,6 +47,24 @@ CollisionParameter CollisionFunction::IsHit_PHead_Hanger(const Actor & sprite1, 
 	MyCol::CreateOBB(&obb2, sp2Translation + Vector2(0, sp2CY), Matrix::CreateRotationZ(sprite2.GetAngle()), Vector2(sprite2.GetParameter().size.x / 2.0f, sprite2.GetParameter().size.y / 12.0f));
 
 	return CollisionParameter(COL_ID::BOX_HANGER_COL, MyCol::TestOBBOBB(obb1, obb2), sprite1.GetPosition());
+}
+
+CollisionParameter CollisionFunction::IsHit_Circle_Capsules(const Actor & sprite1, const Actor & sprite2)
+{
+	Circle head;
+	std::array<Vector2, 4> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite2))->GetCollisionPoints();
+	Vector3 headTranslation = sprite1.GetPose().Translation();
+
+	for (int i = 0; i < 3; i++) {
+		auto circleCenter = DXConverter::GetInstance().ToVECTOR(headTranslation);
+		auto capPos1 = DXConverter::GetInstance().ToVECTOR(Vector3(collisionPoints[i].x, collisionPoints[i].y, 0));
+		auto capPos2 = DXConverter::GetInstance().ToVECTOR(Vector3(collisionPoints[i+1].x, collisionPoints[i+1].y, 0));
+		if (HitCheck_Sphere_Capsule(circleCenter, sprite1.GetParameter().radius, capPos1, capPos2, sprite2.GetParameter().radius)) {
+			return CollisionParameter(COL_ID::PHEAD_CLOTHES_COL, true);
+		}
+	}
+
+	return CollisionParameter(COL_ID::PHEAD_CLOTHES_COL, false);
 }
 
 CollisionParameter CollisionFunction::IsHit_OBB_Segment(const Actor & sprite1, const Actor & sprite2)

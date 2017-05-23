@@ -139,14 +139,15 @@ public:
 	bool GetIsBiteMode()const {
 		return playerMode_==MODE_BITE||playerMode_==MODE_RESIST;
 	}
+	bool GetIsResistMode()const {
+		return playerMode_ == MODE_RESIST;
+	}
 	//噛み付き状態にするかをセット、
 	void SetIsBiteMode(bool ismode) {
 		int setMode = (ismode) ? MODE_BITE : MODE_SHOOT;
 		playerMode_ = setMode;
 	}
-	void SetMode(int pMode) {
-		playerMode_ = pMode;
-	}
+	void SetMode(int pMode);
 	//シュート終了の瞬間かどうかを取る
 	bool GetIsShootModeEnd()const {
 		return playerMode_==MODE_SHOOT_END;
@@ -175,6 +176,7 @@ public:
 		changeType_ = changeType;
 		world_->ChangeCamMoveMode(addNum);
 
+		//PHeadChanger();
 		SetMode(MODE_FALL);
 	}
 	void setCurPHeadSPos(const Vector2& sPos);
@@ -202,6 +204,9 @@ public:
 	}
 	Vector2 GetStopPos()const {
 		return stopPos_;
+	}
+	Vector2 GetHeadPosAddVect() const{
+		return headPosAddVect_;
 	}
 private:
 	//入力による動作をまとめる
@@ -315,6 +320,8 @@ private:
 	bool isSlipped_;
 
 	bool isPlayerFallLane_;
+
+	Vector2 headPosAddVect_;
 
 	//滑り落ちるまでの時間
 	float slipResistTime_;

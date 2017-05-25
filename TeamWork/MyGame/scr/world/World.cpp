@@ -32,13 +32,13 @@ void World::Update()
 	if (targetAct_ != nullptr&&!isChangeCam_) {
 		inv(targetMat_);
 		//targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
-		targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+		targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x,0, 0));
 		//*Matrix::CreateRotationZ(targetAct_->GetAngle());
 	}
 
 	isChangeFrame_ = false;
 	if (isChangeCam_) {
-		keepDatas_.SetPlayerNextLane(addNum_);
+		//keepDatas_.SetPlayerNextLane(addNum_);
 		//camShootSpd_ += 0.1f;
 		if (addNum_ > 0) camShootSpd_ -= 0.1f;
 		else camShootSpd_ += 0.1f;

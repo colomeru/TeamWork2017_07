@@ -105,12 +105,15 @@ public:
 
 		}
 	}
-	bool CamMoveUpdate() {
+	//レーン移動時限定のアップデート、virtualだが、Player以外はoverrideしないようにする事
+	virtual bool CamMoveUpdate() {
+		CamMoveOnlyUpdate();
 		spriteAlpha_ = 0.5f;
 		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
 		drawPos_ = GetDrawPosVect(position_);
 		return true;
 	}
+	virtual void CamMoveOnlyUpdate(){}
 	virtual void StartOnlyUpdate() {
 
 	}
@@ -125,14 +128,13 @@ public:
 		StartOnlyLateUpdate();
 		return false;
 	}
-	void CamMoveUp() {
+	virtual void CamMoveUp() {
 		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
 		laneLerpNum = min(1.f, laneLerpNum);
 		int targetNum = world_->GetKeepDatas().playerLane_-laneNum_+2;
 		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum+1], laneLerpNum)- defDrawLineChangePosY[targetNum];
 	}
-	void CamMoveDown() {
-		
+	virtual void CamMoveDown() {
 		LaneChangeFall();
 	}
 	Vector2 GetDrawPosVect(const Vector2& pos)const{

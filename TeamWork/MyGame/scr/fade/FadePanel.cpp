@@ -27,7 +27,7 @@ void FadePanel::Initialize()
 {
 	/* èâä˙ê›íË */
 	color_		= ColorType::Black;
-	alpha_		= 1.0f;
+	alpha_		= 0.0f;
 	maxAlpha_	= 1.0f;
 	actionTime_	= 0;
 	inTime_		= 1.0f;
@@ -71,10 +71,10 @@ void FadePanel::Draw()const
 	switch (color_)
 	{
 	case FadePanel::White:
-		//Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
+		Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
 		break;
 	case FadePanel::Black:
-		//Sprite::GetInstance().Draw(SPRITE_ID::BLACK_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
+		Sprite::GetInstance().Draw(SPRITE_ID::BLACK_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
 		break;
 	}
 }

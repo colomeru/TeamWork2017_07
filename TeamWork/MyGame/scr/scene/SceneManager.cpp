@@ -10,8 +10,9 @@ const int SceneManager::MaxStageCount = 6;
 
 // コンストラクタ
 SceneManager::SceneManager() :
-mStageCount(6)
+mStageCount(6), nectSceneName_(Scene::Title)
 {
+
 }
 
 // 更新前初期化
@@ -24,14 +25,17 @@ void SceneManager::Initialize()
 // 更新
 void SceneManager::Update()
 {
-	mCurrentScene->Update();
+	if (!FadePanel::GetInstance().IsAction()) 
+		mCurrentScene->Update();
+	
 	FadePanel::GetInstance().Update(Time::DeltaTime);
 }
 
 // 描画
 void SceneManager::Draw() const
 {
-	mCurrentScene->Draw();
+	//if (!FadePanel::GetInstance().IsAction())
+		mCurrentScene->Draw();
 	FadePanel::GetInstance().Draw();
 }
 
@@ -39,6 +43,7 @@ void SceneManager::Draw() const
 void SceneManager::End()
 {
 	mCurrentScene->End();
+
 }
 
 // シーン変更
@@ -63,6 +68,7 @@ void SceneManager::SetScene(Scene name)
 // シーン変更
 void SceneManager::Change(Scene name)
 {
+	if (FadePanel::GetInstance().IsAction())return;
 	Scene now = Scene::None;
 	for (auto& scene : mScenes)
 	{
@@ -72,9 +78,16 @@ void SceneManager::Change(Scene name)
 	if (name == now)
 		return;
 
-	End();
-	mCurrentScene = mScenes[name];
-         	mCurrentScene->Initialize();
+	nectSceneName_ = name;
+
+	SetFadeInOutSpeed();
+	FadePanel::GetInstance().AddCollBack([this] {End(); });
+	FadePanel::GetInstance().AddCollBack([this] {SceneChangeAfterFade(); });
+	FadePanel::GetInstance().FadeOut();
+	//End();
+	//mCurrentScene = mScenes[name];
+ //        	mCurrentScene->Initialize();
+
 }
 
 // 初期化を指定する
@@ -92,4 +105,23 @@ void SceneManager::Final(Scene name)
 void SceneManager::SetStageCount(int n)
 {
 	mStageCount = MathHelper::Clamp(n, 0, SceneManager::MaxStageCount);
+}
+
+void SceneManager::SceneChangeAfterFade()
+{
+	mCurrentScene = mScenes[nectSceneName_];
+	mCurrentScene->Initialize();
+
+	//FadePanel::GetInstance().Initialize();	
+	//FadePanel::GetInstance().AddCollBack([this] {mCurrentScene->Initialize(); });
+	FadePanel::GetInstance().FadeIn();
+
+}
+
+void SceneManager::SetFadeInOutSpeed()
+{
+	FadePanel::GetInstance().Initialize();
+	FadePanel::GetInstance().SetOutTime(0.2f);
+	FadePanel::GetInstance().SetInTime(0.4f);
+
 }

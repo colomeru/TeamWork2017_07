@@ -22,6 +22,9 @@ public:
 	virtual Scene Next() const = 0;
 	// I—¹ˆ—
 	virtual void End() = 0;
+	void SetIsEnd(bool isEnd) {
+		isEnd_ = isEnd;
+	}
 
 protected:
 	bool	isEnd_;

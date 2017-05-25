@@ -114,6 +114,7 @@ public:
 		addNum_ = addNum;
 		if (addNum > 0) camShootSpd_ = 2.33f;
 		else camShootSpd_ = 0.f;
+		keepDatas_.SetPlayerNextLane(addNum_);
 	}
 	virtual bool GetIsCamChangeMode()const override {
 		return isChangeCam_;

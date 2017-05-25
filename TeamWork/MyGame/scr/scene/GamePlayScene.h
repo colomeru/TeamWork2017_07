@@ -8,7 +8,7 @@
 #include"addScreen/BackgroundScreen.h"
 #include"addScreen/GameClearScreen.h"
 #include"addScreen/PauseScreen.h"
-
+#include"addScreen\LaneChangeScreen.h"
 class Player;
 
 class GamePlayScene : public IScene
@@ -79,6 +79,7 @@ private:
 	GameOverScreen gameOverScreen_;
 	GameClearScreen gameClearScreen_;
 	BackgroundScreen bgScreen_;
+	LaneChangeScreen changeScreen_;
 	//Vector3 posit;
 
 	//Vector3 camera_pos_;

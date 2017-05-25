@@ -19,8 +19,19 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara)override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
-	virtual void LaneChangeFall() override {
+	virtual bool CamMoveUpdate() {
+		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+		return true;
+	}
+	virtual void CamMoveUp()override {
+	}
+	virtual void CamMoveDown() override {
+		LaneChangeFall();
+		drawPos_ = GetDrawPosVect(position_);
 
+	}
+
+	virtual void LaneChangeFall() override {
 		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
 		laneLerpNum = min(1.f, laneLerpNum);
 		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;

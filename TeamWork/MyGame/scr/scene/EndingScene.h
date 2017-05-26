@@ -11,6 +11,13 @@ using namespace std;
 class EndingScene : public IScene
 {
 public:
+	struct DrawPos {
+		Vector2 p0;
+		Vector2 p1;
+		Vector2 p2;
+		Vector2 p3;
+	};
+
 	// コンストラクタ
 	EndingScene();
 	// デストラクタ
@@ -30,45 +37,47 @@ public:
 	virtual void End() override;
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
-	//単振り子
-	virtual void Pendulum();
-	//二重振り子
-	virtual void Double(Vector2 fPos);
+	////単振り子
+	//void Pendulum();
+	////二重振り子
+	//void Double(Vector2 fPos);
 	//多重振り子
-	virtual void Multiple();
+	void Multiple();
 	//変形描画
-	virtual void DeformationDraw();
+	void DeformationDraw();
+	//
+	void MultipleInit(float Length,const Vector2& fPos,float rot);
 
 private:
-	float size;
-	float vertical;
-	float horizontal;
-	float alpha;
-	float distanceH;
-	float distanceV;
-	float absH;
-	float absV;
-	float distanceC;
-	float cAlpha;
-	float aAlpha;
-	Vector2 absC;
-	Vector2 arrowSize;
-	Vector2 particleSize;
-	Vector2 arrowPos;
-	Vector2 particlePos;
-	Vector2 centerPos;
-	Vector2 circlePos;
-	Vector2 circleSize;
-	Vector2 cCenterPos;
+	//float size;
+	//float vertical;
+	//float horizontal;
+	//float alpha;
+	//float distanceH;
+	//float distanceV;
+	//float absH;
+	//float absV;
+	//float distanceC;
+	//float cAlpha;
+	//float aAlpha;
+	//Vector2 absC;
+	//Vector2 arrowSize;
+	//Vector2 particleSize;
+	//Vector2 arrowPos;
+	//Vector2 particlePos;
+	//Vector2 centerPos;
+	//Vector2 circlePos;
+	//Vector2 circleSize;
+	//Vector2 cCenterPos;
 	bool turn;
 	vector<int> v;
 	float friction; //摩擦
 
 	//ここから振り子
-	float fx; //支点x座標
-	float fy; //支点y座標
-	float rot; //角度
-	float rot_spd; //角速度
+	//float fx; //支点x座標
+	//float fy; //支点y座標
+	//float rot; //角度
+	//float rot_spd; //角速度
 	float length; //紐の長さ
 	float g; //重力加速度
 	Vector2 spherePos; //重りの位置
@@ -112,21 +121,27 @@ private:
 
 	//多重振り子
 	int fNum;
-	std::array<Vector2, 99> fPos;
-	std::array<Vector2, 99> multiplePos;
-	std::array<float, 99> mRot;
-	std::array<float, 99> mRot_spd;
 	float mFriction;
 	float mSub;
-	std::array<float, 99> mLimit;
+	std::vector<Vector2> fPos_;
+	std::vector<Vector2> multiplePos;
+	std::vector<float> mRot;
+	std::vector<float> mRot_spd;
+	std::vector<float> mLimit;
+	std::vector<float> correctionLens;
+	float oneLength;
+
 
 	//変形描画
-	int gHandle;
+	int hNeck,hHead;
 	std::array<Vector2, 4> gPos1;
 	std::array<Vector2, 4> gPos2;
 	int posNum;
 	Vector2 pos[7][4];
+	float neckLengh;
+	std::vector<DrawPos> drawPoints;
 
+	//
 
 private:
 	// ワールド用シェアドポインタ

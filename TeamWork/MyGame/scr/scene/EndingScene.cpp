@@ -160,6 +160,7 @@ void EndingScene::Initialize()
 	//		}
 	//	}
 	//}
+	DeformationDraw();
 
 }
 

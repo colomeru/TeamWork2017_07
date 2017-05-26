@@ -3,7 +3,7 @@
 #include"../Scene.h"
 #include"../../math/Vector2.h"
 #include"screenSupport\BackgroundCharacters.h"
-
+#include"screenSupport\BGCharas\LaneChangeWind.h"
 
 class World;
 class LaneChangeScreen
@@ -13,7 +13,7 @@ public:
 	LaneChangeScreen() {}
 	LaneChangeScreen(World* world);
 
-	void Init();
+	void Init(WindDir dir);
 	void Update();
 	// •`‰æ
 	void Draw() const;
@@ -22,6 +22,11 @@ private:
 	World* world_;
 
 	int timeCount_;
+	bool isCreateWind_;
+
+	WindDir dir_;
+
+	std::map<WindDir, float> windDefPoses_;
 
 	//std::vector<BackgroundCharacters*> characters_;
 

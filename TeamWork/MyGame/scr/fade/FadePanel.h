@@ -68,7 +68,7 @@ public:
 	// ディレイタイム取得
 	float GetDelayTime() const;
 
-	// コールバック関登録
+	// コールバック関登録(ラムダで関数追加)
 	void AddCollBack(std::function<void()> collback);
 
 private:

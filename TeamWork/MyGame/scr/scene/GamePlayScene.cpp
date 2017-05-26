@@ -37,7 +37,8 @@ GamePlayScene::GamePlayScene() :
 	updateFunctionMap_[1] = std::bind(&GamePlayScene::baseUpdate, this);
 	updateFunctionMap_[0] = std::bind(&GamePlayScene::startUpdate, this);
 
-	bgScreen_=BackgroundScreen(world_.get());
+	bgScreen_ = BackgroundScreen(world_.get());
+	changeScreen_=LaneChangeScreen(world_.get());
 }
 
 GamePlayScene::~GamePlayScene()
@@ -46,6 +47,10 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
+	//FadePanel::GetInstance().Initialize();
+	//FadePanel::GetInstance().SetInTime(0.2f);
+	//FadePanel::GetInstance().SetOutTime(0.2f);
+
 	isEnd_ = false;
 	//シーン遷移系の初期化
 	{
@@ -57,7 +62,8 @@ void GamePlayScene::Initialize()
 		bgScreen_.Init();
 	}
 	// フェードパネル初期化
-	FadePanel::GetInstance().Initialize();
+	//FadePanel::GetInstance().Initialize();
+	//FadePanel::GetInstance().FadeIn();
 	world_->Initialize();
 	// アクター生成
 	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
@@ -118,7 +124,9 @@ void GamePlayScene::Initialize()
 void GamePlayScene::Update()
 {
 	updateFunctionMap_[gamePlayMode_]();
-
+	if (!world_->GetIsCamChangeMode()) {
+		changeScreen_.End();
+	}
 
 	//if (isPlayerDead_) {
 	//	if (gameOverScreen_.Update(nextScene_)) {
@@ -187,14 +195,13 @@ void GamePlayScene::Draw() const
 	// 描画
 	world_->Draw(maxLaneCount, world_->GetKeepDatas().playerLane_);
 
-
 	//VECTOR pos1 = DXConverter::GetInstance().ToVECTOR(posit);
 	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);
 
 	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
 	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(ply1->GetPosition().x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
-	
+
 	if (gamePlayMode_ == 2) {
 		gameOverScreen_.Draw();
 	}
@@ -219,6 +226,7 @@ Scene GamePlayScene::Next() const
 
 void GamePlayScene::End()
 {
+	//FadePanel::GetInstance().FadeOut();
 	// 初期化
 	world_->Clear();
 
@@ -233,6 +241,15 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 		world_->PopStackActor();
 		break;
 	}
+	case EventMessage::START_LANE_CHANGE:{
+		if (world_->GetKeepDatas().nextLane_ > 0) {
+			changeScreen_.Init(WindDir::UP);
+		}
+		else {
+			changeScreen_.Init(WindDir::DOWN);
+		}
+	}
+								
 	default:
 		break;
 	}
@@ -263,7 +280,7 @@ void GamePlayScene::baseUpdate()
 	//if (world_->GetIsGameClear())setNextMode(3);
 
 	bgScreen_.Update();
-
+	changeScreen_.Update();
 }
 
 void GamePlayScene::pauseUpdate()

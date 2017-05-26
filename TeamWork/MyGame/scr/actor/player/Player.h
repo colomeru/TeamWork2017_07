@@ -63,6 +63,16 @@ public:
 	virtual void OnCollide(Actor&, CollisionParameter colpara) override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
+	virtual bool CamMoveUpdate() {
+		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+		return true;
+	}
+	virtual void CamMoveUp()override {
+	}
+	virtual void CamMoveDown() override{
+		drawPos_ = GetDrawPosVect(position_);
+		LaneChangeFall();
+	}
 	virtual void LaneChangeFall() override {
 
 		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
@@ -87,7 +97,23 @@ public:
 	float GetHeadLengthChangeToPosMult(int headNum) const {
 		return pHeadLength_[headNum] * HeadShootMult;
 	}
-	void HeadPosUpdate();
+	//現在のHeadの首の長さを返す
+	Vector2 GetCurrentHeadLength()const;
+	void HeadPosUpdate()
+	{
+		headChangeTime_ -= 0.016f*sign(headChangeTime_);
+
+		rotTimer = 0;
+		if (MathHelper::Abs(headChangeTime_) <= 0.01f)headChangeTime_ = 0;
+		else if (MathHelper::Abs(headChangeTime_) > 0)rotTimer = headChangeTime_ * 5;//MathHelper::Abs(defHeadChangeTime/1.f);
+
+		for (int i = 0; i < pHeadPoses_.size(); i++) {
+			Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((i + headAngleSetter - currentHead_) * 45)/*+angle_*/ + ((rotTimer)* 45));
+			Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
+			pHeadPoses_[i] = cgToV2;
+		}
+
+	}
 	//使用する頭を右隣の物に変更
 	void changeHead() {
 		//回転した時点でSlip状態を直す
@@ -176,6 +202,7 @@ public:
 		changeType_ = changeType;
 		world_->ChangeCamMoveMode(addNum);
 
+		world_->sendMessage(EventMessage::START_LANE_CHANGE);
 		//PHeadChanger();
 		SetMode(MODE_FALL);
 	}
@@ -236,7 +263,7 @@ private:
 		if (updateNum < 0) {
 			nextVel_ = Vector2(0, -35.f);
 			pGrav_ = 0.f;
-			position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
+			//position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
 		}
 		else if (updateNum > 0) {
 			nextVel_ = pendulumVect_/2;

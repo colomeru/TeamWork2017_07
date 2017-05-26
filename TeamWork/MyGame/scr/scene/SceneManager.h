@@ -45,6 +45,9 @@ public:
 	__declspec(property(get = GetStageCount, put = SetStageCount)) int StageCount;
 
 private:
+	void SceneChangeAfterFade();
+	void SetFadeInOutSpeed();
+private:
 	// コピー禁止
 	SceneManager(const SceneManager& other) = default;
 	SceneManager& operator = (const SceneManager& other) = default;
@@ -58,4 +61,5 @@ private:
 	// 現在のシーン
 	IScenePtr	mCurrentScene;
 	int			mStageCount;
+	Scene nectSceneName_;
 };

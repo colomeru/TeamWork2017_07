@@ -8,15 +8,13 @@
 TitleScene::TitleScene() :
 nextScene_(Scene::Menu)
 {
-	// ƒ[ƒ‹ƒh¶¬
 	world_ = std::make_shared<World>();
-	// ƒCƒxƒ“ƒgƒŠƒXƒi[“o˜^
+	
 	world_->AddEventMessageListener([=](EventMessage msg, void* param)
 	{
 		handleMessage(msg, param);
 	});
 }
-
 TitleScene::~TitleScene()
 {
 }
@@ -30,6 +28,8 @@ void TitleScene::Initialize()
 	Camera::GetInstance().Target.Set(Vector3(0, 0, 0));
 	Camera::GetInstance().Update();
 	isEnd_ = false;
+	selectX_ = 850.0f;
+	selectY_ = 803.0f;
 }
 
 void TitleScene::Update()
@@ -38,12 +38,28 @@ void TitleScene::Update()
 	world_->Update();
 
 	// I—¹
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
-		isEnd_ = true;
 	Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
 	Camera::GetInstance().Target.Set(Vector3(0,0,0));
 	Camera::GetInstance().Update();
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)) {
+		selectX_ = 850.0f;
+		selectY_ = 803.0f;
+		selectNum_ = 0;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN)) {
+		selectX_ = 850.0f;
+		selectY_ = 868.0f;
+		selectNum_ = 1;
+	}
 
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
+		if (selectNum_ == 0) {
+			isEnd_ = true;
+		}
+		else if (selectNum_ == 1) {
+			//Escape
+		}
+	}
 }
 
 void TitleScene::Draw() const
@@ -52,6 +68,11 @@ void TitleScene::Draw() const
 	// 読みこんだグラフィックを画面左上に描画
 	//auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
 	//auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
+	//DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_START_SPRITE, Vector2(905.0f, 780.0f));
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_EXIT_SPRITE, Vector2(905.0f, 840.0f));
+	Sprite::GetInstance().Draw(SPRITE_ID::SPHERE_SPRITE, Vector2(selectX_, selectY_));
+
 	DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
 	auto drawpos = Vector2(WINDOW_WIDTH, WINDOW_HEIGHT) / 2;
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE)/2;
@@ -69,13 +90,12 @@ bool TitleScene::IsEnd() const
 }
 
 Scene TitleScene::Next() const
-{
+{	
 	return nextScene_;
 }
 
 void TitleScene::End()
 {
-	// ‰Šú‰»
 	world_->Clear();
 }
 

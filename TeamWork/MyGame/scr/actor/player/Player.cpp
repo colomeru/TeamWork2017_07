@@ -151,7 +151,9 @@ void Player::Draw() const
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawCircle(drawPos_.x, drawPos_.y, pHDist.Length(), GetColor(255, 255, 255));
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
-	Sprite::GetInstance().Draw(spriteId_, GetDrawPosVect(position_), crcOrigin, spriteAlpha_, Vector2::One);
+	float aHeadAngle = (360 / pHeads_.size());
+	float angle = currentHead_*aHeadAngle + aHeadAngle*(headChangeTime_ / defHeadChangeTime);
+	Sprite::GetInstance().Draw(spriteId_, GetDrawPosVect(position_), crcOrigin, spriteAlpha_, Vector2::One,angle);
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
 	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
@@ -336,20 +338,13 @@ void Player::Pendulum(Vector2 fulcrum, float length)
 
 }
 
-void Player::HeadPosUpdate()
-{
-	headChangeTime_ -= 0.016f*sign(headChangeTime_);
-
-	rotTimer = 0;
-	if (MathHelper::Abs(headChangeTime_) <= 0.01f)headChangeTime_ = 0;
-	else if (MathHelper::Abs(headChangeTime_) > 0)rotTimer = headChangeTime_ * 5;//MathHelper::Abs(defHeadChangeTime/1.f);
-
-	for (int i = 0; i < pHeadPoses_.size(); i++) {
-		Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((i + headAngleSetter - currentHead_) * 45)/*+angle_*/ + ((rotTimer)* 45));
-		Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
-		pHeadPoses_[i] = cgToV2;
-	}
-
+Vector2 Player::GetCurrentHeadLength() const {
+	Vector2 vel = pHeads_[currentHead_]->GetPosition() - position_;
+	Vector2 msx = pHeadLength_[currentHead_] * Vector2(32.f, 32.f).Length();
+	float velLe = vel.Length();
+	float msxLe = msx.Length();
+	float lep = MathHelper::Abs(velLe - msxLe);
+	return msx;
 }
 
 void Player::StartPlayerSet() {

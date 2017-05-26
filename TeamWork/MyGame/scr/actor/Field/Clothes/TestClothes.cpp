@@ -41,7 +41,7 @@ TestClothes::~TestClothes()
 void TestClothes::Update()
 {
 	if (parent_ != nullptr) {
-		if (!static_cast<Player*>(parent_)->GetIsBiteMode()) {
+		if (!static_cast<Player*>(parent_->GetParent())->GetIsBiteMode()) {
 			parent_ = nullptr;
 		}
 	}
@@ -98,47 +98,4 @@ void TestClothes::Draw() const
 
 void TestClothes::OnUpdate()
 {
-}
-
-void TestClothes::OnMessage(EventMessage message, void * param)
-{
-
-	switch (message)
-	{
-	case EventMessage::BEGIN_WIND:
-	{		
-		if (!isUpdate_ || isPendulum_) break;
-		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > 30) return;
-		basePosition_ = position_;
-		isPendulum_ = true;
-		break;
-	}
-	//case EventMessage::STRONG_WIND:
-	//{
-	//	if (!isPendulum_) return;
-	//	rot_spd_ = 2.8f;
-	//	isWind_ = true;
-	//	break;
-	//}
-	//case EventMessage::ATTENUATE_WIND:
-	//{
-	//	if (!isPendulum_) return;
-	//	isFriction_ = true;
-	//	break;
-	//}
-	//case EventMessage::END_WIND:
-	//{
-	//	if (!isPendulum_) return;
-	//	rot_spd_ = 0.5f;
-	//	rot_ = 90.0f;
-	//	friction_ = 1.0f;
-	//	angle_ = 0;
-	//	position_ = basePosition_;
-	//	isFriction_ = false;
-	//	isWind_ = false;
-	//	isPendulum_ = false;
-	//	break;
-	//}
-	}
 }

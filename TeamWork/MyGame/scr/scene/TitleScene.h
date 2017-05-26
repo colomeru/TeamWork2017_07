@@ -33,6 +33,10 @@ private:
 	// ワールド
 	WorldPtr		world_;
 
+	int selectNum_;
+	float selectX_;
+	float selectY_;
+
 	// 次のシーン
 	Scene			nextScene_;
 };

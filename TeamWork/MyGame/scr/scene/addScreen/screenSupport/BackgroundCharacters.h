@@ -12,9 +12,16 @@ public:
 		position_=position;
 	}
 	virtual ~BackgroundCharacters() = default;
-
+	virtual void FastUpdate() override {
+		isUpdate_ = true;
+		isDraw_ = true;
+	}
 	virtual void Update() = 0;
 	virtual void Draw()const = 0;
+	virtual void LateUpdate() override {
+		isDraw_ = true;
+	}
+
 	virtual void Del() = 0;
 	Vector2 GetDrawPosVect(const Vector2& pos)const {
 		Vector2 retPos;

@@ -2,7 +2,10 @@
 #include "../Def.h"
 #include "../math/Vector2.h"
 #include <stack>
+#include <functional>
+#include <vector>
 
+// フェードクラス
 class FadePanel
 {
 public:
@@ -11,13 +14,11 @@ public:
 		White,
 		Black
 	};
-
-public:
-	enum class FADE_STATUS
+	enum FADE_STATUS
 	{
-		STANDBY = 0,	// 実行待ち
-		FadeIn	= 1,	// フェードイン
-		FadeOut = 2		// フェードアウト
+		eStandby = 0,	// 実行待ち
+		eFadeIn	 = 1,	// フェードイン
+		eFadeOut = 2		// フェードアウト
 	};
 
 
@@ -26,6 +27,11 @@ private:
 	FadePanel();
 	// デストラクタ
 	~FadePanel();
+
+	/* コピー禁止 */
+	FadePanel(const FadePanel& other) = delete;
+	FadePanel & operator = (const FadePanel& other) = delete;
+
 
 public:
 	static FadePanel &GetInstance(){
@@ -53,16 +59,17 @@ public:
 	// フェードインタイムの取得
 	float GetInTime() const;
 	// フェードインタイムの設定
-	void  SetInTime(float sec);
+	void  SetInTime(const float sec, const float delay = 0.0f);
 	// フェードアウトタイムの取得
 	float GetOutTime() const;
 	// フェードアウトタイムの設定
-	void  SetOutTime(float sec);
+	void  SetOutTime(const float sec, const float delay = 0.0f);
 
 	// ディレイタイム取得
 	float GetDelayTime() const;
-	// ディレイタイム設定
-	void  SetDelayTime(float sec);
+
+	// コールバック関登録(ラムダで関数追加)
+	void AddCollBack(std::function<void()> collback);
 
 private:
 	// フェードインアップデート
@@ -78,6 +85,11 @@ private:
 
 	// ステートスタック
 	std::stack<FADE_STATUS>	stateStack_;
+
+	// コールバック関数宣言
+	using CallBack = std::function<void()>;
+	// コールバックベクター
+	std::vector<CallBack>	callbacks_;
 
 	// タイプ
 	ColorType	color_;

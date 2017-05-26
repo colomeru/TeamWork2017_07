@@ -1,20 +1,17 @@
 #pragma once
 #include"../BackgroundCharacters.h"
+#include"../WindDir.h"
 
-enum WindDir {
-	UP,
-	DOWN,
-	RIGHT,
-	LEFT
-};
 class LaneChangeWind :public BackgroundCharacters {
 public:
 	LaneChangeWind(IWorld* world, const Vector2& position, WindDir dir);
-	virtual void Update()override;
 	virtual void FastUpdate() override {
 		isUpdate_ = true;
 		isDraw_ = true;
+		laneNum_ = world_->GetKeepDatas().playerLane_;
 	}
+	virtual void Update()override;
+	virtual void CamMoveOnlyUpdate()override;
 	virtual void Draw()const override;
 	virtual void Del()override;
 private:

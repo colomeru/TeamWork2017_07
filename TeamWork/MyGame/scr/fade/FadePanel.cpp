@@ -16,7 +16,7 @@ delayTime_(0.0f)
 	{
 		stateStack_.pop();
 	}
-	stateStack_.push(FADE_STATUS::STANDBY);
+	stateStack_.push(FADE_STATUS::eStandby);
 }
 
 FadePanel::~FadePanel()
@@ -25,21 +25,19 @@ FadePanel::~FadePanel()
 
 void FadePanel::Initialize()
 {
-	/* 初期設定 */
 	color_		= ColorType::Black;
-	alpha_		= 1.0f;
+	alpha_		= 0.0f;
 	maxAlpha_	= 1.0f;
-	actionTime_	= 0;
+	actionTime_	= 0.0f;
 	inTime_		= 1.0f;
 	outTime_	= 1.0f;
 	delayTime_  = 0.0f;
 
-	// ステートリセット
 	while (!stateStack_.empty())
-	{
 		stateStack_.pop();
-	}
-	stateStack_.push(FADE_STATUS::STANDBY);
+	stateStack_.push(FADE_STATUS::eStandby);
+
+	callbacks_.clear();
 }
 
 void FadePanel::Update(float deltaTime)
@@ -58,8 +56,8 @@ void FadePanel::Update(float deltaTime)
 	switch (stateStack_.top())
 	{
 	// フェードイン
-	case FADE_STATUS::FadeIn:	FadeInUpdate(deltaTime);	break;
-	case FADE_STATUS::FadeOut:	FadeOutUpdate(deltaTime);	break;
+	case FADE_STATUS::eFadeIn:	FadeInUpdate(deltaTime);	break;
+	case FADE_STATUS::eFadeOut:	FadeOutUpdate(deltaTime);	break;
 	}
 
 	// アルファクランプ
@@ -71,10 +69,10 @@ void FadePanel::Draw()const
 	switch (color_)
 	{
 	case FadePanel::White:
-		//Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
+		Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
 		break;
 	case FadePanel::Black:
-		//Sprite::GetInstance().Draw(SPRITE_ID::BLACK_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
+		Sprite::GetInstance().Draw(SPRITE_ID::BLACK_SCREEN_SPRITE, Vector2::Zero, Vector2::Zero, alpha_, SCALE, 0.0f, false, false);
 		break;
 	}
 }
@@ -82,14 +80,14 @@ void FadePanel::Draw()const
 // フェードイン開始
 void FadePanel::FadeIn()
 {
-	stateStack_.push(FADE_STATUS::FadeIn);
+	stateStack_.push(FADE_STATUS::eFadeIn);
 	actionTime_ = GetInTime();
 }
 
 // フェードアウト開始
 void FadePanel::FadeOut(ColorType type, float maxAlpha)
 {
-	stateStack_.push(FADE_STATUS::FadeOut);
+	stateStack_.push(FADE_STATUS::eFadeOut);
 	color_	= type;
 	maxAlpha_	= maxAlpha;
 	actionTime_ = GetOutTime();
@@ -98,7 +96,7 @@ void FadePanel::FadeOut(ColorType type, float maxAlpha)
 // 変異中か？
 bool FadePanel::IsAction() const
 {
-	return stateStack_.top() != FADE_STATUS::STANDBY;
+	return stateStack_.top() != FADE_STATUS::eStandby;
 }
 
 // 画面が埋まっているか？
@@ -120,9 +118,10 @@ float FadePanel::GetInTime() const
 }
 
 // フェードインタイムの設定
-void FadePanel::SetInTime(float sec)
+void FadePanel::SetInTime(const float sec, const float delay)
 {
-	inTime_ = sec;
+	inTime_	   = sec;
+	delayTime_ = delay;
 }
 
 // フェードアウトタイムの取得
@@ -132,9 +131,10 @@ float FadePanel::GetOutTime() const
 }
 
 // フェードアウトタイムの設定
-void FadePanel::SetOutTime(float sec)
+void FadePanel::SetOutTime(const float sec, const float delay)
 {
-	outTime_ = sec;
+	outTime_   = sec;
+	delayTime_ = delay;
 }
 
 // ディレイタイム取得
@@ -143,10 +143,9 @@ float FadePanel::GetDelayTime() const
 	return delayTime_;
 }
 
-// ディレイタイム取得
-void FadePanel::SetDelayTime(float sec)
+void FadePanel::AddCollBack(std::function<void()> collback)
 {
-	delayTime_ = sec;
+	callbacks_.push_back(collback);
 }
 
 // フェードインアップデート
@@ -156,7 +155,16 @@ void FadePanel::FadeInUpdate(float deltaTime)
 
 	// 終了判定
 	if (IsClearScreen())
+	{
 		stateStack_.pop();
+		
+		// コールバック呼び出し
+		auto tempCallbacks = callbacks_;
+		callbacks_.clear();
+		for (auto& callback : tempCallbacks)
+			callback();
+		tempCallbacks.clear();
+	}
 }
 
 // フェードアウトアップデート
@@ -166,5 +174,14 @@ void FadePanel::FadeOutUpdate(float deltaTime)
 
 	// 終了判定
 	if (IsFillScreen())
+	{
 		stateStack_.pop();
+
+		// コールバック呼び出し
+		auto tempCallbacks = callbacks_;
+		callbacks_.clear();
+		for (auto& callback : tempCallbacks)
+			callback();
+		tempCallbacks.clear();
+	}
 }

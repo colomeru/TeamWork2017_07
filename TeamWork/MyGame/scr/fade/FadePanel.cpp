@@ -25,21 +25,19 @@ FadePanel::~FadePanel()
 
 void FadePanel::Initialize()
 {
-	/* 初期設定 */
 	color_		= ColorType::Black;
 	alpha_		= 1.0f;
 	maxAlpha_	= 1.0f;
-	actionTime_	= 0;
+	actionTime_	= 0.0f;
 	inTime_		= 1.0f;
 	outTime_	= 1.0f;
 	delayTime_  = 0.0f;
 
-	// ステートリセット
 	while (!stateStack_.empty())
-	{
 		stateStack_.pop();
-	}
 	stateStack_.push(FADE_STATUS::eStandby);
+
+	callbacks_.clear();
 }
 
 void FadePanel::Update(float deltaTime)
@@ -161,9 +159,11 @@ void FadePanel::FadeInUpdate(float deltaTime)
 		stateStack_.pop();
 		
 		// コールバック呼び出し
-		for (auto& callback : callbacks_)
-			callback();
+		auto tempCallbacks = callbacks_;
 		callbacks_.clear();
+		for (auto& callback : tempCallbacks)
+			callback();
+		tempCallbacks.clear();
 	}
 }
 
@@ -178,8 +178,10 @@ void FadePanel::FadeOutUpdate(float deltaTime)
 		stateStack_.pop();
 
 		// コールバック呼び出し
-		for (auto& callback : callbacks_)
-			callback();
+		auto tempCallbacks = callbacks_;
 		callbacks_.clear();
+		for (auto& callback : tempCallbacks)
+			callback();
+		tempCallbacks.clear();
 	}
 }

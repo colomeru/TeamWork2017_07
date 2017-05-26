@@ -48,3 +48,4 @@ void Enemy::OnCollide(Actor & other, CollisionParameter colpara)
 void Enemy::OnMessage(EventMessage message, void * param)
 {
 }
+

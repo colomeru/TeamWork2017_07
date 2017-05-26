@@ -26,6 +26,9 @@ public:
 	virtual void CamMoveUp()override {
 	}
 	virtual void CamMoveDown() override {
+		if (!player_->isLaneChangeFall()) {
+			return;
+		}
 		LaneChangeFall();
 		drawPos_ = GetDrawPosVect(position_);
 

@@ -7,6 +7,7 @@
 #include"../../math/Matrix.h"
 #include"../../math/MyFuncionList.h"
 #include"../../input/GamePad.h"
+#include"Player_Sword.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -60,6 +61,9 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 
 		SetMyHeadLaneNum(i);
 	}
+	pSword_ = std::make_shared<Player_Sword>(world,this,position_);
+	world_->Add(ACTOR_ID::PLAYER_SWORD_ACTOR, pSword_);
+
 	updateFunctionMap_[MODE_FALL] = std::bind(&Player::FallUpdate, this);
 	updateFunctionMap_[MODE_SHOOT] = std::bind(&Player::ShootUpdate, this);
 	updateFunctionMap_[MODE_SHOOT_END] = std::bind(&Player::ShootEndUpdate, this);
@@ -116,6 +120,7 @@ void Player::Update()
 	parameter_.mat.NormalizeRotationMatrix();
 
 	HeadPosUpdate();
+	SwordPosUpdate();
 
 	worldSetMyDatas();
 
@@ -345,6 +350,27 @@ Vector2 Player::GetCurrentHeadLength() const {
 	float msxLe = msx.Length();
 	float lep = MathHelper::Abs(velLe - msxLe);
 	return msx;
+}
+
+void Player::SwordPosUpdate() {
+	if (!GetIsBiteMode()&&!world_->GetIsCamChangeMode()) {
+		pSword_->SetUseSword(false);
+		return;
+	}
+	Vector2 velUnPos = pHeads_[currentHead_]->GetPosition();
+	//if (pHeadDead_[currentHead_]) {
+	//	Vector3 pHRt= Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ((360.f/(float)pHeads_.size())*6);
+
+	//	velUnPos.x = pHRt.x;
+	//	velUnPos.y = pHRt.y;
+	//	velUnPos += position_;
+	//}
+	Vector2 vel = position_ - velUnPos;
+	vel = Vector2::Normalize(vel);
+
+	pSword_->SetSwordVel(vel);
+
+	pSword_->SetLaneNum(laneNum_);
 }
 
 void Player::StartPlayerSet() {
@@ -584,8 +610,12 @@ void Player::ShootEndUpdate()
 void Player::BiteUpdate()
 {
 	Pendulum(pHeads_[currentHead_]->GetPosition(), length_);
+		if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+			pSword_->SetUseSword(true);
+		}
 		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y>0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+				//pSword_->SetUseSword(true);
 				SetNextLane(1);
 				//UpdateLaneNum(1);
 			}

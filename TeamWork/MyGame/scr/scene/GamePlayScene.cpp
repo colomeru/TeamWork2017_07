@@ -11,7 +11,6 @@
 #include"../actor/Field/Clothes/TestClothes.h"
 #include"../actor/Field/ClothesLine.h"
 #include"../actor/Field/ClothesPin.h"
-
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"
 #include"../stageGenerator/Stage1/Stage1.h"
@@ -95,6 +94,8 @@ void GamePlayScene::Initialize()
 	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 
+	//world_->Add(ACTOR_ID::ENEMY_ACTOR,std::make_shared<Birds>)
+	//world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get(), 1, Vector2(0, 0)));
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 3, Vector2(200, 100)));
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 4, Vector2(200, 100)));

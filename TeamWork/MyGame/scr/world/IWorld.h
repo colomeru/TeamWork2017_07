@@ -49,5 +49,5 @@ public:
 	virtual bool isChangeFrame()const = 0;
 	
 	virtual void StartModeUpdate()=0;
-
+	virtual void UnlockCameraPosY() = 0;
 };

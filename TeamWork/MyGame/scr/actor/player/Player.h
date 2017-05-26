@@ -6,6 +6,7 @@
 #include"../../Def.h"
 
 class Player_Head;
+class Player_Sword;
 
 static const Vector2 pHDist = Vector2(32, 32);
 static const int headAngleSetter = -2;
@@ -70,6 +71,9 @@ public:
 	virtual void CamMoveUp()override {
 	}
 	virtual void CamMoveDown() override{
+		if (changeType_ == LaneChangeType::LaneChange_Normal) {
+			return;
+		}
 		drawPos_ = GetDrawPosVect(position_);
 		LaneChangeFall();
 	}
@@ -114,6 +118,7 @@ public:
 		}
 
 	}
+	void SwordPosUpdate();
 	//使用する頭を右隣の物に変更
 	void changeHead() {
 		//回転した時点でSlip状態を直す
@@ -200,6 +205,13 @@ public:
 		if (laneNum_ + addNum > (maxLaneSize_-1) || laneNum_ + addNum<0)return;
 		
 		changeType_ = changeType;
+		//if (!isLaneChangeFall()&&addNum>0) {
+		//	//world_->UnlockCameraPosY();
+		//	position_.y -= defDrawLinePosY[1];
+		//	world_->InitializeInv(position_);
+		//	UpdateLaneNum(addNum, changeType_);
+		//	return;
+		//}
 		world_->ChangeCamMoveMode(addNum);
 
 		world_->sendMessage(EventMessage::START_LANE_CHANGE);
@@ -260,16 +272,20 @@ private:
 		
 		//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
 		Vector2 nextVel_;
+		//上がるとき
 		if (updateNum < 0) {
 			nextVel_ = Vector2(0, -35.f);
 			pGrav_ = 0.f;
 			//position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
 		}
+		//降りる時
 		else if (updateNum > 0) {
-			nextVel_ = pendulumVect_/2;
+			nextVel_ = pendulumVect_ / 2;
 			pGrav_ *= 0.3f;
 			if (changeType == LaneChangeType::LaneChange_Fall) position_.y += (defDrawLinePosY[0] - defDrawLinePosY[1])*fallAddPosMult;
-			else position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
+			else {
+				//position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
+			}
 		}
 		laneNum_ += updateNum;
 		//レーン最大範囲を超えたらVectの補正を行わない
@@ -295,6 +311,7 @@ private:
 	void ResistUpdate();
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
+	using PSwordPtr = std::shared_ptr<Player_Sword>;
 	//ステージの最大レーン数
 	int maxLaneSize_;
 
@@ -321,6 +338,8 @@ private:
 
 	//Headが静止する位置を格納する
 	Vector2 stopPos_;
+
+	PSwordPtr pSword_;
 
 	std::vector<PHeadPtr> pHeads_;
 	std::vector<Vector2> pHeadPoses_;

@@ -45,6 +45,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("pbody.png", SPRITE_ID::PBODY_SPRITE);
 	sprite.Load("orochi_neck2.png", SPRITE_ID::OROCHI_NECK_SPRITE);
 	sprite.Load("orochi2.png", SPRITE_ID::OROCHI_HEAD_SPRITE);
+	sprite.Load("sword.png", SPRITE_ID::SWORD_SPRITE);
+	sprite.Load("birdsDropping.png", SPRITE_ID::BIRDS_DROPPING_SPRITE);
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ

@@ -109,7 +109,7 @@ public:
 	virtual KeepDatas& GetCanChangedKeepDatas() override {
 		return keepDatas_;
 	}
-	virtual void ChangeCamMoveMode(int addNum) override{
+	virtual void ChangeCamMoveMode(int addNum) override {
 		isChangeCam_ = true;
 		addNum_ = addNum;
 		if (addNum > 0) camShootSpd_ = 2.33f;
@@ -123,7 +123,11 @@ public:
 		return isChangeFrame_;
 	}
 	virtual void StartModeUpdate()override;
-	
+
+	virtual void UnlockCameraPosY()override {
+		isLockedCamY_ = false;
+	}
+
 private:
 	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
 	{
@@ -145,6 +149,7 @@ private:
 	bool isChangeCam_;
 	int addNum_;
 	bool isChangeFrame_;
+	bool isLockedCamY_;
 	std::map<bool, std::function<void()>> updateFunctionMap_;
 
 	Matrix inv_;

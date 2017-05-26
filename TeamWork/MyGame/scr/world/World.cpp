@@ -3,7 +3,7 @@
 #include"../math/Vector3.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f)
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isLockedCamY_(true)
 {
 	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
 	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
@@ -24,6 +24,7 @@ void World::Initialize()
 	isChangeCam_ = false;
 	addNum_ = 0;
 	isChangeFrame_ = false;
+	isLockedCamY_ = true;
 }
 
 // 更新
@@ -31,8 +32,11 @@ void World::Update()
 {
 	if (targetAct_ != nullptr&&!isChangeCam_) {
 		inv(targetMat_);
-		//targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
-		targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x,0, 0));
+		
+		if (isLockedCamY_)targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+		else targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
+		
+
 		//*Matrix::CreateRotationZ(targetAct_->GetAngle());
 	}
 
@@ -160,7 +164,7 @@ void World::inv(const Matrix & mat)
 
 	//最大最小値の指定(0,999999は後で消そう)
 	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, 0, 999999);
-	float clampPosY = MathHelper::Clamp((int)playerMat.Translation().y, 0, 999999);
+	float clampPosY = MathHelper::Clamp((int)playerMat.Translation().y, -10000, 999999);
 
 	//if (scrool.scroolJudge.x == 0)
 	//	clampPosX = playerScreenPos_.x;

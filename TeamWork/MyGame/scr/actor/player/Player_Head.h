@@ -91,6 +91,9 @@ public:
 		isBiteSlipWind_ = isSlip;
 
 	}
+	Player* GetPlayerPointer() const{
+		return player_;
+	}
 private:
 	//Õ“Ë‚µ‚Ä‚¢‚é‚©
 	bool isHit_;

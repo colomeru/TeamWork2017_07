@@ -17,6 +17,7 @@
 #include"../game/Random.h"
 #include"GamePlayDefine.h"
 #include"../actor/Field/Enemys/EnemyGenerator.h"
+#include"../actor/Field/Enemys/EnemyCharas/ClothesTapper.h"
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3),
@@ -95,6 +96,8 @@ void GamePlayScene::Initialize()
 	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<EnemyGenerator>(world_.get()));
+	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(800.f,0.f)));
+	
 	//world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get(), 1, Vector2(0, 0)));
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 3, Vector2(200, 100)));

@@ -3,7 +3,7 @@
 #include"../../../../math/Easing.h"
 #include"../../../../game/Random.h"
 
-static int defDropTime = 60;
+static int defDropTime = 180;
 Bird::Bird(IWorld * world, int laneNum, Vector2 pos) :
 	Enemys(world, laneNum, pos),dropTimer_(0), timeCount_(0.0f), basePos_(pos)
 {
@@ -27,7 +27,7 @@ void Bird::Update()
 		//if(Random::GetInstance().Range(0,100)>30)
 			world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<BirdsDropping>(world_, laneNum_, position_));
 	}
-	if (position_.x <= world_->GetKeepDatas().playerPos_.x-WINDOW_WIDTH) {
+	if (position_.x <= world_->GetKeepDatas().playerPos_.x-WINDOW_WIDTH|| laneNum_ != world_->GetKeepDatas().playerLane_) {
 		parameter_.isDead = true;
 	}
 }

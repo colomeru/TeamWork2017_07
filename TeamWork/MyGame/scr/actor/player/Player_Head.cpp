@@ -10,7 +10,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 	:Actor(world, targetP)
 	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false)
 {
-	spriteId_ = SPRITE_ID::PLAYER_HEAD_SPRITE;
+	spriteId_ = SPRITE_ID::OROCHI_HEAD_SPRITE;
 
 	parameter_.ID = ACTOR_ID::PLAYER_HEAD_ACTOR;
 	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2;
@@ -126,10 +126,23 @@ void Player_Head::Draw() const
 	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	Vector2 headOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
-	Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
+	float angle = (float)(((int)MathAngle(player_->GetPosition()- position_))%360);
+	if (getIsCurrentHead()) {
+		if (angle > 90 && 180 > angle)angle = 90;
+		else if (angle < 270 && 180 <= angle) {
+			angle = 270;
+		}
+		Vector2 headOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
+		Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_,Vector2::One, angle,true,false);
+		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
+	}
+	else {
+		Vector2 headOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
+		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+		//Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One);
+		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
 
+	}
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);
 	//if (player_->GetCurHead() == myNumber_) {
 	//SetDrawBlendMode(BLEND_MODE::Alpha, fatigueCheckColor_);

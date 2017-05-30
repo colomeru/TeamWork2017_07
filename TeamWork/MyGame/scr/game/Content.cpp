@@ -19,7 +19,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("sphere.png", SPRITE_ID::SPHERE_SPRITE);
 	sprite.Load("êl.png", SPRITE_ID::HITO_SPRITE);
 	sprite.Load("snake.png", SPRITE_ID::SNAKE_SPRITE);
-	sprite.Load("head.bmp", SPRITE_ID::PLAYER_HEAD_SPRITE);
+	sprite.Load("clip.png", SPRITE_ID::PLAYER_HEAD_SPRITE);
 	sprite.Load("headFatigue.bmp", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
 	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE);
 	sprite.Load("testClothes.bmp", SPRITE_ID::TEST_CLOTHES_SPRITE);
@@ -48,6 +48,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("sword.png", SPRITE_ID::SWORD_SPRITE);
 	sprite.Load("birdsDropping.png", SPRITE_ID::BIRDS_DROPPING_SPRITE);
 	sprite.Load("bird.png", SPRITE_ID::BIRD_SPRITE);
+	sprite.Load("whitescreen.png", SPRITE_ID::WHITE_SCREEN_SPRITE);
+	sprite.Load("blackscreen.png", SPRITE_ID::BLACK_SCREEN_SPRITE);
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ

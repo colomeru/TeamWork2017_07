@@ -1065,10 +1065,13 @@ void Player::BiteUpdate()
 		if (otherClothesID_ == CLOTHES_ID::FLUFFY_CLOTHES && (MathHelper::Abs(GamePad::GetInstance().Stick().x > 0.01f) ||
 			Keyboard::GetInstance().KeyStateDown(KEYCODE::D) ||
 			Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) &&
-			MathHelper::Abs(rot_spd_) <= 0.01f&&
+			MathHelper::Abs(mRot_spd[0]) <= 0.01f&&
 			ptoDownAngle <= 10.f&&
 			pHeads_[currentHead_]->GetPosition().y < position_.y) {
 			rot_spd_ += (spdLimit);
+			for (auto& spd : mRot_spd) {
+				spd += (spdLimit);
+			}
 		}
 
 		slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];

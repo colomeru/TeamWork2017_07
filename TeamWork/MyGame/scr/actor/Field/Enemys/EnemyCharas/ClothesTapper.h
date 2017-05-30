@@ -2,6 +2,14 @@
 #include"../Enemys.h"
 #include "../MyGame/scr/actor/player/Player.h"
 
+enum {
+
+	MODE_MOVE = 0,
+	MODE_TAP = 1,
+	MODE_IDLE=2
+
+};
+
 class ClothesTapper : public Enemys, public std::enable_shared_from_this<ClothesTapper>
 {
 public:
@@ -26,11 +34,24 @@ public:
 
 private:
 	void SetNextTapPos(const Vector2& pos=Vector2::Zero);
+	void PlayTap();
+	void ToTapMode();
+	void ToMoveMode();
+	void ToIdleMode();
 
+private:
+	void MoveUpdate();
+	void TapUpdate();
+	void IdleUpdate();
 private:
 	Player* player_;
 	Actor* player_Head_;
 	Vector2 basePos_;
 	Vector2 targetPos_;
 	float timeCount_;
+	
+	int updateMode_;
+	SPRITE_ID spriteID_;
+	std::map<int, std::function<void()>> updateFunctionMap_;
+
 };

@@ -3,6 +3,7 @@
 #include "../MyGame/scr/game/ID.h"
 #include "../../player/Player_Head.h"
 #include <array>
+#include <vector>
 
 class Clothes : public Actor
 {
@@ -20,8 +21,8 @@ protected:
 public:
 	//コンストラクタ
 	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum);
-	//仮想デストラクタ
-	virtual ~Clothes() = default;
+	//デストラクタ
+	virtual ~Clothes();
 	//更新
 	virtual void Update() = 0;
 	//描画
@@ -38,7 +39,7 @@ public:
 	Vector2 GetFulcrum() const {
 		return fulcrum_;
 	}
-	std::array<Vector2, 4> GetCollisionPoints() const {
+	std::vector<Vector2> GetCollisionPoints() const {
 		return collisionPoints;
 	}
 
@@ -72,9 +73,12 @@ protected:
 	//服ID
 	CLOTHES_ID clothes_ID;
 	//当たり判定のポイント
-	std::array<Vector2, 4> collisionPoints;
+	std::vector<Vector2> collisionPoints;
 	//当たり判定のポイントのローカル座標
-	std::array<Vector3, 4> localPoints;
+	std::vector<Vector3> localPoints;
+
+	//テスト
+	Vector2 intersectPos_;
 
 
 	//振り子関連(服用)

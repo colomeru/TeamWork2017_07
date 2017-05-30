@@ -21,10 +21,10 @@ GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 
-	localPoints[0] = Vector3(-60, 0 + length_, 0);
-	localPoints[1] = Vector3(-60, 100 + length_, 0);
-	localPoints[2] = Vector3(60, 100 + length_, 0);
-	localPoints[3] = Vector3(60, 0 + length_, 0);
+	localPoints.push_back(Vector3(-60, 0 + length_, 0));
+	localPoints.push_back(Vector3(-60, 90 + length_, 0));
+	localPoints.push_back(Vector3(60, 90 + length_, 0));
+	localPoints.push_back(Vector3(60, 0 + length_, 0));
 
 	SetPointsUpdate();
 
@@ -94,17 +94,19 @@ void GumClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::GUM_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	
-	auto drawP1 = GetDrawPosVect(collisionPoints[0]);
-	auto drawP2 = GetDrawPosVect(collisionPoints[1]);
-	auto drawP3 = GetDrawPosVect(collisionPoints[2]);
-	auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-	DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
-	DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
-	DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+	if (!collisionPoints.empty()) {
+		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
+		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
+		auto drawP3 = GetDrawPosVect(collisionPoints[2]);
+		auto drawP4 = GetDrawPosVect(collisionPoints[3]);
+		DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
+		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
+		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+	}
 
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 153, 0), TRUE);
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
@@ -118,10 +120,20 @@ void GumClothes::OnUpdate()
 
 void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	if (!isWind_) {
-		parent_ = &other;
-		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-		static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
-		static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
+	switch (other.GetParameter().ID)
+	{
+	case ACTOR_ID::PLAYER_HEAD_ACTOR:
+	{
+		if (!isWind_) {
+			parent_ = &other;
+			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
+			static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+			static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
+			static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
+		}
+		break;
+	}
+	default:
+		break;
 	}
 }

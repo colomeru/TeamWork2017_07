@@ -1,7 +1,10 @@
 #include "CollisionFunction.h"
 #include "../actor/Actor.h"
 #include "../actor/Field/Clothes/Clothes.h"
+#include <vector>
 #include "../collision/MyCol.h"
+#include "../actor/player/Player.h"
+#include "../actor/player/Player_Sword.h"
 
 CollisionFunction::CollisionFunction(IWorld * world) :
 world_(world)
@@ -51,8 +54,9 @@ CollisionParameter CollisionFunction::IsHit_PHead_Hanger(const Actor & sprite1, 
 
 CollisionParameter CollisionFunction::IsHit_Circle_Capsules(const Actor & sprite1, const Actor & sprite2)
 {
+	std::vector<Vector2> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite2))->GetCollisionPoints();
+	if(collisionPoints.empty()) return CollisionParameter(COL_ID::PHEAD_CLOTHES_COL, false);
 	Circle head;
-	std::array<Vector2, 4> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite2))->GetCollisionPoints();
 	Vector3 headTranslation = sprite1.GetPose().Translation();
 
 	for (int i = 0; i < 3; i++) {
@@ -92,6 +96,37 @@ CollisionParameter CollisionFunction::IsHit_OBB_Segment(const Actor & sprite1, c
 	}
 
 	return CollisionParameter(COL_ID::BOX_SEGMENT_COL, isHitCheck, segPoint);
+}
+
+CollisionParameter CollisionFunction::IsHit_Clothes_PSword(const Actor & sprite1, const Actor & sprite2)
+{
+	std::vector<Vector2> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite1))->GetCollisionPoints();
+	if (collisionPoints.empty()) return CollisionParameter(COL_ID::BOX_SEGMENT_COL, false, Vector2());
+
+	std::vector<Segment> seg1;
+	seg1.reserve(4);
+	Segment seg2;
+	for (int i = 0; i < 3; i++) {
+		Segment seg;
+		MyCol::CreateSegment(&seg, collisionPoints[i], collisionPoints[i + 1]);
+		seg1.push_back(seg);
+	}
+
+	auto player_Sword = static_cast<Player_Sword*>(const_cast<Actor*>(&sprite2));
+	auto startPos = player_Sword->GetSwordStartPos();
+	auto endPos = player_Sword->GetSwordEndPos();
+	MyCol::CreateSegment(&seg2, startPos, endPos);
+	Vector2 segPoint;
+
+	bool isHitCheck = false;
+	for (int i = 0; i < 3; i++) {
+		if (MyCol::Col_Segment_Segment(seg1[i], seg2, segPoint)) {
+			isHitCheck = true;
+		}
+	}
+
+	return CollisionParameter(COL_ID::BOX_SEGMENT_COL, isHitCheck, segPoint);
+
 }
 
 CollisionParameter CollisionFunction::IsHit_Segment_Segment(const Actor & sprite1, const Actor & sprite2)

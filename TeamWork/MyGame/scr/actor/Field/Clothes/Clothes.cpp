@@ -12,6 +12,14 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.5f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
 	,count_(0),clothesState_(ClothesState::BEGIN_WIND)
 {
+	localPoints.reserve(4);
+	collisionPoints.reserve(4);
+}
+
+Clothes::~Clothes()
+{
+	localPoints.clear();
+	collisionPoints.clear();
 }
 
 //当たり判定処理
@@ -20,16 +28,21 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	switch (other.GetParameter().ID)
 	{
 	case ACTOR_ID::PLAYER_HEAD_ACTOR:
-		{
-			if (!isWind_) {
-				parent_ = &other;
-				static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-				static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
-				static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
-				static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
-			}
-		break;
+	{
+		if (!isWind_) {
+			parent_ = &other;
+			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
+			static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
+			static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
+			static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
 		}
+		break;
+	}
+	case ACTOR_ID::PLAYER_SWORD_ACTOR:
+	{
+		intersectPos_ = colpara.colPos;
+		isHit_ = true;
+	}
 	default:
 		break;
 	}
@@ -176,6 +189,10 @@ void Clothes::WindSwing()
 
 void Clothes::SetPointsUpdate()
 {
+	collisionPoints.clear();
+
+	if (laneNum_ != world_->GetKeepDatas().playerLane_ || !isDraw_) return;
+
 	//ワールドマトリクス
 	Matrix mat = Matrix::CreateRotationZ(angle_)
 		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
@@ -189,9 +206,10 @@ void Clothes::SetPointsUpdate()
 	auto p4
 		= Matrix::CreateTranslation(localPoints[3]) * mat;
 
-	collisionPoints[0] = Vector2(p1.Translation().x, p1.Translation().y);
-	collisionPoints[1] = Vector2(p2.Translation().x, p2.Translation().y);
-	collisionPoints[2] = Vector2(p3.Translation().x, p3.Translation().y);
-	collisionPoints[3] = Vector2(p4.Translation().x, p4.Translation().y);
+	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
+	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
+	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
+	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
+
 
 }

@@ -174,7 +174,9 @@
     <ClCompile Include="scr\actor\Field\Clothes\Hanger\Hanger.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\Bird.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.cpp" />
+    <ClCompile Include="scr\actor\Field\Enemys\EnemyGenerator.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\Enemys.cpp" />
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
@@ -260,7 +262,9 @@
     <ClInclude Include="scr\actor\Field\Clothes\Hanger\Hanger.h" />
     <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h" />
+    <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\Bird.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.h" />
+    <ClInclude Include="scr\actor\Field\Enemys\EnemyGenerator.h" />
     <ClInclude Include="scr\actor\Field\Enemys\Enemys.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />

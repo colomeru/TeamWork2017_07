@@ -217,7 +217,8 @@ void Player::Draw() const
 		count++;
 	}
 
-	DrawFormatString(600, 750, GetColor(255, 255, 255), "%f:%f",multiplePos[0].x, multiplePos[0].y);
+	DrawFormatString(600, 750, GetColor(255, 255, 255), "%f", GetPlayerSwordAngle());
+	
 }
 
 void Player::OnUpdate()
@@ -387,6 +388,9 @@ void Player::StartPendulum() {
 
 Vector2 Player::GetCurrentPHeadPosition() const {
 	return pHeads_[currentHead_]->GetPosition();
+}
+float Player::GetPlayerSwordAngle() const {
+	return MathFormedAngle(pSword_->GetSwordEndPos() - position_);
 }
 void Player::MultipleInit(float len, const Vector2& fPos, float rot)
 {

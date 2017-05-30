@@ -22,6 +22,19 @@ inline float MathAngle(const Vector2& targetVect,const Vector2& baseVect=Vector2
 	}
 	return angle;
 }
+//指定軸とのなす角の角度を返す
+inline float MathFormedAngle(const Vector2& targetVect, const Vector2& baseVect = Vector2::Up) {
+	//Vector2 nTVect = Vector2::Normalize(targetVect);
+	//Vector2 nBVect = Vector2::Normalize(baseVect);
+	Vector2 nTVect = targetVect;
+	Vector2 nBVect = baseVect;
+	
+	float angle = Vector2::Dot(nTVect, nBVect) / (nTVect.Length()*nBVect.Length());
+	angle = MathHelper::ToDegrees(acos(angle));
+
+	return angle;
+}
+
 //描画開始点と、描画向き、横幅、縦幅から、描画範囲を表す4点を返す 描画位置dirN=方向
 inline DrawPos MathDrawPoint(const Vector2& basePos,const Vector2& dir, int width,int height) {
 	DrawPos p;

@@ -18,6 +18,14 @@ protected:
 		END_WIND,				//風が終了
 	};
 
+	enum ClothesCuttingState
+	{
+		Normal,					//通常
+		RightUpSlant,			//右斜め上に向かって切れてる
+		LeftUpSlant,			//左斜め上に向かって切れてる
+		Horizontally			//水平に切れてる
+	};
+
 public:
 	//コンストラクタ
 	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum);
@@ -52,10 +60,12 @@ public:
 	void Pendulum(Vector2 fulcrum, float length);
 	//風による服揺らし
 	void ShakesClothes();
-	//
+	//強い風によるプレイヤーへの作用
 	void WindSwing();
 	//服の当たり判定の設定
 	void SetPointsUpdate();
+	//切断状態による当たり判定のポイントの設定
+	void SetLocalPoints();
 
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
@@ -106,4 +116,6 @@ protected:
 	int count_;
 	//服の状態
 	ClothesState clothesState_;
+	//服の切断状態
+	ClothesCuttingState cuttingState_;
 };

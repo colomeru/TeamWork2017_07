@@ -10,8 +10,10 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum)
 	:Actor(world)
 	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
 	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.5f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
-	,count_(0),clothesState_(ClothesState::BEGIN_WIND)
+	,count_(0),clothesState_(ClothesState::BEGIN_WIND),cuttingState_(ClothesCuttingState::Normal)
 {
+	localPoints.clear();
+	collisionPoints.clear();
 	localPoints.reserve(4);
 	collisionPoints.reserve(4);
 }
@@ -104,12 +106,6 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 	//角度に角速度を加算
 	rot_ += rot_spd_;
-
-	//当たり判定確認用
-	//if (initialRot > rot_) {
-	//	rot_ -= rot_spd_;
-	//	return;
-	//}
 
 	//新しい重りの位置
 	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
@@ -210,6 +206,23 @@ void Clothes::SetPointsUpdate()
 	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
 	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
 	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
+}
 
-
+void Clothes::SetLocalPoints()
+{
+	switch (cuttingState_)
+	{
+	case ClothesCuttingState::Normal: {
+		break;
+	}
+	case ClothesCuttingState::RightUpSlant: {
+		break;
+	}
+	case ClothesCuttingState::LeftUpSlant: {
+		break;
+	}
+	case ClothesCuttingState::Horizontally: {
+		break;
+	}
+	}
 }

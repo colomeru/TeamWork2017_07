@@ -221,7 +221,7 @@ void Clothes::SetLocalPoints()
 	case ClothesCuttingState::LeftUpSlant: {
 		break;
 	}
-	case ClothesCuttingState::Horizontally: {
+	case ClothesCuttingState::HorizontalSlant: {
 		break;
 	}
 	}

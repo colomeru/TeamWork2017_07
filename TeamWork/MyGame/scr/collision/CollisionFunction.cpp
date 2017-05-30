@@ -98,29 +98,29 @@ CollisionParameter CollisionFunction::IsHit_OBB_Segment(const Actor & sprite1, c
 	return CollisionParameter(COL_ID::BOX_SEGMENT_COL, isHitCheck, segPoint);
 }
 
-CollisionParameter CollisionFunction::IsHit_Clothes_PSword(const Actor & sprite1, const Actor & sprite2)
+CollisionParameter CollisionFunction::IsHit_PSword_Clothes(const Actor & sprite1, const Actor & sprite2)
 {
-	std::vector<Vector2> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite1))->GetCollisionPoints();
+	std::vector<Vector2> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite2))->GetCollisionPoints();
 	if (collisionPoints.empty()) return CollisionParameter(COL_ID::BOX_SEGMENT_COL, false, Vector2());
 
-	std::vector<Segment> seg1;
-	seg1.reserve(4);
-	Segment seg2;
+	Segment seg1;
+	auto player_Sword = static_cast<Player_Sword*>(const_cast<Actor*>(&sprite1));
+	auto startPos = player_Sword->GetSwordStartPos();
+	auto endPos = player_Sword->GetSwordEndPos();
+	MyCol::CreateSegment(&seg1, startPos, endPos);
+	Vector2 segPoint;
+
+	std::vector<Segment> seg2;
+	seg2.reserve(4);
 	for (int i = 0; i < 3; i++) {
 		Segment seg;
 		MyCol::CreateSegment(&seg, collisionPoints[i], collisionPoints[i + 1]);
-		seg1.push_back(seg);
+		seg2.push_back(seg);
 	}
-
-	auto player_Sword = static_cast<Player_Sword*>(const_cast<Actor*>(&sprite2));
-	auto startPos = player_Sword->GetSwordStartPos();
-	auto endPos = player_Sword->GetSwordEndPos();
-	MyCol::CreateSegment(&seg2, startPos, endPos);
-	Vector2 segPoint;
 
 	bool isHitCheck = false;
 	for (int i = 0; i < 3; i++) {
-		if (MyCol::Col_Segment_Segment(seg1[i], seg2, segPoint)) {
+		if (MyCol::Col_Segment_Segment(seg1, seg2[i], segPoint)) {
 			isHitCheck = true;
 		}
 	}

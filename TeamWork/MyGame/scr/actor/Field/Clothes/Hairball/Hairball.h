@@ -1,6 +1,7 @@
 #pragma once
 #include "../Clothes.h"
 #include "../MyGame/scr/actor/player/Player.h"
+#include "../MyGame/scr/actor/player/Player_Head.h"
 
 class Hairball : public Clothes, public std::enable_shared_from_this<Hairball>
 {
@@ -18,9 +19,9 @@ public:
 	//衝突時のアクション
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	//メッセージ取得
-	virtual void OnMessage(EventMessage message, void* param);
+	virtual void OnMessage(EventMessage message, void* param) override;
 
 private:
 	Player* player_;
-	Actor* player_Head_;
+	Player_Head* player_Head_;
 };

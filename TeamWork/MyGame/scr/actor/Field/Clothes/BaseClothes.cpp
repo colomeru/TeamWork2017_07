@@ -36,7 +36,7 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	SetPointsUpdate();
 
-	colFuncMap_[COL_ID::BOX_SEGMENT_COL] = std::bind(&CollisionFunction::IsHit_Clothes_PSword, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	//colFuncMap_[COL_ID::BOX_SEGMENT_COL] = std::bind(&CollisionFunction::IsHit_PSword_Clothes, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 	//if (is_Pin)
 	//	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(50, 50), this, fulcrum_));
@@ -56,9 +56,9 @@ void BaseClothes::Update()
 		}
 	}
 
-	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_SWORD_ACTOR, COL_ID::BOX_SEGMENT_COL);
-	}
+	//if (isCheckCol_ && isUpdate_) {
+	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_SWORD_ACTOR, COL_ID::BOX_SEGMENT_COL);
+	//}
 
 	ShakesClothes();
 	WindSwing();

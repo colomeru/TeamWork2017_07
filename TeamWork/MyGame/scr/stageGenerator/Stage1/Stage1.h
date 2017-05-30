@@ -22,6 +22,7 @@ public:
 private:
 	void Pin_Add(int i, int j, int data, int laneNum);
 	void Clothes_Add(int i, int j, int data, int laneNum);
+	void HairballGenerator_Add(int i, int j, int data, int laneNum);
 
 private:
 	std::queue<bool> pin_list;

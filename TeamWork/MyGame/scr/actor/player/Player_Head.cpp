@@ -88,11 +88,12 @@ void Player_Head::Update()
 
 	parameter_.mat.Translation(toMatPos);
 
+
 	if (player_->GetIsShootModeEnd()&&player_->GetCurHead()==myNumber_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::PHEAD_CLOTHES_COL);
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::HANGER_ACTOR, COL_ID::BOX_HANGER_COL);
 	}
-
+	
 }
 
 void Player_Head::Draw() const

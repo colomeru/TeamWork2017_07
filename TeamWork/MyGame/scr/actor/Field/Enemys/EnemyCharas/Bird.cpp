@@ -25,7 +25,7 @@ void Bird::Update()
 
 	if (dropTimer_ == 0) {
 		//if(Random::GetInstance().Range(0,100)>30)
-			world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<BirdsDropping>(world_, 1, position_));
+			world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<BirdsDropping>(world_, laneNum_, position_));
 	}
 	if (position_.x <= world_->GetKeepDatas().playerPos_.x-WINDOW_WIDTH) {
 		parameter_.isDead = true;

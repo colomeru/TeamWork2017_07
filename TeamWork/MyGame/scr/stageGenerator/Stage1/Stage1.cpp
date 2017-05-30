@@ -42,9 +42,10 @@ void Stage1::AddStage()
 		if (pin == 0 && i != 0) {
 			laneNum++;
 			while(!pin_list.empty())
-			pin_list.pop();
+				pin_list.pop();
 
 		}
+		//csvの列番号によって生成するオブジェクトを変更
 		for (int j = 0; j < col; j++) {
 			auto data = csvReader_.geti(i, j);
 			switch (pin)
@@ -56,6 +57,10 @@ void Stage1::AddStage()
 			}
 			case 2: {
 				Clothes_Add(i, j, data, laneNum);
+				break;
+			}
+			case 3: {
+				HairballGenerator_Add(i, j, data, laneNum);
 				break;
 			}
 			}
@@ -102,7 +107,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 3: {
-		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, laneNum, Vector2(j, -0.4f) * STAGE_TIP_SIZE));
+		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 		break;
 	}
 	case 4: {
@@ -133,10 +138,17 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 		break;
 	}
-	case 8: {
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<HairballGenerator>(world_, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
+	}
+
+}
+
+void Stage1::HairballGenerator_Add(int i, int j, int data, int laneNum)
+{
+	switch (data)
+	{
+	case 1: {
+		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 		break;
 	}
 	}
-
 }

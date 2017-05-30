@@ -258,6 +258,7 @@ public:
 	}
 	//Œ»İg—p‚µ‚Ä‚¢‚éHead‚ÌÀ•W‚ğ•Ô‚·
 	Vector2 GetCurrentPHeadPosition()const;
+	float GetPlayerSwordAngle()const;
 private:
 	void MultipleInit(float Length, const Vector2& fPos, float rot);
 	void Multiple();

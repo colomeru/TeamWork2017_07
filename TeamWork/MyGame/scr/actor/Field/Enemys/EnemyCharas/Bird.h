@@ -2,17 +2,16 @@
 #include"../Enemys.h"
 #include "../MyGame/scr/actor/player/Player.h"
 
-class BirdsDropping : public Enemys, public std::enable_shared_from_this<BirdsDropping>
+class Bird : public Enemys, public std::enable_shared_from_this<Bird>
 {
 public:
 	//コンストラクタ
-	BirdsDropping(IWorld* world, int laneNum, Vector2 pos);
+	Bird(IWorld* world, int laneNum, Vector2 pos);
 	//デストラクタ
-	~BirdsDropping();
+	~Bird();
 	virtual void FastUpdate()override {
 		isUpdate_ = true;
 	}
-
 	//更新
 	virtual void Update() override;
 	//描画
@@ -25,8 +24,7 @@ public:
 	virtual void OnMessage(EventMessage message, void* param);
 
 private:
-	Player* player_;
-	Actor* player_Head_;
-	Vector2 basePos_;
 	float timeCount_;
+	int dropTimer_;
+	Vector2 basePos_;
 };

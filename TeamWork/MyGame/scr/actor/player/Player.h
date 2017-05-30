@@ -305,7 +305,7 @@ private:
 		Vector2 nextVel_;
 		//ã‚ª‚é‚Æ‚«
 		if (updateNum < 0) {
-			nextVel_ = Vector2(0, -35.f);
+			nextVel_ = Vector2(0, -15.f);
 			pGrav_ = 0.f;
 			//position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
 		}
@@ -372,7 +372,6 @@ private:
 	std::vector<Vector2> multiplePos;
 	std::vector<float> mRot;
 	std::vector<float> mRot_spd;
-	std::vector<float> mLimit;
 	std::vector<float> correctionLens;
 	std::vector<DrawPos> drawPoints;
 

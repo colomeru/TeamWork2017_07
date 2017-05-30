@@ -23,7 +23,7 @@ protected:
 		Normal,					//’Êí
 		RightUpSlant,			//‰EŽÎ‚ßã‚ÉŒü‚©‚Á‚ÄØ‚ê‚Ä‚é
 		LeftUpSlant,			//¶ŽÎ‚ßã‚ÉŒü‚©‚Á‚ÄØ‚ê‚Ä‚é
-		Horizontally			//…•½‚ÉØ‚ê‚Ä‚é
+		HorizontalSlant			//…•½‚ÉØ‚ê‚Ä‚é
 	};
 
 public:

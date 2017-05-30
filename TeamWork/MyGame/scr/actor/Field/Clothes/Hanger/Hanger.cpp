@@ -20,8 +20,9 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 
 	laneNum_ = laneNum;
 
-	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, length_);
+	position_ = pos - Vector2(0, length_ / 2);
+	fulcrum_ = pos - Vector2(0, length_);
+
 	colFuncMap_[COL_ID::BOX_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 }
@@ -77,6 +78,8 @@ void Hanger::Draw() const
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos_, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 
+
+	DrawFormatString(400, 100, GetColor(255, 255, 255), "position x:%f, y:%f", position_.x, position_.y);
 	//if (parent_ == nullptr)
 	//	DrawFormatString(100, 100, GetColor(255, 255, 255), "null");
 	//else
@@ -100,6 +103,8 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 		player_ = static_cast<Player*>(parent_->GetParent());
 		player_->CurHeadBite(other.GetPosition());
+		player_->SetIsBiteMode(true);
+		player_->SetOtherClothesID_(clothes_ID);
 		break;
 	}
 	case ACTOR_ID::STAGE_ACTOR:

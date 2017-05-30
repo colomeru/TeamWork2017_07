@@ -42,6 +42,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 		* Matrix::CreateTranslation(Vector3::Zero);
 
 	position_ = Vector2(0, 200);
+	prevPosition_ = position_;
 
 	slipCountMult_[CLOTHES_ID::BASE_CLOTHES]
 		= slipCountMult_[CLOTHES_ID::GOAL_CLOTHES]
@@ -391,7 +392,6 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot)
 {
 	mRot.clear();
 	mRot_spd.clear();
-	mLimit.clear();
 	fPos_.clear();
 	multiplePos.clear();
 	correctionLens.clear();
@@ -406,20 +406,18 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot)
 		float h = MathHelper::Mod(len - oneLength, oneLength) / oneLength;
 		correctionLens.push_back(h);
 	}
-
-
+	//xとyでどちらが優位かによって振り子の動きが違う、角度によって初速の決定方法を変更する必要がありそう
+	float spd = (position_ - prevPosition_).Length();
 	fPos_.push_back(fPos);
 	mRot.push_back(rot);
-	mLimit.push_back(0.0f);
-	mRot_spd.push_back(0.f);
+	mRot_spd.push_back(spd);
 	multiplePos.push_back(Vector2(0.0f, 0.0f));
 	for (int i = 0; i < s; i++) {
 		auto px = fPos_[i].x + MathHelper::Cos(mRot[i]) * (oneLength);
 		auto py = fPos_[i].y + MathHelper::Sin(mRot[i]) * (oneLength);
 
 		mRot.push_back(rot);
-		mRot_spd.push_back(0.f);
-		mLimit.push_back(0.0f);
+		mRot_spd.push_back(spd);
 		fPos_.push_back(Vector2(px, py));
 		multiplePos.push_back(Vector2(0.0f, 0.0f));
 	}
@@ -546,7 +544,6 @@ void Player::SetMultiplePos(const Vector2 & addpos) {
 void Player::SetNeckNonMult() {
 	mRot.clear();
 	mRot_spd.clear();
-	mLimit.clear();
 	fPos_.clear();
 	multiplePos.clear();
 	correctionLens.clear();
@@ -565,7 +562,6 @@ void Player::SetNeckNonMult() {
 
 	fPos_.push_back(pHeads_[currentHead_]->GetPosition());
 	mRot.push_back(135.f);
-	mLimit.push_back(0.0f);
 	mRot_spd.push_back(0.0f);
 	multiplePos.push_back(Vector2(0.0f, 0.0f));
 	for (int i = 0; i < defHeadLength-1; i++) {
@@ -574,7 +570,6 @@ void Player::SetNeckNonMult() {
 
 		mRot.push_back(135.f);
 		mRot_spd.push_back(0.0f);
-		mLimit.push_back(0.0f);
 		fPos_.push_back(Vector2(px, py));
 		multiplePos.push_back(Vector2(0.0f, 0.0f));
 	}

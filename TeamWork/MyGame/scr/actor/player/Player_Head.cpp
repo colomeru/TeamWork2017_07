@@ -61,20 +61,21 @@ void Player_Head::Update()
 	Vector2 vel = basePos - player_->GetPosition();
 	//自分の首の向き*自分の首に設定されている長さ
 	if (player_->GetCurHead() == myNumber_&&(player_->GetIsSlipped()|| world_->GetIsCamChangeMode())) {
-		vel = player_->GetHeadPosAddVect();
+		//vel = player_->GetHeadPosAddVect();
+		position_ = player_->GetSlipHeadPoint();
 	}
-
-	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
-	//スリップしたかを調べて
-	//if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()) {
-		//Playerがスリップ状態に入った時点でposAddVectを指定してもらい、その位置に首を固定する
-		//position_ = basePos + posAddVect_;
-	//}
-	//else {
-		//通常時は首の長さに対応した位置に補正する
+	else {
+		Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
+		//スリップしたかを調べて
+		//if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()) {
+			//Playerがスリップ状態に入った時点でposAddVectを指定してもらい、その位置に首を固定する
+			//position_ = basePos + posAddVect_;
+		//}
+		//else {
+			//通常時は首の長さに対応した位置に補正する
 		position_ = basePos + bPlusLngPos;
-	//}
-
+		//}
+	}
 
 	if (player_->GetCurHead() == myNumber_) {
 		if (player_->GetIsBiteMode())	position_ = player_->GetStopPos();

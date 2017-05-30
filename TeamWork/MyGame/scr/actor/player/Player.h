@@ -4,6 +4,7 @@
 #include"../../math/MathHelper.h"
 #include"../../math/MyFuncionList.h"
 #include"../../Def.h"
+#include"../../graphic/DrawPos.h"
 
 class Player_Head;
 class Player_Sword;
@@ -94,6 +95,8 @@ public:
 	}
 	//振り子運動
 	void Pendulum(Vector2 fulcrum, float length);
+	void StartPendulum();
+
 	Vector2 GetHeadPos(int headNum)const {
 		return pHeadPoses_[headNum];
 	}
@@ -151,6 +154,8 @@ public:
 		//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
 		rot_ = 135;
 		rot_spd_ = -3.0f;
+
+		StartPendulum();
 	}
 	void ResurrectHead() {
 		for (int i = currentHead_; i < pHeads_.size() + currentHead_; i++) {
@@ -237,6 +242,7 @@ public:
 	void PHeadChanger(int rot = 0) {
 		PHeadLengthReset();
 		(sign(rot) == 1) ? backChangeHead() : changeHead();
+		//StartPendulum();
 	}
 	void SetStopPos(Vector2 target) {
 		stopPos_ = target;
@@ -247,7 +253,32 @@ public:
 	Vector2 GetHeadPosAddVect() const{
 		return headPosAddVect_;
 	}
+	Vector2 GetSlipHeadPoint()const{
+		return fPos_.front();
+	}
+	//現在使用しているHeadの座標を返す
+	Vector2 GetCurrentPHeadPosition()const;
 private:
+	void MultipleInit(float Length, const Vector2& fPos, float rot);
+	void Multiple();
+	//多重振り子に移動量を加算
+	void UpdateMultiplePos();
+	void SetMultiplePos(const Vector2& addpos);
+	//多重振り子を強制的に移動
+	void AddMultiplePos(const Vector2& addPos) {
+		for (int i = 0; i < multiplePos.size(); i++) {
+			multiplePos[i] += (addPos);
+			if (i > 0) fPos_[i] = multiplePos[i - 1];
+		}
+	}
+	void SetNeckNonMult();
+	void DeformationDraw();
+	//首の描画に必要な一連の動作を行う
+	void SetDrawNeck(const Vector2& bodyPoint,const Vector2& headPoint);
+	//首の描画位置を設定
+	void SetDrawPoint(const Vector2& bodyPoint, const Vector2& headPoint);
+	//首の各描画位置を設定する
+	void SetDrawNeckParts(const Vector2& bodyPoint, const Vector2& headPoint);
 	//入力による動作をまとめる
 	void PlayerInputControl();
 	//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
@@ -335,6 +366,17 @@ private:
 	float friction;
 	//振り子移動によるベクトルを作り出す
 	Vector2 pendulumVect_;
+
+	//多重振り子
+	std::vector<Vector2> fPos_;
+	std::vector<Vector2> multiplePos;
+	std::vector<float> mRot;
+	std::vector<float> mRot_spd;
+	std::vector<float> mLimit;
+	std::vector<float> correctionLens;
+	std::vector<DrawPos> drawPoints;
+
+
 
 	//Headが静止する位置を格納する
 	Vector2 stopPos_;

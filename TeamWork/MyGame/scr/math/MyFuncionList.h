@@ -1,5 +1,7 @@
 #pragma once
 #include"../math/Vector2.h"
+#include"../graphic/DrawPos.h"
+#include"../math/Matrix.h"
 
 template<typename _Tp> inline int sign(_Tp val) {
 	return 1 - (val <= 0) - (val < 0);
@@ -18,7 +20,31 @@ inline float MathAngle(const Vector2& targetVect,const Vector2& baseVect=Vector2
 		angle = 360 - angle;
 
 	}
-
-
 	return angle;
+}
+//描画開始点と、描画向き、横幅、縦幅から、描画範囲を表す4点を返す 描画位置dirN=方向
+inline DrawPos MathDrawPoint(const Vector2& basePos,const Vector2& dir, int width,int height) {
+	DrawPos p;
+
+	//頭から体へのベクトル(正規化)
+	Vector2 pHtoBVec2 = Vector2::Normalize(dir);
+	Vector3 pHtoBVec3 = pHtoBVec2;
+
+	//HtoBベクトルを90度回転
+	Vector3 pHtBRotateVec = pHtoBVec3*Matrix::CreateRotationZ(90);
+	//Vec2に変換
+	Vector2 pHtBNVerticalVec(pHtBRotateVec.x, pHtBRotateVec.y);
+	pHtBNVerticalVec = pHtBNVerticalVec.Normalize();
+
+	Vector2 drawBasePos = basePos;
+
+	p.p0 = drawBasePos - (pHtBNVerticalVec*width);
+	p.p1 = drawBasePos + (pHtBNVerticalVec*width);
+
+	drawBasePos += pHtoBVec2*height;
+
+	p.p2 = drawBasePos + (pHtBNVerticalVec*width);
+	p.p3 = drawBasePos - (pHtBNVerticalVec*width);
+
+	return p;
 }

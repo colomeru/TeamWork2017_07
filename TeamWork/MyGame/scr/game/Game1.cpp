@@ -7,7 +7,7 @@
 #include "../scene/GamePlayScene.h"
 #include "../scene/CreditScene.h"
 #include "../scene/EndingScene.h"
-
+#include "../scene/MovieScene.h"
 #include "../graphic/Anime.h"
 #include "../graphic/Model.h"
 #include "../graphic/Sprite.h"
@@ -40,6 +40,7 @@ void Game1::Initialize()
 	mSceneManager.Add(Scene::GamePlay, std::make_shared<GamePlayScene>());
 	mSceneManager.Add(Scene::Credit, std::make_shared<CreditScene>());
 	mSceneManager.Add(Scene::Ending, std::make_shared<EndingScene>());
+	mSceneManager.Add(Scene::Movie, std::make_shared<MovieScene>());
 
 	// ÉVÅ[ÉìÇÃì«Ç›çûÇ›
 	mSceneManager.SetScene(Scene::Demo);

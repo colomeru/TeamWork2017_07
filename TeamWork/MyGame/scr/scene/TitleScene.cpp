@@ -21,15 +21,17 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
-	Camera::GetInstance().SetRange(0.1f, 10000.0f);
+	/*Camera::GetInstance().SetRange(0.1f, 10000.0f);
 	Camera::GetInstance().SetViewAngle(60.0f);
 	Camera::GetInstance().Up.Set(Vector3::Up);
 	Camera::GetInstance().Position.Set(Vector3(0, 0, -10));
 	Camera::GetInstance().Target.Set(Vector3(0, 0, 0));
 	Camera::GetInstance().Update();
+	*/
 	isEnd_ = false;
 	selectX_ = 850.0f;
 	selectY_ = 803.0f;
+	selectNum_ = 0;
 }
 
 void TitleScene::Update()
@@ -38,9 +40,18 @@ void TitleScene::Update()
 	world_->Update();
 
 	// I—¹
-	Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
+	/*Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
 	Camera::GetInstance().Target.Set(Vector3(0,0,0));
 	Camera::GetInstance().Update();
+	*/
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
+		if (selectNum_ == 0) {
+			isEnd_ = true;
+		}
+		else if (selectNum_ == 1) {
+			//Escape
+		}
+	}	
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)) {
 		selectX_ = 850.0f;
 		selectY_ = 803.0f;
@@ -50,15 +61,6 @@ void TitleScene::Update()
 		selectX_ = 850.0f;
 		selectY_ = 868.0f;
 		selectNum_ = 1;
-	}
-
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
-		if (selectNum_ == 0) {
-			isEnd_ = true;
-		}
-		else if (selectNum_ == 1) {
-			//Escape
-		}
 	}
 }
 

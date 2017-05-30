@@ -18,7 +18,7 @@ const int correctionHeight = 30;
 const float correctionWidth = 1.8f;
 
 EndingScene::EndingScene() :
-	nextScene_(Scene::Title)
+	nextScene_(Scene::Movie)
 {
 	// ƒ[ƒ‹ƒh¶¬
 	world_ = std::make_shared<World>();

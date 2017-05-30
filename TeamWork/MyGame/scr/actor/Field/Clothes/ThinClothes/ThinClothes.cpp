@@ -22,10 +22,10 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 
-	localPoints[0] = Vector3(-60, 0 + length_, 0);
-	localPoints[1] = Vector3(-60, 100 + length_, 0);
-	localPoints[2] = Vector3(60, 100 + length_, 0);
-	localPoints[3] = Vector3(60, 0 + length_, 0);
+	localPoints.push_back(Vector3(-60, 0 + length_, 0));
+	localPoints.push_back(Vector3(-60, 90 + length_, 0));
+	localPoints.push_back(Vector3(60, 90 + length_, 0));
+	localPoints.push_back(Vector3(60, 0 + length_, 0));
 
 	SetPointsUpdate();
 
@@ -83,17 +83,19 @@ void ThinClothes::Draw() const
 
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(204, 204, 204), TRUE);
 
-	auto drawP1 = GetDrawPosVect(collisionPoints[0]);
-	auto drawP2 = GetDrawPosVect(collisionPoints[1]);
-	auto drawP3 = GetDrawPosVect(collisionPoints[2]);
-	auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-	DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
-	DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
-	DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
-	DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+	if (!collisionPoints.empty()) {
+		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
+		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
+		auto drawP3 = GetDrawPosVect(collisionPoints[2]);
+		auto drawP4 = GetDrawPosVect(collisionPoints[3]);
+		DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
+		DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
+		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
+		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+	}
 
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 }

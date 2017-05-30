@@ -1,8 +1,12 @@
 #include "BirdsDropping.h"
+#include"../../../../math/Easing.h"
+
+static const float defDropTime = 3.0f;
 
 BirdsDropping::BirdsDropping(IWorld * world, int laneNum, Vector2 pos):
-	Enemys(world,laneNum,pos)
+	Enemys(world,laneNum,pos), basePos_(pos), timeCount_(0.f)
 {
+
 }
 
 BirdsDropping::~BirdsDropping()
@@ -11,7 +15,12 @@ BirdsDropping::~BirdsDropping()
 
 void BirdsDropping::Update()
 {
-	position_.y += 20;
+	position_.y = Easing::EaseInBack(timeCount_, basePos_.y, WINDOW_HEIGHT, defDropTime, 1.1f);
+	timeCount_ += 0.016f;
+
+	if (timeCount_ > defDropTime) {
+		parameter_.isDead = true;
+	}
 }
 
 void BirdsDropping::Draw() const

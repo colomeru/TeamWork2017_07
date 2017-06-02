@@ -4,8 +4,10 @@
 Player_Sword::Player_Sword(IWorld * world, Player * targetP, Vector2 pos)
 	:Actor(world),swordStartPos_(pos),swordEndPos_(pos),player_(targetP),useSword_(false)
 {
+	parameter_.ID = ACTOR_ID::PLAYER_SWORD_ACTOR;
 	position_ = pos;
 	laneNum_ = targetP->GetLaneNum();
+	colFuncMap_[COL_ID::PSWORD_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_PSword_Clothes, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 Player_Sword::~Player_Sword()

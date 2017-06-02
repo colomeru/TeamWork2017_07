@@ -13,6 +13,9 @@
 #include "../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../graphic/Sprite.h"
 #include "../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
+#include "../game/Random.h"
+#include "GamePlayDefine.h"
+#define STR(var) #var
 
 CreditScene::CreditScene() :
 nextScene_(Scene::Ending),
@@ -26,6 +29,8 @@ target_(0, 0, 0)
 	{
 		handleMessage(msg, param);
 	});
+
+	bgScreen_ = BackgroundScreen(world_.get());
 }
 
 CreditScene::~CreditScene()
@@ -49,15 +54,16 @@ void CreditScene::Initialize()
 	player_ = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
 	world_->PushStackActor(player_);
-	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<HairballGenerator>(world_.get()));
 
-	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
+	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
 	stageGeneratorManager.SetStage(Stage::Stage1);
+	setWindTime(Stage::Stage1);
 
 	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
 	world_->SetTarget(player_.get());
 
 	size = stageGeneratorManager.GetStageSize(Stage::Stage1);
+	bgScreen_.Init();
 }
 
 void CreditScene::Update()
@@ -74,6 +80,8 @@ void CreditScene::Update()
 	//Camera::GetInstance().Target.Set(target_);
 	//Camera::GetInstance().Update();
 
+	bgScreen_.Update();
+
 	// I—¹
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
@@ -81,12 +89,13 @@ void CreditScene::Update()
 
 void CreditScene::Draw() const
 {
+	bgScreen_.Draw();
+
 	DrawFormatString(0, 00, GetColor(255, 255, 255), "CreditScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	// •`‰æ
 	world_->Draw(3, world_->GetKeepDatas().playerLane_);
-
 
 	DrawFormatString(0, 200, GetColor(255, 255, 255), "stageSize x:%f y:%f", size.x, size.y);
 }
@@ -105,6 +114,7 @@ void CreditScene::End()
 {
 	// ‰Šú‰»
 	world_->Clear();
+	bgScreen_.End();
 }
 
 void CreditScene::handleMessage(EventMessage message, void * param)

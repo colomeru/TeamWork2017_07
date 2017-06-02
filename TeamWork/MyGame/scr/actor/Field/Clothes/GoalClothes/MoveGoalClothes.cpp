@@ -1,13 +1,13 @@
-#include "GoalClothes.h"
+#include "MoveGoalClothes.h"
 #include "../MyGame/scr/actor/UI/GoalUI.h"
 
-GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
+MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum)
 {
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(400, 200.f);
+	parameter_.size = Vector2(200, 600.f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -20,22 +20,23 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	isHit_ = false;
 
-	localPoints.push_back(Vector3(-120, 0 + length_, 0));
-	localPoints.push_back(Vector3(-120, 90 + length_, 0));
-	localPoints.push_back(Vector3(120, 90 + length_, 0));
-	localPoints.push_back(Vector3(120, 0 + length_, 0));
+	localPoints.push_back(Vector3(-60, -270 + length_, 0));
+	localPoints.push_back(Vector3(-60, 270 + length_, 0));
+	localPoints.push_back(Vector3(60, 270 + length_, 0));
+	localPoints.push_back(Vector3(60, -270 + length_, 0));
 
 	SetPointsUpdate();
 
 }
 
-GoalClothes::~GoalClothes()
+MoveGoalClothes::~MoveGoalClothes()
 {
 }
 
-void GoalClothes::Update()
+void MoveGoalClothes::Update()
 {
 	SetPointsUpdate();
+	Pendulum(fulcrum_, length_);
 
 	if (player_ == nullptr || parent_ == nullptr)return;
 
@@ -45,7 +46,7 @@ void GoalClothes::Update()
 	}
 }
 
-void GoalClothes::Draw() const
+void MoveGoalClothes::Draw() const
 {
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
@@ -67,7 +68,9 @@ void GoalClothes::Draw() const
 	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
 	if (!collisionPoints.empty()) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
@@ -84,12 +87,12 @@ void GoalClothes::Draw() const
 	}
 }
 
-void GoalClothes::OnUpdate()
+void MoveGoalClothes::OnUpdate()
 {
-	
+
 }
 
-void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
+void MoveGoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 	if (!isWind_) {
 		parent_ = &other;
@@ -101,7 +104,7 @@ void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 }
 
-void GoalClothes::OnMessage(EventMessage message, void * param)
+void MoveGoalClothes::OnMessage(EventMessage message, void * param)
 {
 	switch (message)
 	{

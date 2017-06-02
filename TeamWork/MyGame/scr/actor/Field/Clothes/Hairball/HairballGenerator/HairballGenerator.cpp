@@ -4,8 +4,11 @@
 #include "../MyGame/scr/game/Random.h"
 #include "../MyGame/scr/scene/GamePlayDefine.h"
 
-HairballGenerator::HairballGenerator(IWorld * world, int laneNum, Vector2 pos)
+HairballGenerator::HairballGenerator(IWorld * world, int laneNum, Vector2 pos, int hairballCnt)
 	:Actor(world)
+	,is_Generate_(false)
+	,generate_Count_(0)
+	,defGenerate_Count_(hairballCnt)
 {
 	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;
 	parameter_.radius = 0.0f;
@@ -35,6 +38,10 @@ void HairballGenerator::Update()
 		position_ = Vector2(player_->GetPosition().x + WINDOW_WIDTH, player_->GetCurrentPHeadPosition().y);
 	else
 		position_.x = player_->GetPosition().x + WINDOW_WIDTH;
+
+	if (is_Generate_) {
+		GenerateHairball();
+	}
 }
 
 void HairballGenerator::Draw() const
@@ -55,10 +62,27 @@ void HairballGenerator::OnMessage(EventMessage message, void * param)
 	{
 	case EventMessage::BEGIN_WIND:
 	{
-		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > frequencyHairBall) return;
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Hairball>(world_, CLOTHES_ID::HAIRBALL, laneNum_, position_));
+		is_Generate_ = true;
+		break;
+	}
+	case EventMessage::END_WIND:
+	{
+		is_Generate_ = false;
 		break;
 	}
 	}
+}
+
+void HairballGenerator::GenerateHairball()
+{
+	if (generate_Count_ > defGenerate_Count_) {
+		int rand = Random::GetInstance().Range(0, 100);
+		if (rand > frequencyHairBall) {
+			generate_Count_ = 0;
+			return;
+		}
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Hairball>(world_, CLOTHES_ID::HAIRBALL, laneNum_, position_));
+		generate_Count_ = 0;
+	}
+	generate_Count_++;
 }

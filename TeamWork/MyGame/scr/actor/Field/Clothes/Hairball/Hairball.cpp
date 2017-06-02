@@ -82,6 +82,7 @@ void Hairball::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::PLAYER_SWORD_ACTOR: {
 		parameter_.isDead = true;
+		break;
 	}
 	}
 }

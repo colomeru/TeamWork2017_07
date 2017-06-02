@@ -6,7 +6,7 @@ class HairballGenerator : public Actor
 {
 public:
 	// コンストラクタ
-	HairballGenerator(IWorld* world, int lane_num, Vector2 pos);
+	HairballGenerator(IWorld* world, int lane_num, Vector2 pos, int hairballCnt);
 	// デストラクタ
 	~HairballGenerator();
 	// 更新
@@ -20,8 +20,14 @@ public:
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param) override;
 	
+private:
+	void GenerateHairball();
 
 private:
 	Player* player_;
+
+	int generate_Count_;
+	int defGenerate_Count_;
+	bool is_Generate_;
 
 };

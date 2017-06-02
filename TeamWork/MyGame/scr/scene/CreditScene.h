@@ -7,6 +7,8 @@
 #include "../stageGenerator/StageGeneratorManager.h"
 #include "../actor/player/Player.h"
 #include "../actor/Field/Clothes/GoalClothes/GoalClothes.h"
+#include "GamePlayDefine.h"
+#include "addScreen\BackgroundScreen.h"
 
 class CreditScene : public IScene
 {
@@ -43,6 +45,8 @@ private:
 
 	Vector3 camera_pos_;
 	Vector3 target_;
+
+	BackgroundScreen bgScreen_;
 
 	//テスト用フラグ
 	bool isTest_;

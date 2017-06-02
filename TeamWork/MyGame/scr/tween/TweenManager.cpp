@@ -61,6 +61,14 @@ void TweenManager::Add(float* value, const EaseType& type, const float b, const 
 	auto ease = std::make_shared<TweenObject>(value, b, c, d, callback, s);
 	ease->SetFunction(easeFuncMap_[type]);
 	ease->SetLoopType(updateType);
+	for (auto& e : easeList_)
+	{
+		if (e->GetValuePointer() == value)
+		{
+			e = ease;
+			return;
+		}
+	}
 	easeList_.push_back(ease);
 }
 

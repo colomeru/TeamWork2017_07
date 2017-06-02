@@ -5,7 +5,7 @@
 #include "../math/MathHelper.h"
 #include "../time/Time.h"
 #include <algorithm>
-#include"../math/EasingManager.h"
+#include"../tween/TweenManager.h"
 
 const int SceneManager::MaxStageCount = 6;
 
@@ -21,7 +21,7 @@ void SceneManager::Initialize()
 {
 	End();
 	mScenes.clear();
-	EasingManager::GetInstance().Initialize();
+	TweenManager::GetInstance().Initialize();
 }
 
 // 更新
@@ -30,8 +30,8 @@ void SceneManager::Update()
 	if (!FadePanel::GetInstance().IsAction()) 
 		mCurrentScene->Update();
 	
-	EasingManager::GetInstance().Update(Time::DeltaTime);
-	EasingManager::GetInstance().Remove();
+	TweenManager::GetInstance().Update(Time::DeltaTime);
+	TweenManager::GetInstance().Remove();
 	FadePanel::GetInstance().Update(Time::DeltaTime);
 }
 
@@ -47,7 +47,7 @@ void SceneManager::Draw() const
 void SceneManager::End()
 {
 	mCurrentScene->End();
-	EasingManager::GetInstance().Clear();
+	TweenManager::GetInstance().Clear();
 }
 
 // シーン変更

@@ -1,5 +1,6 @@
 #include "ClothesTapper.h"
 #include"../../../../game/Random.h"
+#include"../../../../tween/TweenManager.h"
 #include"../../../../math/Easing.h"
 
 static const float moveTime = 2.0f;
@@ -76,6 +77,7 @@ void ClothesTapper::ToTapMode()
 {
 	updateMode_ = MODE_TAP;
 	timeCount_ = 0.0f;
+
 }
 
 void ClothesTapper::ToMoveMode()
@@ -86,6 +88,17 @@ void ClothesTapper::ToMoveMode()
 	position_.y -= defDrawLinePosY[1]- defDrawLinePosY[1-sign(laneTNum)];
 	laneNum_ = world_->GetKeepDatas().playerLane_;
 	SetNextTapPos();
+	
+	Vector2 moveVec = targetPos_ - position_;
+
+	//d=かかる秒数、
+	TweenManager::GetInstance().Add(&position_,EaseOutQuad, position_, moveVec, moveTime/2.0f);
+
+	
+
+	//Vector3 d3pos = Easing::EaseInOutQuadFT(timeCount_, moveTime, basePos_, targetPos_);
+	//position_ = Vector2(d3pos.x, d3pos.y);
+
 }
 
 void ClothesTapper::ToIdleMode()
@@ -98,8 +111,9 @@ void ClothesTapper::MoveUpdate()
 {
 	timeCount_ += 0.016f;
 
-	Vector3 d3pos = Easing::EaseInOutQuadFT(timeCount_, moveTime, basePos_, targetPos_);
-	position_ = Vector2(d3pos.x, d3pos.y);
+	//ここの更新はMoveModeになるときに1度だけ移動量指定をする(現在移動先を指定するFT系は、ループしないもののみ利用可能
+	//Vector3 d3pos = Easing::EaseInOutQuadFT(timeCount_, moveTime, basePos_, targetPos_);
+	//position_ = Vector2(d3pos.x, d3pos.y);
 	
 	if (timeCount_ > moveTime) {
 		ToTapMode();

@@ -29,13 +29,21 @@ public:
 	//
 	void Action();
 	//前のステージをクリアしているか？
-	bool CheckPreviousSrage(int sNum);
+	bool CheckPreviousStage(int sNum);
 	//次のステージの解放
 	void OpenNextStage(int sNum);
+	//次のステージが解放されているか？
+	bool CheckNextStage(int sNum);
+	//パターン１
+	void Pattern1Update();
+	void Pattern1Draw() const;
+	//パターン２
+	void Pattern2Update();
+	void Pattern2Draw() const;
 	
 private:
 	int stageNum = 0; //ステージ番号
-	const float height = WINDOW_HEIGHT / 4.0f * 3.0f; //パネル１のy座標
+	const float height = WINDOW_HEIGHT / 4.0f * 2.0f; //パネル１のy座標
 	Vector2 backPos; //戻るパネルの座標
 	bool backSelect; //戻るを選択しているか？
 	Vector2 cursorPos; //カーソルの座標
@@ -45,7 +53,18 @@ private:
 	//
 	Vector2 pos;
 	Vector2 gPos;
-	Vector2 dir;
+	Vector2 dir; //移動方向
 	float dis;
 	float disN;
+	float from;
+	float ease;
+	bool test;
+	const float MoveTime = 0.5f;
+
+	float timer_;
+	Vector2 drawPos;
+	Vector2 modify; //総移動距離
+	Vector2 moveDis; //移動距離
+	Vector2 velocity; //速度
+	float mag; //速度倍率
 };

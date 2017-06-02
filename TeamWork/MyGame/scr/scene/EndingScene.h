@@ -45,8 +45,8 @@ public:
 	void Multiple();
 	//変形描画
 	void DeformationDraw();
-	//
-	void MultipleInit(float Length,const Vector2& fPos,float rot);
+	//多重振り子初期化
+	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius); //首の長さ、支点、角度、半径
 
 private:
 	//float size;
@@ -133,7 +133,7 @@ private:
 
 
 	//変形描画
-	int hNeck,hHead;
+	int hNeck, hHead;
 	std::array<Vector2, 4> gPos1;
 	std::array<Vector2, 4> gPos2;
 	int posNum;

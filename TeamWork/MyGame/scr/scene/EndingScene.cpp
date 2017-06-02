@@ -18,7 +18,7 @@ const int correctionHeight = 30;
 const float correctionWidth = 1.8f;
 
 EndingScene::EndingScene() :
-	nextScene_(Scene::Movie)
+	nextScene_(Scene::Title)
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -128,7 +128,7 @@ void EndingScene::Initialize()
 	//	fPos.push_back(Vector2(px, py));
 	//	multiplePos.push_back(Vector2(0.0f, 0.0f));
 	//}
-	MultipleInit(neckLengh,Vector2(800.0f,300.0f),0.0f);
+	MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f,150.0f);
 	Multiple();
 
 
@@ -179,8 +179,9 @@ void EndingScene::Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM4))
 	{
-		MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f);
+		//MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f);
 	}
+	MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f,150.0f);
 
 
 	//四角の当たり判定
@@ -329,7 +330,7 @@ void EndingScene::Draw() const
 	//}
 	for (int i = drawPoints.size() - 1; i > 0; i--) {
 		auto p = drawPoints[i];
-		DrawRectModiGraph(p.p0.x, p.p0.y, p.p1.x, p.p1.y, p.p2.x, p.p2.y, p.p3.x, p.p3.y, 0, 0, 41, 76 * correctionLens[i], hNeck, 1);
+		DrawRectModiGraph(p.p0.x, p.p0.y, p.p1.x, p.p1.y, p.p2.x, p.p2.y, p.p3.x, p.p3.y, 0, 0, 41.0f, 76.0f * correctionLens[i], hNeck, 1);
 	}
 	auto p = drawPoints[0];
 	DrawRectModiGraph(p.p0.x, p.p0.y, p.p1.x, p.p1.y, p.p2.x, p.p2.y, p.p3.x, p.p3.y, 0, 0, 63, 91 * correctionLens[0], hHead, 1);
@@ -646,7 +647,7 @@ void EndingScene::handleMessage(EventMessage message, void * param)
 void EndingScene::Multiple()
 {
 	//振り子
-	float oneLength = 100.0f;
+	//float oneLength = 100.0f;
 
 	//現在の重りの位置
 	for (int i = 0; i < fPos_.size(); i++)
@@ -738,46 +739,8 @@ void EndingScene::Multiple()
 //変形描画
 void EndingScene::DeformationDraw()
 {
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM1)) {
-		posNum = 0;
-	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM2)) {
-		posNum = 1;
-	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM3)) {
-		posNum = 2;
-	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM4)) {
-		posNum = 3;
-	}
-
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) {
-		gPos1[posNum].x -= 5;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)) {
-		gPos1[posNum].x += 5;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-		gPos1[posNum].y -= 5;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
-		gPos1[posNum].y += 5;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::Z)) {
-		gPos1[2].x -= 5;
-		gPos1[3].x -= 5;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::X)) {
-		gPos1[2].x += 5;
-		gPos1[3].x += 5;
-	}
-
-	gPos2[0] = Vector2(gPos1[3].x, gPos1[3].y);
-	gPos2[1] = Vector2(gPos1[2].x, gPos1[2].y);
-
 	//
 	drawPoints.clear();
-
 
 	DrawPos p;
 	for (int i = 0; i < fPos_.size(); i++) {
@@ -796,21 +759,14 @@ void EndingScene::DeformationDraw()
 				drawPoints.push_back(p);
 			}
 		}
-		else if (fPos_.size() - 1 == i) {
-			p.p0 = fPos_[i] + n * resWidth;
-			p.p1 = fPos_[i] - n * resWidth;
-			if (v.Length() > 0) {
-				p.p2 = p.p1 - v.Normalize() * 76.0f * correctionLens.back();
-				p.p3 = p.p0 - v.Normalize() * 76.0f * correctionLens.back();
-				drawPoints.push_back(p);
-			}
-		}
 		else {
 			p.p0 = fPos_[i] + n * resWidth;
 			p.p1 = fPos_[i] - n * resWidth;
 			if (v.Length() > 0) {
-				p.p2 = multiplePos[i] - n * resWidth;
-				p.p3 = multiplePos[i] + n * resWidth;
+				p.p2 = p.p1 - v.Normalize() * 76.0f * correctionLens[i];
+				p.p3 = p.p0 - v.Normalize() * 76.0f * correctionLens[i];
+				p.p0 += v.Normalize() * correctionHeight;
+				p.p1 += v.Normalize() * correctionHeight;
 				p.p2 -= v.Normalize() * correctionHeight;
 				p.p3 -= v.Normalize() * correctionHeight;
 				drawPoints.push_back(p);
@@ -819,7 +775,7 @@ void EndingScene::DeformationDraw()
 	}
 }
 
-void EndingScene::MultipleInit(float len, const Vector2& fPos, float rot)
+void EndingScene::MultipleInit(float len, const Vector2& fPos, float rot,float radius)
 {
 	mRot.clear();
 	mRot_spd.clear();
@@ -829,15 +785,20 @@ void EndingScene::MultipleInit(float len, const Vector2& fPos, float rot)
 
 	int s = len / oneLength;
 	correctionLens.clear();
-	for (int i = 0; i < s + 1; i++) {
-		correctionLens.push_back(1.0f);
-	}
-	if (len - oneLength > 0) {
-		float h = MathHelper::Mod(len - oneLength, oneLength) / oneLength;
-		correctionLens.push_back(h);
-	}
-	fNum = s;
+	vector<float> data(s + 1, 0.0f);
+	correctionLens = data;
+	correctionLens.front() = 1.0f;
+	len -= oneLength;
+	len -= radius;
+	int i;
+	for (i = 1; i < len / oneLength; i++) {
+		correctionLens[i] = 1.0f;
 
+	}
+	float h = (MathHelper::Mod(len - oneLength, oneLength) + correctionHeight * 2.0f) / (oneLength + correctionHeight * 2.0f);
+
+	correctionLens[i] = h;
+	fNum = s;
 
 	fPos_.push_back(fPos);
 	mRot.push_back(rot);
@@ -854,7 +815,5 @@ void EndingScene::MultipleInit(float len, const Vector2& fPos, float rot)
 		fPos_.push_back(Vector2(px, py));
 		multiplePos.push_back(Vector2(0.0f, 0.0f));
 	}
-	//Multiple();
-	//
 }
 

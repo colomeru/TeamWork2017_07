@@ -1,15 +1,15 @@
 ﻿#include "TitleScene.h"
 #include "../Def.h"
-#include "../time/Time.h"
 #include "../camera/Camera.h"
 #include "../conv/DXConverter.h"
 #include "../graphic/Sprite.h"
+#include "../game/Game1.h"
 
 TitleScene::TitleScene() :
-nextScene_(Scene::Menu)
+	nextScene_(Scene::Menu)
 {
 	world_ = std::make_shared<World>();
-	
+
 	world_->AddEventMessageListener([=](EventMessage msg, void* param)
 	{
 		handleMessage(msg, param);
@@ -38,20 +38,21 @@ void TitleScene::Update()
 {
 	// XV
 	world_->Update();
-
 	// I—¹
 	/*Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
 	Camera::GetInstance().Target.Set(Vector3(0,0,0));
 	Camera::GetInstance().Update();
 	*/
+
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
-		if (selectNum_ == 0) {
-			isEnd_ = true;
+		if (selectNum_ == 0) { 
+			isEnd_ = true;			
 		}
 		else if (selectNum_ == 1) {
+			GameFrame::GameEnd();
 			//Escape
 		}
-	}	
+	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)) {
 		selectX_ = 850.0f;
 		selectY_ = 803.0f;
@@ -66,7 +67,6 @@ void TitleScene::Update()
 
 void TitleScene::Draw() const
 {
-
 	// 読みこんだグラフィックを画面左上に描画
 	//auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
 	//auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
@@ -77,12 +77,12 @@ void TitleScene::Draw() const
 
 	DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
 	auto drawpos = Vector2(WINDOW_WIDTH, WINDOW_HEIGHT) / 2;
-	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE)/2;
-	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE,drawpos,origin,Vector2::One);
+	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, drawpos, origin, Vector2::One);
 	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 	//DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
 	// •`‰æ
-	
+
 	world_->Draw();
 }
 
@@ -92,7 +92,7 @@ bool TitleScene::IsEnd() const
 }
 
 Scene TitleScene::Next() const
-{	
+{
 	return nextScene_;
 }
 

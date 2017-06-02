@@ -54,6 +54,7 @@ private:
 
 public:
 	static const int MaxStageCount;
+	float timer;
 
 private:
 	// ƒV[ƒ“

@@ -182,7 +182,6 @@ void GamePlayScene::Draw() const
 	//if (gamePlayMode_ == 1)
 	bgScreen_.Draw();
 	//DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	//DrawFormatString(700, 600, GetColor(255, 255, 255), "%f", ply1->GetAngle());
 
@@ -216,6 +215,9 @@ void GamePlayScene::Draw() const
 		pauseScreen_.Draw();
 	}
 
+	if (BuildMode != 1)return;
+
+	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 }
 
 bool GamePlayScene::IsEnd() const

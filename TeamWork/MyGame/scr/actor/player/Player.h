@@ -259,6 +259,10 @@ public:
 	//現在使用しているHeadの座標を返す
 	Vector2 GetCurrentPHeadPosition()const;
 	float GetPlayerSwordAngle()const;
+	//振り子の支点位置を移動する
+	void SetMultipleFulcrumPos(const Vector2& pos) {
+		fPos_.front() = pos;
+	}
 private:
 	void MultipleInit(float Length, const Vector2& fPos, float rot);
 	void Multiple();
@@ -439,3 +443,4 @@ private:
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
 };
+

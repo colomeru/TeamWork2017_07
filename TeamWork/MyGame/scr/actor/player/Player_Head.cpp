@@ -158,6 +158,10 @@ void Player_Head::Draw() const
 
 
 	DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
+
+
+
+	
 }
 
 void Player_Head::OnUpdate()

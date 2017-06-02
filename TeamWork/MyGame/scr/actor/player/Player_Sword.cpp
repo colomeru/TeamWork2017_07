@@ -26,6 +26,8 @@ void Player_Sword::Draw() const
 	float angle = MathAngle(vel);
 	Vector2 origin(Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).x/2,0);
 	Sprite::GetInstance().Draw(SPRITE_ID::SWORD_SPRITE, drawPos_,origin, Vector2::One, angle);
+
+	if (BuildMode != 1)return;
 	DrawLine(startDP.x, startDP.y, endDP.x, endDP.y, GetColor(0, 0, 255));
 	DrawFormatString(400, 400, GetColor(255, 255, 255), "%f", angle);
 }

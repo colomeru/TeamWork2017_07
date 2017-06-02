@@ -89,15 +89,11 @@ void ClothesTapper::ToMoveMode()
 	laneNum_ = world_->GetKeepDatas().playerLane_;
 	SetNextTapPos();
 	
-	Vector2 moveVec = targetPos_ - position_;
-
-	//d=かかる秒数、
-	TweenManager::GetInstance().Add(&position_,EaseOutQuad, position_, moveVec, moveTime/2.0f);
+	Vector2 moveVec = targetPos_ - basePos_;
+	//d=かかる秒数
+	TweenManager::GetInstance().Add(&position_,EaseInOutQuad, basePos_, moveVec, moveTime);
 
 	
-
-	//Vector3 d3pos = Easing::EaseInOutQuadFT(timeCount_, moveTime, basePos_, targetPos_);
-	//position_ = Vector2(d3pos.x, d3pos.y);
 
 }
 
@@ -112,7 +108,8 @@ void ClothesTapper::MoveUpdate()
 	timeCount_ += 0.016f;
 
 	//ここの更新はMoveModeになるときに1度だけ移動量指定をする(現在移動先を指定するFT系は、ループしないもののみ利用可能
-	//Vector3 d3pos = Easing::EaseInOutQuadFT(timeCount_, moveTime, basePos_, targetPos_);
+	//Vector2 movePos = targetPos_ - basePos_;
+	//Vector3 d3pos = Easing::EaseInOutQuad(timeCount_, Vector3(basePos_), Vector3(movePos), moveTime);
 	//position_ = Vector2(d3pos.x, d3pos.y);
 	
 	if (timeCount_ > moveTime) {

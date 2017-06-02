@@ -9,6 +9,8 @@
 #include"addScreen/GameClearScreen.h"
 #include"addScreen/PauseScreen.h"
 #include"addScreen\LaneChangeScreen.h"
+#include"addScreen\StageEffectScreen.h"
+
 class Player;
 
 class GamePlayScene : public IScene
@@ -80,7 +82,10 @@ private:
 	GameClearScreen gameClearScreen_;
 	BackgroundScreen bgScreen_;
 	LaneChangeScreen changeScreen_;
+	StageEffectScreen stageEffectScreen_;
 	//Vector3 posit;
+
+	Stage currentStage_;
 
 	//Vector3 camera_pos_;
 	//Vector3 target_;
@@ -94,6 +99,8 @@ private:
 
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
+
+	std::map<Stage, int> defWindTime_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
 

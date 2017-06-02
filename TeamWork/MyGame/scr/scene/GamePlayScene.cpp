@@ -18,10 +18,13 @@
 #include"GamePlayDefine.h"
 #include"../actor/Field/Enemys/EnemyGenerator.h"
 #include"../actor/Field/Enemys/EnemyCharas/ClothesTapper.h"
+#include"../tween/TweenManager.h"
+
 
 GamePlayScene::GamePlayScene() :
-	nextScene_(Scene::Credit), windTime_(defWindTime_), maxLaneCount(3),
-	gameOverScreen_(), gameClearScreen_(), pauseScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(200.0f, 100.0f)), gamePlayMode_(0)
+	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
+	gameOverScreen_(), gameClearScreen_(), pauseScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(200.0f, 100.0f)),
+	gamePlayMode_(0), currentStage_(Stage::Stage2), stageEffectScreen_()
 	//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 {
 	// ワールド生成
@@ -37,6 +40,15 @@ GamePlayScene::GamePlayScene() :
 	updateFunctionMap_[2] = std::bind(&GamePlayScene::overUpdate, this);
 	updateFunctionMap_[1] = std::bind(&GamePlayScene::baseUpdate, this);
 	updateFunctionMap_[0] = std::bind(&GamePlayScene::startUpdate, this);
+
+	defWindTime_[Stage::Stage1] = defWindTime[0];
+	defWindTime_[Stage::Stage2] = defWindTime[1];
+	defWindTime_[Stage::Stage3] = defWindTime[2];
+	defWindTime_[Stage::Stage4] = defWindTime[3];
+	defWindTime_[Stage::Stage5] = defWindTime[4];
+	defWindTime_[Stage::Stage6] = defWindTime[5];
+	defWindTime_[Stage::Stage7] = defWindTime[6];
+	defWindTime_[Stage::Stage8] = defWindTime[7];
 
 	bgScreen_ = BackgroundScreen(world_.get());
 	changeScreen_=LaneChangeScreen(world_.get());
@@ -83,8 +95,8 @@ void GamePlayScene::Initialize()
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, 22, Vector2(0, 0)));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, 3, Vector2(0, 0)));
 
-	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test"),60));
-	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1"),60));
+	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test"), 60));
+	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
 
 	//ステージの最大レーン数(後々MapGeneratorからレーン数を受け取れるようにする)
 	int stageLaneSize = 3;
@@ -92,8 +104,8 @@ void GamePlayScene::Initialize()
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, ply1);
 	world_->PushStackActor(ply1);
 
-	stageGeneratorManager.SetStage(Stage::Stage2);
-	stageLen_ = stageGeneratorManager.GetStageSize(Stage::Stage2).x;
+	stageGeneratorManager.SetStage(currentStage_);
+	stageLen_ = stageGeneratorManager.GetStageSize(currentStage_).x;
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<EnemyGenerator>(world_.get()));
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(800.f,0.f)));
@@ -123,6 +135,9 @@ void GamePlayScene::Initialize()
 	startScreen_ = StartScreen(world_.get(), maxLaneCount);
 	
 	startScreen_.Init(stageLen_);
+
+	stageEffectScreen_.Init(currentStage_);
+	
 }
 
 void GamePlayScene::Update()
@@ -198,6 +213,7 @@ void GamePlayScene::Draw() const
 	// 描画
 	world_->Draw(maxLaneCount, world_->GetKeepDatas().playerLane_);
 
+	stageEffectScreen_.Draw();
 	//VECTOR pos1 = DXConverter::GetInstance().ToVECTOR(posit);
 	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);
 
@@ -235,8 +251,9 @@ void GamePlayScene::End()
 	//FadePanel::GetInstance().FadeOut();
 	// 初期化
 	world_->Clear();
-
 	bgScreen_.End();
+
+	TweenManager::GetInstance().Clear();
 }
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
@@ -254,6 +271,11 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 		else {
 			changeScreen_.Init(WindDir::DOWN);
 		}
+		break;
+	}
+	case EventMessage::BEGIN_WIND: {
+		stageEffectScreen_.StartEffect();
+		break;
 	}
 								
 	default:
@@ -274,7 +296,7 @@ void GamePlayScene::baseUpdate()
 	if (windTime_ <= 0) {
 		world_->sendMessage(EventMessage::BEGIN_WIND);
 		bgScreen_.addBGCharacters();
-		windTime_ = defWindTime_;
+		windTime_ = defWindTime_[currentStage_];
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)||GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8)) {
 		//Vector2 pss = Vector2(200, 200);
@@ -287,6 +309,7 @@ void GamePlayScene::baseUpdate()
 
 	bgScreen_.Update();
 	changeScreen_.Update();
+	stageEffectScreen_.Update();
 }
 
 void GamePlayScene::pauseUpdate()
@@ -305,6 +328,7 @@ void GamePlayScene::overUpdate()
 	if (gameOverScreen_.Update(nextScene_)) {
 		isEnd_ = true;
 		if (nextScene_ == Scene::GamePlay) {
+			End();
 			Initialize();
 		}
 	}
@@ -316,6 +340,7 @@ void GamePlayScene::clearUpdate()
 	if (gameClearScreen_.Update(nextScene_)) {
 		isEnd_ = true;
 		if (nextScene_ == Scene::GamePlay) {
+			End();
 			Initialize();
 		}
 	}

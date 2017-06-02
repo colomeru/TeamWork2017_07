@@ -263,6 +263,7 @@ public:
 	void SetMultipleFulcrumPos(const Vector2& pos) {
 		fPos_.front() = pos;
 	}
+	bool GetIsSwordActive()const;
 private:
 	void MultipleInit(float Length, const Vector2& fPos, float rot);
 	void Multiple();

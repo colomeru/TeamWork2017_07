@@ -396,6 +396,9 @@ Vector2 Player::GetCurrentPHeadPosition() const {
 float Player::GetPlayerSwordAngle() const {
 	return MathFormedAngle(pSword_->GetSwordEndPos() - position_);
 }
+bool Player::GetIsSwordActive() const {
+	return pSword_->GetUseSword();
+}
 void Player::MultipleInit(float len, const Vector2& fPos, float rot)
 {
 	mRot.clear();

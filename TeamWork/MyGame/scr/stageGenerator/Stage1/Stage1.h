@@ -20,8 +20,11 @@ public:
 	}
 
 private:
+	//ƒsƒ“’Ç‰ÁŠÖ”
 	void Pin_Add(int i, int j, int data, int laneNum);
+	//•’Ç‰ÁŠÖ”
 	void Clothes_Add(int i, int j, int data, int laneNum);
+	//ƒS[ƒ‹’Ç‰ÁŠÖ”i‚Qí—Ş‚ÌƒS[ƒ‹j
 	void GoalClothes_Add(int i, int j, int data, int laneNum);
 
 private:

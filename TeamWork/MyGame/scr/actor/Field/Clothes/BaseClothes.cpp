@@ -7,8 +7,8 @@
 #include "../../../graphic/Model.h"
 #include "../../../graphic/Sprite.h"
 
-BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
-	:Clothes(world, clothes, laneNum)
+BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
+	:Clothes(world, clothes, laneNum, weight)
 {
 	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -104,7 +104,7 @@ void BaseClothes::Draw() const
 	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 
 	//DrawBox(drawPos_.x, drawPos_.y, drawPos_.x + 5, drawPos_.y + 5, GetColor(255, 0, 0), TRUE);
-	if (!collisionPoints.empty()) {
+	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);

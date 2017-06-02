@@ -243,6 +243,8 @@
     <ClCompile Include="scr\stageGenerator\StageGeneratorManager.cpp" />
     <ClCompile Include="scr\time\FPS.cpp" />
     <ClCompile Include="scr\time\Time.cpp" />
+    <ClCompile Include="scr\tween\TweenManager.cpp" />
+    <ClCompile Include="scr\tween\TweenObject.cpp" />
     <ClCompile Include="scr\world\World.cpp" />
     <ClCompile Include="scr\world\WorldActor.cpp" />
   </ItemGroup>
@@ -354,6 +356,8 @@
     <ClInclude Include="scr\stageGenerator\StageGeneratorManager.h" />
     <ClInclude Include="scr\time\FPS.h" />
     <ClInclude Include="scr\time\Time.h" />
+    <ClInclude Include="scr\tween\TweenManager.h" />
+    <ClInclude Include="scr\tween\TweenObject.h" />
     <ClInclude Include="scr\world\IWorld.h" />
     <ClInclude Include="scr\world\IWorldPtr.h" />
     <ClInclude Include="scr\world\World.h" />

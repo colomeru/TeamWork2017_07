@@ -121,7 +121,8 @@ CollisionParameter CollisionFunction::IsHit_PSword_Clothes(const Actor & sprite1
 	bool isHitCheck = false;
 	for (int i = 0; i < 3; i++) {
 		if (MyCol::Col_Segment_Segment(seg1, seg2[i], segPoint)) {
-			if(static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()))->GetPlayerSwordAngle() > 90)
+			auto sword_Parent = static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()));
+			if(sword_Parent->GetPlayerSwordAngle() > 90 && sword_Parent->GetIsSwordActive())
 				isHitCheck = true;
 		}
 	}

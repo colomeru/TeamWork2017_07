@@ -1,8 +1,9 @@
 #include "Hairball.h"
 #include "../MyGame/scr/Def.h"
+#include "../MyGame/scr/tween/TweenManager.h"
 
 Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
-	:Clothes(world, clothes, laneNum)
+	:Clothes(world, clothes, laneNum, 0.0f)
 {
 	clothes_ID = CLOTHES_ID::HAIRBALL;
 	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;
@@ -31,6 +32,8 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
+	TweenManager::GetInstance().Delay(6.0f, [=]() {Dead(); });
+
 	isHit_ = false;
 
 }
@@ -50,9 +53,6 @@ void Hairball::Update()
 	velocity_ = Vector2(-10.0f, 0.0f);
 
 	position_ += velocity_;
-	
-	if (position_.x < player_->GetPosition().x - 400)
-		parameter_.isDead = true;
 }
 
 void Hairball::Draw() const
@@ -74,7 +74,7 @@ void Hairball::OnCollide(Actor & other, CollisionParameter colpara)
 		if (!player_Head_->getIsCurrentHead()) return;
 
 		if (player_->GetIsBiteMode()) {
-			player_->SetMode(MODE_SLIP);
+			//player_->SetMode(MODE_SLIP);
 			player_Head_->setIsBiteSlipWind(true);
 			parameter_.isDead = true;
 		}

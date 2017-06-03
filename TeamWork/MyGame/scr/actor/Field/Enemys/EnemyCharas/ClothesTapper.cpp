@@ -4,13 +4,23 @@
 #include"../../../../math/Easing.h"
 
 static const float moveTime = 2.0f;
-static const float TapTime = 2.0f;
+//static const float TapTime = 2.0f;
 static const float IdleTime = 1.0f;
 
 ClothesTapper::ClothesTapper(IWorld * world, int laneNum, Vector2 pos):
-	Enemys(world,laneNum,pos), timeCount_(0.f),targetPos_(pos),basePos_(pos),updateMode_(MODE_IDLE), spriteID_(SPRITE_ID::TEST2_SPRITE)
+	Enemys(world,laneNum,pos), timeCount_(0.f),targetPos_(pos),basePos_(pos),updateMode_(MODE_IDLE), spriteID_(SPRITE_ID::CLOTHES_TAP_01_SPRITE)
 {
-	parameter_.radius = Sprite::GetInstance().GetSize(spriteID_).x/2;
+	//parameter_.radius = Sprite::GetInstance().GetSize(spriteID_).x/2;
+	parameter_.radius = 100.f;
+
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_01_SPRITE);
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_02_SPRITE);
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_03_SPRITE);
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_04_SPRITE);
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_05_SPRITE);
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_06_SPRITE);
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_07_SPRITE);
+	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_08_SPRITE);
 
 	//auto ePx = std::make_shared<EaseNode>(&position_.x, EaseType::Linear, 0.f, -200.f, 5.f, [this]() {SetNextTapPos(); });
 	////auto ePy = std::make_shared<EaseNode>(&position_.y, EaseType::Linear, position_.y, 5.f, 5.f, [this]() {SetNextTapPos(); });
@@ -35,7 +45,13 @@ void ClothesTapper::Update()
 void ClothesTapper::Draw() const
 {
 	auto origin = Sprite::GetInstance().GetSize(spriteID_) / 2;
-	Sprite::GetInstance().Draw(spriteID_, drawPos_, origin,Vector2::One);
+	anmManager_.Draw(drawPos_ + Vector2(0, 300.f), origin,Vector2(2.0f,2.0f));
+	//Sprite::GetInstance().Draw(spriteID_, drawPos_+Vector2(0,400), origin,Vector2(2.f,2.f));
+	
+	if (BuildMode != 1)return;
+
+	DrawCircle(drawPos_.x, drawPos_.y, parameter_.radius, GetColor(255, 255, 255));
+
 }
 
 void ClothesTapper::OnUpdate()
@@ -101,6 +117,7 @@ void ClothesTapper::ToIdleMode()
 {
 	updateMode_ = MODE_IDLE;
 	timeCount_ = 0.0f;
+	anmManager_.ResetAnm();
 }
 
 void ClothesTapper::MoveUpdate()
@@ -120,8 +137,9 @@ void ClothesTapper::MoveUpdate()
 void ClothesTapper::TapUpdate()
 {
 	timeCount_ += 0.016f;
-
-	if (timeCount_ > TapTime) {
+	anmManager_.Update();
+	//if (timeCount_ > TapTime) {
+	if (timeCount_ > anmManager_.GetAnmEndTime()) {
 		PlayTap();
 		ToIdleMode();
 	}

@@ -20,7 +20,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("人.png", SPRITE_ID::HITO_SPRITE);
 	sprite.Load("snake.png", SPRITE_ID::SNAKE_SPRITE);
 	sprite.Load("clip.png", SPRITE_ID::PLAYER_HEAD_SPRITE);
-	sprite.Load("headFatigue.bmp", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
+	sprite.Load("orochi_4.png", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
 	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE);
 	sprite.Load("testClothes.bmp", SPRITE_ID::TEST_CLOTHES_SPRITE);
 	sprite.Load("goal.bmp", SPRITE_ID::TEST_GOAL_SPRITE);
@@ -51,6 +51,15 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("whitescreen.png", SPRITE_ID::WHITE_SCREEN_SPRITE);
 	sprite.Load("blackscreen.png", SPRITE_ID::BLACK_SCREEN_SPRITE);
 	sprite.Load("testGoalClothes.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
+	//非結合腕アニメーションリソース
+	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
+	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);
+	sprite.Load("tataki/tatakianime_00003.png", SPRITE_ID::CLOTHES_TAP_03_SPRITE);
+	sprite.Load("tataki/tatakianime_00004.png", SPRITE_ID::CLOTHES_TAP_04_SPRITE);
+	sprite.Load("tataki/tatakianime_00005.png", SPRITE_ID::CLOTHES_TAP_05_SPRITE);
+	sprite.Load("tataki/tatakianime_00006.png", SPRITE_ID::CLOTHES_TAP_06_SPRITE);
+	sprite.Load("tataki/tatakianime_00007.png", SPRITE_ID::CLOTHES_TAP_07_SPRITE);
+	sprite.Load("tataki/tatakianime_00008.png", SPRITE_ID::CLOTHES_TAP_08_SPRITE);
 }
 
 // ３Ｄモデルを読み込む

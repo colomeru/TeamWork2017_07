@@ -1,6 +1,7 @@
 #pragma once
 #include"../Enemys.h"
 #include "../MyGame/scr/actor/player/Player.h"
+#include"CharacterAnmManager.h"
 
 enum {
 
@@ -20,7 +21,13 @@ public:
 	virtual void FastUpdate()override {
 		isUpdate_ = true;
 	}
-
+	virtual bool CamMoveUpdate() {
+		//laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+		return true;
+	}
+	virtual void LateUpdate() {
+		laneNum_ = world_->GetKeepDatas().playerLane_;
+	}
 	//XV
 	virtual void Update() override;
 	//•`‰æ
@@ -50,6 +57,8 @@ private:
 	Vector2 targetPos_;
 	float timeCount_;
 	
+	CharacterAnmManager anmManager_;
+
 	int updateMode_;
 	SPRITE_ID spriteID_;
 	std::map<int, std::function<void()>> updateFunctionMap_;

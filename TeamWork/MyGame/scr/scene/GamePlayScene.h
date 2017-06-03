@@ -36,6 +36,9 @@ public:
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
 	
+	void ReceiveStage(Stage stage)override {
+		currentStage_ = stage;
+	}
 private:
 	void setNextMode(int mode) {
 		gamePlayMode_ = mode;

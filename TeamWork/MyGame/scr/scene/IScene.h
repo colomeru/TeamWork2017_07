@@ -3,6 +3,7 @@
 #include "../world/World.h"
 #include "../input/Keyboard.h"
 #include "../input/GamePad.h"
+#include"../stageGenerator/Stage.h"
 
 // シーンインターフェース
 class IScene
@@ -22,6 +23,10 @@ public:
 	virtual Scene Next() const = 0;
 	// 終了時処理
 	virtual void End() = 0;
+	virtual void ReceiveStage(Stage stage) {}
+	virtual Stage SendStage()const {
+		return Stage::Stage1;
+	}
 	void SetIsEnd(bool isEnd) {
 		isEnd_ = isEnd;
 	}

@@ -30,9 +30,10 @@ void MenuScene::Update()
 	world_->Update();
 
 	// èIóπ
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
 		isEnd_ = true;
 
+	}
 	menu.Update();
 }
 
@@ -65,4 +66,9 @@ void MenuScene::End()
 
 void MenuScene::handleMessage(EventMessage message, void * param)
 {
+}
+
+Stage MenuScene::SendStage() const
+{
+	return menu.GetGamePlayStage();
 }

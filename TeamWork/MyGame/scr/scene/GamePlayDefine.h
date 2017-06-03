@@ -7,7 +7,7 @@ static const int defSinC = 90;
 static const int defWindTime[8]{
 800,//ステージ1
 800,//ステージ2
-800,//ステージ3
+500,//ステージ3
 800,//ステージ4
 800,//ステージ5
 800,//ステージ6

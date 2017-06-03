@@ -134,13 +134,13 @@ void Player_Head::Draw() const
 		}
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
 		Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_,Vector2::One, angle,true,false);
-		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
+		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One, angle, true, false);
 	}
 	else {
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
 		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
 		//Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One);
-		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
+		//Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
 
 	}
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 255, 0), TRUE);

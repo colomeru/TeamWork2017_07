@@ -7,7 +7,8 @@ enum {
 
 	MODE_MOVE = 0,
 	MODE_TAP = 1,
-	MODE_IDLE=2
+	MODE_IDLE = 2,
+	MODE_DEAD = 3,
 
 };
 
@@ -45,11 +46,12 @@ private:
 	void ToTapMode();
 	void ToMoveMode();
 	void ToIdleMode();
-
+	void ToDeadMode();
 private:
 	void MoveUpdate();
 	void TapUpdate();
 	void IdleUpdate();
+	void DeadUpdate();
 private:
 	Player* player_;
 	Actor* player_Head_;
@@ -58,6 +60,7 @@ private:
 	float timeCount_;
 	
 	CharacterAnmManager anmManager_;
+	CharacterAnmManager anmManager2_;
 
 	int updateMode_;
 	SPRITE_ID spriteID_;

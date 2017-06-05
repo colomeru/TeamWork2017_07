@@ -74,8 +74,8 @@ void BackgroundScreen::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, bgPos);
 	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, BGSize+bgPos);
 
-	Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
-	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
+	//Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	//Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
 	
 	Vector2 ceilPos = Vector2::Zero - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_] +Sprite::GetInstance().GetSize(SPRITE_ID::CEILING_SPRITE).y- defDrawPointYAdd[1]);
 	Sprite::GetInstance().Draw(SPRITE_ID::CEILING_SPRITE, ceilPos);

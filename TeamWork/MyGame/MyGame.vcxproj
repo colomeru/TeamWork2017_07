@@ -177,6 +177,7 @@
     <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\Bird.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.cpp" />
+    <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyGenerator.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\Enemys.cpp" />
@@ -229,6 +230,7 @@
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.cpp" />
+    <ClCompile Include="scr\scene\addScreen\StageEffectScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\StartScreen.cpp" />
     <ClCompile Include="scr\scene\CreditScene.cpp" />
     <ClCompile Include="scr\scene\DemoScene.cpp" />
@@ -270,6 +272,7 @@
     <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\Bird.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.h" />
+    <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyGenerator.h" />
     <ClInclude Include="scr\actor\Field\Enemys\Enemys.h" />
@@ -334,6 +337,7 @@
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\WindDir.h" />
+    <ClInclude Include="scr\scene\addScreen\StageEffectScreen.h" />
     <ClInclude Include="scr\scene\addScreen\StartScreen.h" />
     <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />

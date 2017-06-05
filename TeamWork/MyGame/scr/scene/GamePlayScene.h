@@ -12,6 +12,7 @@
 #include"addScreen\StageEffectScreen.h"
 
 class Player;
+class EnemyGenerator;
 
 class GamePlayScene : public IScene
 {	
@@ -77,7 +78,7 @@ private:
 	Scene			nextScene_;
 
 	PlayerPtr ply1;
-
+	std::shared_ptr<EnemyGenerator> enemGenerator_;
 	StageGenerateManager stageGeneratorManager;
 	StartScreen startScreen_;
 	PauseScreen pauseScreen_;
@@ -102,6 +103,8 @@ private:
 
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
+
+	std::map<Stage,Stage> nextStageList_;
 
 	std::map<Stage, int> defWindTime_;
 

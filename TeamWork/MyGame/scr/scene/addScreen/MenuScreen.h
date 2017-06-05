@@ -70,5 +70,5 @@ private:
 	Vector2 velocity; //‘¬“x
 	float mag; //‘¬“x”{—¦
 
-	std::array<Stage,8> stageList_;
+	std::array<Stage,9> stageList_;
 };

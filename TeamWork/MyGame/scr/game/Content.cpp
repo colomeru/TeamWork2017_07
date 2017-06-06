@@ -56,6 +56,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("testGoalClothes.png", SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE);
 	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE);
 	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE);
+	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);
+
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
 	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);

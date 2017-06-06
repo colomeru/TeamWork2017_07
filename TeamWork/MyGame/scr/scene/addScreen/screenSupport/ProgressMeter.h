@@ -45,11 +45,16 @@ private:
 
 	//画像のハンドル
 	int pinHandle_; //ピン
-	int playerHandle_; //カーソル
-	int upperHandle_; //レーン１（上段）
-	int middleHandle_; //レーン２（中段）
-	int lowerHandle_; //レーン３（下段）
+	int pIconHandle_; //プレイヤーアイコン
+	int laneHandle_; //レーン
 	int startHandle_; //スタート
-	int goalhandle_; //ゴール
+	int goalHandle_; //ゴール
+
+	//画像のサイズ
+	Vector2 pinSize_; //ピン
+	Vector2 pIconSize_; //プレイヤーアイコン
+	Vector2 laneSize_; //レーン１
+	Vector2 startSize_; //スタート
+	Vector2 goalSize_; //ゴール
 
 };

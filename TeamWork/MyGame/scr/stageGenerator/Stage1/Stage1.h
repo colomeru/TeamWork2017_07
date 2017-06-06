@@ -6,7 +6,7 @@ class Stage1 : public StageGenerator
 {
 public:
 	//コンストラクタ
-	Stage1(IWorld* world, std::string& fileName);
+	Stage1(IWorld* world, std::string& fileName, int hairballCnt);
 	//デストラクタ
 	virtual ~Stage1() override;
 	//ステージ読み込み
@@ -22,8 +22,9 @@ public:
 private:
 	void Pin_Add(int i, int j, int data, int laneNum);
 	void Clothes_Add(int i, int j, int data, int laneNum);
-	void HairballGenerator_Add(int i, int j, int data, int laneNum);
+	void GoalClothes_Add(int i, int j, int data, int laneNum);
 
 private:
 	std::queue<bool> pin_list;
+	int hairballCnt_;
 };

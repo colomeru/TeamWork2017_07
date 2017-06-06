@@ -85,6 +85,8 @@ void BackgroundScreen::Draw() const
 	//for (auto& bgC : characters_) {
 	//	bgC->Draw();
 	//}
+	if (BuildMode != 1)return;
+
 	DrawFormatString(700, 700, GetColor(255, 255, 255), "%f", myds);
 }
 

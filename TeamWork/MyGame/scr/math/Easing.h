@@ -6,6 +6,11 @@ struct Vector3;
 class Easing
 {
 public:
+	// コンストラクタ
+	Easing() = default;
+	// デストラクタ
+	~Easing() = default;
+
 	/* 開始点→移動量パターン */
 	// t = 時間 / b = 開始値 / c = 移動量 / d = 終了時間
 	static float Linear(float t, float b, float c, float d);
@@ -69,72 +74,6 @@ public:
 	static float EaseOutBounce(float t, float b, float c, float d);
 	// t = 時間 / b = 開始値 / c = 移動量 / d = 終了時間
 	static float EaseInOutBounce(float t, float b, float c, float d);
-
-	/* 開始点→終了点パターン */
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float LinearFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInQuadFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutQuadFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutQuadFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInCubicFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutCubicFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutCubicFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInQuartFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutQuartFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutQuartFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInQuintFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutQuintFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutQuintFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInSineFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutSineFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutSineFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInExpoFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutExpoFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutExpoFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInCircFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutCircFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutCircFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInElasticFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutElasticFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutElasticFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値 / s > 1.0f
-	static float EaseInBackFT(float time, float endTime, float from, float to, float s);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値 / s > 1.0f
-	static float EaseOutBackFT(float time, float endTime, float from, float to, float s);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値 / s > 1.0f
-	static float EaseInOutBackFT(float time, float endTime, float from, float to, float s);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInBounceFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseOutBounceFT(float time, float endTime, float from, float to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static float EaseInOutBounceFT(float time, float endTime, float from, float to);
-
-	/*** Vector3 ***/
 
 	/* 開始点→移動量パターン */
 	// t = 時間 / b = 開始値 / c = 移動量 / d = 終了時間
@@ -200,67 +139,35 @@ public:
 	// t = 時間 / b = 開始値 / c = 移動量 / d = 終了時間
 	static Vector3 EaseInOutBounce(float t, const Vector3& b, const Vector3& c, float d);
 
-	/* 開始点→終了点パターン */
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 LinearFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInQuadFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutQuadFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutQuadFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInCubicFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutCubicFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutCubicFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInQuartFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutQuartFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutQuartFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInQuintFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutQuintFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutQuintFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInSineFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutSineFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutSineFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInExpoFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutExpoFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutExpoFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInCircFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutCircFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutCircFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInElasticFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutElasticFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutElasticFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値 / s > 1.0f
-	static Vector3 EaseInBackFT(float time, float endTime, const Vector3& from, const Vector3& to, float s);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値 / s > 1.0f
-	static Vector3 EaseOutBackFT(float time, float endTime, const Vector3& from, const Vector3& to, float s);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値 / s > 1.0f
-	static Vector3 EaseInOutBackFT(float time, float endTime, const Vector3& from, const Vector3& to, float s);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInBounceFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseOutBounceFT(float time, float endTime, const Vector3& from, const Vector3& to);
-	// time = 時間 / endTime = 終了時間 / from = 開始値 / to = 終了値
-	static Vector3 EaseInOutBounceFT(float time, float endTime, const Vector3& from, const Vector3& to);
+	float LinearFunc(float t, float b, float c, float d, float = 1.0f) const;
+	float EaseInQuadFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutQuadFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutQuadFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInCubicFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutCubicFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutCubicFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInQuartFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutQuartFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutQuartFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInQuintFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutQuintFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutQuintFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInSineFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutSineFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutSineFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInExpoFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutExpoFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutExpoFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInCircFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutCircFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutCircFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInElasticFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutElasticFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutElasticFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInBackFunc(float t, float b, float c, float d, float s) const;
+	float EaseOutBackFunc(float t, float b, float c, float d, float s) const;
+	float EaseInOutBackFunc(float t, float b, float c, float d, float s) const;
+	float EaseInBounceFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseOutBounceFunc(float t, float b, float c, float d, float s = 1.0f) const;
+	float EaseInOutBounceFunc(float t, float b, float c, float d, float s = 1.0f) const;
 };

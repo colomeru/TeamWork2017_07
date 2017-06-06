@@ -43,6 +43,28 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	case ACTOR_ID::PLAYER_SWORD_ACTOR:
 	{
 		intersectPos_ = colpara.colPos;
+		if (cuttingState_ == ClothesCuttingState::Normal)
+		{
+			int rand = Random::GetInstance().Range(0, 3);
+			switch (rand)
+			{
+			case 0: {
+				cuttingState_ = ClothesCuttingState::RightUpSlant;
+				SetLocalPoints();
+				break;
+			}
+			case 1: {
+				cuttingState_ = ClothesCuttingState::LeftUpSlant;
+				SetLocalPoints();
+				break;
+			}
+			case 2: {
+				cuttingState_ = ClothesCuttingState::HorizontalSlant;
+				SetLocalPoints();
+				break;
+			}
+			}
+		}
 		isHit_ = true;
 	}
 	default:
@@ -165,6 +187,7 @@ void Clothes::ShakesClothes()
 			count_ = 0;
 			isPendulum_ = false;
 			clothesState_ = ClothesState::BEGIN_WIND;
+			world_->sendMessage(EventMessage::END_WIND);
 			break;
 		default:
 			break;
@@ -210,18 +233,35 @@ void Clothes::SetPointsUpdate()
 
 void Clothes::SetLocalPoints()
 {
+	localPoints.clear();
 	switch (cuttingState_)
 	{
 	case ClothesCuttingState::Normal: {
+		localPoints.push_back(Vector3(-60, 0 + length_, 0));
+		localPoints.push_back(Vector3(-60, 90 + length_, 0));
+		localPoints.push_back(Vector3(60, 90 + length_, 0));
+		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
 	case ClothesCuttingState::RightUpSlant: {
+		localPoints.push_back(Vector3(-60, 0 + length_, 0));
+		localPoints.push_back(Vector3(-60, 50 + length_, 0));
+		localPoints.push_back(Vector3(60, 30 + length_, 0));
+		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
 	case ClothesCuttingState::LeftUpSlant: {
+		localPoints.push_back(Vector3(-60, 0 + length_, 0));
+		localPoints.push_back(Vector3(-60, 30 + length_, 0));
+		localPoints.push_back(Vector3(60, 50 + length_, 0));
+		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
 	case ClothesCuttingState::HorizontalSlant: {
+		localPoints.push_back(Vector3(-60, 0 + length_, 0));
+		localPoints.push_back(Vector3(-60, 40 + length_, 0));
+		localPoints.push_back(Vector3(60, 40 + length_, 0));
+		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
 	}

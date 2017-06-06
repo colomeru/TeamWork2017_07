@@ -294,161 +294,6 @@ float Easing::EaseInOutBounce(float t, float b, float c, float d)
 		return EaseOutBounce(t * 2.0f - d, 0.0f, c, d) * 0.5f + b + c * 0.5f;
 }
 
-float Easing::LinearFT(float time, float endTime, float from, float to)
-{
-	return Linear(time, from, to - from, endTime);
-}
-
-float Easing::EaseInQuadFT(float time, float endTime, float from, float to)
-{
-	return EaseInQuad(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutQuadFT(float time, float endTime, float from, float to)
-{
-	return EaseOutQuad(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutQuadFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutQuad(time, from, to - from, endTime);
-}
-
-float Easing::EaseInCubicFT(float time, float endTime, float from, float to)
-{
-	return EaseInCubic(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutCubicFT(float time, float endTime, float from, float to)
-{
-	return EaseOutCubic(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutCubicFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutCubic(time, from, to - from, endTime);
-}
-
-float Easing::EaseInQuartFT(float time, float endTime, float from, float to)
-{
-	return EaseInQuart(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutQuartFT(float time, float endTime, float from, float to)
-{
-	return EaseOutQuart(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutQuartFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutQuart(time, from, to - from, endTime);
-}
-
-float Easing::EaseInQuintFT(float time, float endTime, float from, float to)
-{
-	return EaseInQuint(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutQuintFT(float time, float endTime, float from, float to)
-{
-	return EaseOutQuint(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutQuintFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutQuint(time, from, to - from, endTime);
-}
-
-float Easing::EaseInSineFT(float time, float endTime, float from, float to)
-{
-	return EaseInSine(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutSineFT(float time, float endTime, float from, float to)
-{
-	return EaseOutSine(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutSineFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutSine(time, from, to - from, endTime);
-}
-
-float Easing::EaseInExpoFT(float time, float endTime, float from, float to)
-{
-	return EaseInExpo(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutExpoFT(float time, float endTime, float from, float to)
-{
-	return EaseOutExpo(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutExpoFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutExpo(time, from, to - from, endTime);
-}
-
-float Easing::EaseInCircFT(float time, float endTime, float from, float to)
-{
-	return EaseInCirc(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutCircFT(float time, float endTime, float from, float to)
-{
-	return EaseOutCirc(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutCircFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutCirc(time, from, to - from, endTime);
-}
-
-float Easing::EaseInElasticFT(float time, float endTime, float from, float to)
-{
-	return EaseInElastic(time, from, to - from, endTime);
-}
-
-float Easing::EaseOutElasticFT(float time, float endTime, float from, float to)
-{
-	return EaseOutElastic(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutElasticFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutElastic(time, from, to - from, endTime);
-}
-
-float Easing::EaseInBackFT(float time, float endTime, float from, float to, float s)
-{
-	return EaseInBack(time, from, to - from, endTime, s);
-}
-
-float Easing::EaseOutBackFT(float time, float endTime, float from, float to, float s)
-{
-	return EaseOutBack(time, from, to - from, endTime, s);
-}
-
-float Easing::EaseInOutBackFT(float time, float endTime, float from, float to, float s)
-{
-	return EaseInOutBack(time, from, to - from, endTime, s);
-}
-
-float Easing::EaseOutBounceFT(float time, float endTime, float from, float to)
-{
-	return EaseOutBounce(time, from, to - from, endTime);
-}
-
-float Easing::EaseInBounceFT(float time, float endTime, float from, float to)
-{
-	return EaseInBounce(time, from, to - from, endTime);
-}
-
-float Easing::EaseInOutBounceFT(float time, float endTime, float from, float to)
-{
-	return EaseInOutBounce(time, from, to - from, endTime);
-}
-
 Vector3 Easing::Linear(float t, const Vector3& b, const Vector3& c, float d)
 {
 	Vector3 result;
@@ -728,281 +573,157 @@ Vector3 Easing::EaseInOutBounce(float t, const Vector3& b, const Vector3& c, flo
 	return result;
 }
 
-Vector3 Easing::LinearFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::LinearFunc(float t, float b, float c, float d, float) const
 {
-	Vector3 result;
-	result.x = LinearFT(time, endTime, from.x, to.x);
-	result.y = LinearFT(time, endTime, from.y, to.y);
-	result.z = LinearFT(time, endTime, from.z, to.z);
-	return result;
+	return Linear(t, b, c, d);
 }
 
-Vector3 Easing::EaseInQuadFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInQuadFunc(float t, float b, float c, float d, float) const
 {
-	Vector3 result;
-	result.x = EaseInQuadFT(time, endTime, from.x, to.x);
-	result.y = EaseInQuadFT(time, endTime, from.y, to.y);
-	result.z = EaseInQuadFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInQuad(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutQuadFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutQuadFunc(float t, float b, float c, float d, float) const
 {
-	Vector3 result;
-	result.x = EaseOutQuadFT(time, endTime, from.x, to.x);
-	result.y = EaseOutQuadFT(time, endTime, from.y, to.y);
-	result.z = EaseOutQuadFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutQuad(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutQuadFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutQuadFunc(float t, float b, float c, float d, float) const
 {
-	Vector3 result;
-	result.x = EaseInOutQuadFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutQuadFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutQuadFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutQuad(t, b, c, d);
 }
 
-Vector3 Easing::EaseInCubicFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInCubicFunc(float t, float b, float c, float d, float) const
 {
-	Vector3 result;
-	result.x = EaseInCubicFT(time, endTime, from.x, to.x);
-	result.y = EaseInCubicFT(time, endTime, from.y, to.y);
-	result.z = EaseInCubicFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInCubic(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutCubicFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutCubicFunc(float t, float b, float c, float d, float) const
 {
-	Vector3 result;
-	result.x = EaseOutCubicFT(time, endTime, from.x, to.x);
-	result.y = EaseOutCubicFT(time, endTime, from.y, to.y);
-	result.z = EaseOutCubicFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutCubic(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutCubicFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutCubicFunc(float t, float b, float c, float d, float) const
 {
-	Vector3 result;
-	result.x = EaseInOutCubicFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutCubicFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutCubicFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutCubic(t, b, c, d);
 }
 
-Vector3 Easing::EaseInQuartFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInQuartFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInQuartFT(time, endTime, from.x, to.x);
-	result.y = EaseInQuartFT(time, endTime, from.y, to.y);
-	result.z = EaseInQuartFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInQuart(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutQuartFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutQuartFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutQuartFT(time, endTime, from.x, to.x);
-	result.y = EaseOutQuartFT(time, endTime, from.y, to.y);
-	result.z = EaseOutQuartFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutQuart(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutQuartFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutQuartFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutQuartFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutQuartFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutQuartFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutQuart(t, b, c, d);
 }
 
-Vector3 Easing::EaseInQuintFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInQuintFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInQuintFT(time, endTime, from.x, to.x);
-	result.y = EaseInQuintFT(time, endTime, from.y, to.y);
-	result.z = EaseInQuintFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInQuint(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutQuintFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutQuintFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutQuintFT(time, endTime, from.x, to.x);
-	result.y = EaseOutQuintFT(time, endTime, from.y, to.y);
-	result.z = EaseOutQuintFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutQuint(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutQuintFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutQuintFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutQuintFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutQuintFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutQuintFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutQuint(t, b, c, d);
 }
 
-Vector3 Easing::EaseInSineFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInSineFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInSineFT(time, endTime, from.x, to.x);
-	result.y = EaseInSineFT(time, endTime, from.y, to.y);
-	result.z = EaseInSineFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInSine(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutSineFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutSineFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutSineFT(time, endTime, from.x, to.x);
-	result.y = EaseOutSineFT(time, endTime, from.y, to.y);
-	result.z = EaseOutSineFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutSine(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutSineFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutSineFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutSineFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutSineFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutSineFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutSine(t, b, c, d);
 }
 
-Vector3 Easing::EaseInExpoFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInExpoFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInExpoFT(time, endTime, from.x, to.x);
-	result.y = EaseInExpoFT(time, endTime, from.y, to.y);
-	result.z = EaseInExpoFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInExpo(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutExpoFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutExpoFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutExpoFT(time, endTime, from.x, to.x);
-	result.y = EaseOutExpoFT(time, endTime, from.y, to.y);
-	result.z = EaseOutExpoFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutExpo(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutExpoFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutExpoFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutExpoFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutExpoFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutExpoFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutExpo(t, b, c, d);
 }
 
-Vector3 Easing::EaseInCircFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInCircFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInCircFT(time, endTime, from.x, to.x);
-	result.y = EaseInCircFT(time, endTime, from.y, to.y);
-	result.z = EaseInCircFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInCirc(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutCircFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutCircFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutCircFT(time, endTime, from.x, to.x);
-	result.y = EaseOutCircFT(time, endTime, from.y, to.y);
-	result.z = EaseOutCircFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutCirc(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutCircFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutCircFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutCircFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutCircFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutCircFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutCirc(t, b, c, d);
 }
 
-Vector3 Easing::EaseInElasticFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInElasticFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInElasticFT(time, endTime, from.x, to.x);
-	result.y = EaseInElasticFT(time, endTime, from.y, to.y);
-	result.z = EaseInElasticFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInElastic(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutElasticFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutElasticFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutElasticFT(time, endTime, from.x, to.x);
-	result.y = EaseOutElasticFT(time, endTime, from.y, to.y);
-	result.z = EaseOutElasticFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutElastic(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutElasticFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutElasticFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutElasticFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutElasticFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutElasticFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutElastic(t, b, c, d);
 }
 
-Vector3 Easing::EaseInBackFT(float time, float endTime, const Vector3 & from, const Vector3 & to, float s)
+float Easing::EaseInBackFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInBackFT(time, endTime, from.x, to.x, s);
-	result.y = EaseInBackFT(time, endTime, from.y, to.y, s);
-	result.z = EaseInBackFT(time, endTime, from.z, to.z, s);
-	return result;
+	return EaseInBack(t, b, c, d, s);
 }
 
-Vector3 Easing::EaseOutBackFT(float time, float endTime, const Vector3 & from, const Vector3 & to, float s)
+float Easing::EaseOutBackFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutBackFT(time, endTime, from.x, to.x, s);
-	result.y = EaseOutBackFT(time, endTime, from.y, to.y, s);
-	result.z = EaseOutBackFT(time, endTime, from.z, to.z, s);
-	return result;
+	return EaseOutBack(t, b, c, d, s);
 }
 
-Vector3 Easing::EaseInOutBackFT(float time, float endTime, const Vector3 & from, const Vector3 & to, float s)
+float Easing::EaseInOutBackFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutBackFT(time, endTime, from.x, to.x, s);
-	result.y = EaseInOutBackFT(time, endTime, from.y, to.y, s);
-	result.z = EaseInOutBackFT(time, endTime, from.z, to.z, s);
-	return result;
+	return EaseInOutBack(t, b, c, d, s);
 }
 
-Vector3 Easing::EaseInBounceFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInBounceFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInBounceFT(time, endTime, from.x, to.x);
-	result.y = EaseInBounceFT(time, endTime, from.y, to.y);
-	result.z = EaseInBounceFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInBounce(t, b, c, d);
 }
 
-Vector3 Easing::EaseOutBounceFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseOutBounceFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseOutBounceFT(time, endTime, from.x, to.x);
-	result.y = EaseOutBounceFT(time, endTime, from.y, to.y);
-	result.z = EaseOutBounceFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseOutBounce(t, b, c, d);
 }
 
-Vector3 Easing::EaseInOutBounceFT(float time, float endTime, const Vector3 & from, const Vector3 & to)
+float Easing::EaseInOutBounceFunc(float t, float b, float c, float d, float s) const
 {
-	Vector3 result;
-	result.x = EaseInOutBounceFT(time, endTime, from.x, to.x);
-	result.y = EaseInOutBounceFT(time, endTime, from.y, to.y);
-	result.z = EaseInOutBounceFT(time, endTime, from.z, to.z);
-	return result;
+	return EaseInOutBounce(t, b, c, d);
 }

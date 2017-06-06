@@ -166,6 +166,26 @@ void Player::Draw() const
 	float aHeadAngle = (360 / pHeads_.size());
 	float angle = currentHead_*aHeadAngle + aHeadAngle*(headChangeTime_ / defHeadChangeTime);
 	Sprite::GetInstance().Draw(spriteId_, GetDrawPosVect(position_), crcOrigin, spriteAlpha_, Vector2::One,angle);
+	
+	if (!pHeadDead_[currentHead_]) {
+		for (int i = drawPoints.size() - 1; i > 0; i--) {
+			auto p = drawPoints[i];
+			Vector2 p0 = GetDrawPosVect(p.p0);
+			Vector2 p1 = GetDrawPosVect(p.p1);
+			Vector2 p2 = GetDrawPosVect(p.p2);
+			Vector2 p3 = GetDrawPosVect(p.p3);
+			DrawRectModiGraph(
+				p0.x, p0.y,
+				p1.x, p1.y,
+				p2.x, p2.y,
+				p3.x, p3.y,
+				0, 0, 41, 76 * correctionLens[i],
+				Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
+		}
+	}
+
+	if (BuildMode != 1)return;
+	
 	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
 	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
 	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
@@ -193,22 +213,6 @@ void Player::Draw() const
 	//	DrawLine(fPos_[i].x, fPos_[i].y, multiplePos[i].x, multiplePos[i].y, GetColor(239, 117, 188), 1); //ピンク
 	//																									  //DrawBox(fPos[i].x - 20.0f, fPos[i].y, multiplePos[i].x + 20.0f, multiplePos[i].y, GetColor(239, 117, 188), 1); //ピンク
 	//}
-	if (!pHeadDead_[currentHead_]) {
-		for (int i = drawPoints.size() - 1; i > 0; i--) {
-			auto p = drawPoints[i];
-			Vector2 p0 = GetDrawPosVect(p.p0);
-			Vector2 p1 = GetDrawPosVect(p.p1);
-			Vector2 p2 = GetDrawPosVect(p.p2);
-			Vector2 p3 = GetDrawPosVect(p.p3);
-			DrawRectModiGraph(
-				p0.x, p0.y,
-				p1.x, p1.y,
-				p2.x, p2.y,
-				p3.x, p3.y,
-				0, 0, 41, 76 * correctionLens[i],
-				Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
-		}
-	}
 	int count = 0;
 	for (auto srmt : pHeadDead_)
 	{
@@ -391,6 +395,9 @@ Vector2 Player::GetCurrentPHeadPosition() const {
 }
 float Player::GetPlayerSwordAngle() const {
 	return MathFormedAngle(pSword_->GetSwordEndPos() - position_);
+}
+bool Player::GetIsSwordActive() const {
+	return pSword_->GetUseSword();
 }
 void Player::MultipleInit(float len, const Vector2& fPos, float rot)
 {

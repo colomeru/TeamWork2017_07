@@ -1,6 +1,7 @@
 #include "LaneChangeWind.h"
 #include"../../../../graphic/Sprite.h"
 #include"../../../../game/Random.h"
+#include"../../../../Def.h"
 
 LaneChangeWind::LaneChangeWind(IWorld* world, const Vector2& position, WindDir dir) :
 	BackgroundCharacters(world, position),dir_(dir),speed_(Random::GetInstance().Range(1.0f, 10.0f)),alphaTime_(0),alpha_(0)
@@ -41,6 +42,7 @@ void LaneChangeWind::Draw() const
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::WIND_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, position_, origin, alpha_, Vector2::One, windAngles_.at(dir_), true, false);
 
+	if (BuildMode != 1)return;
 	DrawFormatString(600, 600, GetColor(255, 255, 255), "da");
 }
 

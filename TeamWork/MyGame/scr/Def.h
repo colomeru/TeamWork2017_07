@@ -34,3 +34,10 @@ static const float BGMVOLUME = 0.8f;
 /// デフォルトのＳＥボリューム
 ///</summary>
 static const float SEVOLUME = 0.8f;
+
+//デバッグモードなら1,リリースモードなら2
+#ifndef NDEBUG
+#define BuildMode 1
+#else
+#define BuildMode 2
+#endif

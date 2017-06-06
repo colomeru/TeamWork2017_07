@@ -50,6 +50,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("bird.png", SPRITE_ID::BIRD_SPRITE);
 	sprite.Load("whitescreen.png", SPRITE_ID::WHITE_SCREEN_SPRITE);
 	sprite.Load("blackscreen.png", SPRITE_ID::BLACK_SCREEN_SPRITE);
+	sprite.Load("testGoalClothes.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ

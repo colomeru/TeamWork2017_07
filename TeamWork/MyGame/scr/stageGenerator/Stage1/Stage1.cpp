@@ -8,11 +8,13 @@
 #include "../../actor/Field/Clothes/ThinClothes/ThinClothes.h"
 #include "../../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
 #include "../../actor/Field/Clothes/GoalClothes/GoalClothes.h"
+#include "../../actor/Field/Clothes/GoalClothes/MoveGoalClothes.h"
 #include "../../actor/Field/ClothesPin.h"
 
 //コンストラクタ
-Stage1::Stage1(IWorld * world, std::string & fileName)
+Stage1::Stage1(IWorld * world, std::string & fileName, int hairballCnt)
 	:StageGenerator(world, fileName)
+	, hairballCnt_(hairballCnt)
 {
 }
 
@@ -34,6 +36,7 @@ void Stage1::AddStage()
 	auto row = csvReader_.rows();			//全体の行数
 	auto col = csvReader_.columns();		//全体の列数
 	int laneNum = 0;
+	stageSize_ = Vector2(col, row) * STAGE_TIP_SIZE;
 
 	//csvの行(row)と列(col)から位置を出し、オブジェクト判別し、生成
 	for (int i = 0; i < row; i++) {
@@ -60,16 +63,16 @@ void Stage1::AddStage()
 				break;
 			}
 			case 3: {
-				HairballGenerator_Add(i, j, data, laneNum);
+				GoalClothes_Add(i, j, data, laneNum);
 				break;
 			}
 			}
-
 		}
 	}
 
-
-	stageSize_ = Vector2(col, row) * STAGE_TIP_SIZE;
+	for (int i = 0; i < 3; i++) {
+		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, i, Vector2::Zero, hairballCnt_));
+	}
 }
 
 void Stage1::Pin_Add(int i, int j, int data, int laneNum)
@@ -135,19 +138,23 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 7: {
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, laneNum, Vector2(stageSize_.x, 0)));
 		break;
 	}
 	}
 
 }
 
-void Stage1::HairballGenerator_Add(int i, int j, int data, int laneNum)
+void Stage1::GoalClothes_Add(int i, int j, int data, int laneNum)
 {
 	switch (data)
 	{
 	case 1: {
-		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -200)));
+		break;
+	}
+	case 2: {
+		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<MoveGoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -200)));
 		break;
 	}
 	}

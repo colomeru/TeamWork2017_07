@@ -83,8 +83,8 @@ void GamePlayScene::Initialize()
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, 22, Vector2(0, 0)));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, 3, Vector2(0, 0)));
 
-	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test")));
-	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
+	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Test"),60));
+	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1"),60));
 
 	//ステージの最大レーン数(後々MapGeneratorからレーン数を受け取れるようにする)
 	int stageLaneSize = 3;
@@ -182,7 +182,6 @@ void GamePlayScene::Draw() const
 	//if (gamePlayMode_ == 1)
 	bgScreen_.Draw();
 	//DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	//DrawFormatString(700, 600, GetColor(255, 255, 255), "%f", ply1->GetAngle());
 
@@ -216,6 +215,9 @@ void GamePlayScene::Draw() const
 		pauseScreen_.Draw();
 	}
 
+	if (BuildMode != 1)return;
+
+	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 }
 
 bool GamePlayScene::IsEnd() const

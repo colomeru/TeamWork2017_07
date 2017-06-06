@@ -1,6 +1,7 @@
 #include "World.h"
 #include "../actor/Actor.h"
 #include"../math/Vector3.h"
+#include"../Def.h"
 
 // コンストラクタ
 World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isLockedCamY_(true)
@@ -72,6 +73,8 @@ void World::Draw(const int laneCount, const int playerLane) const
 	//DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
 	//actors_.Draw(laneCount, playerLane);
 	if(!isChangeFrame_)actors_.Draw(laneCount, playerLane);
+
+	if (BuildMode != 1)return;
 	DrawFormatString(0,600,GetColor(255,255,255),"%f", keepDatas_.changeLaneLerpPos_);
 }
 

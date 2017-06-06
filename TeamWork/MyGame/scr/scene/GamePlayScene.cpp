@@ -23,7 +23,7 @@
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
-	gameOverScreen_(), gameClearScreen_(), pauseScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(200.0f, 100.0f)),
+	gameOverScreen_(), gameClearScreen_(), pauseScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(1100.0f, 50.0f)),
 	gamePlayMode_(0), currentStage_(Stage::Stage2), stageEffectScreen_()
 	//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 {
@@ -124,7 +124,7 @@ void GamePlayScene::Initialize()
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 	enemGenerator_ = std::make_shared<EnemyGenerator>(world_.get());
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, enemGenerator_);
-	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(800.f,0.f)));
+	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(-800.f,2000.f)));
 	
 	//world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get(), 1, Vector2(0, 0)));
 
@@ -232,6 +232,10 @@ void GamePlayScene::Draw() const
 	stageEffectScreen_.Draw();
 	//VECTOR pos1 = DXConverter::GetInstance().ToVECTOR(posit);
 	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
+	DrawBox(1000, 0, 1920, 200, GetColor(128, 128, 128), TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
 	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);

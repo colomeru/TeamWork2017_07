@@ -2,7 +2,7 @@
 #include "../MyGame/scr/actor/UI/GoalUI.h"
 
 MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
-	:Clothes(world, clothes, laneNum)
+	:Clothes(world, clothes, laneNum, 0.0f)
 {
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;

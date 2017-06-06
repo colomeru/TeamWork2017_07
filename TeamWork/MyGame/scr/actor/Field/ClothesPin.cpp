@@ -7,7 +7,7 @@
 ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum)
 	:Actor(world, clothes)
 {
-	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
+	parameter_.ID = ACTOR_ID::PIN_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(50.f, 50.f);
 	parameter_.mat
@@ -29,7 +29,7 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes,
 	
 	SetPose(mat);
 
-	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_Circle_Circle, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 }
 
@@ -78,6 +78,9 @@ void ClothesPin::Draw() const
 
 	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_ - Vector2(50,50));
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+
+	if (BuildMode != 1)return;
+
 	DrawFormatString(100, 100, GetColor(255, 255, 255), "pos x:%f y:%f", position_.x, position_.y);
 }
 

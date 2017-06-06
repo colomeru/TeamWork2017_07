@@ -121,12 +121,40 @@ CollisionParameter CollisionFunction::IsHit_PSword_Clothes(const Actor & sprite1
 	bool isHitCheck = false;
 	for (int i = 0; i < 3; i++) {
 		if (MyCol::Col_Segment_Segment(seg1, seg2[i], segPoint)) {
-			if(static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()))->GetPlayerSwordAngle() > 90)
+			auto sword_Parent = static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()));
+			if(sword_Parent->GetPlayerSwordAngle() > 90 && sword_Parent->GetIsSwordActive())
 				isHitCheck = true;
 		}
 	}
 
 	return CollisionParameter(COL_ID::PSWORD_CLOTHES_COL, isHitCheck, segPoint);
+
+}
+
+CollisionParameter CollisionFunction::IsHit_Tapper_PSword(const Actor & sprite1, const Actor & sprite2)
+{
+	Segment seg1;
+	auto player_Sword = static_cast<Player_Sword*>(const_cast<Actor*>(&sprite2));
+	if(!player_Sword->GetUseSword())return CollisionParameter(COL_ID::TAPPER_PSWORD_COL, false, Vector2());
+	auto startPos = player_Sword->GetSwordStartPos();
+	auto endPos = player_Sword->GetSwordEndPos();
+	MyCol::CreateSegment(&seg1, startPos, endPos);
+
+	Circle crc1;
+	auto rad=sprite1.GetParameter().radius;
+	auto pos = sprite1.GetPosition();
+	MyCol::CreateCircle(&crc1, pos, rad);
+
+
+	Vector2 segPoint;
+	bool isHitCheck = false;
+		if (MyCol::Col_Circle_Segment(crc1,seg1, segPoint)) {
+			//auto sword_Parent = static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()));
+			//if (sword_Parent->GetPlayerSwordAngle() > 90 && sword_Parent->GetIsSwordActive())
+				isHitCheck = true;
+		}
+
+	return CollisionParameter(COL_ID::TAPPER_PSWORD_COL, isHitCheck, segPoint);
 
 }
 

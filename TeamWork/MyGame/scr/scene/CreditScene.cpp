@@ -57,7 +57,7 @@ void CreditScene::Initialize()
 
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
 	stageGeneratorManager.SetStage(Stage::Stage1);
-	setWindTime(Stage::Stage1);
+	//setWindTime(Stage::Stage1);
 
 	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
 	world_->SetTarget(player_.get());
@@ -97,6 +97,7 @@ void CreditScene::Draw() const
 	// •`‰æ
 	world_->Draw(3, world_->GetKeepDatas().playerLane_);
 
+	if (BuildMode != 1) return;
 	DrawFormatString(0, 200, GetColor(255, 255, 255), "stageSize x:%f y:%f", size.x, size.y);
 }
 

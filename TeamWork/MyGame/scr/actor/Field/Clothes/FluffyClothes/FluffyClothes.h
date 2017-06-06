@@ -6,7 +6,7 @@ class FluffyClothes : public Clothes, public std::enable_shared_from_this<Fluffy
 {
 public:
 	//コンストラクタ
-	FluffyClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin = false);
+	FluffyClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin = false);
 	//デストラクタ
 	~FluffyClothes();
 	//更新

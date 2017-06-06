@@ -2,8 +2,8 @@
 #include "../MyGame/scr/game/Random.h"
 #include "../../ClothesPin.h"
 
-FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
-	:Clothes(world, clothes, laneNum)
+FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
+	:Clothes(world, clothes, laneNum, weight)
 {
 	clothes_ID = CLOTHES_ID::FLUFFY_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -85,7 +85,7 @@ void FluffyClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
-	if (!collisionPoints.empty()) {
+	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);

@@ -20,7 +20,7 @@ BackgroundScreen::BackgroundScreen(World * world) :world_(world),timeCount_(0)
 		isCharactersPositionUsed_.push_back(false);
 
 		cPos.x += 180;
-		cPos.y += 150;
+		cPos.y += 100;
 	}
 }
 
@@ -40,7 +40,6 @@ void BackgroundScreen::Update()
 	if (createWindTimeAndPos_.find(timeCount_)!= createWindTimeAndPos_.end()) {
 		Vector2 pPos = world_->GetKeepDatas().playerPos_;
 		world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, createWindTimeAndPos_[timeCount_]+pPos));
-		OutputDebugString("deta");
 	}
 	//std::vector<BackgroundCharacters*>::iterator itr = characters_.begin();
 	//while (itr != characters_.end())
@@ -75,8 +74,8 @@ void BackgroundScreen::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, bgPos);
 	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, BGSize+bgPos);
 
-	Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
-	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
+	//Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	//Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
 	
 	Vector2 ceilPos = Vector2::Zero - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_] +Sprite::GetInstance().GetSize(SPRITE_ID::CEILING_SPRITE).y- defDrawPointYAdd[1]);
 	Sprite::GetInstance().Draw(SPRITE_ID::CEILING_SPRITE, ceilPos);
@@ -92,7 +91,7 @@ void BackgroundScreen::Draw() const
 
 void BackgroundScreen::End()
 {
-
+	createWindTimeAndPos_.clear();
 }
 
 void BackgroundScreen::addBGCharacters()
@@ -102,7 +101,7 @@ void BackgroundScreen::addBGCharacters()
 	//	timeCount_ = defTimeCount_;
 		
 	createWindTimeAndPos_.clear();
-
+	timeCount_ = 0;
 	for (auto& isC : isCharactersPositionUsed_) {
 		isC = false;
 	}
@@ -122,7 +121,7 @@ void BackgroundScreen::addBGCharacters()
 			//characters_.push_back(new BackgroundPill(world_, Vector2(2000+(i*100),charactersPosition_[yPos].y)+pPos));
 			//world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, Vector2(2000 + (i * 100), charactersPosition_[yPos].y) + pPos));
 
-			int createTime = Random::GetInstance().Range(0, defWindTime_);
+			int createTime = Random::GetInstance().Range(0, 400);
 
 			createWindTimeAndPos_[createTime] = Vector2(2000, charactersPosition_[yPos].y);
 		}

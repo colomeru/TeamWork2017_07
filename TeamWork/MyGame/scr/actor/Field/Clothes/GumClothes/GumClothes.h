@@ -7,7 +7,7 @@ class GumClothes : public Clothes, public std::enable_shared_from_this<GumClothe
 {
 public:
 	//コンストラクタ
-	GumClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin = false);
+	GumClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin = false);
 	//デストラクタ
 	~GumClothes();
 	//更新

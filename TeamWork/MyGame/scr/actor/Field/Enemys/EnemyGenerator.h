@@ -18,7 +18,11 @@ public:
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 
+	void StartTapperResurrectTimer();
 private:
 
 	int timeCount_;
+
+	float resurTimer_;
+	bool isResur_;
 };

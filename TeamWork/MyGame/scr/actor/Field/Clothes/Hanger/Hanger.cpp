@@ -3,11 +3,11 @@
 #include "../MyGame/scr/game/Random.h"
 
 Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
-	:Clothes(world, clothes, laneNum)
+	:Clothes(world, clothes, laneNum, 0.0f)
 	,isStop_(false)
 {
 	clothes_ID = CLOTHES_ID::HANGER;
-	//parameter_.ID = ACTOR_ID::HANGER_ACTOR;
+	parameter_.ID = ACTOR_ID::HANGER_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(150, 80.f);
 	parameter_.mat
@@ -70,23 +70,15 @@ void Hanger::Draw() const
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
 	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
-	DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+	if (BuildMode == 1) {
+		DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
+		DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
+		DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+		DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+	}
 
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos_, hangOrigin, spriteAlpha_, Vector2::One, angle_);
-
-
-	DrawFormatString(400, 100, GetColor(255, 255, 255), "position x:%f, y:%f", position_.x, position_.y);
-	//if (parent_ == nullptr)
-	//	DrawFormatString(100, 100, GetColor(255, 255, 255), "null");
-	//else
-	//	DrawFormatString(100, 100, GetColor(255, 255, 255), "null‚¶‚á‚Ë‚¦");
-
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(0, 0, 255), TRUE);
-	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 }
 
 void Hanger::OnUpdate()

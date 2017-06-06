@@ -2,7 +2,7 @@
 #include "../MyGame/scr/actor/UI/GoalUI.h"
 
 GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
-	:Clothes(world, clothes, laneNum)
+	:Clothes(world, clothes, laneNum, 0.0f)
 {
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -69,7 +69,7 @@ void GoalClothes::Draw() const
 
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
 
-	if (!collisionPoints.empty()) {
+	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);

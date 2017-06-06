@@ -1,19 +1,26 @@
 #include "BackgroundPill.h"
 #include"../../../../graphic/Sprite.h"
+#include"../../../../tween/TweenManager.h"
+#include"../../../../game/Random.h"
 
 BackgroundPill::BackgroundPill(IWorld* world, const Vector2& position):
 	BackgroundCharacters(world,position)
 {
+	Vector2 toPos = Vector2(world->GetKeepDatas().playerPos_.x-Random::GetInstance().Range(2000, 3000), position.y);
+	float time = Random::GetInstance().Range(0.5f, 3.f);
+	EaseType type = EaseType::EaseInCirc;
+	TweenManager::GetInstance().Add(type, &position_, toPos,time, [this](){parameter_.isDead = true; });
 }
 
 void BackgroundPill::Update()
 {
-	position_.x -= 30.f;
+	//position_.x -= 30.f;
 	//position_.y += 3.f;
 
-	if (position_.x <= -400.f) {
-		parameter_.isDead = true;
-	}
+	//Vector2 pPos = world_->GetKeepDatas().playerPos_;
+	//if (position_.x <= pPos.x-400.f) {
+	//	parameter_.isDead = true;
+	//}
 }
 
 void BackgroundPill::Draw() const

@@ -37,12 +37,12 @@ void EndingScene::Initialize()
 {
 	isEnd_ = false;
 
-	Camera::GetInstance().SetRange(0.1f, 10000.0f);
-	Camera::GetInstance().SetViewAngle(60.0f);
-	Camera::GetInstance().Up.Set(Vector3::Up);
-	Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
-	Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
-	Camera::GetInstance().Update();
+	//Camera::GetInstance().SetRange(0.1f, 10000.0f);
+	//Camera::GetInstance().SetViewAngle(60.0f);
+	//Camera::GetInstance().Up.Set(Vector3::Up);
+	//Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
+	//Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
+	//Camera::GetInstance().Update();
 
 	//size = 1.0f;
 	//horizontal = 0.0f;
@@ -64,8 +64,7 @@ void EndingScene::Initialize()
 	//particleSize = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE);
 	//circleSize = Sprite::GetInstance().GetSize(SPRITE_ID::CIRCLE_SPRITE);
 
-	//stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
-	//stageManager.SetStage(Stage::Stage1);
+
 
 	//振り子
 	for (int i = 0; i < 8; i++)
@@ -84,7 +83,6 @@ void EndingScene::Initialize()
 	friction = 0.995f;
 	vec = 0;
 	lineRot[0] = -90.0f;
-	//stageLen = stageManager.GetStageSize(Stage::Stage1).x;
 	meterLen = 800.0f;
 	meterPos = Vector2(200.0f, 100.0f);
 
@@ -162,6 +160,20 @@ void EndingScene::Initialize()
 	//}
 	DeformationDraw();
 
+	player_ = std::make_shared<Player>(world_.get());
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
+	world_->PushStackActor(player_);
+
+
+	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
+	world_->SetTarget(player_.get());
+
+	stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
+	stageManager.SetStage(Stage::Stage1);
+	stageLen = stageManager.GetStageSize(Stage::Stage1).x;
+
+	meter_ = ProgressMeter(world_.get(), stageLen, 0);
+	meter_.Initialize();
 }
 
 void EndingScene::Update()
@@ -172,9 +184,9 @@ void EndingScene::Update()
 	// 終了
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
-	Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
-	Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
-	Camera::GetInstance().Update();
+	//Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
+	//Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
+	//Camera::GetInstance().Update();
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM4))
@@ -212,6 +224,7 @@ void EndingScene::Update()
 
 	DeformationDraw();
 
+	meter_.Update();
 }
 
 void EndingScene::Draw() const
@@ -290,9 +303,8 @@ void EndingScene::Draw() const
 	//DrawLine(inPos[7].x, inPos[7].y, outPos[7].x, outPos[7].y, GetColor(255, 255, 255), 1); //白
 
 	//進行度メーター
-	//DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
-	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
-	//DrawBox(100, 100, 700, 200, GetColor(0, 255, 0), 1);
+	DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
+	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
 
 	//DrawLine(spherePos.x, spherePos.y, v1.x, v1.y, GetColor(0, 255, 0), 1);
 	//DrawLine(fx, fy, v2.x, v2.y, GetColor(0, 255, 0), 1);
@@ -347,6 +359,8 @@ void EndingScene::Draw() const
 	// 描画
 	world_->Draw();
 
+	meter_.Draw();
+
 }
 
 bool EndingScene::IsEnd() const
@@ -360,9 +374,9 @@ Scene EndingScene::Next() const
 }
 
 void EndingScene::End()
-{
-	// 初期化
+{	// 初期化
 	world_->Clear();
+	meter_.End();
 }
 
 void EndingScene::handleMessage(EventMessage message, void * param)

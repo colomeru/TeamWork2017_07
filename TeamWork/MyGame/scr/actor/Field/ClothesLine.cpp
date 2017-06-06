@@ -3,7 +3,7 @@
 #include "../MyGame/scr/input/Keyboard.h"
 #include"../../Def.h"
 
-ClothesLine::ClothesLine(IWorld * world, int laneNum, int blockSize, Vector2 pos):blockSize_(blockSize)
+ClothesLine::ClothesLine(IWorld * world, int laneNum, const Vector2& endPos, Vector2 pos):endPos_(endPos)
 	,Actor(world)
 {
 	parameter_.ID = ACTOR_ID::UI_ACTOR;
@@ -15,7 +15,7 @@ ClothesLine::ClothesLine(IWorld * world, int laneNum, int blockSize, Vector2 pos
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	laneNum_ = laneNum;
-	position_ = pos +Vector2(0, -150.f);
+	position_ = pos +Vector2(-200.f, -150.f);
 
 }
 
@@ -25,6 +25,7 @@ ClothesLine::~ClothesLine()
 
 void ClothesLine::Update()
 {
+	
 	//ShakesClothes();
 	//position_.x = (world_->GetKeepDatas().playerPos_.x-200.f)+(WINDOW_WIDTH/2.f);
 }
@@ -40,10 +41,34 @@ void ClothesLine::StartOnlyLateUpdate()
 }
 void ClothesLine::Draw() const
 {
-	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::LANE_SPRITE)/2;
-	for (int i = 0; i < blockSize_; i++) {
-		Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, drawPos_+(i*STAGE_TIP_SIZE), origin, spriteAlpha_, Vector2::One);
+	Vector2 pPos = world_->GetKeepDatas().playerPos_;
+
+	float sizex = Sprite::GetInstance().GetSize(SPRITE_ID::LANE_SPRITE).x;
+	
+	float drawx = (float)((int)world_->GetInv().Translation().x %(int)sizex);
+	drawx -= 300.0f;
+	Vector2 drawVec = Vector2(drawx, drawPos_.y);
+
+	Vector2 LaneSorigin = Sprite::GetInstance().GetSize(SPRITE_ID::LANE_SIDE_SPRITE) / 2;
+	Vector2 drawEndPos = drawPos_ + Vector2(endPos_.x, 0.f);//-position_.y);// +LaneSorigin.y);
+	Vector2 vecaddpos = Vector2(0, LaneSorigin.y);
+
+	for (int i = 0; i < 6; i++) {
+		Vector2 drawLPos = drawVec + Vector2(sizex / 2, 0.f)*i;
+		if ((drawEndPos).x <= drawLPos.x + sizex){
+			Vector2 lastdp = drawLPos;// -Vector2(0.0f, Sprite::GetInstance().GetSize(SPRITE_ID::LANE_SPRITE).y / 2);
+			Vector2 lastep = drawEndPos + vecaddpos+Vector2(20.0f, Sprite::GetInstance().GetSize(SPRITE_ID::LANE_SPRITE).y/2);
+			DrawModiGraph((int)lastdp.x, (int)lastdp.y, (int)lastep.x, (int)lastdp.y, (int)lastep.x, (int)lastep.y, (int)lastdp.x, (int)lastep.y, Sprite::GetInstance().GetHandle(SPRITE_ID::LANE_SPRITE), TRUE);
+			//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SIDE_SPRITE, drawPos_ + vecaddpos, LaneSorigin, spriteAlpha_, Vector2::One, 0.0f);
+			break;
 	}
+		Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, drawLPos);
+	}
+	//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, BGSize + bgPos);
+	
+	Sprite::GetInstance().Draw(SPRITE_ID::LANE_SIDE_SPRITE, drawPos_+ vecaddpos, LaneSorigin, spriteAlpha_, Vector2::One, 0.0f);
+	Sprite::GetInstance().Draw(SPRITE_ID::LANE_SIDE2_SPRITE, drawEndPos+ vecaddpos, LaneSorigin,spriteAlpha_,Vector2::One,0.0f);
+
 	//auto is = Matrix::CreateRotationZ(angle_);
 	//auto pos = drawPos_;
 	//auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));

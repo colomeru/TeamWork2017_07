@@ -12,6 +12,7 @@
 #include "../game//Random.h"
 #include "../scene/MenuScene.h"
 #include "../scene/addScreen/MenuScreen.h"
+#include "../Def.h"
 
 const int resWidth = 30;
 const int correctionHeight = 30;
@@ -172,7 +173,7 @@ void EndingScene::Initialize()
 	stageManager.SetStage(Stage::Stage1);
 	stageLen = stageManager.GetStageSize(Stage::Stage1).x;
 
-	meter_ = ProgressMeter(world_.get(), stageLen, 0);
+	meter_ = ProgressMeter(world_.get(), stageLen);
 	meter_.Initialize();
 }
 
@@ -229,49 +230,53 @@ void EndingScene::Update()
 
 void EndingScene::Draw() const
 {
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "EndingScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-	//DrawFormatString(0, 40, GetColor(255, 255, 255), "座標 %f %f", arrowPos.x, arrowPos.y);
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "X:%f Y:%f", absH, absV);
-	//DrawFormatString(0, 100, GetColor(255, 255, 255), "rot:%f", rot);
-	//DrawFormatString(0, 120, GetColor(255, 255, 255), "rot_spd:%f", rot_spd);
-	DrawFormatString(0, 140, GetColor(255, 255, 255), "friction:%f", friction);
-	DrawFormatString(0, 180, GetColor(255, 255, 255), "vec:%d", vec);
-	DrawFormatString(0, 200, GetColor(255, 255, 255), "spherePos x:%f y:%f", spherePos.x, spherePos.y);
-	for (int i = 0; i < 8; i++)
-	{
-		DrawFormatString(0, 220 + 20 * i, GetColor(255, 255, 255), "neckLen%d:%f", i, neckLen[i]);
-	}
-	DrawFormatString(0, 380, GetColor(255, 255, 255), "r:%f", r);
-	DrawFormatString(0, 400, GetColor(255, 255, 255), "limit:%f", spdLimit);
-	//if (rotDirection && rot < 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "左に加速できます！");
-	//else if (!rotDirection && rot > 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "右に加速できます！");
-	//else DrawFormatString(0, 420, GetColor(255, 255, 255), "加速できません！");
-	DrawFormatString(0, 440, GetColor(255, 255, 255), "dRot:%f", dRot);
-	DrawFormatString(0, 460, GetColor(255, 255, 255), "dRot_spd:%f", dRot_spd);
-	DrawFormatString(0, 480, GetColor(255, 255, 255), "dFriction:%f", dFriction);
-	DrawFormatString(0, 500, GetColor(255, 255, 255), "dSub:%f", dSub);
-	DrawFormatString(0, 520, GetColor(255, 255, 255), "any:%f", any);
-	DrawFormatString(0, 540, GetColor(255, 255, 255), "any1:%f", any1);
-	DrawFormatString(0, 560, GetColor(255, 255, 255), "any2:%f", any2);
-	for (int i = 0; i < 8; i++)
-	{
-		DrawFormatString(0, 580 + 20 * i, GetColor(255, 255, 255), "outPos%d:%f %f", i, outPos[i].x, outPos[i].y);
-	}
-	for (int i = 0; i < fPos_.size(); i++)
-	{
-		DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "mLimit%d:%f", i, mLimit[i]);
-		DrawFormatString(0, 840 + 20 * i, GetColor(255, 255, 255), "mRot_spd%d:%f", i, mRot_spd[i]);
-		DrawFormatString(1500, 0 + 20 * i, GetColor(255, 255, 255), "mRot%d:%f", i, mRot[i]);
+	if (BuildMode == 1) {
+		DrawFormatString(0, 00, GetColor(255, 255, 255), "EndingScene");
+		DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+		//DrawFormatString(0, 40, GetColor(255, 255, 255), "座標 %f %f", arrowPos.x, arrowPos.y);
+		//DrawFormatString(0, 60, GetColor(255, 255, 255), "X:%f Y:%f", absH, absV);
+		//DrawFormatString(0, 100, GetColor(255, 255, 255), "rot:%f", rot);
+		//DrawFormatString(0, 120, GetColor(255, 255, 255), "rot_spd:%f", rot_spd);
+		DrawFormatString(0, 140, GetColor(255, 255, 255), "friction:%f", friction);
+		DrawFormatString(0, 180, GetColor(255, 255, 255), "vec:%d", vec);
+		DrawFormatString(0, 200, GetColor(255, 255, 255), "spherePos x:%f y:%f", spherePos.x, spherePos.y);
+		for (int i = 0; i < 8; i++)
+		{
+			DrawFormatString(0, 220 + 20 * i, GetColor(255, 255, 255), "neckLen%d:%f", i, neckLen[i]);
+		}
+		DrawFormatString(0, 380, GetColor(255, 255, 255), "r:%f", r);
+		DrawFormatString(0, 400, GetColor(255, 255, 255), "limit:%f", spdLimit);
+		//if (rotDirection && rot < 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "左に加速できます！");
+		//else if (!rotDirection && rot > 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "右に加速できます！");
+		//else DrawFormatString(0, 420, GetColor(255, 255, 255), "加速できません！");
+		DrawFormatString(0, 440, GetColor(255, 255, 255), "dRot:%f", dRot);
+		DrawFormatString(0, 460, GetColor(255, 255, 255), "dRot_spd:%f", dRot_spd);
+		DrawFormatString(0, 480, GetColor(255, 255, 255), "dFriction:%f", dFriction);
+		DrawFormatString(0, 500, GetColor(255, 255, 255), "dSub:%f", dSub);
+		DrawFormatString(0, 520, GetColor(255, 255, 255), "any:%f", any);
+		DrawFormatString(0, 540, GetColor(255, 255, 255), "any1:%f", any1);
+		DrawFormatString(0, 560, GetColor(255, 255, 255), "any2:%f", any2);
+		for (int i = 0; i < 8; i++)
+		{
+			DrawFormatString(0, 580 + 20 * i, GetColor(255, 255, 255), "outPos%d:%f %f", i, outPos[i].x, outPos[i].y);
+		}
+		for (int i = 0; i < fPos_.size(); i++)
+		{
+			DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "mLimit%d:%f", i, mLimit[i]);
+			DrawFormatString(0, 840 + 20 * i, GetColor(255, 255, 255), "mRot_spd%d:%f", i, mRot_spd[i]);
+			DrawFormatString(1500, 0 + 20 * i, GetColor(255, 255, 255), "mRot%d:%f", i, mRot[i]);
+
+		}
+
+		int a = drawPoints.size();
+		DrawFormatString(1500, 160, GetColor(255, 255, 255), "trial:%d", a);
+		DrawFormatString(1500, 180, GetColor(255, 255, 255), "neckLength:%f", neckLengh);
+		DrawFormatString(1500, 200, GetColor(255, 255, 255), "mRot_size:%d", mRot.size());
+		DrawFormatString(1500, 220, GetColor(255, 255, 255), "fNum:%d", fNum);
+		DrawFormatString(1500, 240, GetColor(255, 255, 255), "drawPoints_size:%d", drawPoints.size());
 
 	}
 
-	int a = drawPoints.size();
-	DrawFormatString(1500, 160, GetColor(255, 255, 255), "trial:%d", a);
-	DrawFormatString(1500, 180, GetColor(255, 255, 255), "neckLength:%f", neckLengh);
-	DrawFormatString(1500, 200, GetColor(255, 255, 255), "mRot_size:%d", mRot.size());
-	DrawFormatString(1500, 220, GetColor(255, 255, 255), "fNum:%d", fNum);
-	DrawFormatString(1500, 240, GetColor(255, 255, 255), "drawPoints_size:%d", drawPoints.size());
 
 
 

@@ -211,8 +211,7 @@ void MenuScreen::Pattern1Draw() const
 void MenuScreen::Pattern2Update()
 {
 	if (!backSelect) {
-		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
-			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP))
+		if (IsInputUp())
 		{
 			if (stageNum == 8 || CheckNextStage(stageNum) == false) return;
 			timer_ = 0.0f;
@@ -224,8 +223,7 @@ void MenuScreen::Pattern2Update()
 
 			TweenManager::GetInstance().Add(EaseOutExpo, &from, Vector2(0.0f, dis), MoveTime);
 		}
-		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
-			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN))
+		if (IsInputDown())
 		{
 			if (stageNum == 0.0f) return;
 			timer_ = 0.0f;
@@ -244,22 +242,13 @@ void MenuScreen::Pattern2Update()
 	cursorNum = 0;
 
 	//左を押すと「戻る」にカーソルを移動
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT))
+	if (IsInputLeft())
 	{
-		//cursorPos = Vector2(backPos.x + 32.0f, backPos.y);
-		//backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
 		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[1], MoveTime);
 		backSelect = true;
 	}
-	else if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
-		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
-		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RIGHT) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::RIGHT))
+	else if (IsInputAny())
 	{
-		//backPos = Vector2(WINDOW_WIDTH / 2.0f - 350.0f, WINDOW_HEIGHT / 2.0f);
 		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[0], MoveTime);
 		backSelect = false;
 	}
@@ -280,22 +269,6 @@ void MenuScreen::Pattern2Update()
 	timer_ += Time::DeltaTime;
 	timer_ = MathHelper::Min(timer_, MoveTime);
 
-	//ease = Easing::EaseOutExpo(timer_, from, dis, MoveTime);
-
-	//if ((moveDis.y > 0.0f && moveDis.y > dis - 100.0f) || (moveDis.y < 0.0f && moveDis.y < dis + 100.0f)) mag = 5.0f;
-	//else mag = 30.0f;
-	//mag = 50.0f;
-	//velocity.y = dir.y * mag;
-	//if ((dis > 0 && moveDis.y < dis) || (dis < 0 && moveDis.y > dis)) {
-	//	//if (moveDis.y != dis) {
-	//	moveDis += velocity;
-	//	modify += velocity;
-	//}
-	//else {
-	//	moveDis.y = 0.0f;
-	//	dis = 0.0f;
-	//	velocity.y = 0.0f;
-	//}
 	MathHelper::Clamp(modify.y, 0.0f, 1200.0f);
 }
 
@@ -347,6 +320,39 @@ void MenuScreen::Pattern2Draw() const
 	//
 	DrawCircle(drawPos.x, drawPos.y, 16, GetColor(0, 0, 255), 0, 1);
 	DrawCircle(gPos.x, gPos.y, 16, GetColor(255, 0, 0), 0, 1);
+}
+
+//"上"が入力されたか
+bool MenuScreen::IsInputUp() const
+{
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP);
+}
+
+//"下"が入力されたか
+bool MenuScreen::IsInputDown() const
+{
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN);
+}
+
+//"左/A"のいずれかが入力されたか
+bool MenuScreen::IsInputLeft() const
+{
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1);
+}
+
+//"上/下/右"のいずれかが入力されたか
+bool MenuScreen::IsInputAny() const
+{
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
+		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
+		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RIGHT) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::RIGHT);
 }
 
 Stage MenuScreen::GetGamePlayStage() const

@@ -66,7 +66,7 @@ void ClothesLine::Draw() const
 	}
 	//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, BGSize + bgPos);
 	
-	Sprite::GetInstance().Draw(SPRITE_ID::LANE_SIDE_SPRITE, drawPos_+ vecaddpos, LaneSorigin, spriteAlpha_, Vector2::One, 0.0f);
+	Sprite::GetInstance().Draw(SPRITE_ID::LANE_SIDE_SPRITE, drawPos_+ vecaddpos+Vector2(-20.0f,0.0f), LaneSorigin, spriteAlpha_, Vector2::One, 0.0f);
 	Sprite::GetInstance().Draw(SPRITE_ID::LANE_SIDE2_SPRITE, drawEndPos+ vecaddpos, LaneSorigin,spriteAlpha_,Vector2::One,0.0f);
 
 	//auto is = Matrix::CreateRotationZ(angle_);

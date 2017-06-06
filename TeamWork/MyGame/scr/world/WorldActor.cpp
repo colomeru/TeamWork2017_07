@@ -12,17 +12,6 @@ WorldActor::~WorldActor()
 
 void WorldActor::Initialize()
 {
-	managers_[ACTOR_ID::BACK_GROUND_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::LANE_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::STAGE_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::HANGER_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::PIN_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::PLAYER_HEAD_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::PLAYER_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::PLAYER_SWORD_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::ENEMY_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::EFFECT_ACTOR] = ActorManager();
-	managers_[ACTOR_ID::UI_ACTOR] = ActorManager();
 
 }
 
@@ -64,19 +53,8 @@ bool WorldActor::StartModeUpdate()
 void WorldActor::Draw(const int laneCount,const int playerLane) const
 {
 	// ‘SƒLƒƒƒ‰•`‰æ
-	//EachActor([&](const ActorManager& manager) { manager.Draw(laneCount,playerLane); });
+	EachActor([&](const ActorManager& manager) { manager.Draw(laneCount,playerLane); });
 	
-	managers_.at(ACTOR_ID::BACK_GROUND_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::LANE_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::STAGE_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::HANGER_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::PIN_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::PLAYER_HEAD_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::PLAYER_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::PLAYER_SWORD_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::ENEMY_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::EFFECT_ACTOR).Draw(laneCount, playerLane);
-	managers_.at(ACTOR_ID::UI_ACTOR).Draw(laneCount, playerLane);
 }
 
 // ’Ç‰Á

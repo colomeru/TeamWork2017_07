@@ -1,5 +1,5 @@
 #pragma once
-#include "../stageGenerator/Stage.h"
+#include "../../stageGenerator/Stage.h"
 
 static const float mxmSize = 1.5f;
 static const int defSinC = 90;

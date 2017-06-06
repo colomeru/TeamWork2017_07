@@ -57,6 +57,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE);
 	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE);
 	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);
+	sprite.Load("effect/playereffect/henshin.png", SPRITE_ID::METAMOR_EFFECT_SPRITE,10,Point(10,1),Point(240,240));
 
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
@@ -86,6 +87,15 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("tatakikiri/tatakianimekiri16.png", SPRITE_ID::CLOTHES_TAP_DEAD_16_SPRITE);
 	sprite.Load("tatakikiri/tatakianimekiri17.png", SPRITE_ID::CLOTHES_TAP_DEAD_17_SPRITE);
 	sprite.Load("tatakikiri/tatakianimekiri18.png", SPRITE_ID::CLOTHES_TAP_DEAD_18_SPRITE);
+
+	sprite.Load("crow/crow_00001.png", SPRITE_ID::CROW_ANM_01_SPRITE);
+	sprite.Load("crow/crow_00002.png", SPRITE_ID::CROW_ANM_02_SPRITE);
+	sprite.Load("crow/crow_00003.png", SPRITE_ID::CROW_ANM_03_SPRITE);
+	sprite.Load("crow/crow_00004.png", SPRITE_ID::CROW_ANM_04_SPRITE);
+	sprite.Load("crow/crow_00005.png", SPRITE_ID::CROW_ANM_05_SPRITE);
+	sprite.Load("crow/crow_00006.png", SPRITE_ID::CROW_ANM_06_SPRITE);
+	sprite.Load("crow/crow_00007.png", SPRITE_ID::CROW_ANM_07_SPRITE);
+	sprite.Load("crow/crow_00008.png", SPRITE_ID::CROW_ANM_08_SPRITE);
 
 }
 

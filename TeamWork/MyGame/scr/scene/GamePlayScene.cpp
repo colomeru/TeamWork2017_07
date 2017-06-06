@@ -35,6 +35,8 @@ GamePlayScene::GamePlayScene() :
 		handleMessage(msg, param);
 	});
 
+	updateFunctionMap_[6] = std::bind(&GamePlayScene::nextSwitchUpdate, this);
+	updateFunctionMap_[5] = std::bind(&GamePlayScene::nextUpdate, this);
 	updateFunctionMap_[4] = std::bind(&GamePlayScene::pauseUpdate, this);
 	updateFunctionMap_[3] = std::bind(&GamePlayScene::clearUpdate, this);
 	updateFunctionMap_[2] = std::bind(&GamePlayScene::overUpdate, this);
@@ -65,6 +67,7 @@ GamePlayScene::GamePlayScene() :
 
 GamePlayScene::~GamePlayScene()
 {
+	ply1 = nullptr;
 }
 
 void GamePlayScene::Initialize()
@@ -279,7 +282,10 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 {
 	switch (message) {
 	case EventMessage::GAME_CLEAR_FLAG:{
-		setNextMode(3);
+		setNextMode(5);
+		break;
+	}
+	case EventMessage::GOAL_FLAG: {
 		world_->PopStackActor();
 		break;
 	}
@@ -298,6 +304,10 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 	}
 	case EventMessage::TAPPER_DEAD: {
 		enemGenerator_->StartTapperResurrectTimer();
+		break;
+	}
+	case EventMessage::PLAY_NEXT_STAGE: {
+		setNextMode(3);
 		break;
 	}
 								
@@ -326,6 +336,8 @@ void GamePlayScene::baseUpdate()
 		//ply1->setCurPHeadSPos(pss);
 		//ply1->curPHeadSlip(true);
 		setNextMode(4);
+		TweenManager::GetInstance().StopAll();
+
 	}
 	if (BuildMode==1&&Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
 		//Vector2 pss = Vector2(200, 200);
@@ -346,6 +358,7 @@ void GamePlayScene::pauseUpdate()
 	if (pauseScreen_.Update(nextScene_)) {
 		if (nextScene_ == Scene::GamePlay) {
 			setNextMode(1);
+			TweenManager::GetInstance().Play();
 		}
 		else isEnd_ = true;
 	}
@@ -370,10 +383,32 @@ void GamePlayScene::clearUpdate()
 		isEnd_ = true;
 		if (nextScene_ == Scene::GamePlay) {
 			End();
-			currentStage_=nextStageList_[currentStage_];
+			currentStage_ = nextStageList_[currentStage_];
 			Initialize();
+			//setNextMode(6);
 		}
 	}
+
+}
+
+void GamePlayScene::nextUpdate()
+{
+	world_->Update();
+	bgScreen_.Update();
+	changeScreen_.Update();
+	stageEffectScreen_.Update();
+	//if (ply1->) {
+	//	End();
+	//	currentStage_ = nextStageList_[currentStage_];
+	//	Initialize();
+	//}
+}
+
+void GamePlayScene::nextSwitchUpdate()
+{
+	//End();
+	//currentStage_ = nextStageList_[currentStage_];
+	//Initialize();
 
 }
 

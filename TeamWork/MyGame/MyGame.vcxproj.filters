@@ -267,9 +267,6 @@
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\math\EasingManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -277,6 +274,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\tween\TweenObject.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\scene\addScreen\StageEffectScreen.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -608,9 +611,6 @@
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\math\EasingManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -618,6 +618,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\tween\TweenObject.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\scene\addScreen\StageEffectScreen.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

@@ -10,7 +10,7 @@ HairballGenerator::HairballGenerator(IWorld * world, int laneNum, Vector2 pos, i
 	,generate_Count_(0)
 	,defGenerate_Count_(hairballCnt)
 {
-	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;
+	parameter_.ID = ACTOR_ID::BEGIN_ACTOR;
 	parameter_.radius = 0.0f;
 	parameter_.size = Vector2::Zero;
 	parameter_.mat
@@ -81,7 +81,7 @@ void HairballGenerator::GenerateHairball()
 			generate_Count_ = 0;
 			return;
 		}
-		world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Hairball>(world_, CLOTHES_ID::HAIRBALL, laneNum_, position_));
+		world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<Hairball>(world_, CLOTHES_ID::HAIRBALL, laneNum_, position_));
 		generate_Count_ = 0;
 	}
 	generate_Count_++;

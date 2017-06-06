@@ -14,14 +14,16 @@ MenuScreen::MenuScreen():stageNum(0)
 		if (i == 0) panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * 150.0f),true,1.0f };
 		else panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * 150.0f),false,0.0f };
 	}
+	//本来は0版はチュートリアル
 	stageList_[0] = Stage::Stage1;
-	stageList_[1] = Stage::Stage2;
-	stageList_[2] = Stage::Stage3;
-	stageList_[3] = Stage::Stage4;
-	stageList_[4] = Stage::Stage5;
-	stageList_[5] = Stage::Stage6;
-	stageList_[6] = Stage::Stage7;
-	stageList_[7] = Stage::Stage8;
+	stageList_[1] = Stage::Stage1;
+	stageList_[2] = Stage::Stage2;
+	stageList_[3] = Stage::Stage3;
+	stageList_[4] = Stage::Stage4;
+	stageList_[5] = Stage::Stage5;
+	stageList_[6] = Stage::Stage6;
+	stageList_[7] = Stage::Stage7;
+	stageList_[8] = Stage::Stage8;
 
 	backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
 	cursorPos = Vector2(panel[0].position.x - 350.0f, panel[0].position.y);

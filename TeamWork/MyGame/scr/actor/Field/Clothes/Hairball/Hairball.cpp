@@ -6,7 +6,7 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
 {
 	clothes_ID = CLOTHES_ID::HAIRBALL;
-	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;
+	parameter_.ID = ACTOR_ID::ENEMY_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(50, 50.f);
 	parameter_.mat
@@ -30,7 +30,8 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 
 	SetPointsUpdate();
 
-	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::PHEAD_HAIRBALL_COL] = std::bind(&CollisionFunction::IsHit_Circle_Circle, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::PSWORD_HAIRBALL_COL] = std::bind(&CollisionFunction::IsHit_Hairball_PSword, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 	TweenManager::GetInstance().Delay(6.0f, [=]() {Dead(); });
 
@@ -47,7 +48,8 @@ void Hairball::Update()
 	if (player_ == nullptr) return;
 	
 	if (isCheckCol_ && isUpdate_) {
-		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::PHEAD_HAIRBALL_COL);
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_SWORD_ACTOR, COL_ID::PSWORD_HAIRBALL_COL);
 	}
 
 	velocity_ = Vector2(-10.0f, 0.0f);
@@ -74,14 +76,14 @@ void Hairball::OnCollide(Actor & other, CollisionParameter colpara)
 		if (!player_Head_->getIsCurrentHead()) return;
 
 		if (player_->GetIsBiteMode()) {
-			//player_->SetMode(MODE_SLIP);
+			player_->SetMode(MODE_SLIP);
 			player_Head_->setIsBiteSlipWind(true);
-			parameter_.isDead = true;
+			Dead();
 		}
 		break;
 	}
 	case ACTOR_ID::PLAYER_SWORD_ACTOR: {
-		parameter_.isDead = true;
+		Dead();
 		break;
 	}
 	}

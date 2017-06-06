@@ -1,4 +1,5 @@
 #include "GoalClothes.h"
+#include "../MyGame/scr/graphic/Sprite.h"
 #include "../MyGame/scr/actor/UI/GoalUI.h"
 
 GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
@@ -20,10 +21,10 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	isHit_ = false;
 
-	localPoints.push_back(Vector3(-120, 0 + length_, 0));
-	localPoints.push_back(Vector3(-120, 90 + length_, 0));
-	localPoints.push_back(Vector3(120, 90 + length_, 0));
-	localPoints.push_back(Vector3(120, 0 + length_, 0));
+	localPoints.push_back(Vector3(-170, 0 + length_, 0));
+	localPoints.push_back(Vector3(-170, 90 + length_, 0));
+	localPoints.push_back(Vector3(170, 90 + length_, 0));
+	localPoints.push_back(Vector3(170, 0 + length_, 0));
 
 	SetPointsUpdate();
 
@@ -67,7 +68,9 @@ void GoalClothes::Draw() const
 	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
 	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);

@@ -9,4 +9,5 @@ enum class EventMessage
 	START_LANE_CHANGE,
 	GOAL_FLAG,			//ゴールフラグ
 	GAME_CLEAR_FLAG,	//ステージ終了フラグ
+	TAPPER_DEAD,	//叩き死亡
 };

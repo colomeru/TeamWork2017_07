@@ -131,6 +131,30 @@ CollisionParameter CollisionFunction::IsHit_PSword_Clothes(const Actor & sprite1
 
 }
 
+CollisionParameter CollisionFunction::IsHit_Hairball_PSword(const Actor & sprite1, const Actor & sprite2)
+{
+	Circle crc;
+	Vector2 translation = sprite1.GetPosition();
+	MyCol::CreateCircle(&crc, translation, sprite1.GetParameter().radius);
+
+	Segment seg;
+	auto player_Sword = static_cast<Player_Sword*>(const_cast<Actor*>(&sprite2));
+	auto startPos = player_Sword->GetSwordStartPos();
+	auto endPos = player_Sword->GetSwordEndPos();
+	MyCol::CreateSegment(&seg, startPos, endPos);
+
+	Vector2 segPoint;
+	bool isHitCheck = false;
+	if (MyCol::Col_Circle_Segment(crc, seg, segPoint)) {
+		auto player = static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()));
+		if (player->GetIsSwordActive()) {
+			isHitCheck = true;
+		}
+	}
+
+	return CollisionParameter(COL_ID::PSWORD_HAIRBALL_COL, isHitCheck, segPoint);
+}
+
 CollisionParameter CollisionFunction::IsHit_Tapper_PSword(const Actor & sprite1, const Actor & sprite2)
 {
 	Segment seg1;

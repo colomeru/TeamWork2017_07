@@ -58,7 +58,7 @@ private:
 	Vector2 dir; //ˆÚ“®•ûŒü
 	float dis;
 	float disN;
-	float from;
+	Vector2 from;
 	float ease;
 	bool test;
 	const float MoveTime = 0.5f;

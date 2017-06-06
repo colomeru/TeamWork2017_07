@@ -168,7 +168,7 @@ void EndingScene::Initialize()
 	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
 	world_->SetTarget(player_.get());
 
-	stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
+	stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test0"), 60));
 	stageManager.SetStage(Stage::Stage1);
 	stageLen = stageManager.GetStageSize(Stage::Stage1).x;
 

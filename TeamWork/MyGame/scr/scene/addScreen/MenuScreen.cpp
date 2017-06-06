@@ -5,9 +5,14 @@
 #include "../../input/Keyboard.h"
 #include "../../input/GamePad.h"
 #include "../../math/Easing.h"
+#include "../../tween/TweenManager.h"
+#include "../../Def.h"
+
+const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 350.0f, WINDOW_HEIGHT / 2.0f),
+							Vector2(0.0f, WINDOW_HEIGHT - 100.0f) };
 
 //コンストラクタ
-MenuScreen::MenuScreen():stageNum(0)
+MenuScreen::MenuScreen() :stageNum(0)
 {
 	for (int i = 0; i < 9; i++)
 	{
@@ -25,8 +30,9 @@ MenuScreen::MenuScreen():stageNum(0)
 	stageList_[7] = Stage::Stage7;
 	stageList_[8] = Stage::Stage8;
 
-	backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
-	cursorPos = Vector2(panel[0].position.x - 350.0f, panel[0].position.y);
+	//backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
+	//cursorPos = Vector2(panel[0].position.x - 350.0f, panel[0].position.y);
+	cursorPos = CursorPos[0];
 	backSelect = false;
 
 	//
@@ -212,10 +218,11 @@ void MenuScreen::Pattern2Update()
 			timer_ = 0.0f;
 			dis += 150.0f;
 			//dis = drawPos.y - panel[stageNum].position.y;
-			from = ease;
 			stageNum++;
-			if (dis < 0) return;
+			//if (dis < 0) return;
 			dir = Vector2(0.0f, 1.0f);
+
+			TweenManager::GetInstance().Add(EaseOutExpo, &from, Vector2(0.0f, dis), MoveTime);
 		}
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
 			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN))
@@ -224,10 +231,11 @@ void MenuScreen::Pattern2Update()
 			timer_ = 0.0f;
 			dis -= 150.0f;
 			//dis = panel[stageNum].position.y - drawPos.y;
-			from = ease;
 			stageNum--;
-			if (dis > 0.0f) return;
+			//if (dis > 0.0f) return;
 			dir = Vector2(0.0f, -1.0f);
+
+			TweenManager::GetInstance().Add(EaseOutExpo, &from, Vector2(0.0f, dis), MoveTime);
 		}
 	}
 	stageNum = MathHelper::Clamp(stageNum, 0, 8);
@@ -239,7 +247,9 @@ void MenuScreen::Pattern2Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT))
 	{
-		cursorPos = Vector2(backPos.x + 32.0f, backPos.y);
+		//cursorPos = Vector2(backPos.x + 32.0f, backPos.y);
+		//backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
+		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[1], MoveTime);
 		backSelect = true;
 	}
 	else if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
@@ -249,7 +259,8 @@ void MenuScreen::Pattern2Update()
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::RIGHT))
 	{
-		cursorPos = Vector2(panel[cursorNum].position.x - 350.0f, panel[cursorNum].position.y);
+		//backPos = Vector2(WINDOW_WIDTH / 2.0f - 350.0f, WINDOW_HEIGHT / 2.0f);
+		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[0], MoveTime);
 		backSelect = false;
 	}
 
@@ -269,42 +280,43 @@ void MenuScreen::Pattern2Update()
 	timer_ += Time::DeltaTime;
 	timer_ = MathHelper::Min(timer_, MoveTime);
 
-	ease = Easing::EaseOutExpo(timer_, from, dis, MoveTime);
+	//ease = Easing::EaseOutExpo(timer_, from, dis, MoveTime);
 
 	//if ((moveDis.y > 0.0f && moveDis.y > dis - 100.0f) || (moveDis.y < 0.0f && moveDis.y < dis + 100.0f)) mag = 5.0f;
 	//else mag = 30.0f;
-	mag = 50.0f;
-	velocity.y = dir.y * mag;
-	if ((dis > 0 && moveDis.y < dis) || (dis < 0 && moveDis.y > dis)) {
-		//if (moveDis.y != dis) {
-		moveDis += velocity;
-		modify += velocity;
-	}
-	else {
-		moveDis.y = 0.0f;
-		dis = 0.0f;
-		velocity.y = 0.0f;
-	}
+	//mag = 50.0f;
+	//velocity.y = dir.y * mag;
+	//if ((dis > 0 && moveDis.y < dis) || (dis < 0 && moveDis.y > dis)) {
+	//	//if (moveDis.y != dis) {
+	//	moveDis += velocity;
+	//	modify += velocity;
+	//}
+	//else {
+	//	moveDis.y = 0.0f;
+	//	dis = 0.0f;
+	//	velocity.y = 0.0f;
+	//}
 	MathHelper::Clamp(modify.y, 0.0f, 1200.0f);
 }
 
 //パターン２描画
 void MenuScreen::Pattern2Draw() const
 {
-	DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum);
-	DrawFormatString(0, 60, GetColor(255, 255, 255), "pos %f %f", pos.x, pos.y);
-	DrawFormatString(0, 80, GetColor(255, 255, 255), "ease %f", ease);
-	DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis);
-	DrawFormatString(0, 120, GetColor(255, 255, 255), "velocity %f %f", velocity.x, velocity.y);
-	DrawFormatString(0, 140, GetColor(255, 255, 255), "meveDis %f %f", moveDis.x, moveDis.y);
-	DrawFormatString(0, 160, GetColor(255, 255, 255), "modify %f %f", modify.x, modify.y);
-	DrawFormatString(0, 180, GetColor(255, 255, 255), "mag %f", mag);
-
+	if (BuildMode == 1) {
+		DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum);
+		DrawFormatString(0, 60, GetColor(255, 255, 255), "pos %f %f", pos.x, pos.y);
+		DrawFormatString(0, 80, GetColor(255, 255, 255), "ease %f", ease);
+		DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis);
+		DrawFormatString(0, 120, GetColor(255, 255, 255), "velocity %f %f", velocity.x, velocity.y);
+		DrawFormatString(0, 140, GetColor(255, 255, 255), "meveDis %f %f", moveDis.x, moveDis.y);
+		DrawFormatString(0, 160, GetColor(255, 255, 255), "modify %f %f", modify.x, modify.y);
+		DrawFormatString(0, 180, GetColor(255, 255, 255), "mag %f", mag);
+	}
 	//ステージパネルを描画
 	for (int i = 0; i < 9; i++)
 	{
 		//if (!test) return;
-		auto drawPos = panel[i].position + modify;
+		auto drawPos = panel[i].position + from;
 
 		//float ease = Easing::EaseOutExpo(timer_, 0.0f, dis, 1.0f);
 		//drawPos.y += ease;
@@ -313,17 +325,19 @@ void MenuScreen::Pattern2Draw() const
 		auto max = drawPos + Vector2(300.0f, 50.0f);
 		DrawBox(min.x, min.y, max.x, max.y, GetColor(0, 255 - 20 * i, 20 * i), panel[i].alpha);
 	}
+	//0.0f, WINDOW_HEIGHT - 100.0f
 
 	//戻るパネルを描画
-	DrawBox(backPos.x, backPos.y, backPos.x + 300.0f, backPos.y + 100.0f, GetColor(255, 0, 0), 1);
+	DrawBox(CursorPos[1].x, CursorPos[1].y, CursorPos[1].x + 300.0f, CursorPos[1].y + 100.0f, GetColor(255, 0, 0), 1);
 
 	//カーソルを描画
 	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(panel[cursorNum].position.x - 350.0f, panel[cursorNum].position.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, cursorPos, Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, false);
-	Vector2 cursorPos2;
-	if (!backSelect) cursorPos2 = Vector2(cursorPos.x + 700.0f,cursorPos.y);
-	else cursorPos2 = Vector2(cursorPos.x + 400.0f, cursorPos.y);
-	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(cursorPos2.x, cursorPos2.y), Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, true);
+
+	//Vector2 cursorPos2;
+	//if (!backSelect) cursorPos2 = Vector2(cursorPos.x + 700.0f,cursorPos.y);
+	//else cursorPos2 = Vector2(cursorPos.x + 400.0f, cursorPos.y);
+	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(cursorPos2.x, cursorPos2.y), Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, true);
 
 	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M))
 	//{

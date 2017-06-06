@@ -6,10 +6,11 @@
 
 static const float moveTime = 2.0f;
 //static const float TapTime = 2.0f;
-static const float IdleTime = 1.0f;
+static const float IdleTime = 3.0f;
+static const Vector2 shiftPos=Vector2(-200.f, 200.f);
 
 ClothesTapper::ClothesTapper(IWorld * world, int laneNum, Vector2 pos):
-	Enemys(world,laneNum,pos), timeCount_(0.f),targetPos_(pos),basePos_(pos),updateMode_(MODE_IDLE), spriteID_(SPRITE_ID::CLOTHES_TAP_01_SPRITE), anmManager_()
+	Enemys(world,laneNum,pos), timeCount_(0.f),targetPos_(pos),basePos_(pos),updateMode_(MODE_IDLE), spriteID_(SPRITE_ID::CLOTHES_TAP_01_SPRITE), anmManager_(), shiftPos_(shiftPos)
 {
 	//parameter_.radius = Sprite::GetInstance().GetSize(spriteID_).x/2;
 	parameter_.radius = 100.f;
@@ -32,6 +33,17 @@ ClothesTapper::ClothesTapper(IWorld * world, int laneNum, Vector2 pos):
 	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_05_SPRITE);
 	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_06_SPRITE);
 	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_07_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_08_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_09_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_10_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_11_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_12_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_13_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_14_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_15_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_16_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_17_SPRITE);
+	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_18_SPRITE);
 
 	anmManager2_.SetAnmSpeed(8);
 	//auto ePx = std::make_shared<EaseNode>(&position_.x, EaseType::Linear, 0.f, -200.f, 5.f, [this]() {SetNextTapPos(); });
@@ -65,7 +77,7 @@ void ClothesTapper::Draw() const
 	
 	if (BuildMode != 1)return;
 
-	DrawCircle(drawPos_.x, drawPos_.y, parameter_.radius, GetColor(255, 255, 255));
+	DrawCircle(drawPos_.x+GetShiftPos().x, drawPos_.y+ GetShiftPos().y, parameter_.radius, GetColor(255, 255, 255));
 
 }
 
@@ -133,19 +145,22 @@ void ClothesTapper::ToMoveMode()
 	//anmManager_.ResetAnm();
 	anmManager_.ReverseAnm();
 
-
+	shiftPos_ -= shiftPos;
 }
 
 void ClothesTapper::ToIdleMode()
 {
 	updateMode_ = MODE_IDLE;
 	timeCount_ = 0.0f;
+
+	shiftPos_ += shiftPos;
 }
 
 void ClothesTapper::ToDeadMode()
 {
 	updateMode_ = MODE_DEAD;
 	//anmManager_.ReverseAnm();
+	shiftPos_ -= shiftPos;
 }
 
 void ClothesTapper::MoveUpdate()
@@ -180,7 +195,7 @@ void ClothesTapper::IdleUpdate()
 	timeCount_ += 0.016f;
 
 	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_SWORD_ACTOR, COL_ID::TAPPER_PSWORD_COL);
-
+	
 	if (BuildMode==1&&Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z))ToDeadMode();
 
 	if (timeCount_ > IdleTime) {

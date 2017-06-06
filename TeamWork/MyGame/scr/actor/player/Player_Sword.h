@@ -22,7 +22,10 @@ public:
 	void SetSwordVel(const Vector2& vel) {
 		position_ = player_->GetPosition();
 		swordEndPos_ = position_+(vel*Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).y);
-		swordStartPos_ = (position_ + swordEndPos_) / 2;
+		//swordStartPos_ = (position_ + swordEndPos_) / 2;
+		
+		swordStartPos_= position_ + (swordEndPos_ - position_).Normalize()*32.f;
+		
 	}
 	virtual bool CamMoveUpdate() {
 		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();

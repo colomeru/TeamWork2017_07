@@ -25,8 +25,8 @@ void GoalUI::Update()
 void GoalUI::Draw() const
 {
 	if (timeCount_ != 0) {
-		Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_GOAL_SPRITE) / 2;
-		Sprite::GetInstance().Draw(SPRITE_ID::TEST_GOAL_SPRITE, Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), crcOrigin, 1.0f, Vector2::One);
+		Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_UI_SPRITE) / 2;
+		Sprite::GetInstance().Draw(SPRITE_ID::GOAL_UI_SPRITE, Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), crcOrigin, 1.0f, Vector2::One);
 	}
 }
 

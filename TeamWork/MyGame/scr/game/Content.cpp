@@ -23,7 +23,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("forochi2.png", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
 	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE);
 	sprite.Load("testClothes.bmp", SPRITE_ID::TEST_CLOTHES_SPRITE);
-	sprite.Load("goal.bmp", SPRITE_ID::TEST_GOAL_SPRITE);
+	sprite.Load("goalUI.bmp", SPRITE_ID::GOAL_UI_SPRITE);
 	sprite.Load("hanger.png", SPRITE_ID::HANGER_SPRITE);
 	sprite.Load("fluffyClothes.png", SPRITE_ID::FLUFFY_SPRITE);
 	sprite.Load("gumClothes.png", SPRITE_ID::GUM_SPRITE);
@@ -50,7 +50,10 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("bird.png", SPRITE_ID::BIRD_SPRITE);
 	sprite.Load("whitescreen.png", SPRITE_ID::WHITE_SCREEN_SPRITE);
 	sprite.Load("blackscreen.png", SPRITE_ID::BLACK_SCREEN_SPRITE);
-	sprite.Load("testGoalClothes.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
+	sprite.Load("goal.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
+	sprite.Load("testGoalClothes.png", SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE);
+	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE);
+	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE);
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
 	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);

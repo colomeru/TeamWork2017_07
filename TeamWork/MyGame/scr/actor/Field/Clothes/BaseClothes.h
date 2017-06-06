@@ -1,5 +1,13 @@
 #pragma once
 #include "Clothes.h"
+#include "../MyGame/scr/stageGenerator/StageGeneratorManager.h"
+
+//•‚Ì‰æ‘œ‚Ìƒpƒ^[ƒ“
+enum ClothesPattern
+{
+	Orange,
+	SkyBlue,
+};
 
 class BaseClothes : public Clothes, public std::enable_shared_from_this<BaseClothes>
 {
@@ -16,5 +24,10 @@ public:
 	virtual void OnUpdate() override;
 
 private:
+	void GraphicPattern();
+	void PatternDraw() const;
 
+private:
+	StageGenerateManager* stageManager_;
+	ClothesPattern pattern_;
 };

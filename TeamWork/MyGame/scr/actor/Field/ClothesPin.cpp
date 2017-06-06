@@ -7,7 +7,7 @@
 ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum)
 	:Actor(world, clothes)
 {
-	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
+	parameter_.ID = ACTOR_ID::PIN_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(50.f, 50.f);
 	parameter_.mat
@@ -29,7 +29,7 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes,
 	
 	SetPose(mat);
 
-	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_Circle_Circle, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 }
 

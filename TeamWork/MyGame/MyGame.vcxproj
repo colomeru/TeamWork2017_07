@@ -214,7 +214,6 @@
     <ClCompile Include="scr\main.cpp" />
     <ClCompile Include="scr\math\Color.cpp" />
     <ClCompile Include="scr\math\Easing.cpp" />
-    <ClCompile Include="scr\math\EasingManager.cpp" />
     <ClCompile Include="scr\math\MathHelper.cpp" />
     <ClCompile Include="scr\math\Matrix.cpp" />
     <ClCompile Include="scr\math\Point.cpp" />
@@ -316,7 +315,6 @@
     <ClInclude Include="scr\input\Keyboard.h" />
     <ClInclude Include="scr\math\Color.h" />
     <ClInclude Include="scr\math\Easing.h" />
-    <ClInclude Include="scr\math\EasingManager.h" />
     <ClInclude Include="scr\math\MathHelper.h" />
     <ClInclude Include="scr\math\Matrix.h" />
     <ClInclude Include="scr\math\MyFuncionList.h" />

@@ -6,7 +6,7 @@ class ThinClothes : public Clothes, public std::enable_shared_from_this<ThinClot
 {
 public:
 	//コンストラクタ
-	ThinClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin = false);
+	ThinClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin = false);
 	//デストラクタ
 	~ThinClothes();
 	//更新

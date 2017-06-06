@@ -2,8 +2,8 @@
 #include "../MyGame/scr/game/Random.h"
 #include "../../ClothesPin.h"
 
-ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin)
-	:Clothes(world, clothes, laneNum)
+ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
+	:Clothes(world, clothes, laneNum, weight)
 {
 	clothes_ID = CLOTHES_ID::THIN_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -22,10 +22,10 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 
-	localPoints.push_back(Vector3(-60, 0 + length_, 0));
+	localPoints.push_back(Vector3(-60, -100 + length_, 0));
 	localPoints.push_back(Vector3(-60, 90 + length_, 0));
 	localPoints.push_back(Vector3(60, 90 + length_, 0));
-	localPoints.push_back(Vector3(60, 0 + length_, 0));
+	localPoints.push_back(Vector3(60, -100 + length_, 0));
 
 	SetPointsUpdate();
 
@@ -81,9 +81,11 @@ void ThinClothes::Draw() const
 	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(204, 204, 204), TRUE);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(204, 204, 204), TRUE);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2 + Vector2(0, 50);
+	Sprite::GetInstance().Draw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
-	if (!collisionPoints.empty()) {
+	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);

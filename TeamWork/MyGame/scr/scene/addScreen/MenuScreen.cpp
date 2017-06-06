@@ -7,13 +7,24 @@
 #include "../../math/Easing.h"
 
 //コンストラクタ
-MenuScreen::MenuScreen()
+MenuScreen::MenuScreen():stageNum(0)
 {
 	for (int i = 0; i < 9; i++)
 	{
 		if (i == 0) panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * 150.0f),true,1.0f };
 		else panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * 150.0f),false,0.0f };
 	}
+	//本来は0版はチュートリアル
+	stageList_[0] = Stage::Stage1;
+	stageList_[1] = Stage::Stage1;
+	stageList_[2] = Stage::Stage2;
+	stageList_[3] = Stage::Stage3;
+	stageList_[4] = Stage::Stage4;
+	stageList_[5] = Stage::Stage5;
+	stageList_[6] = Stage::Stage6;
+	stageList_[7] = Stage::Stage7;
+	stageList_[8] = Stage::Stage8;
+
 	backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
 	cursorPos = Vector2(panel[0].position.x - 350.0f, panel[0].position.y);
 	backSelect = false;
@@ -314,12 +325,17 @@ void MenuScreen::Pattern2Draw() const
 	else cursorPos2 = Vector2(cursorPos.x + 400.0f, cursorPos.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(cursorPos2.x, cursorPos2.y), Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, true);
 
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M))
-	{
-		DrawFormatString(panel[cursorNum].position.x - 280, panel[cursorNum].position.y, GetColor(255, 0, 0), "ステージ%d", stageNum + 1);
-	}
+	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M))
+	//{
+	//	DrawFormatString(panel[cursorNum].position.x - 280, panel[cursorNum].position.y, GetColor(255, 0, 0), "ステージ%d", stageNum + 1);
+	//}
 
 	//
 	DrawCircle(drawPos.x, drawPos.y, 16, GetColor(0, 0, 255), 0, 1);
 	DrawCircle(gPos.x, gPos.y, 16, GetColor(255, 0, 0), 0, 1);
+}
+
+Stage MenuScreen::GetGamePlayStage() const
+{
+	return stageList_[stageNum];
 }

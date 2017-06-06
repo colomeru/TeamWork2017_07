@@ -1,11 +1,19 @@
 #pragma once
 #include "Clothes.h"
+#include "../MyGame/scr/stageGenerator/StageGeneratorManager.h"
+
+//服の画像のパターン
+enum ClothesPattern
+{
+	Orange,
+	SkyBlue,
+};
 
 class BaseClothes : public Clothes, public std::enable_shared_from_this<BaseClothes>
 {
 public:
 	//コンストラクタ
-	BaseClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, bool is_Pin = false);
+	BaseClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin = false);
 	//デストラクタ
 	~BaseClothes();
 	//更新
@@ -16,5 +24,10 @@ public:
 	virtual void OnUpdate() override;
 
 private:
+	void GraphicPattern();
+	void PatternDraw() const;
 
+private:
+	StageGenerateManager* stageManager_;
+	ClothesPattern pattern_;
 };

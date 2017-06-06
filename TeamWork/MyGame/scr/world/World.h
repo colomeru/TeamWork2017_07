@@ -6,8 +6,8 @@
 #include"../math/Vector2.h"
 #include <stack>
 
-static const float defDrawLinePosY[3] = { 0,400,1000 };
-static const float defDrawLineChangePosY[5] = { -400,0,400,1000,1500 };
+static const float defDrawLinePosY[3] = { 0,500,1000 };
+static const float defDrawLineChangePosY[5] = { -400,0,500,1000,1500 };
 
 //World内で、アクター全員が取得出来るデータ
 struct KeepDatas {

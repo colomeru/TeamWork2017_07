@@ -2,7 +2,7 @@
 #include "../MyGame/scr/actor/UI/GoalUI.h"
 
 MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
-	:Clothes(world, clothes, laneNum)
+	:Clothes(world, clothes, laneNum, 0.0f)
 {
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -69,8 +69,8 @@ void MoveGoalClothes::Draw() const
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
-	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
 	if (!collisionPoints.empty()) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);

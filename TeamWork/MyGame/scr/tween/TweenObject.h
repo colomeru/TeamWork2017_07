@@ -8,6 +8,9 @@ enum UpdateType
 	PingPong	// 特殊ループ更新
 };
 
+//
+using TweenFuncParam = std::function<float(float, float, float, float, float)>;
+
 class TweenObject
 {
 public:
@@ -21,13 +24,19 @@ public:
 	bool IsEnd() const;
 	// 終了
 	void End();
+	// 再生
+	void Play(float scale = 1.0f);
+	// 停止
+	void Stop();
 	// 変動値ポインタ取得
 	float* GetValuePointer() const;
 
 	// 関数登録
-	void SetFunction(std::function<float(float, float, float, float, float)> func);
+	void SetFunction(const TweenFuncParam& func);
 	// ループタイプ登録
 	void SetLoopType(const UpdateType type);
+	// ループ数登録
+	void SetLoopCount(int count);
 
 private:
 	// 通常更新
@@ -36,8 +45,8 @@ private:
 	void LoopUpdate(float deltaTime);
 	// 特殊ループ更新
 	void PingPongUpdate(float deltaTime);
-	// コールバック実行
-	void Callback();
+	// コールバック呼び出し
+	void Invoke();
 
 private:
 	// ease関数
@@ -59,11 +68,15 @@ private:
 	std::function<void()> callback_;
 	// 時間
 	float	timer_;
+	// 再生倍率
+	float	timeScale_;
 	// 終了フラグ
 	bool	isEnd_;
-	
+
 	// ループタイプ
 	UpdateType	loopType_;
+	// ループ数
+	int			loopCount_;
 	// 更新時汎用補正値
 	float	sine_;
 };

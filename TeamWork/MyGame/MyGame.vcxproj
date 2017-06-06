@@ -177,6 +177,7 @@
     <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\Bird.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.cpp" />
+    <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyGenerator.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\Enemys.cpp" />
@@ -213,7 +214,6 @@
     <ClCompile Include="scr\main.cpp" />
     <ClCompile Include="scr\math\Color.cpp" />
     <ClCompile Include="scr\math\Easing.cpp" />
-    <ClCompile Include="scr\math\EasingManager.cpp" />
     <ClCompile Include="scr\math\MathHelper.cpp" />
     <ClCompile Include="scr\math\Matrix.cpp" />
     <ClCompile Include="scr\math\Point.cpp" />
@@ -229,6 +229,7 @@
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.cpp" />
+    <ClCompile Include="scr\scene\addScreen\StageEffectScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\StartScreen.cpp" />
     <ClCompile Include="scr\scene\CreditScene.cpp" />
     <ClCompile Include="scr\scene\DemoScene.cpp" />
@@ -243,6 +244,8 @@
     <ClCompile Include="scr\stageGenerator\StageGeneratorManager.cpp" />
     <ClCompile Include="scr\time\FPS.cpp" />
     <ClCompile Include="scr\time\Time.cpp" />
+    <ClCompile Include="scr\tween\TweenManager.cpp" />
+    <ClCompile Include="scr\tween\TweenObject.cpp" />
     <ClCompile Include="scr\world\World.cpp" />
     <ClCompile Include="scr\world\WorldActor.cpp" />
   </ItemGroup>
@@ -268,6 +271,7 @@
     <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\Bird.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.h" />
+    <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyGenerator.h" />
     <ClInclude Include="scr\actor\Field\Enemys\Enemys.h" />
@@ -311,7 +315,6 @@
     <ClInclude Include="scr\input\Keyboard.h" />
     <ClInclude Include="scr\math\Color.h" />
     <ClInclude Include="scr\math\Easing.h" />
-    <ClInclude Include="scr\math\EasingManager.h" />
     <ClInclude Include="scr\math\MathHelper.h" />
     <ClInclude Include="scr\math\Matrix.h" />
     <ClInclude Include="scr\math\MyFuncionList.h" />
@@ -332,6 +335,7 @@
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\WindDir.h" />
+    <ClInclude Include="scr\scene\addScreen\StageEffectScreen.h" />
     <ClInclude Include="scr\scene\addScreen\StartScreen.h" />
     <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />
@@ -354,6 +358,8 @@
     <ClInclude Include="scr\stageGenerator\StageGeneratorManager.h" />
     <ClInclude Include="scr\time\FPS.h" />
     <ClInclude Include="scr\time\Time.h" />
+    <ClInclude Include="scr\tween\TweenManager.h" />
+    <ClInclude Include="scr\tween\TweenObject.h" />
     <ClInclude Include="scr\world\IWorld.h" />
     <ClInclude Include="scr\world\IWorldPtr.h" />
     <ClInclude Include="scr\world\World.h" />

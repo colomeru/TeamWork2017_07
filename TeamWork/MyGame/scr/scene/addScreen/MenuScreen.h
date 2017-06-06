@@ -2,6 +2,7 @@
 #include "../../Def.h"
 #include "../../math/Vector2.h"
 #include <array>
+#include"../../stageGenerator/Stage.h"
 
 class MenuScreen
 {
@@ -41,6 +42,7 @@ public:
 	void Pattern2Update();
 	void Pattern2Draw() const;
 	
+	Stage GetGamePlayStage()const;
 private:
 	int stageNum = 0; //ステージ番号
 	const float height = WINDOW_HEIGHT / 4.0f * 2.0f; //パネル１のy座標
@@ -67,4 +69,6 @@ private:
 	Vector2 moveDis; //移動距離
 	Vector2 velocity; //速度
 	float mag; //速度倍率
+
+	std::array<Stage,9> stageList_;
 };

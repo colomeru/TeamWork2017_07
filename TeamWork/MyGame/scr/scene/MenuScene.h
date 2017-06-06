@@ -27,6 +27,7 @@ public:
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
 
+	Stage SendStage()const override;
 private:
 	MenuScreen menu;
 

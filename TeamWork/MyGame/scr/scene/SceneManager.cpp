@@ -113,7 +113,9 @@ void SceneManager::SetStageCount(int n)
 
 void SceneManager::SceneChangeAfterFade()
 {
+	Stage targetStage = mCurrentScene->SendStage();
 	mCurrentScene = mScenes[nectSceneName_];
+	mCurrentScene->ReceiveStage(targetStage);
 	mCurrentScene->Initialize();
 
 	//FadePanel::GetInstance().Initialize();	

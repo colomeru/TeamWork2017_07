@@ -9,7 +9,10 @@
 #include"addScreen/GameClearScreen.h"
 #include"addScreen/PauseScreen.h"
 #include"addScreen\LaneChangeScreen.h"
+#include"addScreen\StageEffectScreen.h"
+
 class Player;
+class EnemyGenerator;
 
 class GamePlayScene : public IScene
 {	
@@ -34,6 +37,9 @@ public:
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
 	
+	void ReceiveStage(Stage stage)override {
+		currentStage_ = stage;
+	}
 private:
 	void setNextMode(int mode) {
 		gamePlayMode_ = mode;
@@ -72,7 +78,7 @@ private:
 	Scene			nextScene_;
 
 	PlayerPtr ply1;
-
+	std::shared_ptr<EnemyGenerator> enemGenerator_;
 	StageGenerateManager stageGeneratorManager;
 	StartScreen startScreen_;
 	PauseScreen pauseScreen_;
@@ -80,7 +86,10 @@ private:
 	GameClearScreen gameClearScreen_;
 	BackgroundScreen bgScreen_;
 	LaneChangeScreen changeScreen_;
+	StageEffectScreen stageEffectScreen_;
 	//Vector3 posit;
+
+	Stage currentStage_;
 
 	//Vector3 camera_pos_;
 	//Vector3 target_;
@@ -94,6 +103,10 @@ private:
 
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
+
+	std::map<Stage,Stage> nextStageList_;
+
+	std::map<Stage, int> defWindTime_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
 

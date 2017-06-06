@@ -28,7 +28,7 @@ protected:
 
 public:
 	//コンストラクタ
-	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum);
+	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight);
 	//デストラクタ
 	virtual ~Clothes();
 	//更新
@@ -72,8 +72,11 @@ public:
 	Clothes& operator = (const Clothes& other) = delete;
 
 
-public:
-
+private:
+	void SetNormal();
+	void SetRightUpSlant();
+	void SetLeftUpSlant();
+	void SetHorizontalSlant();
 
 protected:
 	//衝突しているか
@@ -86,6 +89,8 @@ protected:
 	std::vector<Vector2> collisionPoints;
 	//当たり判定のポイントのローカル座標
 	std::vector<Vector3> localPoints;
+	//重さ
+	float weight_;
 
 	//テスト
 	Vector2 intersectPos_;

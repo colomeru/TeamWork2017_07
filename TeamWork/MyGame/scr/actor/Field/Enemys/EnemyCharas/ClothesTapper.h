@@ -40,6 +40,9 @@ public:
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 
+	Vector2 GetShiftPos()const {
+		return shiftPos_;
+	}
 private:
 	void SetNextTapPos(const Vector2& pos=Vector2::Zero);
 	void PlayTap();
@@ -59,6 +62,8 @@ private:
 	Vector2 targetPos_;
 	float timeCount_;
 	
+	Vector2 shiftPos_;
+
 	CharacterAnmManager anmManager_;
 	CharacterAnmManager anmManager2_;
 

@@ -325,10 +325,10 @@ void MenuScreen::Pattern2Draw() const
 	else cursorPos2 = Vector2(cursorPos.x + 400.0f, cursorPos.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(cursorPos2.x, cursorPos2.y), Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, true);
 
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M))
-	{
-		DrawFormatString(panel[cursorNum].position.x - 280, panel[cursorNum].position.y, GetColor(255, 0, 0), "ステージ%d", stageNum + 1);
-	}
+	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M))
+	//{
+	//	DrawFormatString(panel[cursorNum].position.x - 280, panel[cursorNum].position.y, GetColor(255, 0, 0), "ステージ%d", stageNum + 1);
+	//}
 
 	//
 	DrawCircle(drawPos.x, drawPos.y, 16, GetColor(0, 0, 255), 0, 1);

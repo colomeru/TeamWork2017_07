@@ -2,7 +2,7 @@
 #include"../../math/MyFuncionList.h"
 
 Player_Sword::Player_Sword(IWorld * world, Player * targetP, Vector2 pos)
-	:Actor(world),swordStartPos_(pos),swordEndPos_(pos),player_(targetP),useSword_(false)
+	:Actor(world,targetP),swordStartPos_(pos),swordEndPos_(pos),player_(targetP),useSword_(false)
 {
 	parameter_.ID = ACTOR_ID::PLAYER_SWORD_ACTOR;
 	position_ = pos;
@@ -16,6 +16,9 @@ Player_Sword::~Player_Sword()
 
 void Player_Sword::Update()
 {
+	if (isCheckCol_&&isUpdate_) {
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::PSWORD_CLOTHES_COL);
+	}
 }
 
 void Player_Sword::Draw() const

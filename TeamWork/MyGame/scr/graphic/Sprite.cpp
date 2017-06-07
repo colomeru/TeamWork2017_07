@@ -18,6 +18,7 @@ void Sprite::Initialize()
 	InitGraph();
 	m_sprites.clear();
 	m_splitsprites.clear();
+	m_splitsizes_.clear();
 }
 
 // 通常画像の読み込み
@@ -29,6 +30,7 @@ void Sprite::Load(const std::string& filename, const SPRITE_ID& id)
 // 分割画像の読み込み
 void Sprite::Load(const std::string& filename, const SPRITE_ID& id, int allnum, const Point& splitnum, const Point& size)
 {
+	m_splitsizes_[id] = size;
 	int* handle = new int[allnum];
 	LoadDivGraph((WorkFolder::Name + filename).c_str(), allnum, splitnum.x, splitnum.y, size.x, size.y, handle);
 	for (int i = 0; i < allnum; ++i)
@@ -47,6 +49,7 @@ void Sprite::DeleteAll()
 	}
 	m_sprites.clear();
 	m_splitsprites.clear();
+	m_splitsizes_.clear();
 }
 
 // 通常画像の描画(アセット名、座標)

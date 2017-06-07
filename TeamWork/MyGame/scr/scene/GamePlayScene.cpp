@@ -19,7 +19,7 @@
 #include"../actor/Field/Enemys/EnemyGenerator.h"
 #include"../actor/Field/Enemys/EnemyCharas/ClothesTapper.h"
 #include"../tween/TweenManager.h"
-
+#include"../actor/Effects/PlayerEffect/PlayerMetamorEffect.h"
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
@@ -164,7 +164,6 @@ void GamePlayScene::Update()
 	if (!world_->GetIsCamChangeMode()) {
 		changeScreen_.End();
 	}
-
 	//if (isPlayerDead_) {
 	//	if (gameOverScreen_.Update(nextScene_)) {
 	//		isEnd_ = true;

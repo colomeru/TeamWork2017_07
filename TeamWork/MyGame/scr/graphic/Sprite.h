@@ -174,7 +174,14 @@ public:
 		GetGraphSize(m_sprites.at(id), &size.x, &size.y);
 		return size;
 	}
-
+	Point GetSplitPieceSize(const SPRITE_ID& id) const
+	{
+		return m_splitsizes_.at(id);
+	}
+	int GetSliptFrameSize(const SPRITE_ID& id)const {
+		if (m_splitsprites.find(id) == m_splitsprites.end())return 0;
+		return m_splitsprites.at(id).size();
+	}
 	int GetHandle(const SPRITE_ID& id) const;
 
 private:
@@ -196,4 +203,5 @@ private:
 	std::unordered_map<SPRITE_ID, int> m_sprites;
 	// •ªŠ„‰æ‘œ
 	std::unordered_map<SPRITE_ID, std::vector<int>> m_splitsprites;
+	std::unordered_map<SPRITE_ID, Point> m_splitsizes_;
 };

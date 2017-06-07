@@ -8,6 +8,8 @@
 #include"../../math/MyFuncionList.h"
 #include"../../input/GamePad.h"
 #include"Player_Sword.h"
+#include"../Effects/PlayerEffect/PlayerMetamorEffect.h"
+#include"../Effects/PlayerEffect/PlayerBiteEffect.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -931,6 +933,33 @@ int Player::GetCurHead() const {
 	return currentHead_;
 }
 
+void Player::CurHeadBite(const Vector2 & target) {
+	if (playerMode_ != MODE_SHOOT_END)return;
+
+	CreateBiteEffect();
+	playerMode_ = MODE_BITE;
+	pGrav_ = defPGravPow;
+	//stopPos_ = target;
+	//角度を求める
+	//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
+	rot_ = 135;
+	rot_spd_ = -3.0f;
+
+	StartPendulum();
+}
+
+void Player::ResurrectHead() {
+	for (int i = currentHead_; i < pHeads_.size() + currentHead_; i++) {
+		int trgNum = i;
+		if (trgNum >= pHeads_.size()) {
+			trgNum = trgNum - pHeads_.size();
+		}
+		if (!pHeadDead_[trgNum])continue;
+		pHeadDead_[trgNum] = false;
+		break;
+	}
+}
+
 
 //Headのレーンを本体のレーンに合わせる
 
@@ -970,6 +999,19 @@ void Player::setCurPHeadSPos(const Vector2 & sPos) {
 
 void Player::curPHeadSlip(bool isSlip) {
 	pHeads_[currentHead_]->setIsBiteSlipWind(isSlip);
+}
+
+void Player::PHeadChanger(int rot) {
+	PHeadLengthReset();
+	(sign(rot) == 1) ? backChangeHead() : changeHead();
+
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition()));
+
+	//StartPendulum();
+}
+
+void Player::SetStopPos(Vector2 target) {
+	stopPos_ = target;
 }
 
 void Player::PlayerInputControl()
@@ -1067,6 +1109,14 @@ void Player::CurPHeadLengPlus(float addPow) {
 	}
 }
 
+void Player::CreateBiteEffect()
+{
+	Vector2 vel = pHeads_[currentHead_]->GetPosition() - position_;
+	vel = vel.Normalize();
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerBiteEffect>(world_, pHeads_[currentHead_]->GetPosition() + vel * 30));
+
+}
+
 void Player::FallUpdate()
 {
 	pGrav_ += defPGravPow;
@@ -1134,6 +1184,7 @@ void Player::ShootUpdate()
 
 void Player::ShootEndUpdate()
 {
+	CreateBiteEffect();
 	playerMode_ = MODE_FALL;
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {

@@ -146,30 +146,8 @@ public:
 	bool GetPHeadDead(int pHeadNum)const {
 		return pHeadDead_[pHeadNum];
 	}
-	void CurHeadBite(const Vector2& target) {
-		if (playerMode_ != MODE_SHOOT_END)return;
-
-		playerMode_ = MODE_BITE;
-		pGrav_ = defPGravPow;
-		//stopPos_ = target;
-		//角度を求める
-		//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
-		rot_ = 135;
-		rot_spd_ = -3.0f;
-
-		StartPendulum();
-	}
-	void ResurrectHead() {
-		for (int i = currentHead_; i < pHeads_.size() + currentHead_; i++) {
-			int trgNum = i;
-			if (trgNum>=pHeads_.size()) {
-				trgNum = trgNum - pHeads_.size();
-			}
-			if (!pHeadDead_[trgNum])continue;
-			pHeadDead_[trgNum] = false;
-			break;
-		}
-	}
+	void CurHeadBite(const Vector2& target);
+	void ResurrectHead();
 	void SetOtherClothesID_(CLOTHES_ID cId) {
 		otherClothesID_ = cId;
 	}
@@ -244,14 +222,8 @@ public:
 		}
 		return true;
 	}
-	void PHeadChanger(int rot = 0) {
-		PHeadLengthReset();
-		(sign(rot) == 1) ? backChangeHead() : changeHead();
-		//StartPendulum();
-	}
-	void SetStopPos(Vector2 target) {
-		stopPos_ = target;
-	}
+	void PHeadChanger(int rot = 0);
+	void SetStopPos(Vector2 target);
 	Vector2 GetStopPos()const {
 		return stopPos_;
 	}
@@ -345,6 +317,7 @@ private:
 
 		worldSetMyDatas();
 	}
+	void CreateBiteEffect();
 //プレイヤーの状態に応じた更新
 private:
 	void FallUpdate();

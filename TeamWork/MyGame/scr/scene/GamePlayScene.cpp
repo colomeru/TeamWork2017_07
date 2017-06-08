@@ -84,7 +84,7 @@ void GamePlayScene::Initialize()
 		pauseScreen_.Init();
 		gameOverScreen_.Init();
 		gameClearScreen_.Init();
-		bgScreen_.Init();
+		bgScreen_.Init(currentStage_);
 	}
 	// フェードパネル初期化
 	//FadePanel::GetInstance().Initialize();

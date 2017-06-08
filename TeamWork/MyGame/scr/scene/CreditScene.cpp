@@ -63,7 +63,7 @@ void CreditScene::Initialize()
 	world_->SetTarget(player_.get());
 
 	size = stageGeneratorManager.GetStageSize(Stage::Stage1);
-	bgScreen_.Init();
+	bgScreen_.Init(Stage::Stage1);
 }
 
 void CreditScene::Update()

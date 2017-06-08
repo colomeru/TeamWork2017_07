@@ -37,13 +37,20 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("gameclearText.png", SPRITE_ID::GAMECLEAR_TEXT_SPRITE);
 	sprite.Load("nextstage.png", SPRITE_ID::CHANGE_NEXTSTAGE_TEXT_SPRITE);
 	sprite.Load("stageselect.png", SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE);
-	sprite.Load("background.png", SPRITE_ID::BACKGROUND_SPRITE);
-	sprite.Load("fence.png", SPRITE_ID::FENCE_SPRITE);
+	sprite.Load("stageres/stage1.png", SPRITE_ID::BACKGROUND_1_SPRITE);
+	sprite.Load("stageres/stage2.png", SPRITE_ID::BACKGROUND_2_SPRITE);
+	sprite.Load("stageres/stage3.png", SPRITE_ID::BACKGROUND_3_SPRITE);
+	sprite.Load("stageres/stage4.png", SPRITE_ID::BACKGROUND_4_SPRITE);
+	sprite.Load("stageres/stage5.png", SPRITE_ID::BACKGROUND_5_SPRITE);
+	sprite.Load("stageres/stage6.png", SPRITE_ID::BACKGROUND_6_SPRITE);
+	sprite.Load("stageres/stage7.png", SPRITE_ID::BACKGROUND_7_SPRITE);
+	sprite.Load("stageres/stage8.png", SPRITE_ID::BACKGROUND_8_SPRITE);
+	sprite.Load("stageres/stage_low.png", SPRITE_ID::FENCE_SPRITE);
 	sprite.Load("wind.png", SPRITE_ID::WIND_SPRITE);
 	sprite.Load("gamestartText.png", SPRITE_ID::GAME_START_TEXT_SPRITE);
 	sprite.Load("pauseText.png", SPRITE_ID::PAUSE_TEXT_SPRITE);
 	sprite.Load("backgameplay.png", SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE);
-	sprite.Load("ceiling.png", SPRITE_ID::CEILING_SPRITE);
+	sprite.Load("stageres/stage_high.png", SPRITE_ID::CEILING_SPRITE);
 	sprite.Load("pbody.png", SPRITE_ID::PBODY_SPRITE);
 	sprite.Load("orochi_neck2.png", SPRITE_ID::OROCHI_NECK_SPRITE);
 	sprite.Load("orochi2.png", SPRITE_ID::OROCHI_HEAD_SPRITE);
@@ -57,6 +64,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE);
 	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE);
 	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);
+	sprite.Load("chain_1.png", SPRITE_ID::NECK_CHAIN1_SPRITE);
+	sprite.Load("chain_2.png", SPRITE_ID::NECK_CHAIN2_SPRITE);
 	
 	sprite.Load("effect/playereffect/henshin.png", SPRITE_ID::METAMOR_EFFECT_SPRITE, 10, Point(10, 1), Point(240, 240));
 	sprite.Load("effect/playereffect/biteeffect.png", SPRITE_ID::BITE_EFFECT_SPRITE, 5, Point(5, 1), Point(120, 120));

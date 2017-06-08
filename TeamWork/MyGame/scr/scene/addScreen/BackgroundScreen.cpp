@@ -22,16 +22,24 @@ BackgroundScreen::BackgroundScreen(World * world) :world_(world),timeCount_(0)
 		cPos.x += 180;
 		cPos.y += 100;
 	}
+	BGList_[Stage::Stage1] = SPRITE_ID::BACKGROUND_1_SPRITE;
+	BGList_[Stage::Stage2] = SPRITE_ID::BACKGROUND_2_SPRITE;
+	BGList_[Stage::Stage3] = SPRITE_ID::BACKGROUND_3_SPRITE;
+	BGList_[Stage::Stage4] = SPRITE_ID::BACKGROUND_4_SPRITE;
+	BGList_[Stage::Stage5] = SPRITE_ID::BACKGROUND_5_SPRITE;
+	BGList_[Stage::Stage6] = SPRITE_ID::BACKGROUND_6_SPRITE;
+	BGList_[Stage::Stage7] = SPRITE_ID::BACKGROUND_7_SPRITE;
+	BGList_[Stage::Stage8] = SPRITE_ID::BACKGROUND_8_SPRITE;
 }
 
-void BackgroundScreen::Init()
+void BackgroundScreen::Init(Stage currentStage)
 {
 	timeCount_ = 0;
 	Vector2 pPos = world_->GetKeepDatas().playerPos_;
 	//characters_.push_back(new BackgroundPill(world_ , Vector2(pPos.x+2000, 500)));
 	//characters_.push_back(new BackgroundPill(world_,Vector2(pPos.x+2000, 200)));
 	//characters_.push_back(new BackgroundPill(world_,Vector2(pPos.x+2000,700)));
-
+	currentStage_ = currentStage;
 }
 
 void BackgroundScreen::Update()
@@ -64,18 +72,22 @@ void BackgroundScreen::Update()
 void BackgroundScreen::Draw() const
 {
 	Vector2 camPos(world_->GetInv().Translation().x/2,0);
-	camPos.x = (int)camPos.x % (int)Sprite::GetInstance().GetSize(SPRITE_ID::BACKGROUND_SPRITE).x;
+	camPos.x = (int)camPos.x % (int)Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x;
 	float myds=world_->GetKeepDatas().changeLaneLerpPos_;
 	Vector2 addpos=Vector2::Lerp(Vector2::Zero,Vector2(0,30),myds) *world_->GetKeepDatas().nextLane_;
-	Vector2 bgPos = Vector2(0,Sprite::GetInstance().GetSize(SPRITE_ID::BACKGROUND_SPRITE).y-WINDOW_HEIGHT) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	Vector2 bgPos = Vector2(0,Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).y-WINDOW_HEIGHT) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
 	bgPos += (camPos);
-	Vector2 BGSize = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::BACKGROUND_SPRITE).x, 0);
-	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, bgPos- BGSize);
-	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, bgPos);
-	Sprite::GetInstance().Draw(SPRITE_ID::BACKGROUND_SPRITE, BGSize+bgPos);
+	Vector2 BGSize = Vector2(Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x, 0);
+	Sprite::GetInstance().Draw(BGList_.at(currentStage_), bgPos- BGSize);
+	Sprite::GetInstance().Draw(BGList_.at(currentStage_), bgPos);
+	Sprite::GetInstance().Draw(BGList_.at(currentStage_), BGSize+bgPos);
 
-	//Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
-	//Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
+	Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	fencePos += (camPos)+Vector2(0.f, 60.f);
+	Vector2 fenceSize = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).x, 0);
+	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos- fenceSize);
+	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
+	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos+ fenceSize);
 	
 	Vector2 ceilPos = Vector2::Zero - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_] +Sprite::GetInstance().GetSize(SPRITE_ID::CEILING_SPRITE).y- defDrawPointYAdd[1]);
 	Sprite::GetInstance().Draw(SPRITE_ID::CEILING_SPRITE, ceilPos);

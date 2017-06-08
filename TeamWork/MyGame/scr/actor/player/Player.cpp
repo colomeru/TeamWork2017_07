@@ -10,6 +10,7 @@
 #include"Player_Sword.h"
 #include"../Effects/PlayerEffect/PlayerMetamorEffect.h"
 #include"../Effects/PlayerEffect/PlayerBiteEffect.h"
+#include"PlayerNeckDraw.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -196,6 +197,12 @@ void Player::Draw() const
 			Vector2 p3 = GetDrawPosVect(p.p3);
 			DrawRectModiGraph(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 0, 0, 41.0f, 76.0f * correctionLens[i], Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
 		}
+	}
+	for (int i = 0; i < pHeads_.size();i++) {
+		if (i == currentHead_)continue;
+		if (pHeadDead_[i])continue;
+
+		PlayerNeckDraw().Draw(GetDrawPosVect(pHeadPoses_[i]), pHeads_[i]->GetDrawPos());
 	}
 	//auto p = drawPoints[0];
 	//DrawRectModiGraph(p.p0.x, p.p0.y, p.p1.x, p.p1.y, p.p2.x, p.p2.y, p.p3.x, p.p3.y, 0, 0, 63, 91 * correctionLens[0], hHead, 1);

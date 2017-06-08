@@ -10,6 +10,7 @@ PlayerMetamorEffect::PlayerMetamorEffect(IWorld * world,const Vector2& position,
 
 void PlayerMetamorEffect::Update()
 {
+	laneNum_ = world_->GetKeepDatas().playerLane_;
 	delay_ -= Time::DeltaTime;
 	if (delay_ >= 0.0f)return;
 	position_ = target_->GetPosition();

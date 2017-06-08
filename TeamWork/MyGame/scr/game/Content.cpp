@@ -59,8 +59,9 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);
 	
 	sprite.Load("effect/playereffect/henshin.png", SPRITE_ID::METAMOR_EFFECT_SPRITE, 10, Point(10, 1), Point(240, 240));
-	sprite.Load("effect/playereffect/biteeffect.png", SPRITE_ID::BITE_EFFECT_SPRITE,5,Point(5,1),Point(120,120));
-
+	sprite.Load("effect/playereffect/biteeffect.png", SPRITE_ID::BITE_EFFECT_SPRITE, 5, Point(5, 1), Point(120, 120));
+	sprite.Load("effect/tapeffect.png", SPRITE_ID::TAP_EFFECT_SPRITE,10,Point(10,1),Point(480,480));
+	
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
 	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);

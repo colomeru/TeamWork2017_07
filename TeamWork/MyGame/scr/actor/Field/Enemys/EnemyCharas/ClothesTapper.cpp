@@ -3,6 +3,7 @@
 #include"../../../../tween/TweenManager.h"
 #include"../../../../math/Easing.h"
 #include"../../../../input/Keyboard.h"
+#include"../../../Effects/EnemyEffect/TapperTapEffect.h"
 
 static const float moveTime = 2.0f;
 //static const float TapTime = 2.0f;
@@ -118,6 +119,7 @@ void ClothesTapper::SetNextTapPos(const Vector2 & pos)
 
 void ClothesTapper::PlayTap()
 {
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<TapperTapEffect>(world_, position_));
 	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::TAPPER_PHEAD_COL);
 }
 
@@ -126,6 +128,7 @@ void ClothesTapper::ToTapMode()
 	updateMode_ = MODE_TAP;
 	timeCount_ = 0.0f;
 
+	PlayTap();
 	anmManager_.ResetAnm();
 }
 
@@ -184,7 +187,7 @@ void ClothesTapper::TapUpdate()
 	anmManager_.Update();
 	//if (timeCount_ > TapTime) {
 	if (anmManager_.IsEndAnimation()) {
-		PlayTap();
+		//PlayTap();
 		ToIdleMode();
 	}
 

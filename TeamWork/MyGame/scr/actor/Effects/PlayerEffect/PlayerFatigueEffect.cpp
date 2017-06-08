@@ -2,7 +2,7 @@
 #include"../../../time/Time.h"
 
 PlayerFatigueEffect::PlayerFatigueEffect(IWorld * world, const Vector2& position, Actor* target, float delay) :
-	Effect(world, SPRITE_ID::FATIGUE_EFFECT_SPRITE,2), target_(target), delay_(delay)
+	Effect(world, SPRITE_ID::FATIGUE_EFFECT_SPRITE), target_(target), delay_(delay)
 {
 	position_ = position+Vector2(100.f,0.f);
 	laneNum_ = world_->GetKeepDatas().playerLane_;

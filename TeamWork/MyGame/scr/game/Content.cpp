@@ -71,7 +71,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("effect/playereffect/biteeffect.png", SPRITE_ID::BITE_EFFECT_SPRITE, 5, Point(5, 1), Point(120, 120));
 	sprite.Load("effect/tapeffect.png", SPRITE_ID::TAP_EFFECT_SPRITE, 10, Point(10, 1), Point(480, 480));
 	sprite.Load("effect/playereffect/sword_effect.png", SPRITE_ID::GET_SWORD_EFFECT_SPRITE, 15, Point(5, 3), Point(240, 240));
-	sprite.Load("effect/playereffect/Splash.png", SPRITE_ID::FATIGUE_EFFECT_SPRITE, 12, Point(5, 3), Point(192, 192));
+	sprite.Load("effect/playereffect/Splash.png", SPRITE_ID::FATIGUE_EFFECT_SPRITE, 5, Point(5, 1), Point(184, 180));
 	sprite.Load("effect/playereffect/swordeffect.png", SPRITE_ID::SWORD_ATTACK_EFFECT_SPRITE,10,Point(5,2),Point(120,120));
 	
 	//非結合腕アニメーションリソース

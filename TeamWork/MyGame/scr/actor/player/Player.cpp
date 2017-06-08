@@ -466,6 +466,7 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radiu
 	mRot_spd.clear();
 	fPos_.clear();
 	multiplePos.clear();
+	drawPoints.clear();
 
 	int s = len / oneLength;
 	correctionLens.clear();
@@ -1295,6 +1296,8 @@ void Player::BiteUpdate()
 			//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
 			pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
 			//changeHead();
+			//ここやばいかも？
+			PHeadChanger();
 		}
 		slipCount_ = max(slipCount_, 0.f);
 		
@@ -1340,9 +1343,8 @@ void Player::SlipUpdate()
 		slipCount_ = defSlipCount;
 
 		UpdateMultiplePos();
-
 		DeformationDraw();
-
+		
 }
 
 void Player::ResistUpdate()

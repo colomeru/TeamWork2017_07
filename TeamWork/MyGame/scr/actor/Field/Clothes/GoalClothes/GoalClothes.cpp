@@ -1,6 +1,7 @@
 #include "GoalClothes.h"
 #include "../MyGame/scr/graphic/Sprite.h"
 #include "../MyGame/scr/actor/UI/GoalUI.h"
+#include "../../../player/Player_Head.h"
 
 GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)

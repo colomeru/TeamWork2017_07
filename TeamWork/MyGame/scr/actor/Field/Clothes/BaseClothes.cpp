@@ -1,4 +1,5 @@
 #include "BaseClothes.h"
+#include "../../player/Player.h"
 #include "../MyGame/scr/game/Random.h"
 #include "../ClothesPin.h"
 #include "../MyGame/scr/game/Random.h"
@@ -13,15 +14,7 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(200, 200.f);
-	//parameter_.mat
-	//	= Matrix::CreateScale(Vector3::One)
-	//	* Matrix::CreateRotationZ(0.0f)
-	//	* Matrix::CreateTranslation(Vector3(0, 0, 0));
-	//parameter_.ClothSegmentPoints_.push_back(Vector2(-100.f, 100.f));
-	//parameter_.ClothSegmentPoints_.push_back(Vector2(	0.f, 100.f));
-	//parameter_.ClothSegmentPoints_.push_back(Vector2( 100.f, 100.f));
-
+	parameter_.size = Vector2(100.0f, 200.0f);
 	laneNum_ = laneNum;
 
 	position_ = pos;
@@ -78,8 +71,6 @@ void BaseClothes::Draw() const
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);
 		auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-		//RECT rect = { 0, 0, Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_SPRITE).x, Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_SPRITE).y / 1.5f };
-		//Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, rect, crcOrigin, 1.0f, Vector2::One, angle_, true, false);
 		DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
 		DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
 		DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
@@ -89,10 +80,23 @@ void BaseClothes::Draw() const
 		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
 
-	auto drawP = GetDrawPosVect(intersectPos_);
-	if (isHit_) {
-		DrawCircle(drawP.x, drawP.y, 32, GetColor(255, 0, 0));
-	}
+	auto is = Matrix::CreateRotationZ(angle_);
+	auto pos = drawPos_;
+	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
+
+	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
+	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
+	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
+	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
+	//ç∂è„,âEè„,ç∂â∫,âEâ∫
+	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
+	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
+	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
+	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
+	//DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 0, 0));
+	//DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 0, 0));
+	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 0, 0));
+	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 0, 0));
 }
 
 void BaseClothes::OnUpdate()
@@ -105,11 +109,13 @@ void BaseClothes::GraphicPattern()
 	switch (rand)
 	{
 	case 0: {
-		pattern_ = ClothesPattern::Orange;
+		pattern_ = BaseDrawPattern::Orange;
+		spriteId_ = SPRITE_ID::BASE_CLOTHES_SPRITE;
 		break;
 	}
 	case 1: {
-		pattern_ = ClothesPattern::SkyBlue;
+		pattern_ = BaseDrawPattern::SkyBlue;
+		spriteId_ = SPRITE_ID::BASE_CLOTHES_02_SPRITE;
 		break;
 	}
 	}
@@ -119,14 +125,14 @@ void BaseClothes::PatternDraw() const
 {
 	switch (pattern_)
 	{
-	case ClothesPattern::Orange: {
-		Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_SPRITE) / 2;
-		Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	case BaseDrawPattern::Orange: {
+		Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
+		Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 		break;
 	}
-	case ClothesPattern::SkyBlue: {
-		Vector2 crcOrigin2 = Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_02_SPRITE) / 2;
-		Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_02_SPRITE, drawPos_, crcOrigin2, spriteAlpha_, Vector2::One, angle_);
+	case BaseDrawPattern::SkyBlue: {
+		Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
+		Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 		break;
 	}
 	}

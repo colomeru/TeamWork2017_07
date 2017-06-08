@@ -3,6 +3,7 @@
 #include "../MyGame/scr/input/Keyboard.h"
 #include "../MyGame/scr/game/Random.h"
 #include "../ClothesPin.h"
+#include "../../player/Player.h"
 
 TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)

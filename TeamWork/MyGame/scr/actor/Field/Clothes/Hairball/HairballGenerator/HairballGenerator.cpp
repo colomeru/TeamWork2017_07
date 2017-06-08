@@ -34,8 +34,10 @@ void HairballGenerator::Update()
 {
 	if (player_ == nullptr)return;
 
-	if (player_->GetLaneNum() == laneNum_)
-		position_ = Vector2(player_->GetPosition().x + WINDOW_WIDTH, player_->GetCurrentPHeadPosition().y);
+	if (player_->GetLaneNum() == laneNum_) {
+		int rand = Random::GetInstance().Range(-2, 3);
+		position_ = Vector2(player_->GetPosition().x + WINDOW_WIDTH, player_->GetCurrentPHeadPosition().y - rand * 100); 
+	}
 	else
 		position_.x = player_->GetPosition().x + WINDOW_WIDTH;
 

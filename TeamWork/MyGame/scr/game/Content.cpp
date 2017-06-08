@@ -21,11 +21,11 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("snake.png", SPRITE_ID::SNAKE_SPRITE);
 	sprite.Load("clip.png", SPRITE_ID::PLAYER_HEAD_SPRITE);
 	sprite.Load("forochi2.png", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
-	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE);
+	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE, 6, Point(3, 2), Point(200, 200));	
 	sprite.Load("testClothes.bmp", SPRITE_ID::TEST_CLOTHES_SPRITE);
 	sprite.Load("goalUI.bmp", SPRITE_ID::GOAL_UI_SPRITE);
 	sprite.Load("hanger.png", SPRITE_ID::HANGER_SPRITE);
-	sprite.Load("fluffyClothes.png", SPRITE_ID::FLUFFY_SPRITE);
+	sprite.Load("fluffyClothes.png", SPRITE_ID::FLUFFY_SPRITE, 6, Point(3, 2), Point(200, 200));
 	sprite.Load("gumClothes.png", SPRITE_ID::GUM_SPRITE);
 	sprite.Load("hairball.png", SPRITE_ID::HAIRBALL_SPRITE);
 	sprite.Load("gameoverText.png", SPRITE_ID::GAMEOVER_TEXT_SPRITE);
@@ -61,8 +61,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("blackscreen.png", SPRITE_ID::BLACK_SCREEN_SPRITE);
 	sprite.Load("goal.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
 	sprite.Load("testGoalClothes.png", SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE);
-	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE);
-	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE);
+	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE, 6, Point(3, 2), Point(150, 300));	
+	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE, 6, Point(3, 2), Point(200, 200));	
 	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);
 	sprite.Load("chain_1.png", SPRITE_ID::NECK_CHAIN1_SPRITE);
 	sprite.Load("chain_2.png", SPRITE_ID::NECK_CHAIN2_SPRITE);

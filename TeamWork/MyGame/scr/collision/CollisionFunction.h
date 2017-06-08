@@ -26,6 +26,8 @@ public:
 	CollisionParameter IsHit_Tapper_PSword(const Actor& sprite1, const Actor& sprite2);
 	// スプライトの当たり判定（毛玉（円） vs ２次元のプレイヤーの剣（線分））
 	CollisionParameter IsHit_Hairball_PSword(const Actor& sprite1, const Actor& sprite2);
+	// スプライトの当たり判定（鳥の糞（円）vs 服（OBB））
+	CollisionParameter IsHit_Droping_Clothes(const Actor& sprite1, const Actor& sprite2);
 	// スプライトの当たり判定（２次元の線分 vs 線分）
 	CollisionParameter IsHit_Segment_Segment(const Actor& sprite1, const Actor& sprite2);
 	// スプライトの当たり判定（２次元の円 vs 円）

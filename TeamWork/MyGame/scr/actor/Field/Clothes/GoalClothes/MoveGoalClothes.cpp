@@ -1,5 +1,6 @@
 #include "MoveGoalClothes.h"
 #include "../MyGame/scr/actor/UI/GoalUI.h"
+#include "../../../player/Player_Head.h"
 
 MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)

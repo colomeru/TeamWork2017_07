@@ -10,7 +10,7 @@ GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 
 	clothes_ID = CLOTHES_ID::GUM_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(200, 200.f);
+	parameter_.size = Vector2(100.0f, 200.0f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)

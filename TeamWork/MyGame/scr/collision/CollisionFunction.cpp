@@ -155,6 +155,34 @@ CollisionParameter CollisionFunction::IsHit_Hairball_PSword(const Actor & sprite
 
 	return CollisionParameter(COL_ID::PSWORD_HAIRBALL_COL, isHitCheck, segPoint);
 }
+
+CollisionParameter CollisionFunction::IsHit_Droping_Clothes(const Actor & sprite1, const Actor & sprite2)
+{
+	Circle crc;
+	Vector2 sp1Translation = sprite1.GetPosition();
+	MyCol::CreateCircle(&crc, sp1Translation, sprite1.GetParameter().radius);
+
+	OBB obb;
+	Vector2 size = sprite2.GetParameter().size;
+	Vector2 sp2Translation = sprite2.GetPosition() + Vector2(0, size.y / 8);
+
+	if (sp1Translation.y < sp2Translation.y)
+		return CollisionParameter(COL_ID::DROP_CLOTHES_COL, false);
+
+	MyCol::CreateOBB(&obb, Vector2::Zero, Matrix::CreateRotationZ(sprite2.GetAngle()), Vector2(size.x / 8.0f, size.y / 4.0f));
+
+	Vector2 segPoint;
+	std::vector<Vector2> points = MyCol::GetOBBPoints(sprite2);
+	if (MyCol::Col_OBB_Circle(obb, crc, points, segPoint)) {
+		auto clothes = static_cast<Clothes*>(const_cast<Actor*>(&sprite2));
+		if (!clothes->GetIsWind()) {
+			return CollisionParameter(COL_ID::DROP_CLOTHES_COL, true, segPoint);
+		}
+	}
+
+	return CollisionParameter(COL_ID::DROP_CLOTHES_COL, false);
+}
+
 CollisionParameter CollisionFunction::IsHit_Tapper_PSword(const Actor & sprite1, const Actor & sprite2)
 {
 	Segment seg1;

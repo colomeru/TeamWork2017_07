@@ -3,7 +3,7 @@
 #include "../MyGame/scr/stageGenerator/StageGeneratorManager.h"
 
 //•‚Ì‰æ‘œ‚Ìƒpƒ^[ƒ“
-enum ClothesPattern
+enum BaseDrawPattern
 {
 	Orange,
 	SkyBlue,
@@ -29,5 +29,5 @@ private:
 
 private:
 	StageGenerateManager* stageManager_;
-	ClothesPattern pattern_;
+	BaseDrawPattern pattern_;
 };

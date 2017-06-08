@@ -10,6 +10,7 @@
 #include"Player_Sword.h"
 #include"../Effects/PlayerEffect/PlayerMetamorEffect.h"
 #include"../Effects/PlayerEffect/PlayerBiteEffect.h"
+#include"../Effects/PlayerEffect/GetSwordEffect.h"
 #include"PlayerNeckDraw.h"
 
 static const float headShotPower = 0.3f;
@@ -1237,6 +1238,8 @@ void Player::BiteUpdate()
 	if (isUseKey_) {
 
 		if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+			if(!pSword_->GetUseSword())world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_,pSword_->GetPosition(),pSword_.get()));
+			
 			pSword_->SetUseSword(true);
 		}
 		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {

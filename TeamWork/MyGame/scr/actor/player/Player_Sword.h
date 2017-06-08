@@ -24,7 +24,7 @@ public:
 		swordEndPos_ = position_+(vel*Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).y);
 		//swordStartPos_ = (position_ + swordEndPos_) / 2;
 		
-		swordStartPos_= position_ + (swordEndPos_ - position_).Normalize()*32.f;
+		swordStartPos_= position_ + (swordEndPos_ - position_).Normalize()*128.f;
 		
 	}
 	virtual bool CamMoveUpdate() {

@@ -1002,10 +1002,11 @@ void Player::curPHeadSlip(bool isSlip) {
 }
 
 void Player::PHeadChanger(int rot) {
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
 
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition()));
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f));
 
 	//StartPendulum();
 }

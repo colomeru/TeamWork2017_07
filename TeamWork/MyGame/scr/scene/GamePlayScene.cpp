@@ -121,9 +121,9 @@ void GamePlayScene::Initialize()
 	stageGeneratorManager.SetStage(currentStage_);
 	stageLen_ = stageGeneratorManager.GetStageSize(currentStage_).x;
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
-	enemGenerator_ = std::make_shared<EnemyGenerator>(world_.get());
+	enemGenerator_ = std::make_shared<EnemyGenerator>(world_.get(),currentStage_);
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, enemGenerator_);
-	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(-800.f,2000.f)));
+	//world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(-800.f,2000.f)));
 	
 	//world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get(), 1, Vector2(0, 0)));
 

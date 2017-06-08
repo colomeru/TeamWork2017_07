@@ -1294,7 +1294,7 @@ void Player::BiteUpdate()
 			isSlipped_ = true;
 			//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
 			pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
-			changeHead();
+			//changeHead();
 		}
 		slipCount_ = max(slipCount_, 0.f);
 		

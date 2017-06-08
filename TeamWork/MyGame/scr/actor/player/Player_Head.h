@@ -94,6 +94,7 @@ public:
 	Player* GetPlayerPointer() const{
 		return player_;
 	}
+	void CreateFatigueEffect();
 private:
 	//Õ“Ë‚µ‚Ä‚¢‚é‚©
 	bool isHit_;
@@ -111,4 +112,6 @@ private:
 	Vector2 posAddVect_;
 
 	int fatigueCheckColor_;
+
+	bool isAlreadyCreateSplash_;
 };

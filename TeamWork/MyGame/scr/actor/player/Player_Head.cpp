@@ -5,10 +5,11 @@
 #include "../../graphic/Model.h"
 #include"../Field/Clothes/Clothes.h"
 #include"../Field/ClothesPin.h"
+#include"../Effects/PlayerEffect/PlayerFatigueEffect.h"
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
 	:Actor(world, targetP)
-	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false)
+	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false), isAlreadyCreateSplash_(false)
 {
 	spriteId_ = SPRITE_ID::OROCHI_HEAD_SPRITE;
 
@@ -45,7 +46,11 @@ void Player_Head::Update()
 	else {
 		fatigueCheckColor_ -= 2;
 		//fatigueCheckColor_ = max(fatigueCheckColor_, 0);
+		isAlreadyCreateSplash_ = false;
 	}
+
+	if (player_->GetCurHead()==myNumber_&&fatigueCheckColor_ >= 200)CreateFatigueEffect();
+
 	fatigueCheckColor_ = MathHelper::Clamp(fatigueCheckColor_, 0,255);
 	//Vector2 posAddP = position_;
 	
@@ -219,4 +224,13 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 
 void Player_Head::OnMessage(EventMessage message, void * param)
 {
+}
+
+void Player_Head::CreateFatigueEffect()
+{
+	if (isAlreadyCreateSplash_)return;
+
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFatigueEffect>(world_,position_,this));
+
+	isAlreadyCreateSplash_ = true;
 }

@@ -14,6 +14,29 @@ static const int defWindTime[8]{
 800,//ステージ7
 800	//ステージ8
 };
+//叩きを生成するかどうか
+static const bool isSpawnTapper[8]{
+false,//1
+true,//2
+false,//3
+false,//4
+false,//5
+false,//6
+false,//7
+false//8
+};
+//鳥を生成するまでの時間
+static const int spawnBirfdTime[8]{
+	10,//ステージ1
+	300,//ステージ2
+	300,//ステージ3
+	300,//ステージ4
+	300,//ステージ5
+	300,//ステージ6
+	300,//ステージ7
+	300	//ステージ8
+};
+
 
 //static const void setWindTime(Stage name) {
 //	switch (name)

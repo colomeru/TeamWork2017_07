@@ -25,18 +25,17 @@ CollisionParameter CollisionFunction::IsHit_OBB_OBB(const Actor & sprite1, const
 	return CollisionParameter(COL_ID::BOX_BOX_COL, MyCol::TestOBBOBB(obb1, obb2), sprite1.GetPosition());
 }
 
-CollisionParameter CollisionFunction::IsHit_PHead_Clothes(const Actor & sprite1, const Actor & sprite2)
+CollisionParameter CollisionFunction::IsHit_PHead_Goal(const Actor & sprite1, const Actor & sprite2)
 {
 	OBB obb1;
 	OBB obb2;
 	Vector2 sp1Translation = sprite1.GetPosition();
 	Vector2 sp2Translation = sprite2.GetPosition();
-	auto sp2CY = MathHelper::Abs(MathHelper::Cos(sprite2.GetAngle())) * sprite2.GetParameter().size.y / 2.0f;
 
 	MyCol::CreateOBB(&obb1, sp1Translation, Matrix::CreateRotationZ(sprite1.GetAngle()), Vector2(sprite1.GetParameter().size.x / 2.0f, sprite1.GetParameter().size.y / 2.0f));
-	MyCol::CreateOBB(&obb2, sp2Translation + Vector2(0, sp2CY), Matrix::CreateRotationZ(sprite2.GetAngle()), Vector2(sprite2.GetParameter().size.x / 3.0f, sprite2.GetParameter().size.y / 8.0f));
+	MyCol::CreateOBB(&obb2, sp2Translation, Matrix::CreateRotationZ(sprite2.GetAngle()), Vector2(sprite2.GetParameter().size.x / 2.0f, sprite2.GetParameter().size.y / 2.0f));
 
-	return CollisionParameter(COL_ID::BOX_BOX_COL, MyCol::TestOBBOBB(obb1, obb2), sprite1.GetPosition());
+	return CollisionParameter(COL_ID::PHEAD_GOAL_COL, MyCol::TestOBBOBB(obb1, obb2), sprite1.GetPosition());
 }
 
 CollisionParameter CollisionFunction::IsHit_PHead_Hanger(const Actor & sprite1, const Actor & sprite2)
@@ -164,7 +163,7 @@ CollisionParameter CollisionFunction::IsHit_Droping_Clothes(const Actor & sprite
 
 	OBB obb;
 	Vector2 size = sprite2.GetParameter().size;
-	Vector2 sp2Translation = sprite2.GetPosition() + Vector2(0, size.y / 8);
+	Vector2 sp2Translation = sprite2.GetPosition() + Vector2(0, size.y / 12);
 
 	if (sp1Translation.y < sp2Translation.y)
 		return CollisionParameter(COL_ID::DROP_CLOTHES_COL, false);

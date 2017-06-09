@@ -12,8 +12,8 @@ public:
 
 	// スプライトの当たり判定（２次元のOBB vs OBB）
 	CollisionParameter IsHit_OBB_OBB(const Actor& sprite1, const Actor& sprite2);
-	// スプライトの当たり判定（２次元のPlayerの頭 vs 服）
-	CollisionParameter IsHit_PHead_Clothes(const Actor& sprite1, const Actor& sprite2);
+	// スプライトの当たり判定（２次元のPlayerの頭 vs ゴール）
+	CollisionParameter IsHit_PHead_Goal(const Actor& sprite1, const Actor& sprite2);
 	// スプライトの当たり判定（２次元のPlayerの頭 vs ハンガー）
 	CollisionParameter IsHit_PHead_Hanger(const Actor& sprite1, const Actor& sprite2);
 	// スプライトの当たり判定（２次元のプレイヤーの頭（円） vs 服（カプセル３つ））

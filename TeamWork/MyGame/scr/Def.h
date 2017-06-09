@@ -33,7 +33,7 @@ static const float BGMVOLUME = 0.8f;
 /// デフォルトのＳＥボリューム
 ///</summary>
 static const float SEVOLUME = 0.8f;
-#define MOVIE_FILE"気龍_PV.avi"
+#define MOVIE_FILE "気龍_PV.avi"
 #define DEMO_MOVIE "気龍_PV"
 //デバッグモードなら1,リリースモードなら2
 #ifndef NDEBUG

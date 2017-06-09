@@ -17,9 +17,9 @@ static const int defWindTime[8]{
 //叩きを生成するかどうか
 static const bool isSpawnTapper[8]{
 false,//1
-true,//2
+false,//2
 false,//3
-false,//4
+true,//4
 false,//5
 false,//6
 false,//7
@@ -27,7 +27,7 @@ false//8
 };
 //鳥を生成するまでの時間
 static const int spawnBirfdTime[8]{
-	10,//ステージ1
+	300,//ステージ1
 	300,//ステージ2
 	300,//ステージ3
 	300,//ステージ4
@@ -59,4 +59,4 @@ static const float startAddTime = 0.005f;
 //画面内の服が揺れる確率（％）
 static const int frequencyWind = 30;
 //毛玉が飛んでくる確率（％）
-static const int frequencyHairBall = 30;
+static const int frequencyHairBall = 10;

@@ -23,6 +23,7 @@ void SceneManager::Initialize()
 	mScenes.clear();
 	TweenManager::GetInstance().Initialize();
 	timer = 0;
+	FadeTrigger = false;
 }
 
 // XV

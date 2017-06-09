@@ -55,6 +55,7 @@ private:
 public:
 	static const int MaxStageCount;
 	float timer;
+	bool FadeTrigger;
 
 private:
 	// ƒV[ƒ“

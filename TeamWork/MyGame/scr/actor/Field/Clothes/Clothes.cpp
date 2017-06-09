@@ -13,10 +13,11 @@
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	:Actor(world)
 	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
-	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.8f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
-	,count_(0),clothesState_(ClothesState::BEGIN_WIND),cuttingState_(ClothesCuttingState::Normal),weight_(weight),drawFrame_(0),is_Droping_(false)
-	, clothesFeces_(nullptr)
+	,fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f),count_(0)
+	,clothesState_(ClothesState::WINDLESS),cuttingState_(ClothesCuttingState::Normal),weight_(weight),drawFrame_(0)
+	,is_Droping_(false),clothesFeces_(nullptr)
 {
+	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
 	dNumber_ = 0.0f;
 
 	localPoints.clear();
@@ -108,14 +109,17 @@ void Clothes::OnMessage(EventMessage message, void * param)
 		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
 		if (rand > frequencyWind) break;
-		rot_spd_ -= weight_;
-		basePosition_ = position_;
-		float dRand = Random::GetInstance().Range(0.0f, 2.0f);
-		TweenManager::GetInstance().Delay(dRand, [&]() { 
-			isPendulum_ = true; }, &dNumber_);
-		//rot_spd_ -= weight_;
-		//basePosition_ = position_;
-		//isPendulum_ = true;
+		float dRand = Random::GetInstance().Range(0.0f, 1.5f);
+		TweenManager::GetInstance().Delay(
+			dRand,
+			[&]() {
+			/*isPendulum_ = true;*/
+			rot_spd_ = 2.2f;
+			rot_spd_ -= weight_;
+			basePosition_ = position_;
+			clothesState_ = ClothesState::BEGIN_WIND; },
+			&dNumber_
+			);
 		break;
 	}
 	}
@@ -166,6 +170,8 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	auto angle = rot_ - 90;
 	angle_ = angle;
 	
+	if (clothesState_ == ClothesState::WINDLESS) return;
+
 	count_++;
 
 	switch (count_)
@@ -189,27 +195,30 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 void Clothes::ShakesClothes()
 {
-	if (isPendulum_ && isDraw_) {
+	if (isDraw_) {
 		Pendulum(fulcrum_, length_);
 
 		switch (clothesState_)
 		{
-		case ClothesState::BEGIN_STRONG_WIND:
-			rot_spd_ = 2.5f;
+		case ClothesState::BEGIN_STRONG_WIND: {
+			rot_spd_ = 4.0f;
 			rot_spd_ -= weight_;
 			isWind_ = true;
 			TweenManager::GetInstance().Delay(15.0f, [=]() {isWind_ = false; });
 			clothesState_ = ClothesState::STRONG_WIND;
 			WindSwing();
 			break;
-		case ClothesState::ATTENUATE_WIND:
+		}
+		case ClothesState::ATTENUATE_WIND: {
 			isFriction_ = true;
 			break;
-		case ClothesState::POSSIBLE_BITE:
+		}
+		case ClothesState::POSSIBLE_BITE: {
 			isWind_ = false;
 			break;
-		case ClothesState::END_WIND:
-			rot_spd_ = 0.8f;
+		}
+		case ClothesState::END_WIND: {
+			rot_spd_ = 0.08f;
 			rot_ = 90.0f;
 			friction_ = 1.0f;
 			angle_ = 0;
@@ -217,9 +226,10 @@ void Clothes::ShakesClothes()
 			isFriction_ = false;
 			count_ = 0;
 			isPendulum_ = false;
-			clothesState_ = ClothesState::BEGIN_WIND;
+			clothesState_ = ClothesState::WINDLESS;
 			world_->sendMessage(EventMessage::END_WIND);
 			break;
+		}
 		default:
 			break;
 		}
@@ -272,10 +282,14 @@ void Clothes::SetLocalPoints()
 		break;
 	}
 	case ClothesCuttingState::RightUpSlant: {
+		clothesFeces_ = nullptr;
+		is_Droping_ = false;
 		SetRightUpSlant();
 		break;
 	}
 	case ClothesCuttingState::LeftUpSlant: {
+		clothesFeces_ = nullptr;
+		is_Droping_ = false;
 		SetLeftUpSlant();
 		break;
 	}

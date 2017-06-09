@@ -10,6 +10,7 @@ class Clothes : public Actor
 protected:
 	enum ClothesState
 	{
+		WINDLESS,				//•—‚ª‚¢‚Ä‚¢‚È‚¢ó‘Ô
 		BEGIN_WIND,				//•—‚Ì‚«Žn‚ß
 		BEGIN_STRONG_WIND,		//‹­‚¢•—‚Ì‚«Žn‚ß
 		STRONG_WIND,			//‹­‚¢•—‚ª‚¢‚Ä‚¢‚é

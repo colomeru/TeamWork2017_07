@@ -7,7 +7,7 @@
 //フレーム揺れを考慮しない場合の1フレームあたりの時間(アニメーション終了時間の取得用)
 static const float defFrameTime = 0.016f;
 
-CharacterAnmManager::CharacterAnmManager():anmChangeFrame_(5), timeCount_(0.f), anmEnd_(false), reverse_(1.0f)
+CharacterAnmManager::CharacterAnmManager():anmChangeFrame_(5), timeCount_(0.f), anmEnd_(false), reverse_(1.0f), isRepeat_(false)
 {
 }
 
@@ -34,6 +34,10 @@ void CharacterAnmManager::ReverseAnm()
 
 void CharacterAnmManager::Update()
 {
+	if (isRepeat_) {
+		timeCount_ += Time::DeltaTime;
+		return;
+	}
 	timeCount_ += reverse_*Time::DeltaTime;
 
 	if (((int)roundf((timeCount_*60.f) / anmChangeFrame_)) >= anmID_.size()-1||timeCount_<0.0f) {
@@ -45,6 +49,11 @@ void CharacterAnmManager::Update()
 
 void CharacterAnmManager::Draw(const Vector2& position,const Vector2& origin,const Vector2& size,float alpha) const
 {
+	if (isRepeat_) {
+		int targetFrame = ((int)roundf((timeCount_*60.f) / anmChangeFrame_)) % anmID_.size();
+		Sprite::GetInstance().Draw(anmID_.at(targetFrame), position, origin, alpha, size);
+		return;
+	}
 	int targetFrame = ((int)roundf((timeCount_*60.f) / anmChangeFrame_));// % anmID_.size();
 	//int targetFrame = ((int)roundf((timeCount_*60.f) / anmChangeFrame_));
 	Sprite::GetInstance().Draw(anmID_.at(targetFrame),position,origin,alpha,size);
@@ -67,6 +76,11 @@ float CharacterAnmManager::GetAnmEndTime() const
 bool CharacterAnmManager::IsEndAnimation() const
 {
 	return anmEnd_;
+}
+
+void CharacterAnmManager::SetIsRepeat(bool isrp)
+{
+	isRepeat_ = isrp;
 }
 
 void CharacterAnmManager::SetAnmSpeed(int anmChangeFrame)

@@ -1,9 +1,9 @@
 #pragma once
 #include "../../Actor.h"
 #include "../MyGame/scr/game/ID.h"
-#include "../../player/Player_Head.h"
 #include <array>
 #include <vector>
+#include <map>
 
 class Clothes : public Actor
 {
@@ -23,7 +23,6 @@ protected:
 		Normal,					//通常
 		RightUpSlant,			//右斜め上に向かって切れてる
 		LeftUpSlant,			//左斜め上に向かって切れてる
-		HorizontalSlant			//水平に切れてる
 	};
 
 public:
@@ -44,11 +43,21 @@ public:
 	bool GetIsWind() const {
 		return isWind_;
 	}
+	//支点の取得
 	Vector2 GetFulcrum() const {
 		return fulcrum_;
 	}
+	//当たり判定のポイントの取得
 	std::vector<Vector2> GetCollisionPoints() const {
 		return collisionPoints;
+	}
+	//切断状態の取得
+	ClothesCuttingState GetCuttingState() {
+		return cuttingState_;
+	}
+	//画像のコマ番号の取得
+	int GetDrawFrame() const {
+		return drawFrame_;
 	}
 
 	// 当たり判定処理
@@ -73,16 +82,16 @@ public:
 
 
 private:
+	//切断状態による当たり判定のポイントの変更
 	void SetNormal();
 	void SetRightUpSlant();
 	void SetLeftUpSlant();
-	void SetHorizontalSlant();
+	//服のIDによるスプライトのID設定
+	void SetSpriteID();
 
 protected:
 	//衝突しているか
 	bool isHit_;
-	//テスト
-	bool is_Test_;
 	//服ID
 	CLOTHES_ID clothes_ID;
 	//当たり判定のポイント
@@ -91,10 +100,14 @@ protected:
 	std::vector<Vector3> localPoints;
 	//重さ
 	float weight_;
-
-	//テスト
-	Vector2 intersectPos_;
-
+	//画像のコマ番号
+	int drawFrame_;
+	//糞がついているか
+	bool is_Droping_;
+	//服の状態
+	ClothesState clothesState_;
+	//服の切断状態
+	ClothesCuttingState cuttingState_;
 
 	//振り子関連(服用)
 	//振り子フラグ
@@ -119,8 +132,4 @@ protected:
 	float friction_;
 	//振り子カウント
 	int count_;
-	//服の状態
-	ClothesState clothesState_;
-	//服の切断状態
-	ClothesCuttingState cuttingState_;
 };

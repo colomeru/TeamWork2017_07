@@ -32,6 +32,7 @@ enum {
 	MODE_BITE = 3,
 	MODE_SLIP = 4,
 	MODE_RESIST = 5,
+	MODE_CLEAR = 6
 };
 
 
@@ -114,6 +115,7 @@ public:
 		if (MathHelper::Abs(headChangeTime_) <= 0.01f)headChangeTime_ = 0;
 		else if (MathHelper::Abs(headChangeTime_) > 0)rotTimer = headChangeTime_ * 5;//MathHelper::Abs(defHeadChangeTime/1.f);
 
+		rotTimer+=clearAddRot_;
 		for (int i = 0; i < pHeadPoses_.size(); i++) {
 			Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((i + headAngleSetter - currentHead_) * 45)/*+angle_*/ + ((rotTimer)* 45));
 			Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
@@ -144,30 +146,8 @@ public:
 	bool GetPHeadDead(int pHeadNum)const {
 		return pHeadDead_[pHeadNum];
 	}
-	void CurHeadBite(const Vector2& target) {
-		if (playerMode_ != MODE_SHOOT_END)return;
-
-		playerMode_ = MODE_BITE;
-		pGrav_ = defPGravPow;
-		//stopPos_ = target;
-		//角度を求める
-		//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
-		rot_ = 135;
-		rot_spd_ = -3.0f;
-
-		StartPendulum();
-	}
-	void ResurrectHead() {
-		for (int i = currentHead_; i < pHeads_.size() + currentHead_; i++) {
-			int trgNum = i;
-			if (trgNum>=pHeads_.size()) {
-				trgNum = trgNum - pHeads_.size();
-			}
-			if (!pHeadDead_[trgNum])continue;
-			pHeadDead_[trgNum] = false;
-			break;
-		}
-	}
+	void CurHeadBite(const Vector2& target);
+	void ResurrectHead();
 	void SetOtherClothesID_(CLOTHES_ID cId) {
 		otherClothesID_ = cId;
 	}
@@ -177,6 +157,9 @@ public:
 	}
 	bool GetIsResistMode()const {
 		return playerMode_ == MODE_RESIST;
+	}
+	bool GetIsClearMode()const {
+		return playerMode_ == MODE_CLEAR;
 	}
 	//噛み付き状態にするかをセット、
 	void SetIsBiteMode(bool ismode) {
@@ -239,14 +222,8 @@ public:
 		}
 		return true;
 	}
-	void PHeadChanger(int rot = 0) {
-		PHeadLengthReset();
-		(sign(rot) == 1) ? backChangeHead() : changeHead();
-		//StartPendulum();
-	}
-	void SetStopPos(Vector2 target) {
-		stopPos_ = target;
-	}
+	void PHeadChanger(int rot = 0);
+	void SetStopPos(Vector2 target);
 	Vector2 GetStopPos()const {
 		return stopPos_;
 	}
@@ -264,8 +241,10 @@ public:
 		fPos_.front() = pos;
 	}
 	bool GetIsSwordActive()const;
+	bool GetIsClearBite()const;
+	bool GetIsClearShoot()const;
 private:
-	void MultipleInit(float Length, const Vector2& fPos, float rot);
+	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius);
 	void Multiple();
 	//多重振り子に移動量を加算
 	void UpdateMultiplePos();
@@ -338,6 +317,7 @@ private:
 
 		worldSetMyDatas();
 	}
+	void CreateBiteEffect();
 //プレイヤーの状態に応じた更新
 private:
 	void FallUpdate();
@@ -346,6 +326,7 @@ private:
 	void BiteUpdate();
 	void SlipUpdate();
 	void ResistUpdate();
+	void ClearUpdate();
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
 	using PSwordPtr = std::shared_ptr<Player_Sword>;
@@ -405,6 +386,7 @@ private:
 	float pGrav_;
 
 	float rotTimer;
+	float clearAddRot_;
 
 	float maxChainLength_;
 
@@ -437,6 +419,7 @@ private:
 	//Head回転をロックする(スティックを0に戻す事でリセット)
 	bool isCanNextHeadRot;
 
+	bool isUseKey_;
 	CLOTHES_ID otherClothesID_;
 	LaneChangeType changeType_;
 	//滑る時間の倍数(服毎)

@@ -7,7 +7,15 @@ static int defDropTime = 180;
 Bird::Bird(IWorld * world, int laneNum, Vector2 pos) :
 	Enemys(world, laneNum, pos),dropTimer_(0), timeCount_(0.0f), basePos_(pos)
 {
-
+	anmManager_.Add(SPRITE_ID::CROW_ANM_01_SPRITE);
+	anmManager_.Add(SPRITE_ID::CROW_ANM_02_SPRITE);
+	anmManager_.Add(SPRITE_ID::CROW_ANM_03_SPRITE);
+	anmManager_.Add(SPRITE_ID::CROW_ANM_04_SPRITE);
+	anmManager_.Add(SPRITE_ID::CROW_ANM_05_SPRITE);
+	anmManager_.Add(SPRITE_ID::CROW_ANM_06_SPRITE);
+	anmManager_.Add(SPRITE_ID::CROW_ANM_07_SPRITE);
+	anmManager_.Add(SPRITE_ID::CROW_ANM_08_SPRITE);
+	anmManager_.SetIsRepeat(true);
 }
 
 Bird::~Bird()
@@ -30,12 +38,14 @@ void Bird::Update()
 	if (position_.x <= world_->GetKeepDatas().playerPos_.x-WINDOW_WIDTH|| laneNum_ != world_->GetKeepDatas().playerLane_) {
 		parameter_.isDead = true;
 	}
+	anmManager_.Update();
 }
 
 void Bird::Draw() const
 {
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
-	Sprite::GetInstance().Draw(SPRITE_ID::BIRD_SPRITE, drawPos_, origin, spriteAlpha_, Vector2::One, 0);
+	//Sprite::GetInstance().Draw(SPRITE_ID::BIRD_SPRITE, drawPos_, origin, spriteAlpha_, Vector2::One, 0);
+	anmManager_.Draw(drawPos_, origin,Vector2::One,spriteAlpha_);
 }
 
 void Bird::OnUpdate()

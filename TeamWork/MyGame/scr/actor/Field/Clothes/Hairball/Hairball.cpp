@@ -6,7 +6,7 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
 {
 	clothes_ID = CLOTHES_ID::HAIRBALL;
-	parameter_.ID = ACTOR_ID::ENEMY_ACTOR;
+	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(50, 50.f);
 	parameter_.mat

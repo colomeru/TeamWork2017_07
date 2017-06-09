@@ -158,6 +158,8 @@ private:
 	Actor* targetAct_;
 	Vector2 mPrePos;
 	Vector2 mCurPos;
+
+	float unlockYPos_;
 	// アクター
 	WorldActor	actors_;
 

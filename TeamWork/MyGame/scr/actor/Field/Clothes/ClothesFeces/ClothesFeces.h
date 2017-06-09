@@ -1,0 +1,21 @@
+#pragma once
+#include "../MyGame/scr/actor/Actor.h"
+
+//服に付いた糞
+class ClothesFeces : public Actor, public std::enable_shared_from_this<Actor>
+{
+public:
+	//コンストラクタ
+	ClothesFeces(IWorld* world, int laneNum, Vector2 pos, Actor* clothes);
+	//更新
+	virtual void Update() override;
+	//描画
+	virtual void Draw() const override;
+
+	void ClearThis() {
+		parameter_.isDead = true;
+	}
+private:
+	Vector2 pos_;
+	Vector2 fulcrum_;
+};

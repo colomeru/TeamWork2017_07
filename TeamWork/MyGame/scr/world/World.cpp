@@ -4,7 +4,7 @@
 #include"../Def.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isLockedCamY_(true)
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isLockedCamY_(true), unlockYPos_(0.0f)
 {
 	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
 	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
@@ -26,6 +26,7 @@ void World::Initialize()
 	addNum_ = 0;
 	isChangeFrame_ = false;
 	isLockedCamY_ = true;
+	unlockYPos_ = 0.0f;
 }
 
 // 更新
@@ -35,8 +36,11 @@ void World::Update()
 		inv(targetMat_);
 		
 		if (isLockedCamY_)targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
-		else targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, targetAct_->GetPosition().y, 0));
-		
+		else {
+			unlockYPos_ -= 3.0f;
+			unlockYPos_ = max(unlockYPos_, -WINDOW_HEIGHT);
+			targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, unlockYPos_, 0));
+		}
 
 		//*Matrix::CreateRotationZ(targetAct_->GetAngle());
 	}
@@ -220,4 +224,5 @@ void World::StartModeUpdate()
 	inv(targetMat_);
 	targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
 	actors_.StartModeUpdate();
+	isLockedCamY_ = true;
 }

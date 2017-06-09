@@ -41,6 +41,14 @@ public:
 	//パターン２
 	void Pattern2Update();
 	void Pattern2Draw() const;
+	//"上"が入力されたか
+	bool IsInputUp() const;
+	//"下"が入力されたか
+	bool IsInputDown() const;
+	//"左/A"のいずれかが入力されたか
+	bool IsInputLeft() const;
+	//"上/下/右"のいずれかが入力されたか
+	bool IsInputAny() const;
 	
 	Stage GetGamePlayStage()const;
 private:
@@ -58,7 +66,7 @@ private:
 	Vector2 dir; //移動方向
 	float dis;
 	float disN;
-	float from;
+	Vector2 from;
 	float ease;
 	bool test;
 	const float MoveTime = 0.5f;

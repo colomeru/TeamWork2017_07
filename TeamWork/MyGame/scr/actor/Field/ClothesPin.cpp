@@ -3,6 +3,7 @@
 #include "../MyGame/scr/input/Keyboard.h"
 #include "../../graphic/Sprite.h"
 #include "Clothes\Clothes.h"
+#include "../../Def.h"
 
 ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum)
 	:Actor(world, clothes)
@@ -76,12 +77,12 @@ void ClothesPin::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_ - Vector2(50,50));
+	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE) / 2;
+	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
 
 	if (BuildMode != 1)return;
 
-	DrawFormatString(100, 100, GetColor(255, 255, 255), "pos x:%f y:%f", position_.x, position_.y);
 }
 
 void ClothesPin::OnUpdate()

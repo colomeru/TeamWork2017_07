@@ -1,6 +1,7 @@
 #include "ThinClothes.h"
 #include "../MyGame/scr/game/Random.h"
 #include "../../ClothesPin.h"
+#include "../../../player/Player.h"
 
 ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
@@ -8,7 +9,7 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	clothes_ID = CLOTHES_ID::THIN_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(200, 200.f);
+	parameter_.size = Vector2(100, 300.f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -82,8 +83,10 @@ void ThinClothes::Draw() const
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(204, 204, 204), TRUE);
-	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2 + Vector2(0, 50);
-	Sprite::GetInstance().Draw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2 + Vector2(0, 50);
+	//Sprite::GetInstance().Draw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2;
+	Sprite::GetInstance().SplitDraw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
 	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
@@ -98,8 +101,6 @@ void ThinClothes::Draw() const
 		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
 		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
-
-	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
 }
 
 void ThinClothes::OnUpdate()

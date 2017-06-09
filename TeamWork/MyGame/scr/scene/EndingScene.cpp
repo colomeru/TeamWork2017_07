@@ -12,6 +12,7 @@
 #include "../game//Random.h"
 #include "../scene/MenuScene.h"
 #include "../scene/addScreen/MenuScreen.h"
+#include "../Def.h"
 
 const int resWidth = 30;
 const int correctionHeight = 30;
@@ -37,12 +38,12 @@ void EndingScene::Initialize()
 {
 	isEnd_ = false;
 
-	Camera::GetInstance().SetRange(0.1f, 10000.0f);
-	Camera::GetInstance().SetViewAngle(60.0f);
-	Camera::GetInstance().Up.Set(Vector3::Up);
-	Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
-	Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
-	Camera::GetInstance().Update();
+	//Camera::GetInstance().SetRange(0.1f, 10000.0f);
+	//Camera::GetInstance().SetViewAngle(60.0f);
+	//Camera::GetInstance().Up.Set(Vector3::Up);
+	//Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
+	//Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
+	//Camera::GetInstance().Update();
 
 	//size = 1.0f;
 	//horizontal = 0.0f;
@@ -64,8 +65,7 @@ void EndingScene::Initialize()
 	//particleSize = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE);
 	//circleSize = Sprite::GetInstance().GetSize(SPRITE_ID::CIRCLE_SPRITE);
 
-	//stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
-	//stageManager.SetStage(Stage::Stage1);
+
 
 	//振り子
 	for (int i = 0; i < 8; i++)
@@ -84,7 +84,6 @@ void EndingScene::Initialize()
 	friction = 0.995f;
 	vec = 0;
 	lineRot[0] = -90.0f;
-	//stageLen = stageManager.GetStageSize(Stage::Stage1).x;
 	meterLen = 800.0f;
 	meterPos = Vector2(200.0f, 100.0f);
 
@@ -162,6 +161,20 @@ void EndingScene::Initialize()
 	//}
 	DeformationDraw();
 
+	player_ = std::make_shared<Player>(world_.get());
+	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
+	world_->PushStackActor(player_);
+
+
+	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
+	world_->SetTarget(player_.get());
+
+	stageManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test0"), 60));
+	stageManager.SetStage(Stage::Stage1);
+	stageLen = stageManager.GetStageSize(Stage::Stage1).x;
+
+	meter_ = ProgressMeter(world_.get(), stageLen);
+	meter_.Initialize();
 }
 
 void EndingScene::Update()
@@ -172,9 +185,9 @@ void EndingScene::Update()
 	// 終了
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
 		isEnd_ = true;
-	Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
-	Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
-	Camera::GetInstance().Update();
+	//Camera::GetInstance().Position.Set(Vector3(0.0f, 0.0f, -10.0f));
+	//Camera::GetInstance().Target.Set(Vector3(0.0f, 0.0f, 0.0f));
+	//Camera::GetInstance().Update();
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM4))
@@ -212,53 +225,58 @@ void EndingScene::Update()
 
 	DeformationDraw();
 
+	meter_.Update();
 }
 
 void EndingScene::Draw() const
 {
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "EndingScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-	//DrawFormatString(0, 40, GetColor(255, 255, 255), "座標 %f %f", arrowPos.x, arrowPos.y);
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "X:%f Y:%f", absH, absV);
-	//DrawFormatString(0, 100, GetColor(255, 255, 255), "rot:%f", rot);
-	//DrawFormatString(0, 120, GetColor(255, 255, 255), "rot_spd:%f", rot_spd);
-	DrawFormatString(0, 140, GetColor(255, 255, 255), "friction:%f", friction);
-	DrawFormatString(0, 180, GetColor(255, 255, 255), "vec:%d", vec);
-	DrawFormatString(0, 200, GetColor(255, 255, 255), "spherePos x:%f y:%f", spherePos.x, spherePos.y);
-	for (int i = 0; i < 8; i++)
-	{
-		DrawFormatString(0, 220 + 20 * i, GetColor(255, 255, 255), "neckLen%d:%f", i, neckLen[i]);
-	}
-	DrawFormatString(0, 380, GetColor(255, 255, 255), "r:%f", r);
-	DrawFormatString(0, 400, GetColor(255, 255, 255), "limit:%f", spdLimit);
-	//if (rotDirection && rot < 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "左に加速できます！");
-	//else if (!rotDirection && rot > 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "右に加速できます！");
-	//else DrawFormatString(0, 420, GetColor(255, 255, 255), "加速できません！");
-	DrawFormatString(0, 440, GetColor(255, 255, 255), "dRot:%f", dRot);
-	DrawFormatString(0, 460, GetColor(255, 255, 255), "dRot_spd:%f", dRot_spd);
-	DrawFormatString(0, 480, GetColor(255, 255, 255), "dFriction:%f", dFriction);
-	DrawFormatString(0, 500, GetColor(255, 255, 255), "dSub:%f", dSub);
-	DrawFormatString(0, 520, GetColor(255, 255, 255), "any:%f", any);
-	DrawFormatString(0, 540, GetColor(255, 255, 255), "any1:%f", any1);
-	DrawFormatString(0, 560, GetColor(255, 255, 255), "any2:%f", any2);
-	for (int i = 0; i < 8; i++)
-	{
-		DrawFormatString(0, 580 + 20 * i, GetColor(255, 255, 255), "outPos%d:%f %f", i, outPos[i].x, outPos[i].y);
-	}
-	for (int i = 0; i < fPos_.size(); i++)
-	{
-		DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "mLimit%d:%f", i, mLimit[i]);
-		DrawFormatString(0, 840 + 20 * i, GetColor(255, 255, 255), "mRot_spd%d:%f", i, mRot_spd[i]);
-		DrawFormatString(1500, 0 + 20 * i, GetColor(255, 255, 255), "mRot%d:%f", i, mRot[i]);
+	if (BuildMode == 1) {
+		DrawFormatString(0, 00, GetColor(255, 255, 255), "EndingScene");
+		DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+		//DrawFormatString(0, 40, GetColor(255, 255, 255), "座標 %f %f", arrowPos.x, arrowPos.y);
+		//DrawFormatString(0, 60, GetColor(255, 255, 255), "X:%f Y:%f", absH, absV);
+		//DrawFormatString(0, 100, GetColor(255, 255, 255), "rot:%f", rot);
+		//DrawFormatString(0, 120, GetColor(255, 255, 255), "rot_spd:%f", rot_spd);
+		DrawFormatString(0, 140, GetColor(255, 255, 255), "friction:%f", friction);
+		DrawFormatString(0, 180, GetColor(255, 255, 255), "vec:%d", vec);
+		DrawFormatString(0, 200, GetColor(255, 255, 255), "spherePos x:%f y:%f", spherePos.x, spherePos.y);
+		for (int i = 0; i < 8; i++)
+		{
+			DrawFormatString(0, 220 + 20 * i, GetColor(255, 255, 255), "neckLen%d:%f", i, neckLen[i]);
+		}
+		DrawFormatString(0, 380, GetColor(255, 255, 255), "r:%f", r);
+		DrawFormatString(0, 400, GetColor(255, 255, 255), "limit:%f", spdLimit);
+		//if (rotDirection && rot < 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "左に加速できます！");
+		//else if (!rotDirection && rot > 90) DrawFormatString(0, 420, GetColor(255, 255, 255), "右に加速できます！");
+		//else DrawFormatString(0, 420, GetColor(255, 255, 255), "加速できません！");
+		DrawFormatString(0, 440, GetColor(255, 255, 255), "dRot:%f", dRot);
+		DrawFormatString(0, 460, GetColor(255, 255, 255), "dRot_spd:%f", dRot_spd);
+		DrawFormatString(0, 480, GetColor(255, 255, 255), "dFriction:%f", dFriction);
+		DrawFormatString(0, 500, GetColor(255, 255, 255), "dSub:%f", dSub);
+		DrawFormatString(0, 520, GetColor(255, 255, 255), "any:%f", any);
+		DrawFormatString(0, 540, GetColor(255, 255, 255), "any1:%f", any1);
+		DrawFormatString(0, 560, GetColor(255, 255, 255), "any2:%f", any2);
+		for (int i = 0; i < 8; i++)
+		{
+			DrawFormatString(0, 580 + 20 * i, GetColor(255, 255, 255), "outPos%d:%f %f", i, outPos[i].x, outPos[i].y);
+		}
+		for (int i = 0; i < fPos_.size(); i++)
+		{
+			DrawFormatString(0, 740 + 20 * i, GetColor(255, 255, 255), "mLimit%d:%f", i, mLimit[i]);
+			DrawFormatString(0, 840 + 20 * i, GetColor(255, 255, 255), "mRot_spd%d:%f", i, mRot_spd[i]);
+			DrawFormatString(1500, 0 + 20 * i, GetColor(255, 255, 255), "mRot%d:%f", i, mRot[i]);
+
+		}
+
+		int a = drawPoints.size();
+		DrawFormatString(1500, 160, GetColor(255, 255, 255), "trial:%d", a);
+		DrawFormatString(1500, 180, GetColor(255, 255, 255), "neckLength:%f", neckLengh);
+		DrawFormatString(1500, 200, GetColor(255, 255, 255), "mRot_size:%d", mRot.size());
+		DrawFormatString(1500, 220, GetColor(255, 255, 255), "fNum:%d", fNum);
+		DrawFormatString(1500, 240, GetColor(255, 255, 255), "drawPoints_size:%d", drawPoints.size());
 
 	}
 
-	int a = drawPoints.size();
-	DrawFormatString(1500, 160, GetColor(255, 255, 255), "trial:%d", a);
-	DrawFormatString(1500, 180, GetColor(255, 255, 255), "neckLength:%f", neckLengh);
-	DrawFormatString(1500, 200, GetColor(255, 255, 255), "mRot_size:%d", mRot.size());
-	DrawFormatString(1500, 220, GetColor(255, 255, 255), "fNum:%d", fNum);
-	DrawFormatString(1500, 240, GetColor(255, 255, 255), "drawPoints_size:%d", drawPoints.size());
 
 
 
@@ -290,9 +308,8 @@ void EndingScene::Draw() const
 	//DrawLine(inPos[7].x, inPos[7].y, outPos[7].x, outPos[7].y, GetColor(255, 255, 255), 1); //白
 
 	//進行度メーター
-	//DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
-	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
-	//DrawBox(100, 100, 700, 200, GetColor(0, 255, 0), 1);
+	DrawBox(meterPos.x, meterPos.y, meterPos.x + meterLen, meterPos.y + 20, GetColor(0, 255, 0), 1);
+	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(spherePos.x * meterLen / stageLen + meterPos.x, meterPos.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, turn);
 
 	//DrawLine(spherePos.x, spherePos.y, v1.x, v1.y, GetColor(0, 255, 0), 1);
 	//DrawLine(fx, fy, v2.x, v2.y, GetColor(0, 255, 0), 1);
@@ -347,6 +364,8 @@ void EndingScene::Draw() const
 	// 描画
 	world_->Draw();
 
+	meter_.Draw();
+
 }
 
 bool EndingScene::IsEnd() const
@@ -360,9 +379,9 @@ Scene EndingScene::Next() const
 }
 
 void EndingScene::End()
-{
-	// 初期化
+{	// 初期化
 	world_->Clear();
+	meter_.End();
 }
 
 void EndingScene::handleMessage(EventMessage message, void * param)

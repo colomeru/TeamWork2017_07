@@ -3,7 +3,7 @@
 #include"../Scene.h"
 #include"../../math/Vector2.h"
 #include"screenSupport\BackgroundCharacters.h"
-
+#include"../../stageGenerator/Stage.h"
 
 class World;
 class BackgroundScreen
@@ -13,7 +13,7 @@ public:
 	BackgroundScreen() {}
 	BackgroundScreen(World* world);
 
-	void Init();
+	void Init(Stage currentStage);
 	void Update();
 	// •`‰æ
 	void Draw() const;
@@ -22,6 +22,7 @@ public:
 private:
 	World* world_;
 
+	Stage currentStage_;
 	int timeCount_;
 
 	//std::vector<BackgroundCharacters*> characters_;
@@ -29,4 +30,6 @@ private:
 	std::vector<Vector2> charactersPosition_;
 	std::vector<bool> isCharactersPositionUsed_;
 	std::map<int, Vector2> createWindTimeAndPos_;
+
+	std::map<Stage,SPRITE_ID> BGList_;
 };

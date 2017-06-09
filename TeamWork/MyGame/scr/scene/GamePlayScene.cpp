@@ -19,7 +19,7 @@
 #include"../actor/Field/Enemys/EnemyGenerator.h"
 #include"../actor/Field/Enemys/EnemyCharas/ClothesTapper.h"
 #include"../tween/TweenManager.h"
-
+#include"../actor/Effects/PlayerEffect/PlayerMetamorEffect.h"
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
@@ -35,6 +35,8 @@ GamePlayScene::GamePlayScene() :
 		handleMessage(msg, param);
 	});
 
+	updateFunctionMap_[6] = std::bind(&GamePlayScene::nextSwitchUpdate, this);
+	updateFunctionMap_[5] = std::bind(&GamePlayScene::nextUpdate, this);
 	updateFunctionMap_[4] = std::bind(&GamePlayScene::pauseUpdate, this);
 	updateFunctionMap_[3] = std::bind(&GamePlayScene::clearUpdate, this);
 	updateFunctionMap_[2] = std::bind(&GamePlayScene::overUpdate, this);
@@ -65,6 +67,7 @@ GamePlayScene::GamePlayScene() :
 
 GamePlayScene::~GamePlayScene()
 {
+	ply1 = nullptr;
 }
 
 void GamePlayScene::Initialize()
@@ -81,7 +84,7 @@ void GamePlayScene::Initialize()
 		pauseScreen_.Init();
 		gameOverScreen_.Init();
 		gameClearScreen_.Init();
-		bgScreen_.Init();
+		bgScreen_.Init(currentStage_);
 	}
 	// フェードパネル初期化
 	//FadePanel::GetInstance().Initialize();
@@ -99,10 +102,6 @@ void GamePlayScene::Initialize()
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR,camera_);
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
-
-	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, 1, Vector2(0, 0)));
-	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, 22, Vector2(0, 0)));
-	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, 3, Vector2(0, 0)));
 
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test"), 60));
 	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
@@ -122,9 +121,9 @@ void GamePlayScene::Initialize()
 	stageGeneratorManager.SetStage(currentStage_);
 	stageLen_ = stageGeneratorManager.GetStageSize(currentStage_).x;
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
-	enemGenerator_ = std::make_shared<EnemyGenerator>(world_.get());
+	enemGenerator_ = std::make_shared<EnemyGenerator>(world_.get(),currentStage_);
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, enemGenerator_);
-	world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(-800.f,2000.f)));
+	//world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(-800.f,2000.f)));
 	
 	//world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get(), 1, Vector2(0, 0)));
 
@@ -136,6 +135,9 @@ void GamePlayScene::Initialize()
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
 	//テスト用
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<MyTestCamera>(world_.get()));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
 
 
 	//Camera::GetInstance().SetRange(0.f, 1000.f);
@@ -162,7 +164,6 @@ void GamePlayScene::Update()
 	if (!world_->GetIsCamChangeMode()) {
 		changeScreen_.End();
 	}
-
 	//if (isPlayerDead_) {
 	//	if (gameOverScreen_.Update(nextScene_)) {
 	//		isEnd_ = true;
@@ -280,7 +281,10 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 {
 	switch (message) {
 	case EventMessage::GAME_CLEAR_FLAG:{
-		setNextMode(3);
+		setNextMode(5);
+		break;
+	}
+	case EventMessage::GOAL_FLAG: {
 		world_->PopStackActor();
 		break;
 	}
@@ -299,6 +303,10 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 	}
 	case EventMessage::TAPPER_DEAD: {
 		enemGenerator_->StartTapperResurrectTimer();
+		break;
+	}
+	case EventMessage::PLAY_NEXT_STAGE: {
+		setNextMode(3);
 		break;
 	}
 								
@@ -327,6 +335,8 @@ void GamePlayScene::baseUpdate()
 		//ply1->setCurPHeadSPos(pss);
 		//ply1->curPHeadSlip(true);
 		setNextMode(4);
+		TweenManager::GetInstance().StopAll();
+
 	}
 	if (BuildMode==1&&Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
 		//Vector2 pss = Vector2(200, 200);
@@ -347,6 +357,7 @@ void GamePlayScene::pauseUpdate()
 	if (pauseScreen_.Update(nextScene_)) {
 		if (nextScene_ == Scene::GamePlay) {
 			setNextMode(1);
+			TweenManager::GetInstance().Play();
 		}
 		else isEnd_ = true;
 	}
@@ -371,10 +382,32 @@ void GamePlayScene::clearUpdate()
 		isEnd_ = true;
 		if (nextScene_ == Scene::GamePlay) {
 			End();
-			currentStage_=nextStageList_[currentStage_];
+			currentStage_ = nextStageList_[currentStage_];
 			Initialize();
+			//setNextMode(6);
 		}
 	}
+
+}
+
+void GamePlayScene::nextUpdate()
+{
+	world_->Update();
+	bgScreen_.Update();
+	changeScreen_.Update();
+	stageEffectScreen_.Update();
+	//if (ply1->) {
+	//	End();
+	//	currentStage_ = nextStageList_[currentStage_];
+	//	Initialize();
+	//}
+}
+
+void GamePlayScene::nextSwitchUpdate()
+{
+	//End();
+	//currentStage_ = nextStageList_[currentStage_];
+	//Initialize();
 
 }
 

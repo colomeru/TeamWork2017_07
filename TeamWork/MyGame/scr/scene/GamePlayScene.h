@@ -66,6 +66,9 @@ private:
 	void pauseUpdate();
 	void overUpdate();
 	void clearUpdate();
+	void nextUpdate();
+	void nextSwitchUpdate();
+
 
 private:
 	// ワールド用シェアドポインタ

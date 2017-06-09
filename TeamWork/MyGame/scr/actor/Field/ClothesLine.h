@@ -7,7 +7,7 @@ class ClothesLine : public Actor, public std::enable_shared_from_this<Actor>
 {
 public:
 	//コンストラクタ
-	ClothesLine(IWorld* world, int laneNum,int blockSize, Vector2 pos);
+	ClothesLine(IWorld* world, int laneNum,const Vector2& endPos, Vector2 pos);
 	//デストラクタ
 	~ClothesLine();
 	//更新
@@ -25,4 +25,6 @@ public:
 
 private:
 	int blockSize_;
+
+	Vector2 endPos_;
 };

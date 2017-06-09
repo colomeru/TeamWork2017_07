@@ -10,4 +10,5 @@ enum class EventMessage
 	GOAL_FLAG,			//ゴールフラグ
 	GAME_CLEAR_FLAG,	//ステージ終了フラグ
 	TAPPER_DEAD,	//叩き死亡
+	PLAY_NEXT_STAGE,
 };

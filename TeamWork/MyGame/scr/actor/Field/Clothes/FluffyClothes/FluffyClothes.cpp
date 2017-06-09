@@ -1,6 +1,7 @@
 #include "FluffyClothes.h"
 #include "../MyGame/scr/game/Random.h"
 #include "../../ClothesPin.h"
+#include "../../../player/Player.h"
 
 FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
@@ -8,7 +9,7 @@ FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Ve
 	clothes_ID = CLOTHES_ID::FLUFFY_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(200, 200.f);
+	parameter_.size = Vector2(100.0f, 200.0f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -19,10 +20,11 @@ FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Ve
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 
-	localPoints.push_back(Vector3(-60, 0 + length_, 0));
-	localPoints.push_back(Vector3(-60, 90 + length_, 0));
-	localPoints.push_back(Vector3(60, 90 + length_, 0));
-	localPoints.push_back(Vector3(60, 0 + length_, 0));
+	//localPoints.push_back(Vector3(-60, 0 + length_, 0));
+	//localPoints.push_back(Vector3(-60, 90 + length_, 0));
+	//localPoints.push_back(Vector3(60, 90 + length_, 0));
+	//localPoints.push_back(Vector3(60, 0 + length_, 0));
+	SetLocalPoints();
 
 	SetPointsUpdate();
 
@@ -79,11 +81,13 @@ void FluffyClothes::Draw() const
 	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::FLUFFY_SPRITE) / 2;
+	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::FLUFFY_SPRITE) / 2;
+	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::BASE_CLOTHES_SPRITE) / 2;
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
 	Vector2 hangPos = GetDrawPosVect(fulcrum_);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
-	Sprite::GetInstance().Draw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().SplitDraw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	//Sprite::GetInstance().Draw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
 	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
@@ -98,10 +102,6 @@ void FluffyClothes::Draw() const
 		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
 		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
-
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 104), TRUE);
-	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-
 }
 
 void FluffyClothes::OnUpdate()

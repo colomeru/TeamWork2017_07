@@ -5,6 +5,8 @@
 #include <vector>
 #include <array>
 #include "../stageGenerator/StageGeneratorManager.h"
+#include "../actor/player/Player.h"
+#include "../scene/addScreen/screenSupport/ProgressMeter.h"
 
 using namespace std;
 
@@ -151,4 +153,9 @@ private:
 
 	// Ÿ‚ÌƒV[ƒ“
 	Scene			nextScene_;
+
+	using PlayerPtr = std::shared_ptr<Player>;
+	PlayerPtr player_;
+
+	ProgressMeter meter_;
 };

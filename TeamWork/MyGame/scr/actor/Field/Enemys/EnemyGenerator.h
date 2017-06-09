@@ -1,9 +1,10 @@
 #pragma once
 #include"../../Actor.h"
+#include"../../../stageGenerator/Stage.h"
 
 class EnemyGenerator :public Actor{
 public:
-	EnemyGenerator(IWorld* world);
+	EnemyGenerator(IWorld* world,Stage stage);
 	~EnemyGenerator();
 	void FastUpdate()override {
 		isUpdate_ = true;
@@ -25,4 +26,8 @@ private:
 
 	float resurTimer_;
 	bool isResur_;
+
+	std::map<Stage, int> slist_;
+
+	Stage stage_;
 };

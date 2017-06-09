@@ -5,10 +5,11 @@
 #include "../../graphic/Model.h"
 #include"../Field/Clothes/Clothes.h"
 #include"../Field/ClothesPin.h"
+#include"../Effects/PlayerEffect/PlayerFatigueEffect.h"
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
 	:Actor(world, targetP)
-	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false)
+	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false), isAlreadyCreateSplash_(false)
 {
 	spriteId_ = SPRITE_ID::OROCHI_HEAD_SPRITE;
 
@@ -39,12 +40,18 @@ void Player_Head::Update()
 	//自分が死んでたら更新を行わない
 	if (player_->GetPHeadDead(myNumber_))return;
 	//服を噛んでいる時は、頭の色を赤く、離すと元の色に戻していく
-	if (player_->GetIsResistMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ += 10.0f;
+	if (player_->GetIsClearMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ -= 10;
+	if (player_->GetIsResistMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ += 10;
 	else if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
 	else {
 		fatigueCheckColor_ -= 2;
-		fatigueCheckColor_ = max(fatigueCheckColor_, 0);
+		//fatigueCheckColor_ = max(fatigueCheckColor_, 0);
+		isAlreadyCreateSplash_ = false;
 	}
+
+	if (player_->GetCurHead()==myNumber_&&fatigueCheckColor_ >= 200)CreateFatigueEffect();
+
+	fatigueCheckColor_ = MathHelper::Clamp(fatigueCheckColor_, 0,255);
 	//Vector2 posAddP = position_;
 	
 	//風に吹かれた服に当たってかつ吹かれていない服につかめてない場合のみ落ちる
@@ -60,7 +67,7 @@ void Player_Head::Update()
 	//プレイヤーから各ヘッドまでの長さ、(32,32のLength)*自分の首の長さ
 	Vector2 vel = basePos - player_->GetPosition();
 	//自分の首の向き*自分の首に設定されている長さ
-	if (player_->GetCurHead() == myNumber_&&(player_->GetIsSlipped()|| world_->GetIsCamChangeMode())) {
+	if (player_->GetCurHead() == myNumber_&&(player_->GetIsSlipped()|| world_->GetIsCamChangeMode()||player_->GetIsClearShoot())) {
 		//vel = player_->GetHeadPosAddVect();
 		position_ = player_->GetSlipHeadPoint();
 	}
@@ -78,7 +85,7 @@ void Player_Head::Update()
 	}
 
 	if (player_->GetCurHead() == myNumber_) {
-		if (player_->GetIsBiteMode())	position_ = player_->GetStopPos();
+		if (player_->GetIsBiteMode()||player_->GetIsClearBite())	position_ = player_->GetStopPos();
 	}
 	else {
 		isHit_ = false;
@@ -157,7 +164,7 @@ void Player_Head::Draw() const
 	//DrawFormatString(drawPos_.x, drawPos_.y, GetColor(255, 255, 255), "%d", myNumber_);
 
 
-	DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
+	//DrawLine(drawPos_.x, drawPos_.y, player_->GetDrawPos().x, player_->GetDrawPos().y, GetColor(255, 255, 255));
 
 
 
@@ -217,4 +224,13 @@ void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 
 void Player_Head::OnMessage(EventMessage message, void * param)
 {
+}
+
+void Player_Head::CreateFatigueEffect()
+{
+	if (isAlreadyCreateSplash_)return;
+
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFatigueEffect>(world_,position_,this));
+
+	isAlreadyCreateSplash_ = true;
 }

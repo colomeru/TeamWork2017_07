@@ -817,7 +817,9 @@ void Player::SetDrawNeck(const Vector2 & bodyPoint, const Vector2 & headPoint)
 
 void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 {
+	//Mult‚ÆfPos‚Ì”‚ª‚±‚±‚Å‡‚í‚È‚­‚È‚é
 	fPos_.clear();
+	multiplePos.clear();
 	correctionLens.clear();
 
 	Vector2 vel(bodyPoint - headPoint);
@@ -836,6 +838,7 @@ void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 	DrawPos p;
 	for (int i = 0; i < s; i++) {
 		fPos_.push_back(headPoint+(vel*i));
+		multiplePos.push_back(headPoint + (vel*(i+1)));
 	}
 
 
@@ -1433,7 +1436,7 @@ void Player::ClearUpdate()
 		pendulumVect_ *= 3.f;
 		Vector2 shiftPos_;
 		shiftPos_.x = max(abs(pendulumVect_.x), 30.f)*sign(pendulumVect_.x);
-		shiftPos_.y = max(abs(pendulumVect_.y), 30.f)*sign(pendulumVect_.y);
+		shiftPos_.y = max(abs(pendulumVect_.y), 40.f)*sign(pendulumVect_.y);
 
 		pendulumVect_ = shiftPos_;
 	}

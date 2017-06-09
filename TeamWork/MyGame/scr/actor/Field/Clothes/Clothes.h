@@ -75,6 +75,10 @@ public:
 	void SetPointsUpdate();
 	//切断状態による当たり判定のポイントの設定
 	void SetLocalPoints();
+	//服に付着した鳥の糞の更新
+	void UpdateClothesFeces();
+	//服に付着した鳥の糞の描画
+	void DrawClothesFeces() const;
 
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
@@ -108,6 +112,8 @@ protected:
 	ClothesState clothesState_;
 	//服の切断状態
 	ClothesCuttingState cuttingState_;
+	//服に付着した糞
+	ActorPtr clothesFeces_;
 
 	//振り子関連(服用)
 	//振り子フラグ

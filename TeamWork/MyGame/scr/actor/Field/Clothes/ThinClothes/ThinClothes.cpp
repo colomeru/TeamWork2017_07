@@ -52,6 +52,7 @@ void ThinClothes::Update()
 	WindSwing();
 
 	SetPointsUpdate();
+	UpdateClothesFeces();
 
 	//if (isCheckCol_ && isUpdate_) {
 	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
@@ -87,8 +88,10 @@ void ThinClothes::Draw() const
 	//Sprite::GetInstance().Draw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2;
 	Sprite::GetInstance().SplitDraw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	DrawClothesFeces();
 
-	if (!collisionPoints.empty() && BuildMode == 1) {
+	if (BuildMode != 1) return;
+	if (!collisionPoints.empty()) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);

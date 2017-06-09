@@ -51,6 +51,7 @@ void TestClothes::Update()
 	WindSwing();
 
 	SetPointsUpdate();
+	UpdateClothesFeces();
 
 	//if (isCheckCol_ && isUpdate_) {
 	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
@@ -82,6 +83,7 @@ void TestClothes::Draw() const
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
 	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 0), FALSE);
+	DrawClothesFeces();
 
 	if (!collisionPoints.empty() && BuildMode == 1) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);

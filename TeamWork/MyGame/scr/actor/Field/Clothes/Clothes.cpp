@@ -15,6 +15,7 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
 	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.8f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
 	,count_(0),clothesState_(ClothesState::BEGIN_WIND),cuttingState_(ClothesCuttingState::Normal),weight_(weight),drawFrame_(0),is_Droping_(false)
+	, clothesFeces_(nullptr)
 {
 	dNumber_ = 0.0f;
 
@@ -43,11 +44,7 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 			static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
 			static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
 			static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
-		}
-		if (is_Droping_) {
-			parent_ = &other;
-			static_cast<Player*>(parent_->GetParent())->SetMode(MODE_SLIP);
-			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
+			break;
 		}
 		break;
 	}
@@ -91,7 +88,8 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 		if (is_Droping_ || isPendulum_) return;
 		Vector2 pos = other.GetPosition() - fulcrum_;
-		world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
+		clothesFeces_ = std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor());
+		//world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
 		is_Droping_ = true;
 		other.Dead();
 		break;
@@ -282,6 +280,18 @@ void Clothes::SetLocalPoints()
 		break;
 	}
 	}
+}
+
+void Clothes::UpdateClothesFeces()
+{
+	if (clothesFeces_ != nullptr && is_Droping_ && cuttingState_ == Normal)
+		clothesFeces_->Update();
+}
+
+void Clothes::DrawClothesFeces() const
+{
+	if (clothesFeces_ != nullptr && is_Droping_ && cuttingState_ == Normal)
+		clothesFeces_->Draw();
 }
 
 void Clothes::SetNormal()

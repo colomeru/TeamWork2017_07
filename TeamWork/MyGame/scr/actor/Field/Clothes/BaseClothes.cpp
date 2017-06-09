@@ -5,7 +5,6 @@
 #include "../MyGame/scr/game/Random.h"
 #include "../../../input/Keyboard.h"
 #include "../../../conv/DXConverter.h"
-#include "../../../graphic/Model.h"
 #include "../../../graphic/Sprite.h"
 
 BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
@@ -50,6 +49,7 @@ void BaseClothes::Update()
 	WindSwing();
 
 	SetPointsUpdate();
+	UpdateClothesFeces();
 
 	isHit_ = false;
 }
@@ -58,12 +58,13 @@ void BaseClothes::Draw() const
 {
 	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_SPRITE) / 2;
 	//Vector2 crcOrigin2 = Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_02_SPRITE) / 2;
-	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 12);
+	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 20);
 	Vector2 hangPos = GetDrawPosVect(fulcrum_);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
 	//Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_02_SPRITE, drawPos_, crcOrigin2, spriteAlpha_, Vector2::One, angle_);
 	PatternDraw();
+	DrawClothesFeces();
 
 	if (BuildMode != 1) return;
 	if (!collisionPoints.empty()) {

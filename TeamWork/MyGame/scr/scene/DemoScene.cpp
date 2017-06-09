@@ -1,9 +1,12 @@
 #include "DemoScene.h"
 #include "../fade/FadePanel.h"
+#include "../tween/TweenManager.h"
 
 DemoScene::DemoScene() :
-maxLoadContentCount_(static_cast<float>(GetASyncLoadNum())),
-currentLoadContentCount_(0.0f)
+	isEnd_(false),
+	maxLoadContentCount_((float)GetASyncLoadNum()),
+	currentLoadCount_(0.0f),
+	prevLoadCount_(0.0f)
 {
 }
 
@@ -14,34 +17,41 @@ DemoScene::~DemoScene()
 void DemoScene::Initialize()
 {
 	isEnd_ = false;
+	currentLoadCount_ = GetASyncLoadNum();
 
 	// フェードイン
-	FadePanel::GetInstance().SetInTime(0.0f, 0.0f);
+	FadePanel::GetInstance().Initialize();
+	FadePanel::GetInstance().SetInTime(0.0f);
 	FadePanel::GetInstance().FadeIn();
 }
 
 void DemoScene::Update()
 {
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
-	//	isEnd_ = true;
+	if (!FadePanel::GetInstance().IsClearScreen())
+		return;
 
-	if (GetASyncLoadNum() == 0 && ProcessMessage() == 0)
+	if (currentLoadCount_ <= 0.0f && !isEnd_)
 	{
-		FadePanel::GetInstance().SetOutTime(0.0f);
+		FadePanel::GetInstance().AddCollBack([=]() {
+			SetBackgroundColor(153, 204, 255);
+			isEnd_ = true;
+		});
+		FadePanel::GetInstance().SetOutTime(1.0f);
 		FadePanel::GetInstance().FadeOut();
-		isEnd_ = true;
 	}
-	else
-		currentLoadContentCount_ = static_cast<float>(GetASyncLoadNum());
+
+	if (prevLoadCount_ > GetASyncLoadNum())
+		TweenManager::GetInstance().Add(EaseOutCirc, &currentLoadCount_, (float)GetASyncLoadNum());
+
+	prevLoadCount_ = GetASyncLoadNum();
 }
 
 void DemoScene::Draw() const
 {
-
-	auto load = 100.0f - static_cast<float>(currentLoadContentCount_ / maxLoadContentCount_) * 100.0f;
-
 	DrawFormatString(0, 0, GetColor(255, 255, 255), "DemoScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "Load... [%.1f]", load);
+
+	auto load = 100.0f - (currentLoadCount_ / maxLoadContentCount_) * 100.0f;
+	DrawFormatString(0, 100, GetColor(255, 255, 255), "NowLoadind... %.1f", load);
 }
 
 bool DemoScene::IsEnd() const

@@ -132,4 +132,6 @@ protected:
 	float friction_;
 	//振り子カウント
 	int count_;
+
+	float dNumber_;
 };

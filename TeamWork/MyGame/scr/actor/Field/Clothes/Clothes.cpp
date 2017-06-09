@@ -16,6 +16,8 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.8f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
 	,count_(0),clothesState_(ClothesState::BEGIN_WIND),cuttingState_(ClothesCuttingState::Normal),weight_(weight),drawFrame_(0),is_Droping_(false)
 {
+	dNumber_ = 0.0f;
+
 	localPoints.clear();
 	collisionPoints.clear();
 	localPoints.reserve(4);
@@ -108,13 +110,14 @@ void Clothes::OnMessage(EventMessage message, void * param)
 		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
 		if (rand > frequencyWind) break;
-		//rot_spd_ -= weight_;
-		//basePosition_ = position_;
-		//float dRand = Random::GetInstance().Range(0.0f, 2.0f);
-		//TweenManager::GetInstance().Delay(dRand, [&]() { isPendulum_ = true; });
 		rot_spd_ -= weight_;
 		basePosition_ = position_;
-		isPendulum_ = true;
+		float dRand = Random::GetInstance().Range(0.0f, 2.0f);
+		TweenManager::GetInstance().Delay(dRand, [&]() { 
+			isPendulum_ = true; }, &dNumber_);
+		//rot_spd_ -= weight_;
+		//basePosition_ = position_;
+		//isPendulum_ = true;
 		break;
 	}
 	}

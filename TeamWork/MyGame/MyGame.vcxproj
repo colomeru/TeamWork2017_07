@@ -161,11 +161,20 @@
   <ItemGroup>
     <ClCompile Include="scr\actor\Actor.cpp" />
     <ClCompile Include="scr\actor\ActorManager.cpp" />
+    <ClCompile Include="scr\actor\Effects\Effect.cpp" />
+    <ClCompile Include="scr\actor\Effects\EnemyEffect\TapperTapEffect.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\GetSwordEffect.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerBiteEffect.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerFatigueEffect.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerMetamorEffect.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\SwordAttackEffect.cpp" />
     <ClCompile Include="scr\actor\enemy\Enemy.cpp" />
     <ClCompile Include="scr\actor\Field\ClothesLine.cpp" />
     <ClCompile Include="scr\actor\Field\ClothesPin.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\BaseClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Clothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\ClothesFeces\ClothesFeces.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\DropClothes\DropClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.cpp" />
@@ -184,6 +193,7 @@
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
     <ClCompile Include="scr\actor\player\Player3.cpp" />
+    <ClCompile Include="scr\actor\player\PlayerEffectManager.cpp" />
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\player\Player_Sword.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
@@ -228,6 +238,7 @@
     <ClCompile Include="scr\scene\addScreen\PauseScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.cpp" />
+    <ClCompile Include="scr\scene\addScreen\screenSupport\ProgressMeter.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.cpp" />
     <ClCompile Include="scr\scene\addScreen\StageEffectScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\StartScreen.cpp" />
@@ -255,11 +266,20 @@
     <ClInclude Include="scr\actor\ActorParameter.h" />
     <ClInclude Include="scr\actor\ActorPtr.h" />
     <ClInclude Include="scr\actor\CameraAct\TPSCamera.h" />
+    <ClInclude Include="scr\actor\Effects\Effect.h" />
+    <ClInclude Include="scr\actor\Effects\EnemyEffect\TapperTapEffect.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\GetSwordEffect.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerBiteEffect.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerFatigueEffect.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerMetamorEffect.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\SwordAttackEffect.h" />
     <ClInclude Include="scr\actor\enemy\Enemy.h" />
     <ClInclude Include="scr\actor\Field\ClothesLine.h" />
     <ClInclude Include="scr\actor\Field\ClothesPin.h" />
     <ClInclude Include="scr\actor\Field\Clothes\BaseClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Clothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\ClothesFeces\ClothesFeces.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\DropClothes\DropClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.h" />
@@ -278,6 +298,8 @@
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />
     <ClInclude Include="scr\actor\player\Player3.h" />
+    <ClInclude Include="scr\actor\player\PlayerEffectManager.h" />
+    <ClInclude Include="scr\actor\player\PlayerNeckDraw.h" />
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\player\Player_Sword.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
@@ -333,6 +355,7 @@
     <ClInclude Include="scr\scene\addScreen\screenSupport\BackgroundCharacters.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.h" />
+    <ClInclude Include="scr\scene\addScreen\screenSupport\ProgressMeter.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\WindDir.h" />
     <ClInclude Include="scr\scene\addScreen\StageEffectScreen.h" />

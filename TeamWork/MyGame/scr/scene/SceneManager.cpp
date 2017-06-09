@@ -22,11 +22,14 @@ void SceneManager::Initialize()
 	End();
 	mScenes.clear();
 	TweenManager::GetInstance().Initialize();
+	timer = 0;
+	FadeTrigger = false;
 }
 
 // 更新
 void SceneManager::Update()
 {
+	timer += Time::DeltaTime;
 	if (!FadePanel::GetInstance().IsAction()) 
 		mCurrentScene->Update();
 	
@@ -49,12 +52,29 @@ void SceneManager::End()
 	mCurrentScene->End();
 	TweenManager::GetInstance().Clear();
 }
-
 // シーン変更
 void SceneManager::Change()
 {
+	if(nectSceneName_ != Scene::GamePlay){
+		if (timer > 30.0f) {
+			if (nectSceneName_ == Scene::Title) {
+				Change(Scene::Movie);
+				timer = 0;
+				return;
+			}
+			else if (nectSceneName_ != Scene::Movie) {
+				Change(Scene::Title);
+				timer = 0;
+				return;
+			}
+		}
+	}
+	
 	if (mCurrentScene->IsEnd())
+	{
 		Change(mCurrentScene->Next());
+		timer = 0;
+	}
 }
 
 // シーンの追加
@@ -72,7 +92,7 @@ void SceneManager::SetScene(Scene name)
 // シーン変更
 void SceneManager::Change(Scene name)
 {
-	if (FadePanel::GetInstance().IsAction())return;
+	//if (FadePanel::GetInstance().IsAction())return;
 	Scene now = Scene::None;
 	for (auto& scene : mScenes)
 	{
@@ -84,14 +104,13 @@ void SceneManager::Change(Scene name)
 
 	nectSceneName_ = name;
 
-	SetFadeInOutSpeed();
-	FadePanel::GetInstance().AddCollBack([this] {End(); });
-	FadePanel::GetInstance().AddCollBack([this] {SceneChangeAfterFade(); });
-	FadePanel::GetInstance().FadeOut();
-	//End();
-	//mCurrentScene = mScenes[name];
- //        	mCurrentScene->Initialize();
-
+	//SetFadeInOutSpeed();
+	//FadePanel::GetInstance().AddCollBack([this] {End(); });
+	//FadePanel::GetInstance().AddCollBack([this] {SceneChangeAfterFade(); });
+	//FadePanel::GetInstance().FadeOut();
+	End();
+	mCurrentScene = mScenes[name];
+   	mCurrentScene->Initialize();
 }
 
 // 初期化を指定する

@@ -22,10 +22,12 @@ MenuScene::~MenuScene()
 void MenuScene::Initialize()
 {
 	isEnd_ = false;
+	
 }
 
 void MenuScene::Update()
 {
+	
 	// XV
 	world_->Update();
 
@@ -40,7 +42,7 @@ void MenuScene::Update()
 void MenuScene::Draw() const
 {
 	DrawFormatString(0, 00, GetColor(255, 255, 255), "MenuScene");
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	menu.Draw();
 

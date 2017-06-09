@@ -3,6 +3,7 @@
 #include <map>
 #include "../Def.h"
 #include "../scene/addScreen/MenuScreen.h"
+#include "../time/Time.h"
 
 class MenuScene : public IScene
 {
@@ -30,7 +31,6 @@ public:
 	Stage SendStage()const override;
 private:
 	MenuScreen menu;
-
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;

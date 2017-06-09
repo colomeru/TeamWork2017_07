@@ -25,18 +25,16 @@ public:
 	void handleMessage(EventMessage message, void* param);
 
 private:
-
-
+	int selectNum_;
+	float selectX_;
+	float selectY_;
+	float timer;
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
 	// ワールド
 	WorldPtr		world_;
-
-	int selectNum_;
-	float selectX_;
-	float selectY_;
-
+	
 	// 次のシーン
 	Scene			nextScene_;
 };

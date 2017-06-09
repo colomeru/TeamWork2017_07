@@ -242,6 +242,7 @@
     <ClCompile Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.cpp" />
     <ClCompile Include="scr\scene\addScreen\StageEffectScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\StartScreen.cpp" />
+    <ClCompile Include="scr\scene\addScreen\UIScreen.cpp" />
     <ClCompile Include="scr\scene\CreditScene.cpp" />
     <ClCompile Include="scr\scene\DemoScene.cpp" />
     <ClCompile Include="scr\scene\EndingScene.cpp" />
@@ -250,6 +251,7 @@
     <ClCompile Include="scr\scene\MovieScene.cpp" />
     <ClCompile Include="scr\scene\SceneManager.cpp" />
     <ClCompile Include="scr\scene\TitleScene.cpp" />
+    <ClCompile Include="scr\sound\Sound.cpp" />
     <ClCompile Include="scr\stageGenerator\StageGenerator.cpp" />
     <ClCompile Include="scr\stageGenerator\Stage1\Stage1.cpp" />
     <ClCompile Include="scr\stageGenerator\StageGeneratorManager.cpp" />
@@ -360,6 +362,7 @@
     <ClInclude Include="scr\scene\addScreen\screenSupport\WindDir.h" />
     <ClInclude Include="scr\scene\addScreen\StageEffectScreen.h" />
     <ClInclude Include="scr\scene\addScreen\StartScreen.h" />
+    <ClInclude Include="scr\scene\addScreen\UIScreen.h" />
     <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />
     <ClInclude Include="scr\scene\EndingScene.h" />

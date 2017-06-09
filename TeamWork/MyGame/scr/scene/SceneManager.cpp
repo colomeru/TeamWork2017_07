@@ -55,10 +55,11 @@ void SceneManager::End()
 // ƒV[ƒ“•ÏX
 void SceneManager::Change()
 {
-	if (Keyboard::GetInstance().AnyTriggerDown() == true) {
+	if (Keyboard::GetInstance().AnyTriggerDown()
+		||GamePad::GetInstance().AnyTriggerDown()) {
 		timer = 0;
 	}
-	if (timer > 30.0f) {
+	if (timer > 5.0f) {
 		if (nectSceneName_ == Scene::Title) {
 			Change(Scene::Movie);
 			timer = 0;

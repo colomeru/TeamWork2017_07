@@ -2,7 +2,7 @@
 #include "../game/WorkFolder.h"
 #include "../graphic/Model.h"
 #include "../graphic/Sprite.h"
-//#include "../sound/Sound.h"
+#include "../sound/Sound.h"
 #include "../Def.h"
 #include "../math/MathHelper.h"
 #include "ID.h"
@@ -23,7 +23,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("forochi2.png", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
 	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE, 6, Point(3, 2), Point(200, 200));	
 	sprite.Load("testClothes.bmp", SPRITE_ID::TEST_CLOTHES_SPRITE);
-	sprite.Load("goalUI.bmp", SPRITE_ID::GOAL_UI_SPRITE);
+	sprite.Load("goalUI.png", SPRITE_ID::GOAL_UI_SPRITE);
 	sprite.Load("hanger.png", SPRITE_ID::HANGER_SPRITE);
 	sprite.Load("fluffyClothes.png", SPRITE_ID::FLUFFY_SPRITE, 6, Point(3, 2), Point(200, 200));
 	sprite.Load("gumClothes.png", SPRITE_ID::GUM_SPRITE);
@@ -130,6 +130,33 @@ void Content::LoadSound(Sound& sound)
 {
 	WorkFolder::SetWorkFolder("res/Sound/");
 
+	//BGMì«Ç›çûÇ›
+	sound.LoadBGM("bgm/title.mp3", BGM_ID::TITLE_BGM);
+	sound.LoadBGM("bgm/game01.mp3", BGM_ID::STAGE_01_BGM);
+	sound.LoadBGM("bgm/game02.mp3", BGM_ID::STAGE_02_BGM);
+	sound.LoadBGM("bgm/game03.mp3", BGM_ID::STAGE_03_BGM);
+	sound.LoadBGM("bgm/stageclear.mp3", BGM_ID::STAGE_CLEAR_BGM);
+	sound.LoadBGM("bgm/gameover.mp3", BGM_ID::GAME_OVER_BGM);
+	sound.LoadBGM("bgm/stageselect.mp3", BGM_ID::STAGE_SELECT_BGM);
+
+	//SEì«Ç›çûÇ›
+	sound.LoadSE("se/movecursor.mp3", SE_ID::MOVE_CURSOR_SE);
+	sound.LoadSE("se/cancel.mp3", SE_ID::CANCEL_SE);
+	sound.LoadSE("se/tap.mp3", SE_ID::TAP_SE);
+	sound.LoadSE("se/changehead.mp3", SE_ID::CHANGE_HEAD_SE);
+	sound.LoadSE("se/bite.mp3", SE_ID::BITE_SE);
+	sound.LoadSE("se/fatigue.mp3", SE_ID::FATIGUE_SE);
+	sound.LoadSE("se/check.mp3", SE_ID::CHECK_SE);
+	sound.LoadSE("se/shoot.mp3", SE_ID::HEAD_SHOOT_SE);
+	sound.LoadSE("se/wind.mp3", SE_ID::WIND_SE);
+	sound.LoadSE("se/powerfulwind.mp3", SE_ID::POWERFUL_WIND_SE);
+	sound.LoadSE("se/biteend.mp3", SE_ID::BITE_END_SE);
+	sound.LoadSE("se/clotheswind.mp3", SE_ID::CLOTHES_WIND_SE);
+	sound.LoadSE("se/fallout.mp3", SE_ID::FALL_OUT_SE);
+	sound.LoadSE("se/createsword.mp3", SE_ID::CREATE_SWORD_SE);
+	sound.LoadSE("se/slash.mp3", SE_ID::SLASH_SE);
+	
+	
 }
 
 void Content::EnableASync()

@@ -10,6 +10,7 @@
 #include"addScreen/PauseScreen.h"
 #include"addScreen\LaneChangeScreen.h"
 #include"addScreen\StageEffectScreen.h"
+#include"addScreen/UIScreen.h"
 
 class Player;
 class EnemyGenerator;
@@ -83,6 +84,8 @@ private:
 	PlayerPtr ply1;
 	std::shared_ptr<EnemyGenerator> enemGenerator_;
 	StageGenerateManager stageGeneratorManager;
+
+	//ゲームプレイに重ねる画面(追加描画)を管理する各種クラス
 	StartScreen startScreen_;
 	PauseScreen pauseScreen_;
 	GameOverScreen gameOverScreen_;
@@ -90,6 +93,7 @@ private:
 	BackgroundScreen bgScreen_;
 	LaneChangeScreen changeScreen_;
 	StageEffectScreen stageEffectScreen_;
+	UIScreen uiScreen_;
 	//Vector3 posit;
 
 	Stage currentStage_;
@@ -101,16 +105,17 @@ private:
 	//そのステージのレーンの最大数
 	int maxLaneCount;
 	float stageLen_;
-	float meterLen_;
-	Vector2 meterPos_;
 
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
 
-	std::map<Stage,Stage> nextStageList_;
+	std::map<Stage, Stage> nextStageList_;
+
+	std::map<Stage,BGM_ID> stageBGMList_;
 
 	std::map<Stage, int> defWindTime_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
+
 
 };

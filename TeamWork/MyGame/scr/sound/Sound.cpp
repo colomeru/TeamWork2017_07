@@ -1,7 +1,7 @@
 #include "Sound.h"
 #include "../game/WorkFolder.h"
 #include "../Def.h"
-#include "../math/Math.h"
+#include "../math/MathHelper.h"
 #include <sstream>
 
 Sound::Sound():
@@ -139,6 +139,14 @@ void Sound::StopSE(const SE_ID& id)
 	StopSoundMem(m_SEs[id]);
 }
 
+void Sound::StopSE()
+{
+	for (auto i : m_SEs)
+	{
+		StopSoundMem(i.second);
+	}
+}
+
 // BGMが鳴っているかどうか調べる
 bool Sound::IsPlayBGM()
 {
@@ -190,7 +198,7 @@ void Sound::SetAllBGMVolume(float volume)
 	m_bgm_volume = volume;
 	for (auto& i : m_BGMs)
 		SettingBGM(i.first);
-	m_bgm_volume = Math::Clamp(m_bgm_volume, 0.0f, 1.0f);
+	m_bgm_volume = MathHelper::Clamp(m_bgm_volume, 0.0f, 1.0f);
 }
 
 // 全てのSEのボリュームを設定する
@@ -199,7 +207,7 @@ void Sound::SetAllSEVolume(float volume)
 	m_se_volume = volume;
 	for (auto& i : m_SEs)
 		SettingSE(i.first);
-	m_se_volume = Math::Clamp(m_se_volume, 0.0f, 1.0f);
+	m_se_volume = MathHelper::Clamp(m_se_volume, 0.0f, 1.0f);
 }
 
 // 全てのBGMのボリュームを受け取る

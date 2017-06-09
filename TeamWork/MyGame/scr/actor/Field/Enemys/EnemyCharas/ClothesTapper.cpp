@@ -4,6 +4,7 @@
 #include"../../../../math/Easing.h"
 #include"../../../../input/Keyboard.h"
 #include"../../../Effects/EnemyEffect/TapperTapEffect.h"
+#include"../../../../sound/sound.h"
 
 static const float moveTime = 2.0f;
 //static const float TapTime = 2.0f;
@@ -97,6 +98,7 @@ void ClothesTapper::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	else if (colpara.colID == COL_ID::TAPPER_PSWORD_COL) {
 		ToDeadMode();
+		Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
 	}
 }
 
@@ -121,6 +123,7 @@ void ClothesTapper::PlayTap()
 {
 	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<TapperTapEffect>(world_, position_));
 	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::TAPPER_PHEAD_COL);
+	Sound::GetInstance().PlaySE(SE_ID::TAP_SE);
 }
 
 void ClothesTapper::ToTapMode()

@@ -2,6 +2,7 @@
 #include "../math/MathHelper.h"
 #include "../time/Time.h"
 #include "../fade/FadePanel.h"
+#include"../sound/sound.h"
 
 #include "../actor/SampleActor.h"
 #include"../camera/Camera.h"
@@ -23,7 +24,7 @@
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
-	gameOverScreen_(), gameClearScreen_(), pauseScreen_(), stageLen_(0.f), meterLen_(800.0f),meterPos_(Vector2(1100.0f, 50.0f)),
+	gameOverScreen_(), gameClearScreen_(), pauseScreen_(), stageLen_(0.f),
 	gamePlayMode_(0), currentStage_(Stage::Stage2), stageEffectScreen_()
 	//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 {
@@ -43,14 +44,23 @@ GamePlayScene::GamePlayScene() :
 	updateFunctionMap_[1] = std::bind(&GamePlayScene::baseUpdate, this);
 	updateFunctionMap_[0] = std::bind(&GamePlayScene::startUpdate, this);
 
-	nextStageList_[Stage::Stage1]=Stage::Stage2;
-	nextStageList_[Stage::Stage2]=Stage::Stage3;
-	nextStageList_[Stage::Stage3]=Stage::Stage4;
-	nextStageList_[Stage::Stage4]=Stage::Stage5;
-	nextStageList_[Stage::Stage5]=Stage::Stage6;
-	nextStageList_[Stage::Stage6]=Stage::Stage7;
-	nextStageList_[Stage::Stage7]=Stage::Stage8;
-	nextStageList_[Stage::Stage8]=Stage::Stage1;
+	nextStageList_[Stage::Stage1] = Stage::Stage2;
+	nextStageList_[Stage::Stage2] = Stage::Stage3;
+	nextStageList_[Stage::Stage3] = Stage::Stage4;
+	nextStageList_[Stage::Stage4] = Stage::Stage5;
+	nextStageList_[Stage::Stage5] = Stage::Stage6;
+	nextStageList_[Stage::Stage6] = Stage::Stage7;
+	nextStageList_[Stage::Stage7] = Stage::Stage8;
+	nextStageList_[Stage::Stage8] = Stage::Stage1;
+
+	stageBGMList_[Stage::Stage1] = BGM_ID::STAGE_01_BGM;
+	stageBGMList_[Stage::Stage2] = BGM_ID::STAGE_02_BGM;
+	stageBGMList_[Stage::Stage3] = BGM_ID::STAGE_03_BGM;
+	stageBGMList_[Stage::Stage4] = BGM_ID::STAGE_01_BGM;
+	stageBGMList_[Stage::Stage5] = BGM_ID::STAGE_02_BGM;
+	stageBGMList_[Stage::Stage6] = BGM_ID::STAGE_03_BGM;
+	stageBGMList_[Stage::Stage7] = BGM_ID::STAGE_01_BGM;
+	stageBGMList_[Stage::Stage8] = BGM_ID::STAGE_02_BGM;
 
 	defWindTime_[Stage::Stage1] = defWindTime[0];
 	defWindTime_[Stage::Stage2] = defWindTime[1];
@@ -63,6 +73,7 @@ GamePlayScene::GamePlayScene() :
 
 	bgScreen_ = BackgroundScreen(world_.get());
 	changeScreen_=LaneChangeScreen(world_.get());
+	uiScreen_ = UIScreen(world_.get());
 }
 
 GamePlayScene::~GamePlayScene()
@@ -153,9 +164,12 @@ void GamePlayScene::Initialize()
 	startScreen_ = StartScreen(world_.get(), maxLaneCount);
 	
 	startScreen_.Init(stageLen_);
+	uiScreen_.Init(currentStage_, stageLen_);
 
 	stageEffectScreen_.Init(currentStage_);
 	
+	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_]);
+	Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.5f);
 }
 
 void GamePlayScene::Update()
@@ -164,6 +178,8 @@ void GamePlayScene::Update()
 	if (!world_->GetIsCamChangeMode()) {
 		changeScreen_.End();
 	}
+	uiScreen_.Update(ply1->GetPosition());
+		
 	//if (isPlayerDead_) {
 	//	if (gameOverScreen_.Update(nextScene_)) {
 	//		isEnd_ = true;
@@ -234,13 +250,8 @@ void GamePlayScene::Draw() const
 	//VECTOR pos1 = DXConverter::GetInstance().ToVECTOR(posit);
 	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);
 
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
-	DrawBox(1000, 0, 1920, 200, GetColor(128, 128, 128), TRUE);
-	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
+	uiScreen_.Draw();
 	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
-	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
-	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(ply1->GetPosition().x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
 
 	if (gamePlayMode_ == 2) {
 		gameOverScreen_.Draw();
@@ -274,6 +285,8 @@ void GamePlayScene::End()
 	world_->Clear();
 	bgScreen_.End();
 
+	Sound::GetInstance().StopBGM();
+
 	TweenManager::GetInstance().Clear();
 }
 
@@ -299,6 +312,11 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 	}
 	case EventMessage::BEGIN_WIND: {
 		stageEffectScreen_.StartEffect();
+		Sound::GetInstance().PlaySE(SE_ID::WIND_SE);
+		break;
+	}
+	case EventMessage::STRONG_WIND: {
+		Sound::GetInstance().PlaySE(SE_ID::POWERFUL_WIND_SE);
 		break;
 	}
 	case EventMessage::TAPPER_DEAD: {
@@ -309,7 +327,11 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 		setNextMode(3);
 		break;
 	}
-								
+	case EventMessage::ADD_SCORE: {
+		//ÉXÉRÉAâ¡éZÅAå„Ç≈èCê≥Ç†ÇË
+		uiScreen_.AddScore(100);
+		break;
+	}
 	default:
 		break;
 	}

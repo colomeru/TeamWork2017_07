@@ -11,4 +11,5 @@ enum class EventMessage
 	GAME_CLEAR_FLAG,	//ステージ終了フラグ
 	TAPPER_DEAD,	//叩き死亡
 	PLAY_NEXT_STAGE,
+	ADD_SCORE,
 };

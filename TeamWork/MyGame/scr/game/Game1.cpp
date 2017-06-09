@@ -11,6 +11,7 @@
 #include "../graphic/Anime.h"
 #include "../graphic/Model.h"
 #include "../graphic/Sprite.h"
+#include "../sound/sound.h"
 
 void Game1::Initialize()
 {
@@ -19,6 +20,7 @@ void Game1::Initialize()
 	// リソース関連初期化
 	Model::GetInstance().Initialize();
 	Sprite::GetInstance().Initialize();
+	Sound::GetInstance().Initialize();
 
 	// 非同期読み込み開始
 	mContent.EnableASync();
@@ -26,6 +28,7 @@ void Game1::Initialize()
 	// ファイルの読み込み
 	mContent.LoadSprite(Sprite::GetInstance(), Model::GetInstance());
 	mContent.LoadModel(Model::GetInstance(), false);
+	mContent.LoadSound(Sound::GetInstance());
 
 	// 非同期読み込み終了
 	mContent.DisableASync();
@@ -66,6 +69,8 @@ void Game1::Update()
 	mSceneManager.Change();
 	// シーンを更新
 	mSceneManager.Update();
+	
+	Sound::GetInstance().Update();
 }
 
 void Game1::Draw()

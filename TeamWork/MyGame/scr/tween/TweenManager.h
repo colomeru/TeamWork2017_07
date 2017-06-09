@@ -31,7 +31,7 @@ delay					: 遅延時間
 #include "TweenObject.h"
 #include "../math/Easing.h"
 #include <list>
-#include <map>
+#include <unordered_map>
 #include <functional>
 #include <memory>
 
@@ -100,6 +100,8 @@ public:
 	void Remove();
 	// クリア
 	void Clear();
+	// 実行数
+	int Count() const;
 
 	/***  ***/
 	// 再生 /* scale : 再生倍率 */
@@ -178,7 +180,7 @@ private:
 	// イーズリスト
 	std::list<TweenPtr> tweenList_;
 	//
-	std::map<EaseType, TweenFuncParam>	easeFuncMap_;
+	std::unordered_map<EaseType, TweenFuncParam>	easeFuncMap_;
 	// ループ数
 	int			loopCount_;
 	// 更新タイプ

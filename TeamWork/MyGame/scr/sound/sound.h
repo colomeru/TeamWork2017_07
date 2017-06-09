@@ -60,6 +60,7 @@ public:
 	/// SE‚ðŽ~‚ß‚é
 	///</summary>
 	void StopSE(const SE_ID& id);
+	void StopSE();
 
 	///<summary>
 	/// BGM‚ª–Â‚Á‚Ä‚¢‚é‚©‚Ç‚¤‚©’²‚×‚é

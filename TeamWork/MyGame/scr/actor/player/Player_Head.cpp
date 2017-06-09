@@ -6,6 +6,7 @@
 #include"../Field/Clothes/Clothes.h"
 #include"../Field/ClothesPin.h"
 #include"../Effects/PlayerEffect/PlayerFatigueEffect.h"
+#include"../../sound/sound.h"
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
 	:Actor(world, targetP)
@@ -231,6 +232,6 @@ void Player_Head::CreateFatigueEffect()
 	if (isAlreadyCreateSplash_)return;
 
 	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFatigueEffect>(world_,position_,this));
-
+	Sound::GetInstance().PlaySE(SE_ID::FATIGUE_SE);
 	isAlreadyCreateSplash_ = true;
 }

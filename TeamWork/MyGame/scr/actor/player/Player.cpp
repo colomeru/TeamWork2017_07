@@ -12,6 +12,7 @@
 #include"../Effects/PlayerEffect/PlayerBiteEffect.h"
 #include"../Effects/PlayerEffect/GetSwordEffect.h"
 #include"PlayerNeckDraw.h"
+#include"../../sound/sound.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -931,7 +932,7 @@ void Player::SwordPosUpdate() {
 }
 
 void Player::StartPlayerSet() {
-	playerMode_=MODE_BITE;
+	SetMode(MODE_BITE);// playerMode_ = MODE_BITE;
 	pHeadLength_[currentHead_]=5.f;
 	pHeads_[currentHead_]->StartPlayerHeadBite();
 
@@ -943,10 +944,14 @@ int Player::GetCurHead() const {
 }
 
 void Player::CurHeadBite(const Vector2 & target) {
+
 	if (playerMode_ != MODE_SHOOT_END)return;
 
 	CreateBiteEffect();
-	playerMode_ = MODE_BITE;
+	//スコア加算
+	world_->sendMessage(EventMessage::ADD_SCORE);
+
+	SetMode(MODE_BITE);//playerMode_ = MODE_BITE;
 	pGrav_ = defPGravPow;
 	//stopPos_ = target;
 	//角度を求める
@@ -974,9 +979,53 @@ void Player::ResurrectHead() {
 
 void Player::SetMode(int pMode) {
 	if (!isUseKey_)return;
+	if (pMode == playerMode_)return;
+
 	playerMode_ = pMode;
 	//if (pMode == MODE_SLIP)
 		headPosAddVect_= Vector2::Normalize(pHeads_[currentHead_]->GetPosition() - position_)*Vector2(32.f,32.f).Length();
+
+		switch (playerMode_)
+		{
+		case MODE_FALL: {
+
+			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			break;
+		}
+		case MODE_SHOOT: {
+
+			Sound::GetInstance().PlaySE(SE_ID::HEAD_SHOOT_SE, DX_PLAYTYPE_LOOP);
+			break;
+		}
+		case MODE_SHOOT_END: {
+
+			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			break;
+		}
+		case MODE_BITE: {
+			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
+			break;
+		}
+		case MODE_SLIP: {
+
+			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			break;
+		}
+		case MODE_RESIST: {
+
+			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			break;
+		}
+		case MODE_CLEAR: {
+
+			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			break;
+		}
+
+		default:
+			break;
+		}
 }
 
 void Player::SetMyHeadLaneNum(int targetNum) {
@@ -1015,8 +1064,11 @@ void Player::PHeadChanger(int rot) {
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
 
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f));
+	Vector2 addVec = position_- pHeadPoses_[currentHead_];
+	addVec=addVec.Normalize()*32.f;
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f, addVec));
 
+	Sound::GetInstance().PlaySE(SE_ID::CHANGE_HEAD_SE);
 	//StartPendulum();
 }
 
@@ -1133,14 +1185,14 @@ void Player::FallUpdate()
 	if (isUseKey_) {
 		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) &&
 			isCanNextHeadRot) {
-			playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			//キーを押し直したかの判断
 			PHeadChanger();
 			isCanNextHeadRot = false;
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) &&
 			isCanNextHeadRot) {
-			playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			//キーを押し直したかの判断
 			PHeadChanger(1);
 			isCanNextHeadRot = false;
@@ -1152,7 +1204,7 @@ void Player::FallUpdate()
 		}
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-			playerMode_ = MODE_SHOOT;
+			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
 	}
@@ -1174,14 +1226,14 @@ void Player::ShootUpdate()
 			CurPHeadLengPlus(headShotPower);
 		}
 		else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
-			playerMode_ = MODE_SHOOT_END;
+			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 		}
 		else {
-			playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		}
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-			playerMode_ = MODE_SHOOT;
+			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
 	}
@@ -1195,7 +1247,7 @@ void Player::ShootUpdate()
 void Player::ShootEndUpdate()
 {
 	CreateBiteEffect();
-	playerMode_ = MODE_FALL;
+	SetMode(MODE_FALL);// playerMode_ = MODE_FALL;
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
 		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
@@ -1221,7 +1273,7 @@ void Player::ShootEndUpdate()
 		}
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-			playerMode_ = MODE_SHOOT;
+			SetMode(MODE_SHOOT);// playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
 	}
@@ -1239,9 +1291,11 @@ void Player::BiteUpdate()
 	if (isUseKey_) {
 
 		if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-			if(!pSword_->GetUseSword())world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_,pSword_->GetPosition(),pSword_.get()));
-			
-			pSword_->SetUseSword(true);
+			if (!pSword_->GetUseSword()) {
+				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_, pSword_->GetPosition(), pSword_.get()));
+				pSword_->SetUseSword(true);
+				Sound::GetInstance().PlaySE(SE_ID::CREATE_SWORD_SE);
+			}
 		}
 		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
@@ -1321,17 +1375,17 @@ void Player::SlipUpdate()
 				//Headを交代する
 			PHeadChanger();
 			//}
-			playerMode_ = MODE_SHOOT;
+			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 
 		}
 		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
-			playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			PHeadChanger();
 			isCanNextHeadRot = false;
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
-			playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			//キーを押し直したかの判断
 			PHeadChanger(1);
 			isCanNextHeadRot = false;
@@ -1353,7 +1407,7 @@ void Player::ResistUpdate()
 
 	if (slipResistTime_ <= 0.f) {
 		slipResistTime_ = defResistTime;
-		playerMode_ = MODE_FALL;
+		SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		return;
 	}
 

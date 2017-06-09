@@ -71,6 +71,8 @@ void BackgroundScreen::Update()
 
 void BackgroundScreen::Draw() const
 {
+	SetDrawBright(100.0f, 100.f, 100.f);
+
 	Vector2 camPos(world_->GetInv().Translation().x/2,0);
 	camPos.x = (int)camPos.x % (int)Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x;
 	float myds=world_->GetKeepDatas().changeLaneLerpPos_;
@@ -92,6 +94,7 @@ void BackgroundScreen::Draw() const
 	Vector2 ceilPos = Vector2::Zero - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_] +Sprite::GetInstance().GetSize(SPRITE_ID::CEILING_SPRITE).y- defDrawPointYAdd[1]);
 	Sprite::GetInstance().Draw(SPRITE_ID::CEILING_SPRITE, ceilPos);
 
+	SetDrawBright(255, 255, 255);
 
 	//for (auto& bgC : characters_) {
 	//	bgC->Draw();

@@ -318,6 +318,8 @@ private:
 		worldSetMyDatas();
 	}
 	void CreateBiteEffect();
+
+
 //プレイヤーの状態に応じた更新
 private:
 	void FallUpdate();

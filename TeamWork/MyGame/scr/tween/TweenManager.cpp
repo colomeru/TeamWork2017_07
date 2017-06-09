@@ -72,6 +72,11 @@ void TweenManager::Clear()
 	tweenList_.clear();
 }
 
+int TweenManager::Count() const
+{
+	return static_cast<int>(tweenList_.size());
+}
+
 void TweenManager::Play(float scale)
 {
 	for (auto& ease : tweenList_)
@@ -150,7 +155,7 @@ void TweenManager::Add(float* value, const EaseType& type, const float b, const 
 	tweenPtr_->SetLoopCount(loopCount_);
 	for (auto& e : tweenList_)
 	{
-		if (e->GetValuePointer() == value)
+		if (e->GetValuePointer() == value && value != nullptr)
 		{
 			e = tweenPtr_;
 			return;

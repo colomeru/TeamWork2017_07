@@ -1,7 +1,6 @@
 #pragma once
 
 #include "IScene.h"
-#include "../time/Time.h"
 
 class TitleScene : public IScene
 {
@@ -29,6 +28,7 @@ private:
 	int selectNum_;
 	float selectX_;
 	float selectY_;
+	float timer;
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;

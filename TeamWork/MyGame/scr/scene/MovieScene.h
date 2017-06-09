@@ -29,13 +29,6 @@ public:
 
 private:
 	Movie movieView_;
-
-private:
-	// ワールド用シェアドポインタ
-	using WorldPtr = std::shared_ptr<World>;
-	// ワールド
-	WorldPtr		world_;
-
-	// 次のシーン
+	float timer;
 	Scene			nextScene_;
 };

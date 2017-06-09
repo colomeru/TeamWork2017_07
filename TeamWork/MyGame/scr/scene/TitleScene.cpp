@@ -4,6 +4,8 @@
 #include "../conv/DXConverter.h"
 #include "../graphic/Sprite.h"
 #include "../game/Game1.h"
+#include "../fade/FadePanel.h"
+#include "../time/Time.h"
 
 TitleScene::TitleScene() :
 	nextScene_(Scene::Menu)
@@ -21,21 +23,20 @@ TitleScene::~TitleScene()
 
 void TitleScene::Initialize()
 {
-	/*Camera::GetInstance().SetRange(0.1f, 10000.0f);
-	Camera::GetInstance().SetViewAngle(60.0f);
-	Camera::GetInstance().Up.Set(Vector3::Up);
-	Camera::GetInstance().Position.Set(Vector3(0, 0, -10));
-	Camera::GetInstance().Target.Set(Vector3(0, 0, 0));
-	Camera::GetInstance().Update();
-	*/
+
 	isEnd_ = false;
 	selectX_ = 850.0f;
 	selectY_ = 803.0f;
 	selectNum_ = 0;
+	timer = 0;
+	
+	FadePanel::GetInstance().SetInTime(1.0f);
+	FadePanel::GetInstance().FadeIn();
 }
 
 void TitleScene::Update()
 {
+	timer += Time::DeltaTime;
 	// XV
 	world_->Update();
 	// I—¹
@@ -68,9 +69,7 @@ void TitleScene::Update()
 void TitleScene::Draw() const
 {
 	// 読みこんだグラフィックを画面左上に描画
-	//auto pos1 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
-	//auto pos2 = DXConverter::GetInstance().ToVECTOR(Vector3(0, 0, 0));
-	//DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
+	
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_START_SPRITE, Vector2(905.0f, 780.0f));
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_EXIT_SPRITE, Vector2(905.0f, 840.0f));
 	Sprite::GetInstance().Draw(SPRITE_ID::SPHERE_SPRITE, Vector2(selectX_, selectY_));

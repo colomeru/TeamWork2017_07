@@ -16,6 +16,7 @@ void DemoScene::Initialize()
 	isEnd_ = false;
 
 	// フェードイン
+	FadePanel::GetInstance().SetInTime(0.0f, 0.0f);
 	FadePanel::GetInstance().FadeIn();
 }
 

@@ -55,16 +55,18 @@ void SceneManager::End()
 // ƒV[ƒ“•ÏX
 void SceneManager::Change()
 {
-	if(timer > 30.0f){		
-	    if (nectSceneName_ == Scene::Title){
-			Change(Scene::Movie);
-			timer = 0;
-			return;
-		}  
-		else if (nectSceneName_ != Scene::Movie) {
-			Change(Scene::Title);
-			timer = 0;
-			return;
+	if(nectSceneName_ != Scene::GamePlay){
+		if (timer > 30.0f) {
+			if (nectSceneName_ == Scene::Title) {
+				Change(Scene::Movie);
+				timer = 0;
+				return;
+			}
+			else if (nectSceneName_ != Scene::Movie) {
+				Change(Scene::Title);
+				timer = 0;
+				return;
+			}
 		}
 	}
 	

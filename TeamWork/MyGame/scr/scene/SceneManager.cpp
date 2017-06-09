@@ -11,7 +11,7 @@ const int SceneManager::MaxStageCount = 6;
 
 // コンストラクタ
 SceneManager::SceneManager() :
-mStageCount(6), nectSceneName_(Scene::Title)
+	mStageCount(6), nectSceneName_(Scene::Title)
 {
 
 }
@@ -30,9 +30,9 @@ void SceneManager::Initialize()
 void SceneManager::Update()
 {
 	timer += Time::DeltaTime;
-	if (!FadePanel::GetInstance().IsAction()) 
+	if (!FadePanel::GetInstance().IsAction())
 		mCurrentScene->Update();
-	
+
 	TweenManager::GetInstance().Update(Time::DeltaTime);
 	TweenManager::GetInstance().Remove();
 	FadePanel::GetInstance().Update(Time::DeltaTime);
@@ -42,7 +42,7 @@ void SceneManager::Update()
 void SceneManager::Draw() const
 {
 	//if (!FadePanel::GetInstance().IsAction())
-		mCurrentScene->Draw();
+	mCurrentScene->Draw();
 	FadePanel::GetInstance().Draw();
 }
 
@@ -55,21 +55,21 @@ void SceneManager::End()
 // シーン変更
 void SceneManager::Change()
 {
-	if(nectSceneName_ != Scene::GamePlay){
-		if (timer > 30.0f) {
-			if (nectSceneName_ == Scene::Title) {
-				Change(Scene::Movie);
-				timer = 0;
-				return;
-			}
-			else if (nectSceneName_ != Scene::Movie) {
-				Change(Scene::Title);
-				timer = 0;
-				return;
-			}
+	if (Keyboard::GetInstance().AnyTriggerDown() == true) {
+		timer = 0;
+	}
+	if (timer > 30.0f) {
+		if (nectSceneName_ == Scene::Title) {
+			Change(Scene::Movie);
+			timer = 0;
+			return;
+		}
+		else if (nectSceneName_ != Scene::Movie) {
+			Change(Scene::Title);
+			timer = 0;
+			return;
 		}
 	}
-	
 	if (mCurrentScene->IsEnd())
 	{
 		Change(mCurrentScene->Next());
@@ -110,7 +110,7 @@ void SceneManager::Change(Scene name)
 	//FadePanel::GetInstance().FadeOut();
 	End();
 	mCurrentScene = mScenes[name];
-   	mCurrentScene->Initialize();
+	mCurrentScene->Initialize();
 }
 
 // 初期化を指定する

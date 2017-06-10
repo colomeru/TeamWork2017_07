@@ -18,7 +18,7 @@
 #include "GamePlayDefine.h"
 
 TutorialScene::TutorialScene() :
-	nextScene_(Scene::GamePlay)
+	nextScene_(Scene::Title)
 {
 	// ÉèÅ[ÉãÉhê∂ê¨
 	world_ = std::make_shared<World>();
@@ -58,7 +58,7 @@ void TutorialScene::Initialize()
 	world_->SetTarget(player_.get());
 
 	bgScreen_.Init(Stage::Stage1);
-	textScreen_.Init("Tutorial1.txt");
+	textScreen_.Init("Tutorial.txt");
 }
 
 void TutorialScene::Update()

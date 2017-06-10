@@ -7,6 +7,7 @@
 #include "../../math/Easing.h"
 #include "../../tween/TweenManager.h"
 #include "../../Def.h"
+#include "../../game/Random.h"
 
 const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 350.0f, WINDOW_HEIGHT / 2.0f),
 							Vector2(0.0f, WINDOW_HEIGHT - 100.0f) };
@@ -14,10 +15,11 @@ const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 350.0f, WINDOW_HEIGHT 
 //コンストラクタ
 MenuScreen::MenuScreen() :stageNum(0)
 {
+	betDis_ = 339.0f;
 	for (int i = 0; i < 9; i++)
 	{
-		if (i == 0) panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * 150.0f),true,1.0f };
-		else panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * 150.0f),false,0.0f };
+		if (i == 0) panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * betDis_),true,1.0f };
+		else panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * betDis_),false,0.0f };
 	}
 	//本来は0版はチュートリアル
 	stageList_[0] = Stage::Stage1;
@@ -47,6 +49,47 @@ MenuScreen::MenuScreen() :stageNum(0)
 	velocity = Vector2(0.0f, 0.0f);
 	modify = Vector2(0.0f, 0.0f);
 	mag = 50.0f;
+	builPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f);
+	bgPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f);
+	wwwPos_ = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT);
+
+	bgHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::STAGE_SELECT_BACK_SPRITE);
+	builHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::STAGE_SELECT_M_SPRITE);
+	wwwHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::WWW_SPRITE);
+
+	//背景色
+	bgColor_[0] = Vector3(155, 204, 255);
+	bgColor_[1] = Vector3(51, 204, 255);
+	bgColor_[2] = Vector3(0, 153, 255);
+	bgColor_[3] = Vector3(0, 153, 204);
+	bgColor_[4] = Vector3(204, 153, 102);
+	bgColor_[5] = Vector3(204, 153, 0);
+	bgColor_[6] = Vector3(153, 102, 51);
+	bgColor_[7] = Vector3(0, 51, 102);
+	bgColor_[8] = Vector3(0, 0, 102);
+	color_ = bgColor_[0];
+
+	//星
+	starNum_ = 40;
+	alphaValue_ = 0.01f;
+	for (int i = 0; i < starNum_; i++) {
+		int randX = Random::GetInstance().Range(0, WINDOW_WIDTH);
+		int randY = Random::GetInstance().Range(0, WINDOW_HEIGHT);
+		star_[i].position_ = Vector2(randX, randY);
+		star_[i].isAlpha_ = 0.0f;
+		star_[i].timer_ = 0.0f;
+	}
+
+	//流れ星
+	sStarNum_ = 10;
+	for (int i = 0; i < sStarNum_; i++) {
+		int randX = Random::GetInstance().Range(0, WINDOW_WIDTH);
+		int randY = Random::GetInstance().Range(0, WINDOW_HEIGHT);
+		sStar_[i].position_ = Vector2(randX, randY);
+		sStar_[i].isAlpha_ = 0.0f;
+		sStar_[i].timer_ = 0.0f;
+	}
+
 }
 
 //デストラクタ
@@ -214,26 +257,28 @@ void MenuScreen::Pattern2Update()
 		if (IsInputUp())
 		{
 			if (stageNum == 8 || CheckNextStage(stageNum) == false) return;
-			timer_ = 0.0f;
-			dis += 150.0f;
+			dis += betDis_;
 			//dis = drawPos.y - panel[stageNum].position.y;
 			stageNum++;
 			//if (dis < 0) return;
 			dir = Vector2(0.0f, 1.0f);
 
 			TweenManager::GetInstance().Add(EaseOutExpo, &from, Vector2(0.0f, dis), MoveTime);
+			TweenManager::GetInstance().Add(Linear, &color_, bgColor_[stageNum], MoveTime);
+
 		}
 		if (IsInputDown())
 		{
 			if (stageNum == 0.0f) return;
-			timer_ = 0.0f;
-			dis -= 150.0f;
+			dis -= betDis_;
 			//dis = panel[stageNum].position.y - drawPos.y;
 			stageNum--;
 			//if (dis > 0.0f) return;
 			dir = Vector2(0.0f, -1.0f);
 
 			TweenManager::GetInstance().Add(EaseOutExpo, &from, Vector2(0.0f, dis), MoveTime);
+			TweenManager::GetInstance().Add(Linear, &color_, bgColor_[stageNum], MoveTime);
+
 		}
 	}
 	stageNum = MathHelper::Clamp(stageNum, 0, 8);
@@ -270,6 +315,11 @@ void MenuScreen::Pattern2Update()
 	timer_ = MathHelper::Min(timer_, MoveTime);
 
 	MathHelper::Clamp(modify.y, 0.0f, 1200.0f);
+
+	//背景色
+	SetBackgroundColor(color_.x, color_.y, color_.z);
+
+	Star();
 }
 
 //パターン２描画
@@ -284,18 +334,36 @@ void MenuScreen::Pattern2Draw() const
 		DrawFormatString(0, 140, GetColor(255, 255, 255), "meveDis %f %f", moveDis.x, moveDis.y);
 		DrawFormatString(0, 160, GetColor(255, 255, 255), "modify %f %f", modify.x, modify.y);
 		DrawFormatString(0, 180, GetColor(255, 255, 255), "mag %f", mag);
+		for (int i = 0; i < 30; i++) {
+			DrawFormatString(0, 200 + i * 20, GetColor(255, 255, 255), "isAlpha %f", star_[i].isAlpha_);
+		}
 	}
+
+	//背景
+	static auto bgSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_BACK_SPRITE);
+	static auto builSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_M_SPRITE);
+	static auto wwwSize = Sprite::GetInstance().GetSize(SPRITE_ID::WWW_SPRITE);
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_BACK_SPRITE, bgPos_ + from * 0.7f, Vector2(bgSize.x / 2.0f - 100.0f, bgSize.y), Vector2(1.5f, 1.5f), 1.0f, false);
+
+	//星
+	for (int i = 0; i < starNum_; i++) {
+		Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, star_[i].position_, star_[i].isAlpha_);
+	}
+
+	//ビルと草
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_M_SPRITE, builPos_ + from, Vector2(builSize.x / 2.0f - 24.0f, builSize.y), Vector2(3.0f, 3.0f), 1.0f, false);
+	Sprite::GetInstance().Draw(SPRITE_ID::WWW_SPRITE, wwwPos_ + from, Vector2(wwwSize.x / 2.0f, wwwSize.y), Vector2(2.0f, 2.2f), 1.0f, false);
+
 	//ステージパネルを描画
 	for (int i = 0; i < 9; i++)
 	{
-		//if (!test) return;
 		auto drawPos = panel[i].position + from;
 
 		//float ease = Easing::EaseOutExpo(timer_, 0.0f, dis, 1.0f);
 		//drawPos.y += ease;
 		//if ((stageNum != 0 && dis == -150.0f) || (stageNum != 8 && dis == 150.0f)) drawPos.y += ease;
-		auto min = drawPos - Vector2(300.0f, 50.0f);
-		auto max = drawPos + Vector2(300.0f, 50.0f);
+		auto min = drawPos - Vector2(400.0f, 80.0f);
+		auto max = drawPos + Vector2(400.0f, 80.0f);
 		DrawBox(min.x, min.y, max.x, max.y, GetColor(0, 255 - 20 * i, 20 * i), panel[i].alpha);
 	}
 	//0.0f, WINDOW_HEIGHT - 100.0f
@@ -307,19 +375,6 @@ void MenuScreen::Pattern2Draw() const
 	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(panel[cursorNum].position.x - 350.0f, panel[cursorNum].position.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, cursorPos, Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, false);
 
-	//Vector2 cursorPos2;
-	//if (!backSelect) cursorPos2 = Vector2(cursorPos.x + 700.0f,cursorPos.y);
-	//else cursorPos2 = Vector2(cursorPos.x + 400.0f, cursorPos.y);
-	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(cursorPos2.x, cursorPos2.y), Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, true);
-
-	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::M))
-	//{
-	//	DrawFormatString(panel[cursorNum].position.x - 280, panel[cursorNum].position.y, GetColor(255, 0, 0), "ステージ%d", stageNum + 1);
-	//}
-
-	//
-	DrawCircle(drawPos.x, drawPos.y, 16, GetColor(0, 0, 255), 0, 1);
-	DrawCircle(gPos.x, gPos.y, 16, GetColor(255, 0, 0), 0, 1);
 }
 
 //"上"が入力されたか
@@ -353,6 +408,66 @@ bool MenuScreen::IsInputAny() const
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::RIGHT);
+}
+
+
+
+//星
+void MenuScreen::Star()
+{
+	alphaValue_ = 0.007 * (9 - stageNum);
+
+	if (stageNum == 8) {
+		for (int i = 0; i < starNum_; i++) {
+			star_[i].isAlpha_ += alphaValue_;
+		}
+	}
+	else if (stageNum == 7) {
+		for (int i = 0; i < 20; i++) {
+			star_[i].isAlpha_ += alphaValue_;
+		}
+		for (int i = 20; i < starNum_; i++) {
+			star_[i].isAlpha_ -= alphaValue_;
+		}
+	}
+	else if (stageNum == 6) {
+		for (int i = 0; i < 3; i++) {
+			star_[i].isAlpha_ += alphaValue_;
+		}
+		for (int i = 3; i < starNum_; i++) {
+			star_[i].isAlpha_ -= alphaValue_;
+		}
+	}
+	else {
+		for (int i = 0; i < starNum_; i++) {
+			star_[i].isAlpha_ -= alphaValue_;
+		}
+	}
+	
+	for (int i = 0; i < starNum_; i++) {
+		star_[i].isAlpha_ = MathHelper::Clamp(star_[i].isAlpha_,0.0f,1.0f);
+	}
+}
+
+//流れ星
+void MenuScreen::ShootingStar()
+{
+	if (stageNum = 8) {
+		for (int i = 0; i < sStarNum_; i++) {
+			sStar_[i].timer_ += Time::DeltaTime;
+			sStar_[i].timer_ = MathHelper::Min(sStar_[i].timer_, WaitTime_);
+			if (sStar_[i].timer_ >= WaitTime_) {
+				sStar_[i].position_ += Vector2(-2.0f, 1.0f);
+
+			}
+		}
+	}
+
+}
+
+//カラス
+void MenuScreen::Crow()
+{
 }
 
 Stage MenuScreen::GetGamePlayStage() const

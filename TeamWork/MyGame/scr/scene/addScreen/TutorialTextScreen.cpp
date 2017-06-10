@@ -9,8 +9,8 @@
 #include"../../time/Time.h"
 #include"../../graphic/FontManager.h"
 
-static const int textSpeed = 5;
-static const float defTextChangeTime = 1.0f;
+static const int textSpeed = 3;
+static const float defTextChangeTime = 3.0f;
 
 TutorialTextScreen::TutorialTextScreen(World * world) :world_(world), textCount_(0)
 {

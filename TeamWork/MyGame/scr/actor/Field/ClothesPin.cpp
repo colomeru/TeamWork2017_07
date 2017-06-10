@@ -30,6 +30,8 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes,
 	
 	SetPose(mat);
 
+	angle_ = 0.f;
+
 	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_Circle_Circle, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
 }
@@ -79,7 +81,9 @@ void ClothesPin::Draw() const
 
 	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE) / 2;
 	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
-	DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, origin, 1.f, Vector2::One, angle_);
 
 	if (BuildMode != 1)return;
 

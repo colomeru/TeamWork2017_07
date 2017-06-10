@@ -2,7 +2,9 @@
 #include "../../Def.h"
 #include "../../math/Vector2.h"
 #include <array>
-#include"../../stageGenerator/Stage.h"
+#include "../../stageGenerator/Stage.h"
+#include "../../math/Vector3.h"
+#include <vector>
 
 class MenuScreen
 {
@@ -13,11 +15,20 @@ public:
 		Vector2 position; //パネルの座標
 		bool isDraw; //選択可能か
 		float alpha; //パネルのアルファ値
-		PanelStruct():
-			position(Vector2::Zero),isDraw(false),alpha(0.0f){}
+		PanelStruct() :
+			position(Vector2::Zero), isDraw(false), alpha(0.0f) {}
 		PanelStruct(Vector2 position, bool isDraw = false, float alpha = 0.0f) :
 			position(position), isDraw(isDraw), alpha(alpha) {}
 	};
+
+	//星
+	struct StarStruct
+	{
+		Vector2 position_;
+		float isAlpha_;
+		float timer_;
+	};
+
 
 	//コンストラクタ
 	MenuScreen();
@@ -49,7 +60,13 @@ public:
 	bool IsInputLeft() const;
 	//"上/下/右"のいずれかが入力されたか
 	bool IsInputAny() const;
-	
+	//星
+	void Star();
+	//流れ星
+	void ShootingStar();
+	//カラス
+	void Crow();
+
 	Stage GetGamePlayStage()const;
 private:
 	int stageNum = 0; //ステージ番号
@@ -77,6 +94,27 @@ private:
 	Vector2 moveDis; //移動距離
 	Vector2 velocity; //速度
 	float mag; //速度倍率
+	int bgHandle; //背景のハンドル
+	int builHandle; //ビルのハンドル
+	int wwwHandle; //草のハンドル
+	Vector2 bgPos_; //背景座標
+	Vector2 builPos_; //ビル座標
+	Vector2 wwwPos_; //草座標
+	float betDis_; //間距離
 
-	std::array<Stage,9> stageList_;
+	//背景色
+	std::array<Vector3, 9> bgColor_;
+	Vector3 color_;
+
+	//星
+	std::array<StarStruct, 40> star_;
+	int starNum_;
+	float alphaValue_;
+
+	//流れ星
+	std::array<StarStruct, 10> sStar_;
+	int sStarNum_;
+	const float WaitTime_ = 10.0f;
+
+	std::array<Stage, 9> stageList_;
 };

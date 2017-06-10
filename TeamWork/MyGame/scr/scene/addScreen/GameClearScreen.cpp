@@ -5,6 +5,7 @@
 #include"../../input/GamePad.h"
 #include"../../math/MathHelper.h"
 #include"../GamePlayDefine.h"
+#include"../../tween/TweenManager.h"
 
 GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 {
@@ -16,6 +17,11 @@ GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 
 	textSizeList_.push_back(1.f);
 	textSizeList_.push_back(1.f);
+
+	cursorPos_.push_back(Vector2(400, 600));
+	cursorPos_.push_back(Vector2(400, 800));
+
+	cursorDrawPos_ = cursorPos_[inputCount_];
 }
 
 
@@ -37,15 +43,21 @@ bool GameClearScreen::Update(Scene & nextScene)
 {
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;
+		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
+		TweenManager::GetInstance().Cancel(&cursorDrawPos_);
+		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
 		inputCount_--;
+		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
+		TweenManager::GetInstance().Cancel(&cursorDrawPos_);
+		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
 	}
-	inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
+	//inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 
 	drawUpdate();
 
@@ -68,12 +80,14 @@ void GameClearScreen::Draw() const
 
 	Vector2 RTposit = Vector2(WINDOW_WIDTH / 2, 600.f);
 	Vector2 RTorig = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_NEXTSTAGE_TEXT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_NEXTSTAGE_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One*textSizeList_[0]);
+	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_NEXTSTAGE_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One/**textSizeList_[0]*/);
 
 	Vector2 BTposit = Vector2(WINDOW_WIDTH / 2, 800.f);
 	Vector2 BTorig = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[1], Vector2::One*textSizeList_[1]);
+	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[1], Vector2::One/**textSizeList_[1]*/);
 
+	Vector2 CSorig = Sprite::GetInstance().GetSize(SPRITE_ID::OROCHI_CURSOR_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorDrawPos_, CSorig, Vector2::One);
 }
 
 void GameClearScreen::drawUpdate()

@@ -33,4 +33,6 @@ private:
 	float	currentLoadCount_;
 	// ‘OƒtƒŒ[ƒ€“Ç‚İ‚İ”
 	float	prevLoadCount_;
+
+	int timeCount_;
 };

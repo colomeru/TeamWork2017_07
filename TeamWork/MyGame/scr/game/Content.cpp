@@ -8,6 +8,13 @@
 #include "../math/MathHelper.h"
 #include "ID.h"
 
+void Content::NotAsyncLoadSprite(Sprite & sprite, Model & model)
+{
+	WorkFolder::SetWorkFolder("res/Sprite/");
+	sprite.Load("nowloading.png", SPRITE_ID::NOWLOADING_SPRITE);
+	sprite.Load("dot.png", SPRITE_ID::DOT_SPRITE);
+}
+
 // âÊëúÇì«Ç›çûÇﬁ
 void Content::LoadSprite(Sprite& sprite, Model& model)
 {

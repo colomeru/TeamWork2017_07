@@ -12,6 +12,7 @@ public:
 	Content() = default;
 	~Content() = default;
 
+	void NotAsyncLoadSprite(Sprite& sprite, Model& model);
 	///<summary>
 	/// ‰æ‘œ‚ğ“Ç‚İ‚Ş
 	///</summary>

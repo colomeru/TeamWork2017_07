@@ -26,6 +26,8 @@ void Game1::Initialize()
 	Sound::GetInstance().Initialize();
 	FontManager::GetInstance().Initialize();
 
+	mContent.NotAsyncLoadSprite(Sprite::GetInstance(), Model::GetInstance());
+
 	// ”ñ“¯Šú“Ç‚İ‚İŠJn
 	mContent.EnableASync();
 

@@ -2,6 +2,7 @@
 
 class Sprite;
 class Model;
+class FontManager;
 class Sound;
 class File;
 
@@ -26,6 +27,7 @@ public:
 	///</summary>
 	void LoadSound(Sound& sound);
 
+	void LoadFont(FontManager& font);
 	///<summary>
 	/// ”ñ“¯Šú“Ç‚İ‚İ‚ğ—LŒø‰»
 	///</summary>

@@ -95,6 +95,9 @@ public:
 		return player_;
 	}
 	void CreateFatigueEffect();
+	void SetBiteSprite() {
+		biteSpriteTimer_ = 0.15f;
+	}
 private:
 	//Õ“Ë‚µ‚Ä‚¢‚é‚©
 	bool isHit_;
@@ -106,6 +109,8 @@ private:
 	//Vector2 stopPos_;
 
 	int myNumber_;
+
+	float biteSpriteTimer_;
 
 	bool isHitOnce;
 

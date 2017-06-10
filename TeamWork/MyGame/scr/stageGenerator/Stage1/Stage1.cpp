@@ -76,6 +76,32 @@ void Stage1::AddStage()
 		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, i, Vector2::Zero, hairballCnt_));
 	}
 }
+void Stage1::CreateClothes() {
+	csvReader_.load("res/csv/" + fileName_ + ".csv");
+
+	auto row = csvReader_.rows();			//全体の行数
+	auto col = csvReader_.columns();		//全体の列数
+	int laneNum = 0;
+	stageSize_ = Vector2(col, row) * STAGE_TIP_SIZE;
+
+	//csvの行(row)と列(col)から位置を出し、オブジェクト判別し、生成
+	for (int i = 0; i < row; i++) {
+		//laneNum = i / 5;
+		auto pin = i % 5;
+		if (pin == 0 && i != 0) {
+			laneNum++;
+			while (!pin_list.empty())
+				pin_list.pop();
+
+		}
+		for (int j = 0; j < col; j++) {
+			if (pin != 2)break;
+			pin_list.push(false);
+			auto data = csvReader_.geti(i, j);
+			Clothes_Add(i, j, data, laneNum);
+		}
+	}
+}
 
 void Stage1::Pin_Add(int i, int j, int data, int laneNum)
 {

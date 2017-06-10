@@ -7,9 +7,10 @@
 #include"../Field/ClothesPin.h"
 #include"../Effects/PlayerEffect/PlayerFatigueEffect.h"
 #include"../../sound/sound.h"
+#include"../../time/Time.h"
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
-	:Actor(world, targetP)
+	:Actor(world, targetP), biteSpriteTimer_(0.0f)
 	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false), isAlreadyCreateSplash_(false)
 {
 	spriteId_ = SPRITE_ID::OROCHI_HEAD_SPRITE;
@@ -54,6 +55,10 @@ void Player_Head::Update()
 	if (player_->GetCurHead()==myNumber_&&fatigueCheckColor_ >= 200)CreateFatigueEffect();
 
 	fatigueCheckColor_ = MathHelper::Clamp(fatigueCheckColor_, 0,255);
+	
+	biteSpriteTimer_ -= Time::DeltaTime;
+	biteSpriteTimer_ = max(biteSpriteTimer_,0.0f);
+
 	//Vector2 posAddP = position_;
 	
 	//•—‚É‚©‚ê‚½•ž‚É“–‚½‚Á‚Ä‚©‚Â‚©‚ê‚Ä‚¢‚È‚¢•ž‚É‚Â‚©‚ß‚Ä‚È‚¢ê‡‚Ì‚Ý—Ž‚¿‚é
@@ -143,8 +148,19 @@ void Player_Head::Draw() const
 			angle = 270;
 		}
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
-		Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_,Vector2::One, angle,true,false);
-		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One, angle, true, false);
+
+		if (player_->GetIsShootMode())
+		{
+			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+		}
+		else if (biteSpriteTimer_ > 0.01f) {
+			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_END_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+
+		}
+		else {
+			Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+			Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One, angle, true, false);
+		}
 	}
 	else {
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;

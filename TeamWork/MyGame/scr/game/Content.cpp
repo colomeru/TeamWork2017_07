@@ -3,6 +3,7 @@
 #include "../graphic/Model.h"
 #include "../graphic/Sprite.h"
 #include "../sound/Sound.h"
+#include "../graphic/FontManager.h"
 #include "../Def.h"
 #include "../math/MathHelper.h"
 #include "ID.h"
@@ -20,7 +21,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("人.png", SPRITE_ID::HITO_SPRITE);
 	sprite.Load("snake.png", SPRITE_ID::SNAKE_SPRITE);
 	sprite.Load("clip.png", SPRITE_ID::PLAYER_HEAD_SPRITE);
-	sprite.Load("forochi2.png", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
+	sprite.Load("orochi_4.png", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
 	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE, 6, Point(3, 2), Point(200, 200));	
 	sprite.Load("testClothes.bmp", SPRITE_ID::TEST_CLOTHES_SPRITE);
 	sprite.Load("goalUI.png", SPRITE_ID::GOAL_UI_SPRITE);
@@ -53,7 +54,9 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("stageres/stage_high.png", SPRITE_ID::CEILING_SPRITE);
 	sprite.Load("pbody.png", SPRITE_ID::PBODY_SPRITE);
 	sprite.Load("orochi_neck2.png", SPRITE_ID::OROCHI_NECK_SPRITE);
-	sprite.Load("orochi2.png", SPRITE_ID::OROCHI_HEAD_SPRITE);
+	sprite.Load("orochi.png", SPRITE_ID::OROCHI_HEAD_SPRITE);
+	sprite.Load("orochi_anime2.png", SPRITE_ID::OROCHI_HEAD_SHOOT_SPRITE);
+	sprite.Load("orochi_anime3.png", SPRITE_ID::OROCHI_HEAD_SHOOT_END_SPRITE);
 	sprite.Load("sword.png", SPRITE_ID::SWORD_SPRITE);
 	sprite.Load("birdsDropping.png", SPRITE_ID::BIRDS_DROPPING_SPRITE);
 	sprite.Load("bird.png", SPRITE_ID::BIRD_SPRITE);
@@ -66,11 +69,14 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);
 	sprite.Load("chain_1.png", SPRITE_ID::NECK_CHAIN1_SPRITE);
 	sprite.Load("chain_2.png", SPRITE_ID::NECK_CHAIN2_SPRITE);
+	sprite.Load("orochidead.png", SPRITE_ID::OROCHI_DEAD_SPRITE);
 	
+	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(102, 218));
+
 	sprite.Load("effect/playereffect/henshin.png", SPRITE_ID::METAMOR_EFFECT_SPRITE, 10, Point(10, 1), Point(240, 240));
 	sprite.Load("effect/playereffect/biteeffect.png", SPRITE_ID::BITE_EFFECT_SPRITE, 5, Point(5, 1), Point(120, 120));
 	sprite.Load("effect/tapeffect.png", SPRITE_ID::TAP_EFFECT_SPRITE, 10, Point(10, 1), Point(480, 480));
-	sprite.Load("effect/playereffect/sword_effect.png", SPRITE_ID::GET_SWORD_EFFECT_SPRITE, 15, Point(5, 3), Point(240, 240));
+	sprite.Load("effect/playereffect/sword_effect.png", SPRITE_ID::GET_SWORD_EFFECT_SPRITE, 15, Point(5, 3), Point(260, 260));
 	sprite.Load("effect/playereffect/Splash.png", SPRITE_ID::FATIGUE_EFFECT_SPRITE, 5, Point(5, 1), Point(184, 180));
 	sprite.Load("effect/playereffect/swordeffect.png", SPRITE_ID::SWORD_ATTACK_EFFECT_SPRITE,10,Point(5,2),Point(120,120));
 	
@@ -157,6 +163,13 @@ void Content::LoadSound(Sound& sound)
 	sound.LoadSE("se/slash.mp3", SE_ID::SLASH_SE);
 	
 	
+}
+
+void Content::LoadFont(FontManager& font)
+{
+	WorkFolder::SetWorkFolder("res/Font/");
+
+	font.AddFont(FONT_ID::TUTORIAL_FONT,"nicomoji-plus_1.11.ttf","ニコモジ＋", 50);
 }
 
 void Content::EnableASync()

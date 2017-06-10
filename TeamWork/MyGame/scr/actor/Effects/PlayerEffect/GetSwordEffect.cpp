@@ -22,5 +22,10 @@ void GetSwordEffect::Update()
 void GetSwordEffect::Draw() const
 {
 	if (!target_->GetUseSword())return;
-	effectMgr_.DrawEffect(drawPos_);
+	Vector2 startDP = GetDrawPosVect(target_->GetSwordStartPos());
+	Vector2 endDP = GetDrawPosVect(target_->GetSwordEndPos());
+
+	Vector2 vel = endDP - drawPos_;
+	float angle = MathAngle(vel);
+	effectMgr_.DrawEffect(drawPos_,angle+180.f);
 }

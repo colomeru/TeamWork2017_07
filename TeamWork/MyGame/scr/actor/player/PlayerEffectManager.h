@@ -11,7 +11,7 @@ public:
 	~PlayerEffectManager();
 
 	void Update();
-	void DrawEffect(const Vector2& position)const;
+	void DrawEffect(const Vector2& position, float angle=0.0f)const;
 	bool GetIsEnd()const;
 private:
 	int maxFrame_;

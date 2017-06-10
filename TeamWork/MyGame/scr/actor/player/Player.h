@@ -32,7 +32,8 @@ enum {
 	MODE_BITE = 3,
 	MODE_SLIP = 4,
 	MODE_RESIST = 5,
-	MODE_CLEAR = 6
+	MODE_CLEAR = 6,
+	MODE_PLAYERDEAD = 7
 };
 
 
@@ -152,8 +153,11 @@ public:
 		otherClothesID_ = cId;
 	}
 	//噛み付ける状態かを返す(レジスト含む)
+	bool GetIsShootMode()const {
+		return playerMode_ == MODE_SHOOT;
+	}
 	bool GetIsBiteMode()const {
-		return playerMode_==MODE_BITE||playerMode_==MODE_RESIST;
+		return playerMode_ == MODE_BITE || playerMode_ == MODE_RESIST;
 	}
 	bool GetIsResistMode()const {
 		return playerMode_ == MODE_RESIST;
@@ -214,7 +218,7 @@ public:
 	void curPHeadSlip(bool isSlip);
 	//プレイヤーが死んでるか
 	bool isPlayerDead()const {
-		if(laneNum_==(maxLaneSize_-1)&&position_.y >= WINDOW_HEIGHT)return true;
+		if(laneNum_==(maxLaneSize_-1)&&position_.y >= WINDOW_HEIGHT-200)return true;
 		//if (position_.y >= WINDOW_HEIGHT)return true;
 
 		for (auto pHD : pHeadDead_) {
@@ -329,6 +333,7 @@ private:
 	void SlipUpdate();
 	void ResistUpdate();
 	void ClearUpdate();
+	void DeadUpdate();
 private:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
 	using PSwordPtr = std::shared_ptr<Player_Sword>;
@@ -420,6 +425,7 @@ private:
 	
 	//Head回転をロックする(スティックを0に戻す事でリセット)
 	bool isCanNextHeadRot;
+
 
 	bool isUseKey_;
 	CLOTHES_ID otherClothesID_;

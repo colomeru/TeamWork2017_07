@@ -12,4 +12,5 @@ enum class EventMessage
 	TAPPER_DEAD,	//’@‚«Ž€–S
 	PLAY_NEXT_STAGE,
 	ADD_SCORE,
+	PLAYER_DEAD,
 };

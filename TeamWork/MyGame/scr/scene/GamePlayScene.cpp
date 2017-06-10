@@ -91,7 +91,7 @@ void GamePlayScene::Initialize()
 	//ƒV[ƒ“‘JˆÚŒn‚Ì‰Šú‰»
 	{
 		gamePlayMode_ = 0;
-		nextScene_ = Scene::Credit;
+		nextScene_ = Scene::Tutorial;
 		pauseScreen_.Init();
 		gameOverScreen_.Init();
 		gameClearScreen_.Init();
@@ -332,6 +332,9 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 		uiScreen_.AddScore(100);
 		break;
 	}
+	case EventMessage::PLAYER_DEAD: {
+		setNextMode(2);
+	}
 	default:
 		break;
 	}
@@ -366,7 +369,6 @@ void GamePlayScene::baseUpdate()
 		//ply1->curPHeadSlip(true);
 		setNextMode(3);
 	}
-	if (ply1->isPlayerDead())setNextMode(2);
 	//if (world_->GetIsGameClear())setNextMode(3);
 
 	bgScreen_.Update();

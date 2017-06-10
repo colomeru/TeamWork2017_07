@@ -6,6 +6,7 @@
 #include"../../math/MathHelper.h"
 #include"../GamePlayDefine.h"
 #include"../../tween/TweenManager.h"
+#include"screenSupport\DrawScore.h"
 
 GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 {
@@ -27,6 +28,10 @@ GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 
 void GameClearScreen::Init()
 {
+	score_ = 0;
+	headCount_ = 0;
+	starCount_ = 0;
+	isShowScore_=true;
 	inputCount_ = 0;
 	sinCount_ = defSinC;
 	for (int i = 0; i < changeSceneList_.size(); i++) {
@@ -36,11 +41,18 @@ void GameClearScreen::Init()
 	textAlphaList_[inputCount_] = 1.f;
 	textSizeList_[inputCount_] = mxmSize;
 
+	dstar_ = DrawStar();
 
 }
 
 bool GameClearScreen::Update(Scene & nextScene)
 {
+	if (isShowScore_) {
+		ScoreUpdate();
+		return false;
+	}
+
+
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;
 		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
@@ -61,7 +73,7 @@ bool GameClearScreen::Update(Scene & nextScene)
 
 	drawUpdate();
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		nextScene = changeSceneList_[inputCount_];
 		return true;
 	}
@@ -78,6 +90,11 @@ void GameClearScreen::Draw() const
 	Vector2 GOorig = Sprite::GetInstance().GetSize(SPRITE_ID::GAMECLEAR_TEXT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::GAMECLEAR_TEXT_SPRITE, GOposit, GOorig, 1.f, Vector2::One);
 
+	if (isShowScore_) {
+		ScoreDraw();
+		return;
+	}
+
 	Vector2 RTposit = Vector2(WINDOW_WIDTH / 2, 600.f);
 	Vector2 RTorig = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_NEXTSTAGE_TEXT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_NEXTSTAGE_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One/**textSizeList_[0]*/);
@@ -88,6 +105,30 @@ void GameClearScreen::Draw() const
 
 	Vector2 CSorig = Sprite::GetInstance().GetSize(SPRITE_ID::OROCHI_CURSOR_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorDrawPos_, CSorig, Vector2::One);
+}
+
+void GameClearScreen::ScoreUpdate()
+{
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+		isShowScore_ = false;
+	}
+	dstar_.Update();
+}
+
+void GameClearScreen::ScoreDraw() const
+{
+	Vector2 origin=Sprite::GetInstance().GetSize(SPRITE_ID::BITECOUNT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(400, 750), origin, Vector2::One);
+	DrawScore::getInstance().Draw(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x * 3,700.f),
+		score_, 6,Vector2::One);
+
+	Vector2 horigin = Sprite::GetInstance().GetSize(SPRITE_ID::HEADCOUNT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::HEADCOUNT_SPRITE, Vector2(650, 950), horigin, Vector2::One);
+	//DrawScore::getInstance().Draw(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x * 0.5f, 900.f),
+	DrawScore::getInstance().Draw(Vector2(1150, 900.f),
+		headCount_, 1, Vector2::One);
+
+	dstar_.Draw(Vector2(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::SCORE_STAR_SPRITE).x * (starCount_ -0.5f), 400.f)));
 }
 
 void GameClearScreen::drawUpdate()

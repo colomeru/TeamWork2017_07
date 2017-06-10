@@ -165,6 +165,13 @@ public:
 	bool GetIsClearMode()const {
 		return playerMode_ == MODE_CLEAR;
 	}
+	int GetPHeadLiveCount()const {
+		int result = 0;
+		for (auto i : pHeadDead_) {
+			if (!i)result++;
+		}
+		return result;
+	}
 	//噛み付き状態にするかをセット、
 	void SetIsBiteMode(bool ismode) {
 		int setMode = (ismode) ? MODE_BITE : MODE_SHOOT;

@@ -75,8 +75,11 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("www.png", SPRITE_ID::WWW_SPRITE);
 	sprite.Load("orochi_cursor.png", SPRITE_ID::OROCHI_CURSOR_SPRITE);
 	sprite.Load("tostageselect.png", SPRITE_ID::TO_STAGESELECT_SPRITE);
+	sprite.Load("scoretext.png", SPRITE_ID::BITECOUNT_SPRITE);
+	sprite.Load("headcount.png", SPRITE_ID::HEADCOUNT_SPRITE);
 	
-	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(102, 218));
+	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(128, 120));
+	sprite.Load("scorestar.png", SPRITE_ID::SCORE_STAR_SPRITE, 7, Point(7, 1), Point(240, 240));
 
 	sprite.Load("effect/playereffect/henshin.png", SPRITE_ID::METAMOR_EFFECT_SPRITE, 10, Point(10, 1), Point(240, 240));
 	sprite.Load("effect/playereffect/biteeffect.png", SPRITE_ID::BITE_EFFECT_SPRITE, 5, Point(5, 1), Point(120, 120));
@@ -85,6 +88,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("effect/playereffect/Splash.png", SPRITE_ID::FATIGUE_EFFECT_SPRITE, 5, Point(5, 1), Point(184, 180));
 	sprite.Load("effect/playereffect/swordeffect.png", SPRITE_ID::SWORD_ATTACK_EFFECT_SPRITE,10,Point(5,2),Point(120,120));
 	
+
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
 	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);

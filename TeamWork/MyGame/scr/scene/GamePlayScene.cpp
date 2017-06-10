@@ -435,6 +435,29 @@ void GamePlayScene::nextSwitchUpdate()
 
 }
 
+void GamePlayScene::setNextMode(int mode) {
+	gamePlayMode_ = mode;
+	switch (gamePlayMode_)
+	{
+	case 2: {
+		gameOverScreen_.Init();
+		break;
+	}
+	case 3: {
+		gameClearScreen_.Init();
+		gameClearScreen_.SetScore(uiScreen_.GetScore());
+		gameClearScreen_.SetHeadCount(ply1->GetPHeadLiveCount());
+		gameClearScreen_.SetStarCount();
+		break;
+	}
+	case 4: {
+		pauseScreen_.Init();
+	}
+	default:
+		break;
+	}
+}
+
 void GamePlayScene::startUpdate()
 {
 	if (startScreen_.Update()) {

@@ -18,6 +18,9 @@ public:
 	void Draw() const;
 	void End();
 	void AddScore(int score);
+	int GetScore()const {
+		return (iscore_);
+	}
 private:
 	World* world_;
 
@@ -28,6 +31,6 @@ private:
 	Vector2 meterPos_;
 	float stageLen_;
 	Vector2 playerPos_;
- 	int score_;
 	float fscore_;
+	int iscore_;
 };

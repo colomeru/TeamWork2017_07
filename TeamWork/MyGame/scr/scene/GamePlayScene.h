@@ -42,25 +42,7 @@ public:
 		currentStage_ = stage;
 	}
 private:
-	void setNextMode(int mode) {
-		gamePlayMode_ = mode;
-		switch (gamePlayMode_)
-		{
-		case 2: {
-			gameOverScreen_.Init();
-			break;
-		}
-		case 3: {
-			gameClearScreen_.Init();
-			break;
-		}
-		case 4: {
-			pauseScreen_.Init();
-		}
-		default:
-			break;
-		}
-	}
+	void setNextMode(int mode);
 private:
 	void startUpdate();
 	void baseUpdate();

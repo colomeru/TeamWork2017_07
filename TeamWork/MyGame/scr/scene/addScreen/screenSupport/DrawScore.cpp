@@ -14,7 +14,7 @@ DrawScore::~DrawScore()
 {
 }
 
-void DrawScore::Draw(const Vector2& position,int score,int digit)
+void DrawScore::Draw(const Vector2& position,int score,int digit,const Vector2& numberSize)
 {
 	//SPRITE_ID::NUMBER_SPRITE
 	
@@ -29,7 +29,7 @@ void DrawScore::Draw(const Vector2& position,int score,int digit)
 
 	for (int i = 0; i < drawscoretext.size(); i++) {
 		Sprite::GetInstance().SplitDraw(SPRITE_ID::NUMBER_SPRITE,
-			position+Vector2(numberSpriteSize_*i,0.f),((int)drawscoretext.at(i))-48);
+			position+Vector2(numberSpriteSize_*i*numberSize.x,0.f),((int)drawscoretext.at(i))-48,Vector2::Zero,numberSize);
 	}
 
 }

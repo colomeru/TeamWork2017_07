@@ -74,6 +74,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("stage_select_m.PNG", SPRITE_ID::STAGE_SELECT_M_SPRITE);
 	sprite.Load("www.png", SPRITE_ID::WWW_SPRITE);
 	sprite.Load("orochi_cursor.png", SPRITE_ID::OROCHI_CURSOR_SPRITE);
+	sprite.Load("tostageselect.png", SPRITE_ID::TO_STAGESELECT_SPRITE);
 	
 	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(102, 218));
 

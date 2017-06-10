@@ -12,7 +12,7 @@
 static const int textSpeed = 3;
 static const float defTextChangeTime = 3.0f;
 
-TutorialTextScreen::TutorialTextScreen(World * world) :world_(world), textCount_(0)
+TutorialTextScreen::TutorialTextScreen(World * world) :world_(world), textCount_(0), sinCount_(0)
 {
 
 }
@@ -43,11 +43,14 @@ void TutorialTextScreen::Init(const std::string& filename)
 	maxTextSize_ = size;
 	textCount_ = 0;
 	currentTextLine_ = 0;
+	sinCount_ = 0;
 	textChangeTimeCount_ = defTextChangeTime;
 }
 
 void TutorialTextScreen::Update()
 {
+	sinCount_+=5; sinCount_ %= 360;
+
 	textCount_++;
 	if (textCount_/textSpeed >= GetMaxTextSize()){
 		textChangeTimeCount_ -= Time::DeltaTime;
@@ -57,13 +60,16 @@ void TutorialTextScreen::Update()
 		textChangeTimeCount_ = defTextChangeTime;
 		currentTextLine_++;
 		
-		currentTextLine_ = min(currentTextLine_, drawText_.size() - 1);
+		//currentTextLine_ = min(currentTextLine_, drawText_.size() - 1);
 	
+		if (currentTextLine_>=drawText_.size()/3) {
+			currentTextLine_ = 0;
+		}
+
 		textCount_ = 0;
 	}
 
 	textCount_ = min(textCount_, GetMaxTextSize()*textSpeed);
-
 
 }
 
@@ -92,6 +98,9 @@ void TutorialTextScreen::Draw() const
 	}
 
 	FontManager::GetInstance().DrawTextApplyFont(200, 100, GetColor(255, 255, 255), FONT_ID::TUTORIAL_FONT, drawString_.c_str());
+
+	Sprite::GetInstance().Draw(SPRITE_ID::TO_STAGESELECT_SPRITE, Vector2(1500, 200), MathHelper::Sin(sinCount_));
+	
 }
 
 void TutorialTextScreen::End()

@@ -34,7 +34,7 @@ private:
 	Stage currentStage_;
 
 	int textCount_;
-
+	int sinCount_;
 	int maxTextSize_;
 
 	int currentTextLine_;

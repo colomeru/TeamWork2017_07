@@ -5,6 +5,8 @@
 #include"../../game/Random.h"
 #include"../../Def.h"
 #include"../GamePlayDefine.h"
+#include"screenSupport/DrawScore.h"
+#include"../../tween/TweenManager.h"
 
 static const int defTimeCount_ = 60;
 static const int defGenerateCharaCount = 10;
@@ -22,6 +24,7 @@ void UIScreen::Init(Stage currentStage, float stageLen)
 	stageLen_ = stageLen;
 	currentStage_ = currentStage;
 	score_ = 0;
+	fscore_ = 0.f;
 }
 
 void UIScreen::Update(const Vector2& playerPos)
@@ -37,8 +40,9 @@ void UIScreen::Draw() const
 
 	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
 	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(playerPos_.x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
-
-	DrawFormatString(1700, 150, GetColor(255, 0, 0), "%d", score_);
+	
+	//DrawScore::getInstance().Draw(Vector2(1000, 200), score_, 6);
+	DrawScore::getInstance().Draw(Vector2(1000, 200), (int)roundf(fscore_), 6);
 }
 
 void UIScreen::End()
@@ -47,7 +51,10 @@ void UIScreen::End()
 
 void UIScreen::AddScore(int score)
 {
-	score_ += score;
-	score_ = min(score_, 999999);
+	float toscore = fscore_ + score;
+	toscore = min(toscore, 999999);
+
+	TweenManager::GetInstance().Add(EaseType::Linear, &fscore_, toscore, 0.5f);
+
 }
 

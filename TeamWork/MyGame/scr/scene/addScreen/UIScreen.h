@@ -29,4 +29,5 @@ private:
 	float stageLen_;
 	Vector2 playerPos_;
  	int score_;
+	float fscore_;
 };

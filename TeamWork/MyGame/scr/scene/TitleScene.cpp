@@ -29,7 +29,8 @@ void TitleScene::Initialize()
 	selectY_ = 803.0f;
 	selectNum_ = 0;
 	timer = 0;
-	
+	bgScreen_.Init();
+
 	FadePanel::GetInstance().SetInTime(1.0f);
 	FadePanel::GetInstance().FadeIn();
 }
@@ -44,7 +45,7 @@ void TitleScene::Update()
 	Camera::GetInstance().Target.Set(Vector3(0,0,0));
 	Camera::GetInstance().Update();
 	*/
-
+	bgScreen_.Update();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
 		if (selectNum_ == 0) { 
 			isEnd_ = true;			
@@ -69,7 +70,8 @@ void TitleScene::Update()
 void TitleScene::Draw() const
 {
 	// 読みこんだグラフィックを画面左上に描画
-	
+	bgScreen_.Draw();
+
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_START_SPRITE, Vector2(905.0f, 780.0f));
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_EXIT_SPRITE, Vector2(905.0f, 840.0f));
 	Sprite::GetInstance().Draw(SPRITE_ID::SPHERE_SPRITE, Vector2(selectX_, selectY_));
@@ -83,6 +85,7 @@ void TitleScene::Draw() const
 	// •`‰æ
 
 	world_->Draw();
+
 }
 
 bool TitleScene::IsEnd() const

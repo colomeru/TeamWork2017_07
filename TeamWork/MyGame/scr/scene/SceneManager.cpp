@@ -29,7 +29,7 @@ void SceneManager::Initialize()
 // XV
 void SceneManager::Update()
 {
-	timer += Time::DeltaTime;
+	//timer += Time::DeltaTime;
 	if (!FadePanel::GetInstance().IsAction())
 		mCurrentScene->Update();
 

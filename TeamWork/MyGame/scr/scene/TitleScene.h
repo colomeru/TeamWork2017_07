@@ -1,6 +1,7 @@
 #pragma once
 
 #include "IScene.h"
+#include"addScreen\TitleBGScreen.h"
 
 class TitleScene : public IScene
 {
@@ -35,6 +36,7 @@ private:
 	// ワールド
 	WorldPtr		world_;
 	
+	TitleBGScreen bgScreen_;
 	// 次のシーン
 	Scene			nextScene_;
 };

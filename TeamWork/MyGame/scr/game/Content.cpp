@@ -95,6 +95,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("headcount.png", SPRITE_ID::HEADCOUNT_SPRITE);
 	sprite.Load("goalUI.png", SPRITE_ID::TITLE_EXIT_SPRITE);
 	sprite.Load("pressBkey.png", SPRITE_ID::PRESS_B_SPRITE);
+	sprite.Load("titlepole.png", SPRITE_ID::TITLE_POLE_SPRITE);
 	
 	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(128, 120));
 	sprite.Load("scorestar.png", SPRITE_ID::SCORE_STAR_SPRITE, 7, Point(7, 1), Point(240, 240));

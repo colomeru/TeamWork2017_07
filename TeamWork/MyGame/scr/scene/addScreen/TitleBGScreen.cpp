@@ -54,7 +54,8 @@ void TitleBGScreen::Draw() const
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2::Zero-Vector2(scrollPos_,0));
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2(WINDOW_WIDTH,0) - Vector2(scrollPos_, 0));
 
-	//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE),
+	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_POLE_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_POLE_SPRITE, Vector2(WINDOW_WIDTH / 2, lanePos_.at(1)), origin, Vector2::One);
 
 	Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero, whiteScreenAlpha_);
 }

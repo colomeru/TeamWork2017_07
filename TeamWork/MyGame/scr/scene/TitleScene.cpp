@@ -8,6 +8,7 @@
 #include "../time/Time.h"
 #include"../tween/TweenManager.h"
 #include"../sound/sound.h"
+#include"../actor/Field/Clothes/BaseClothes.h"
 
 TitleScene::TitleScene() :
 	nextScene_(Scene::Menu)
@@ -39,7 +40,7 @@ void TitleScene::Initialize()
 	FadePanel::GetInstance().SetInTime(1.0f);
 	FadePanel::GetInstance().FadeIn();
 
-	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM);
+	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM,DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
 
 }

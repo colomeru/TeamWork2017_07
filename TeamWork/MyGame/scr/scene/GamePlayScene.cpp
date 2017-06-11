@@ -113,7 +113,7 @@ void GamePlayScene::Initialize()
 	//FadePanel::GetInstance().FadeIn();
 	world_->Initialize();
 	// アクター生成
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
+	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
 
 	//Vector3 position_ = posit;
 	//Vector3 target_ = posit;
@@ -179,7 +179,7 @@ void GamePlayScene::Initialize()
 
 	stageEffectScreen_.Init(currentStage_);
 	
-	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_]);
+	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_],DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.5f);
 }
 

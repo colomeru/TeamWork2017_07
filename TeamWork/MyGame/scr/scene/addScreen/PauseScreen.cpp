@@ -6,6 +6,7 @@
 #include"../../math/MathHelper.h"
 #include"../GamePlayDefine.h"
 #include"../../tween/TweenManager.h"
+#include"../../sound/sound.h"
 
 PauseScreen::PauseScreen() :inputCount_(0), sinCount_(defSinC)
 {
@@ -47,6 +48,7 @@ bool PauseScreen::Update(Scene& nextScene)
 		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
 		inputCount_--;
@@ -55,13 +57,15 @@ bool PauseScreen::Update(Scene& nextScene)
 		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
 	//inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 
 	drawUpdate();
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		nextScene = changeSceneList_[inputCount_];
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 		return true;
 	}
 	return false;

@@ -7,6 +7,7 @@
 #include "../fade/FadePanel.h"
 #include "../time/Time.h"
 #include"../tween/TweenManager.h"
+#include"../sound/sound.h"
 
 TitleScene::TitleScene() :
 	nextScene_(Scene::Menu)
@@ -37,6 +38,10 @@ void TitleScene::Initialize()
 
 	FadePanel::GetInstance().SetInTime(1.0f);
 	FadePanel::GetInstance().FadeIn();
+
+	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM);
+	Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
+
 }
 
 void TitleScene::Update()
@@ -69,14 +74,17 @@ void TitleScene::Update()
 			GameFrame::GameEnd();
 			//Escape
 		}
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)||GamePad::GetInstance().Stick().y>0.3f) {
 		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 750.f), 0.2f);
 		selectNum_ = 0;
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN)) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) || GamePad::GetInstance().Stick().y < -0.3f) {
 		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 930.f), 0.2f);
 		selectNum_ = 1;
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
 	for (int i = 0; i < alpha_.size(); i++) {
 		if (i == selectNum_) {
@@ -132,6 +140,7 @@ Scene TitleScene::Next() const
 
 void TitleScene::End()
 {
+	Sound::GetInstance().StopBGM();
 	world_->Clear();
 }
 
@@ -143,6 +152,7 @@ void TitleScene::SetNextPanel()
 {
 	if (isStartSetPanel_)return;
 	isStartSetPanel_ = true;
+	Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 
 	TweenManager::GetInstance().Add(Linear, &dummy_, 1.f, 0.2f, [=] {isPushKey_ = true; sinCount_ = 0; });
 }

@@ -441,16 +441,20 @@ void GamePlayScene::setNextMode(int mode) {
 	{
 	case 2: {
 		gameOverScreen_.Init();
+		Sound::GetInstance().PlayBGM(BGM_ID::GAME_OVER_BGM);
+
 		break;
 	}
 	case 3: {
 		gameClearScreen_.Init();
 		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount());
+		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);
 		//gameClearScreen_.SetStarCount();
 		break;
 	}
 	case 4: {
 		pauseScreen_.Init();
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
 	default:
 		break;

@@ -7,6 +7,7 @@
 #include"../GamePlayDefine.h"
 #include"../../tween/TweenManager.h"
 #include"screenSupport\DrawScore.h"
+#include"../../sound/sound.h"
 
 GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 {
@@ -49,6 +50,7 @@ void GameClearScreen::Init()
 
 	dstar_ = DrawStar();
 
+
 }
 
 bool GameClearScreen::Update(Scene & nextScene)
@@ -66,6 +68,8 @@ bool GameClearScreen::Update(Scene & nextScene)
 		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
+
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
 		inputCount_--;
@@ -74,6 +78,7 @@ bool GameClearScreen::Update(Scene & nextScene)
 		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
 	//inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 
@@ -81,6 +86,8 @@ bool GameClearScreen::Update(Scene & nextScene)
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		nextScene = changeSceneList_[inputCount_];
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+
 		return true;
 	}
 	return false;
@@ -122,6 +129,7 @@ void GameClearScreen::SetScore(int score, int count) {
 
 void GameClearScreen::SetHeadCount() {
 	isHeadDraw_ = true;
+	Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	TweenManager::GetInstance().Add(Linear, &fheadCount_, (float)headCount_, 1.f, [=] {SetStarCount(); });
 }
 
@@ -134,6 +142,8 @@ void GameClearScreen::SetStarCount() {
 		starCount_++;
 	}
 	dstar_.SetStarCount(starCount_);
+	Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+
 }
 void GameClearScreen::SetFullStarCount() {
 	starCount_ = 1;
@@ -158,12 +168,16 @@ void GameClearScreen::ScoreUpdate()
 			isHeadDraw_ = true;
 			dstar_.SetFull();
 			isKeyOnceScore_ = true;
+			Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+
 		}
 		else {
 			isShowScore_ = false;
 		}
 	}
 	dstar_.Update();
+
+	if (dstar_.GetStarFull())isKeyOnceScore_ = true;
 }
 
 void GameClearScreen::ScoreDraw() const

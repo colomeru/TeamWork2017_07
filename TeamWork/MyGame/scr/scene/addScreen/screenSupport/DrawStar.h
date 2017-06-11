@@ -15,9 +15,13 @@ public:
 	void SetFullStarCount(int count);
 
 	void SetFull();
+	bool GetStarFull()const;
 private:
 	std::vector<int> timeCount_;
 	int starCount_;
 	float fstarCount_;
 	bool isSetStar_;
+	bool isFullStar_;
+
+	std::vector<bool> isStarUp_;
 };

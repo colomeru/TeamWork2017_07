@@ -1001,36 +1001,43 @@ void Player::SetMode(int pMode) {
 		{
 		case MODE_FALL: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_SHOOT: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().PlaySE(SE_ID::HEAD_SHOOT_SE, DX_PLAYTYPE_LOOP);
 			break;
 		}
 		case MODE_SHOOT_END: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_BITE: {
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
 			break;
 		}
 		case MODE_SLIP: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_RESIST: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_CLEAR: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
@@ -1041,6 +1048,7 @@ void Player::SetMode(int pMode) {
 			for (int i = 0; i < 8; i++) {
 				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerDeadPin>(world_, position_));
 			}
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}

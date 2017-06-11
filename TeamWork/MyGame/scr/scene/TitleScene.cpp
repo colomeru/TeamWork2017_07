@@ -76,12 +76,12 @@ void TitleScene::Update()
 		}
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)||GamePad::GetInstance().Stick().y<0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)|| GamePad::GetInstance().Stick().y < -0.3f) {
 		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 750.f), 0.2f);
 		selectNum_ = 0;
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) || GamePad::GetInstance().Stick().y > -0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) || GamePad::GetInstance().Stick().y>0.3f) {
 		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 930.f), 0.2f);
 		selectNum_ = 1;
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);

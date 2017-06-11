@@ -31,7 +31,13 @@ void GameClearScreen::Init()
 	score_ = 0;
 	headCount_ = 0;
 	starCount_ = 0;
+	fscore_ = 0.f;
+	fheadCount_ = 0.f;
+	cursorDrawPos_ = cursorPos_[inputCount_];
+
+	isKeyOnceScore_ = false;
 	isShowScore_=true;
+	isHeadDraw_ = false;
 	inputCount_ = 0;
 	sinCount_ = defSinC;
 	for (int i = 0; i < changeSceneList_.size(); i++) {
@@ -105,12 +111,57 @@ void GameClearScreen::Draw() const
 
 	Vector2 CSorig = Sprite::GetInstance().GetSize(SPRITE_ID::OROCHI_CURSOR_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorDrawPos_, CSorig, Vector2::One);
+
+}
+
+void GameClearScreen::SetScore(int score, int count) {
+	score_ = score;
+	headCount_ = count;
+	TweenManager::GetInstance().Add(Linear, &fscore_, (float)score, 1.f, [=] {SetHeadCount(); });
+}
+
+void GameClearScreen::SetHeadCount() {
+	isHeadDraw_ = true;
+	TweenManager::GetInstance().Add(Linear, &fheadCount_, (float)headCount_, 1.f, [=] {SetStarCount(); });
+}
+
+void GameClearScreen::SetStarCount() {
+	starCount_ = 1;
+	if (score_ >= 5000) {
+		starCount_++;
+	}
+	if (headCount_ >= 5) {
+		starCount_++;
+	}
+	dstar_.SetStarCount(starCount_);
+}
+void GameClearScreen::SetFullStarCount() {
+	starCount_ = 1;
+	if (score_ >= 5000) {
+		starCount_++;
+	}
+	if (headCount_ >= 5) {
+		starCount_++;
+	}
+	dstar_.SetFullStarCount(starCount_);
 }
 
 void GameClearScreen::ScoreUpdate()
 {
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
-		isShowScore_ = false;
+		if (!isKeyOnceScore_) {
+			TweenManager::GetInstance().Cancel(&fscore_);
+			TweenManager::GetInstance().Cancel(&fheadCount_);
+			fscore_ = score_;
+			fheadCount_ = headCount_;
+			SetFullStarCount();
+			isHeadDraw_ = true;
+			dstar_.SetFull();
+			isKeyOnceScore_ = true;
+		}
+		else {
+			isShowScore_ = false;
+		}
 	}
 	dstar_.Update();
 }
@@ -120,13 +171,15 @@ void GameClearScreen::ScoreDraw() const
 	Vector2 origin=Sprite::GetInstance().GetSize(SPRITE_ID::BITECOUNT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(400, 750), origin, Vector2::One);
 	DrawScore::getInstance().Draw(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x * 3,700.f),
-		score_, 6,Vector2::One);
+		(int)roundf(fscore_), 6,Vector2::One);
+
+	if (!isHeadDraw_)return;
 
 	Vector2 horigin = Sprite::GetInstance().GetSize(SPRITE_ID::HEADCOUNT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::HEADCOUNT_SPRITE, Vector2(650, 950), horigin, Vector2::One);
 	//DrawScore::getInstance().Draw(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x * 0.5f, 900.f),
 	DrawScore::getInstance().Draw(Vector2(1150, 900.f),
-		headCount_, 1, Vector2::One);
+		(int)roundf(fheadCount_), 1, Vector2::One);
 
 	dstar_.Draw(Vector2(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::SCORE_STAR_SPRITE).x * (starCount_ -0.5f), 400.f)));
 }

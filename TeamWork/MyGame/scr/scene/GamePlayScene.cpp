@@ -445,9 +445,8 @@ void GamePlayScene::setNextMode(int mode) {
 	}
 	case 3: {
 		gameClearScreen_.Init();
-		gameClearScreen_.SetScore(uiScreen_.GetScore());
-		gameClearScreen_.SetHeadCount(ply1->GetPHeadLiveCount());
-		gameClearScreen_.SetStarCount();
+		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount());
+		//gameClearScreen_.SetStarCount();
 		break;
 	}
 	case 4: {

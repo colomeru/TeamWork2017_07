@@ -16,29 +16,19 @@ public:
 	// •`‰æ
 	void Draw() const;
 
-	void SetScore(int score) {
-		score_ = score;
-	}
-	void SetHeadCount(int count) {
-		headCount_ = count;
-	}
-	void SetStarCount() {
-		starCount_ = 1;
-		if (score_ >= 5000) {
-			starCount_++;
-		}
-		if (headCount_ >= 5) {
-			starCount_++;
-		}
-		dstar_.SetStarCount(starCount_);
-	}
+	void SetScore(int score, int count);
+	void SetHeadCount();
+	void SetStarCount();
+	void SetFullStarCount();
 private:
 	void ScoreUpdate();
 	void ScoreDraw()const;
 	void drawUpdate();
 private:
 	int score_;
+	float fscore_;
 	int headCount_;
+	float fheadCount_;
 	int starCount_;
 	int inputCount_;
 	int sinCount_;
@@ -49,6 +39,7 @@ private:
 	Vector2 cursorDrawPos_;
 
 	DrawStar dstar_;
-
+	bool isHeadDraw_;
 	bool isShowScore_;
+	bool isKeyOnceScore_;
 };

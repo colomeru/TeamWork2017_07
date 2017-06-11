@@ -13,6 +13,15 @@ void Content::NotAsyncLoadSprite(Sprite & sprite, Model & model)
 	WorkFolder::SetWorkFolder("res/Sprite/");
 	sprite.Load("nowloading.png", SPRITE_ID::NOWLOADING_SPRITE);
 	sprite.Load("dot.png", SPRITE_ID::DOT_SPRITE);
+	sprite.Load("load/load_00001.png", SPRITE_ID::LOAD_ANM_1_SPRITE);
+	sprite.Load("load/load_00002.png", SPRITE_ID::LOAD_ANM_2_SPRITE);
+	sprite.Load("load/load_00003.png", SPRITE_ID::LOAD_ANM_3_SPRITE);
+	sprite.Load("load/load_00004.png", SPRITE_ID::LOAD_ANM_4_SPRITE);
+	sprite.Load("load/load_00005.png", SPRITE_ID::LOAD_ANM_5_SPRITE);
+	sprite.Load("load/load_00006.png", SPRITE_ID::LOAD_ANM_6_SPRITE);
+	sprite.Load("load/load_00007.png", SPRITE_ID::LOAD_ANM_7_SPRITE);
+	sprite.Load("load/load_00008.png", SPRITE_ID::LOAD_ANM_8_SPRITE);
+	
 }
 
 // âÊëúÇì«Ç›çûÇﬁ

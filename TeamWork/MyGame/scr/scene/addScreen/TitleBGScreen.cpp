@@ -17,6 +17,10 @@ TitleBGScreen::TitleBGScreen() {
 	BGList_[5] = SPRITE_ID::BACKGROUND_6_SPRITE;
 	BGList_[6] = SPRITE_ID::BACKGROUND_7_SPRITE;
 	BGList_[7] = SPRITE_ID::BACKGROUND_8_SPRITE;
+
+	lanePos_.push_back(-200);
+	lanePos_.push_back(400);
+	lanePos_.push_back(900);
 }
 
 void TitleBGScreen::Init()
@@ -49,8 +53,10 @@ void TitleBGScreen::Draw() const
 
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2::Zero-Vector2(scrollPos_,0));
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2(WINDOW_WIDTH,0) - Vector2(scrollPos_, 0));
-	Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero,whiteScreenAlpha_);
 
+	//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE),
+
+	Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero, whiteScreenAlpha_);
 }
 
 void TitleBGScreen::End()

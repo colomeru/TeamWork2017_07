@@ -158,7 +158,8 @@ bool MenuScreen::CheckPreviousStage(int sNum)
 //次のステージの解放
 void MenuScreen::OpenNextStage(int sNum)
 {
-	if (CheatData::getInstance().GetClearData(sNum))
+	if (sNum == 0)return;
+	if (CheatData::getInstance().GetClearData(sNum-1))
 	{
 		panel[sNum + 1].isDraw = true;
 		panel[sNum + 1].alpha = 1.0f;

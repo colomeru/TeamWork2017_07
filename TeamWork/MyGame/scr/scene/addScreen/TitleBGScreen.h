@@ -31,4 +31,5 @@ private:
 	float whiteScreenAlpha_;
 	float whiteScreenAlphaAdd_;
 	std::map<int, SPRITE_ID> BGList_;
+	std::vector<int> lanePos_;
 };

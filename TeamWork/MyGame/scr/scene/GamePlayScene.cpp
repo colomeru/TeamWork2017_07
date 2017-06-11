@@ -457,7 +457,9 @@ void GamePlayScene::setNextMode(int mode) {
 		break;
 	}
 	case 3: {
-		CheatData::getInstance().SetClearData(stagenum_[currentStage_],true);
+		CheatData::getInstance().SetClearData(stagenum_[currentStage_], true);
+		if(currentStage_!=Stage::Stage8)
+			CheatData::getInstance().SetSelectStage(nextStageList_[currentStage_]);
 		gameClearScreen_.Init();
 		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount());
 		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);

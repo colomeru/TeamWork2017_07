@@ -26,10 +26,12 @@ public:
 	void handleMessage(EventMessage message, void* param);
 
 private:
+	void SetNextPanel();
+private:
 	int selectNum_;
-	float selectX_;
-	float selectY_;
+	Vector2 selectPos_;
 	float timer;
+	float dummy_;
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
@@ -39,4 +41,10 @@ private:
 	TitleBGScreen bgScreen_;
 	// 次のシーン
 	Scene			nextScene_;
+
+	std::vector<float> alpha_;
+	int sinCount_;
+
+	bool isPushKey_;
+	bool isStartSetPanel_;
 };

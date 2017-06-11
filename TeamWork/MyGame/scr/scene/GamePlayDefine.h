@@ -3,6 +3,8 @@
 
 static const float mxmSize = 1.5f;
 static const int defSinC = 90;
+
+
 //風が吹くまでの基本時間(フレーム数)
 static const int defWindTime[8]{
 800,//ステージ1

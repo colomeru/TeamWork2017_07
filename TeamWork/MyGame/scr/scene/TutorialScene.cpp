@@ -18,7 +18,7 @@
 #include "GamePlayDefine.h"
 
 TutorialScene::TutorialScene() :
-	nextScene_(Scene::Title)
+	nextScene_(Scene::Menu)
 {
 	// ÉèÅ[ÉãÉhê∂ê¨
 	world_ = std::make_shared<World>();
@@ -79,7 +79,7 @@ void TutorialScene::Update()
 	textScreen_.Update();
 
 	// èIóπ
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)|| GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
 		isEnd_ = true;
 }
 

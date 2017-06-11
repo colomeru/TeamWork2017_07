@@ -109,6 +109,7 @@ Player::~Player()
 	mRot_spd.clear();
 	correctionLens.clear();
 	drawPoints.clear();
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 }
 
 void Player::Update()

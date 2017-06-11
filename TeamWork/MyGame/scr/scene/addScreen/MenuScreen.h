@@ -35,6 +35,7 @@ public:
 	MenuScreen();
 	//デストラクタ
 	~MenuScreen();
+	void Init();
 	//更新
 	void Update();
 	//描画
@@ -70,7 +71,18 @@ public:
 	//SE
 	void SE();
 
+
 	Stage GetGamePlayStage()const;
+
+//外部クラス用
+public:
+	bool GetIsBackSelect()const {
+		return backSelect;
+	}
+	bool GetIsTutorialSelect()const {
+		return stageNum == 0;
+	}
+	void InputSelectStage();
 private:
 	int stageNum = 0; //ステージ番号
 	const float height = WINDOW_HEIGHT / 4.0f * 2.0f; //パネル１のy座標

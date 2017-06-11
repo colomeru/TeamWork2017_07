@@ -12,7 +12,7 @@
 GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 {
 	changeSceneList_.push_back(Scene::GamePlay);
-	changeSceneList_.push_back(Scene::Title);
+	changeSceneList_.push_back(Scene::Menu);
 
 	textAlphaList_.push_back(1.f);
 	textAlphaList_.push_back(1.f);

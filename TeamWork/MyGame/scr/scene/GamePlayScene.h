@@ -96,6 +96,8 @@ private:
 	std::map<Stage,BGM_ID> stageBGMList_;
 
 	std::map<Stage, int> defWindTime_;
+	
+	std::map<Stage, int> stagenum_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
 

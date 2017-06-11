@@ -22,7 +22,8 @@ MenuScene::~MenuScene()
 void MenuScene::Initialize()
 {
 	isEnd_ = false;
-	
+	menu.Init();
+	nextScene_ = Scene::GamePlay;
 }
 
 void MenuScene::Update()
@@ -32,9 +33,11 @@ void MenuScene::Update()
 	world_->Update();
 
 	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))){
+		if (menu.GetIsBackSelect())nextScene_ = Scene::Title;
+		if (menu.GetIsTutorialSelect())nextScene_ = Scene::Tutorial;
 		isEnd_ = true;
-
 	}
 	menu.Update();
 }

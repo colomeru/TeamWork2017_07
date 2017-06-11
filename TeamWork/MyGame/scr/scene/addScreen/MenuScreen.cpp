@@ -9,6 +9,8 @@
 #include "../../Def.h"
 #include "../../game/Random.h"
 #include "../../sound/sound.h"
+#include"../GamePlayDefine.h"
+#include"../../cheat/CheatData.h"
 
 const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 370.0f, WINDOW_HEIGHT / 2.0f),
 							Vector2(429.5f, WINDOW_HEIGHT - 54.25f) };
@@ -22,7 +24,7 @@ MenuScreen::MenuScreen() :stageNum(0)
 		if (i == 0 || i == 1) panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * betDis_),true,1.0f };
 		else panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * betDis_),false,0.5f };
 	}
-	//本来は0版はチュートリアル
+	//本来は0番号はチュートリアル
 	stageList_[0] = Stage::Stage1;
 	stageList_[1] = Stage::Stage1;
 	stageList_[2] = Stage::Stage2;
@@ -120,6 +122,13 @@ MenuScreen::~MenuScreen()
 {
 }
 
+void MenuScreen::Init()
+{
+	for (int i = 0; i < 8; i++) {
+		OpenNextStage(i);
+	}
+}
+
 //更新
 void MenuScreen::Update()
 {
@@ -149,7 +158,7 @@ bool MenuScreen::CheckPreviousStage(int sNum)
 //次のステージの解放
 void MenuScreen::OpenNextStage(int sNum)
 {
-	if (CheckPreviousStage(sNum) == true)
+	if (CheatData::getInstance().GetClearData(sNum))
 	{
 		panel[sNum + 1].isDraw = true;
 		panel[sNum + 1].alpha = 1.0f;
@@ -337,7 +346,8 @@ void MenuScreen::Pattern2Update()
 		stageNum != 8 && //ステージ9以外
 		backSelect == false) //戻るを選択していなければ
 	{
-		OpenNextStage(stageNum);
+		//06/11宮内コメントアウト
+		//OpenNextStage(stageNum);
 	}
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::V))
@@ -630,4 +640,9 @@ void MenuScreen::SE()
 Stage MenuScreen::GetGamePlayStage() const
 {
 	return stageList_[stageNum];
+}
+
+void MenuScreen::InputSelectStage()
+{
+	CheatData::getInstance().SetSelectStage(stageList_[stageNum]);
 }

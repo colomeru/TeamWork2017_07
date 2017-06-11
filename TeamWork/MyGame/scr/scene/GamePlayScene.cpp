@@ -21,6 +21,7 @@
 #include"../actor/Field/Enemys/EnemyCharas/ClothesTapper.h"
 #include"../tween/TweenManager.h"
 #include"../actor/Effects/PlayerEffect/PlayerMetamorEffect.h"
+#include"../cheat/CheatData.h"
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
@@ -71,6 +72,15 @@ GamePlayScene::GamePlayScene() :
 	defWindTime_[Stage::Stage7] = defWindTime[6];
 	defWindTime_[Stage::Stage8] = defWindTime[7];
 
+	stagenum_[Stage::Stage1] = 0;
+	stagenum_[Stage::Stage2] = 1;
+	stagenum_[Stage::Stage3] = 2;
+	stagenum_[Stage::Stage4] = 3;
+	stagenum_[Stage::Stage5] = 4;
+	stagenum_[Stage::Stage6] = 5;
+	stagenum_[Stage::Stage7] = 6;
+	stagenum_[Stage::Stage8] = 7;
+
 	bgScreen_ = BackgroundScreen(world_.get());
 	changeScreen_=LaneChangeScreen(world_.get());
 	uiScreen_ = UIScreen(world_.get());
@@ -83,6 +93,7 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
+	currentStage_ = CheatData::getInstance().GetSelectStage();
 	//FadePanel::GetInstance().Initialize();
 	//FadePanel::GetInstance().SetInTime(0.2f);
 	//FadePanel::GetInstance().SetOutTime(0.2f);
@@ -91,7 +102,7 @@ void GamePlayScene::Initialize()
 	//ƒV[ƒ“‘JˆÚŒn‚Ì‰Šú‰»
 	{
 		gamePlayMode_ = 0;
-		nextScene_ = Scene::Tutorial;
+		nextScene_ = Scene::Title;
 		pauseScreen_.Init();
 		gameOverScreen_.Init();
 		gameClearScreen_.Init();
@@ -446,6 +457,7 @@ void GamePlayScene::setNextMode(int mode) {
 		break;
 	}
 	case 3: {
+		CheatData::getInstance().SetClearData(stagenum_[currentStage_],true);
 		gameClearScreen_.Init();
 		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount());
 		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);

@@ -98,6 +98,20 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	
 	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(128, 120));
 	sprite.Load("scorestar.png", SPRITE_ID::SCORE_STAR_SPRITE, 7, Point(7, 1), Point(240, 240));
+	sprite.Load("stage_select_night_1.png", SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE);
+	sprite.Load("stage_select_night_2.png", SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE);
+	sprite.Load("stage_select_night_3.png", SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE);
+	sprite.Load("star_sprite.png", SPRITE_ID::STAR_SPRITE);
+
+	sprite.Load("stage_select//stage1.png", SPRITE_ID::STAGE_SELECT_1_SPRITE);
+	sprite.Load("stage_select//stage2.png", SPRITE_ID::STAGE_SELECT_2_SPRITE);
+	sprite.Load("stage_select//stage3.png", SPRITE_ID::STAGE_SELECT_3_SPRITE);
+	sprite.Load("stage_select//stage4.png", SPRITE_ID::STAGE_SELECT_4_SPRITE);
+	sprite.Load("stage_select//stage5.png", SPRITE_ID::STAGE_SELECT_5_SPRITE);
+	sprite.Load("stage_select//stage6.png", SPRITE_ID::STAGE_SELECT_6_SPRITE);
+	sprite.Load("stage_select//stage7.png", SPRITE_ID::STAGE_SELECT_7_SPRITE);
+	sprite.Load("stage_select//stage8.png", SPRITE_ID::STAGE_SELECT_8_SPRITE);
+	sprite.Load("stage_select//training_mode.png", SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE);
 
 	sprite.Load("effect/playereffect/henshin.png", SPRITE_ID::METAMOR_EFFECT_SPRITE, 10, Point(10, 1), Point(240, 240));
 	sprite.Load("effect/playereffect/biteeffect.png", SPRITE_ID::BITE_EFFECT_SPRITE, 5, Point(5, 1), Point(120, 120));

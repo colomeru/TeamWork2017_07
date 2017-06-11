@@ -5,6 +5,7 @@
 #include "../../stageGenerator/Stage.h"
 #include "../../math/Vector3.h"
 #include <vector>
+#include "../../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
 
 class MenuScreen
 {
@@ -66,6 +67,8 @@ public:
 	void ShootingStar();
 	//カラス
 	void Crow();
+	//SE
+	void SE();
 
 	Stage GetGamePlayStage()const;
 private:
@@ -107,14 +110,26 @@ private:
 	Vector3 color_;
 
 	//星
-	std::array<StarStruct, 40> star_;
+	std::array<StarStruct, 50> star_;
 	int starNum_;
 	float alphaValue_;
+	std::array<float, 3> starAlpha_;
 
 	//流れ星
 	std::array<StarStruct, 10> sStar_;
 	int sStarNum_;
 	const float WaitTime_ = 10.0f;
+
+	//カラス
+	std::array<Vector2, 3> crowPos_;
+	std::array<float, 3> interval_;
+	std::array<float, 3> cTimer_;
+	std::array<bool, 3> spriteTurn_;
+	std::array<Vector2, 3> cVelocity_;
+	std::array<Vector2, 3> cFrom_;
+	std::array<float, 3> cDis_;
+
+	CharacterAnmManager anmManager_;
 
 	std::array<Stage, 9> stageList_;
 };

@@ -170,10 +170,6 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		pin_list.pop();
 		break;
 	}
-	case 7: {
-		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, laneNum, Vector2(stageSize_.x, 0)));
-		break;
-	}
 	}
 
 }

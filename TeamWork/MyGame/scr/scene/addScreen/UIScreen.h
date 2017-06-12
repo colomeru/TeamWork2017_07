@@ -3,6 +3,7 @@
 #include"../Scene.h"
 #include"../../math/Vector2.h"
 #include"../../stageGenerator/Stage.h"
+#include "screenSupport/ProgressMeter.h"
 
 class World;
 class UIScreen
@@ -33,4 +34,6 @@ private:
 	Vector2 playerPos_;
 	float fscore_;
 	int iscore_;
+
+	ProgressMeter meter_;
 };

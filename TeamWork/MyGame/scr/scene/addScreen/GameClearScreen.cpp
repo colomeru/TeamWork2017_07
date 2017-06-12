@@ -49,6 +49,7 @@ void GameClearScreen::Init()
 	textSizeList_[inputCount_] = mxmSize;
 
 	dstar_ = DrawStar();
+	cursorDrawPos_ = cursorPos_[inputCount_];
 
 
 }

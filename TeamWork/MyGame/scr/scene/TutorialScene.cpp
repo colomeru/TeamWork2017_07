@@ -16,6 +16,7 @@
 #include "../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
 #include "../game/Random.h"
 #include "GamePlayDefine.h"
+#include"../actor/Field/ClothesLine.h"
 
 TutorialScene::TutorialScene() :
 	nextScene_(Scene::Menu)
@@ -39,9 +40,10 @@ TutorialScene::~TutorialScene()
 void TutorialScene::Initialize()
 {
 	isEnd_ = false;
-
+	isRetry_=false;
 	FadePanel::GetInstance().Initialize();
 
+	world_->Initialize();
 
 	player_ = std::make_shared<Player>(world_.get());
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
@@ -59,6 +61,10 @@ void TutorialScene::Initialize()
 
 	bgScreen_.Init(Stage::Stage1);
 	textScreen_.Init("Tutorial.txt");
+
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stage.GetStageSize()+Vector2(150,0), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stage.GetStageSize()+Vector2(150,0), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stage.GetStageSize()+Vector2(150,0), Vector2(0, 0)));
 }
 
 void TutorialScene::Update()
@@ -81,6 +87,12 @@ void TutorialScene::Update()
 	// èIóπ
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)|| GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
 		isEnd_ = true;
+
+	if (isRetry_) {
+		End();
+		Initialize();
+
+	}
 }
 
 void TutorialScene::Draw() const
@@ -117,5 +129,33 @@ void TutorialScene::End()
 
 void TutorialScene::handleMessage(EventMessage message, void * param)
 {
+	switch (message)
+	{
+	case EventMessage::BEGIN_WIND:
+		break;
+	case EventMessage::STRONG_WIND:
+		break;
+	case EventMessage::ATTENUATE_WIND:
+		break;
+	case EventMessage::END_WIND:
+		break;
+	case EventMessage::START_LANE_CHANGE:
+		break;
+	case EventMessage::GOAL_FLAG:
+		break;
+	case EventMessage::GAME_CLEAR_FLAG:
+		break;
+	case EventMessage::TAPPER_DEAD:
+		break;
+	case EventMessage::PLAY_NEXT_STAGE:
+		break;
+	case EventMessage::ADD_SCORE:
+		break;
+	case EventMessage::PLAYER_DEAD:
+		isRetry_ = true;
+		break;
+	default:
+		break;
+	}
 }
 

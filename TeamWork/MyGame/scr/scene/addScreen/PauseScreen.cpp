@@ -36,6 +36,7 @@ void PauseScreen::Init()
 	}
 	textAlphaList_[inputCount_] = 1.f;
 	textSizeList_[inputCount_] = mxmSize;
+	cursorDrawPos_ = cursorPos_[inputCount_];
 
 }
 

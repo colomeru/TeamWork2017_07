@@ -25,11 +25,14 @@ void UIScreen::Init(Stage currentStage, float stageLen)
 	currentStage_ = currentStage;
 	fscore_ = 0.f;
 	iscore_ = 0;
+	meter_ = ProgressMeter(world_, stageLen,meterPos_);
+	meter_.Initialize();
 }
 
 void UIScreen::Update(const Vector2& playerPos)
 {
 	playerPos_ = playerPos;
+	meter_.Update();
 }
 
 void UIScreen::Draw() const
@@ -38,8 +41,10 @@ void UIScreen::Draw() const
 	DrawBox(1000, 0, 1920, 200, GetColor(128, 128, 128), TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
-	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(playerPos_.x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
+	meter_.Draw();
+
+	//DrawBox(meterPos_.x, meterPos_.y, meterPos_.x + meterLen_, meterPos_.y + 20, GetColor(0, 255, 0), 1);
+	//Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, Vector2(playerPos_.x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y), Vector2(32.0f, 32.0f), Vector2::One, 1.0f, false);
 	
 	//DrawScore::getInstance().Draw(Vector2(1000, 200), score_, 6);
 	Vector2 origin=Sprite::GetInstance().GetSize(SPRITE_ID::BITECOUNT_SPRITE) / 2;

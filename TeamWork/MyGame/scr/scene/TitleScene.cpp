@@ -79,14 +79,15 @@ void TitleScene::Update()
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)|| GamePad::GetInstance().Stick().y < -0.3f) {
 		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 750.f), 0.2f);
-		selectNum_ = 0;
+		selectNum_--;
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) || GamePad::GetInstance().Stick().y>0.3f) {
 		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 930.f), 0.2f);
-		selectNum_ = 1;
+		selectNum_++;
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
+	selectNum_ %= 2;
 	for (int i = 0; i < alpha_.size(); i++) {
 		if (i == selectNum_) {
 			alpha_[i] = MathHelper::Sin(sinCount_);

@@ -51,4 +51,6 @@ private:
 	Scene			nextScene_;
 
 	TutorialTextScreen textScreen_;
+
+	bool isRetry_;
 };

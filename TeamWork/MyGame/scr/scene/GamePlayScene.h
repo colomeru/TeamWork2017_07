@@ -88,6 +88,8 @@ private:
 	int maxLaneCount;
 	float stageLen_;
 
+	int changeCount_;
+
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
 

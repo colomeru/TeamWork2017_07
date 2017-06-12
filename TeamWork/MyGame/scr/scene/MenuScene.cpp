@@ -38,6 +38,7 @@ void MenuScene::Update()
 		if (menu.GetIsBackSelect())nextScene_ = Scene::Title;
 		else if (menu.GetIsTutorialSelect())nextScene_ = Scene::Tutorial;
 		isEnd_ = true;
+		menu.InputSelectStage();
 	}
 	menu.Update();
 }

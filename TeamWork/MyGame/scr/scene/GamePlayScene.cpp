@@ -93,6 +93,7 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
+	changeCount_ = 300;
 	currentStage_ = CheatData::getInstance().GetSelectStage();
 	//FadePanel::GetInstance().Initialize();
 	//FadePanel::GetInstance().SetInTime(0.2f);
@@ -420,17 +421,25 @@ void GamePlayScene::clearUpdate()
 			currentStage_ = nextStageList_[currentStage_];
 			Initialize();
 			//setNextMode(6);
+
 		}
 	}
+
 
 }
 
 void GamePlayScene::nextUpdate()
 {
+
 	world_->Update();
 	bgScreen_.Update();
 	changeScreen_.Update();
 	stageEffectScreen_.Update();
+	
+	changeCount_--;
+	if (changeCount_ <= 0) setNextMode(6);
+	bgScreen_.DownCeil();
+
 	//if (ply1->) {
 	//	End();
 	//	currentStage_ = nextStageList_[currentStage_];
@@ -443,7 +452,6 @@ void GamePlayScene::nextSwitchUpdate()
 	//End();
 	//currentStage_ = nextStageList_[currentStage_];
 	//Initialize();
-
 }
 
 void GamePlayScene::setNextMode(int mode) {

@@ -19,11 +19,14 @@ public:
 	void Draw() const;
 	void End();
 	void addBGCharacters();
+
+	void DownCeil();
 private:
 	World* world_;
 
 	Stage currentStage_;
 	int timeCount_;
+	Vector2 ceilPos;
 
 	//std::vector<BackgroundCharacters*> characters_;
 

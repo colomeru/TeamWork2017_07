@@ -105,6 +105,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("meter_start.png", SPRITE_ID::METER_START_SPRITE);
 	sprite.Load("meter_start.png", SPRITE_ID::METER_GOAL_SPRITE);
 	sprite.Load("chain_1.png", SPRITE_ID::NECK_CHAIN1_SPRITE);
+	sprite.Load("titleselect.png", SPRITE_ID::TITLE_SELECT_SPRITE);
 
 	sprite.Load("stage_select//stage1.png", SPRITE_ID::STAGE_SELECT_1_SPRITE);
 	sprite.Load("stage_select//stage2.png", SPRITE_ID::STAGE_SELECT_2_SPRITE);

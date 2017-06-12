@@ -13,7 +13,7 @@
 #include"../../cheat/CheatData.h"
 
 const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 390.0f, WINDOW_HEIGHT / 2.0f),
-							Vector2(400.0f, WINDOW_HEIGHT - 54.25f) };
+							Vector2(380.0f, WINDOW_HEIGHT - 54.25f) };
 
 //コンストラクタ
 MenuScreen::MenuScreen() :stageNum(0)
@@ -434,7 +434,7 @@ void MenuScreen::Pattern2Draw() const
 
 	//戻るパネルを描画
 	//DrawBox(CursorPos[1].x, CursorPos[1].y, CursorPos[1].x + 354.5f, CursorPos[1].y + 108.5f, GetColor(255, 0, 0), 1);
-	Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE, Vector2(0.0f, WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f, 0.5f));
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SELECT_SPRITE, Vector2(0.0f, WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f, 0.5f));
 
 	//カーソルを描画
 	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect);

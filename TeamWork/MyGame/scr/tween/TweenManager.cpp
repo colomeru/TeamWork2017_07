@@ -55,8 +55,14 @@ void TweenManager::Initialize()
 
 void TweenManager::Update(const float deltaTime)
 {
-	for (auto& ease : tweenList_)
-		ease->Update(deltaTime);
+	// 追加
+	for (auto& tween : addTweenList_)
+		tweenList_.push_back(tween);
+	addTweenList_.clear();
+
+	// 更新
+	for (auto& tween : tweenList_)
+		tween->Update(deltaTime);
 }
 
 void TweenManager::Remove()
@@ -69,6 +75,7 @@ void TweenManager::Remove()
 
 void TweenManager::Clear()
 {
+	addTweenList_.clear();
 	tweenList_.clear();
 }
 
@@ -149,19 +156,30 @@ void TweenManager::ResetOption()
 
 void TweenManager::Add(float* value, const EaseType& type, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
-	auto tweenPtr_ = std::make_shared<TweenObject>(value, b, c, d, callback, s);
-	tweenPtr_->SetFunction(easeFuncMap_[type]);
-	tweenPtr_->SetLoopType(updateType_);
-	tweenPtr_->SetLoopCount(loopCount_);
-	for (auto& e : tweenList_)
+	auto tweenPtr = std::make_shared<TweenObject>(value, b, c, d, callback, s);
+	tweenPtr->SetFunction(easeFuncMap_[type]);
+	tweenPtr->SetLoopType(updateType_);
+	tweenPtr->SetLoopCount(loopCount_);
+	addTweenList_.push_back(tweenPtr);
+
+	// 同じポインタを参照しているTweenを強制終了
+	for (auto& t : tweenList_)
 	{
-		if (e->GetValuePointer() == value && value != nullptr)
+		if (t->GetValuePointer() == value && value != nullptr)
 		{
-			e = tweenPtr_;
+			t->End();
 			return;
 		}
 	}
-	tweenList_.push_back(tweenPtr_);
+	//for (auto& e : tweenList_)
+	//{
+	//	if (e->GetValuePointer() == value && value != nullptr)
+	//	{
+	//		e = tweenPtr;
+	//		return;
+	//	}
+	//}
+	//tweenList_.push_back(tweenPtr);
 }
 
 void TweenManager::Add(Vector2 * value, const EaseType & type, const Vector2 & b, const Vector2 & c, const float d, const std::function<void()>& callback, const float s)
@@ -208,7 +226,7 @@ void TweenManager::Loop(Vector2 * value, const EaseType & type, const Vector2 & 
 	ResetOption();
 }
 
-void TweenManager::Loop(Vector3 * value, const EaseType & type, const Vector3 & b, const Vector3 c, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::Loop(Vector3 * value, const EaseType & type, const Vector3 & b, const Vector3& c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 0;
 	updateType_ = UpdateType::Loop;
@@ -240,7 +258,7 @@ void TweenManager::Loop(const EaseType & type, Vector3 * from, const Vector3 & t
 	ResetOption();
 }
 
-void TweenManager::LoopOnce(float * value, const EaseType & type, const float b, const float c, const float d, std::function<void()> callback, const float s)
+void TweenManager::LoopOnce(float * value, const EaseType & type, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 1;
 	updateType_ = UpdateType::Loop;
@@ -248,7 +266,7 @@ void TweenManager::LoopOnce(float * value, const EaseType & type, const float b,
 	ResetOption();
 }
 
-void TweenManager::LoopCount(float * value, const EaseType & type, const int count, const float b, const float c, const float d, std::function<void()> callback, const float s)
+void TweenManager::LoopCount(float * value, const EaseType & type, const int count, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
 	updateType_ = UpdateType::Loop;

@@ -5,6 +5,7 @@ UnityのLeanTweenをモデルに作成
 ***	関数メモ ***
 Update / Remove			: 毎フレーム必ず更新される場所で呼び出す
 Clear					: シーンの切り替え時等に呼び出す
+Count					: 実行中のTween数
 Play					: 登録されているTweenを再生
 Stop / StopAll			: 登録されているTweenを停止
 Delay					: 遅延関数実行
@@ -145,7 +146,7 @@ public:
 	// ループ /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Loop(Vector2* value, const EaseType& type, const Vector2& b, const Vector2 c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void Loop(Vector3* value, const EaseType& type, const Vector3& b, const Vector3 c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void Loop(Vector3* value, const EaseType& type, const Vector3& b, const Vector3& c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Loop(const EaseType& type, float* from, const float to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
@@ -154,10 +155,10 @@ public:
 	void Loop(const EaseType& type, Vector3* from, const Vector3& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（一度のみ）
 	// /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void LoopOnce(float* value, const EaseType& type, const float b, const float c, const float d = 1.0f, std::function<void()> callback = nullptr, const float s = 1.0f);
+	void LoopOnce(float* value, const EaseType& type, const float b, const float c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（指定回数）
 	// /* *value : 変動値格納ポインタ / type : Easetype / count : loop数 / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void LoopCount(float* value, const EaseType& type, const int count, const float b, const float c, const float d = 1.0f, std::function<void()> callback = nullptr, const float s = 1.0f);
+	void LoopCount(float* value, const EaseType& type, const int count, const float b, const float c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 特殊ループ（callback呼び出しは1ループ毎 / 必ずデストラクタなりで Cancel を呼ぶ）
 	// /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopPingPong(float* value, const EaseType& type, const float b, const float c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
@@ -175,11 +176,13 @@ public:
 private:
 	// easingインスタンス
 	Easing	ease_;
-	// イージング用シェアドポインタ
+	// tween用シェアドポインタ
 	using TweenPtr = std::shared_ptr<TweenObject>;
-	// イーズリスト
+	// tweenlist
 	std::list<TweenPtr> tweenList_;
-	//
+	// 追加用tween
+	std::list<TweenPtr> addTweenList_;
+	// easing関数マップ
 	std::unordered_map<EaseType, TweenFuncParam>	easeFuncMap_;
 	// ループ数
 	int			loopCount_;

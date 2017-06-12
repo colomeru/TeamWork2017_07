@@ -49,4 +49,5 @@ private:
 	bool isPushKey_;
 	bool isStartSetPanel_;
 
+	bool isTrigger_;
 };

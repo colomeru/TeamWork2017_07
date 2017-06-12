@@ -44,6 +44,7 @@ void TitleScene::Initialize()
 	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM,DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
 
+	isTrigger_ = true;
 }
 
 void TitleScene::Update()
@@ -78,17 +79,22 @@ void TitleScene::Update()
 		}
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)|| GamePad::GetInstance().Stick().y < -0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)|| (GamePad::GetInstance().Stick().y < -0.3f&&isTrigger_)) {
+		isTrigger_ = false;
 		selectNum_++;
 		selectNum_ %=2;
 		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) || GamePad::GetInstance().Stick().y>0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) || (GamePad::GetInstance().Stick().y>0.3f&&isTrigger_)) {
+		isTrigger_ = false;
 		selectNum_++;
 		selectNum_ %= 2;
 		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
+	}
+	if (abs(GamePad::GetInstance().Stick().y) <= 0.3f) {
+		isTrigger_=true;
 	}
 	for (int i = 0; i < alpha_.size(); i++) {
 		if (i == selectNum_) {
@@ -107,7 +113,7 @@ void TitleScene::Draw() const
 	bgScreen_.Draw();
 
 
-	DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
+	//DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
 	auto drawpos = Vector2(WINDOW_WIDTH / 2, 450) ;
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, drawpos, origin, Vector2::One);

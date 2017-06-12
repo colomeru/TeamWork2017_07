@@ -51,6 +51,7 @@ void TestClothes::Update()
 	WindSwing();
 
 	SetPointsUpdate();
+	Synchronize();
 	UpdateClothesFeces();
 
 	//if (isCheckCol_ && isUpdate_) {

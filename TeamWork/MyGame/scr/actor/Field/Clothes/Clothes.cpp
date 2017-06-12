@@ -1,7 +1,6 @@
 #include "Clothes.h"
 #include "../MyGame/scr/math/MyFuncionList.h"
 #include "../MyGame/scr/game/Random.h"
-#include "../../player/Player.h"
 #include "Hanger\Hanger.h"
 #include "../MyGame/scr/scene/GamePlayDefine.h"
 #include "../MyGame/scr/tween/TweenManager.h"
@@ -12,10 +11,10 @@
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	:Actor(world)
-	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
-	,fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f),count_(0)
-	,clothesState_(ClothesState::WINDLESS),cuttingState_(ClothesCuttingState::Normal),weight_(weight),drawFrame_(0)
-	,is_Droping_(false),clothesFeces_(nullptr)
+	, isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
+	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f), count_(0)
+	, clothesState_(ClothesState::WINDLESS), cuttingState_(ClothesCuttingState::Normal), weight_(weight), drawFrame_(0)
+	, is_Droping_(false), clothesFeces_(nullptr), player_(nullptr)
 {
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
 	dNumber_ = 0.0f;
@@ -42,9 +41,10 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 		if (!isWind_ && !is_Droping_) {
 			parent_ = &other;
 			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-			static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
-			static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
-			static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
+			player_ = static_cast<Player*>(parent_->GetParent());
+			player_->CurHeadBite(other.GetPosition());
+			player_->SetIsBiteMode(true);
+			player_->SetOtherClothesID_(clothes_ID);
 			break;
 		}
 		break;
@@ -113,8 +113,7 @@ void Clothes::OnMessage(EventMessage message, void * param)
 		TweenManager::GetInstance().Delay(
 			dRand,
 			[&]() {
-			/*isPendulum_ = true;*/
-			rot_spd_ = 2.2f;
+			rot_spd_ = 1.7f;
 			rot_spd_ -= weight_;
 			basePosition_ = position_;
 			clothesState_ = ClothesState::BEGIN_WIND; },
@@ -127,6 +126,8 @@ void Clothes::OnMessage(EventMessage message, void * param)
 
 void Clothes::Pendulum(Vector2 fulcrum, float length)
 {
+	beforePos_ = position_;
+
 	//現在の重りの位置
 	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
 	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
@@ -167,8 +168,7 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
 
 	//角度を画像に反映
-	auto angle = rot_ - 90;
-	angle_ = angle;
+	angle_ = rot_ - 90;
 	
 	if (clothesState_ == ClothesState::WINDLESS) return;
 
@@ -306,6 +306,16 @@ void Clothes::DrawClothesFeces() const
 {
 	if (clothesFeces_ != nullptr && is_Droping_ && cuttingState_ == Normal)
 		clothesFeces_->Draw();
+}
+
+void Clothes::Synchronize()
+{
+	if (parent_ == nullptr || player_== nullptr || !player_->GetIsBiteMode()) return;
+
+	pendulumVec_ = (position_ - beforePos_);
+	auto pos = parent_->GetPosition() + pendulumVec_;
+	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
+	player_->setCurPHeadSPos(pos);
 }
 
 void Clothes::SetNormal()

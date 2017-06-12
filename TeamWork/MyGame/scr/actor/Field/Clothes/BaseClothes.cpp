@@ -49,6 +49,7 @@ void BaseClothes::Update()
 	WindSwing();
 
 	SetPointsUpdate();
+	Synchronize();
 	UpdateClothesFeces();
 
 	isHit_ = false;

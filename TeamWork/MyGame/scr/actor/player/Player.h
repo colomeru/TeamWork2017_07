@@ -238,6 +238,9 @@ public:
 	Vector2 GetStopPos()const {
 		return stopPos_;
 	}
+	float GetRot()const {
+		return mRot.front();
+	}
 	Vector2 GetHeadPosAddVect() const{
 		return headPosAddVect_;
 	}

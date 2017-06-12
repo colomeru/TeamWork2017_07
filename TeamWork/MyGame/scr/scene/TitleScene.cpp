@@ -40,9 +40,6 @@ void TitleScene::Initialize()
 	bgScreen_.Init();
 	sinCount_ = 0;
 
-	FadePanel::GetInstance().SetOutTime(0.f);
-	FadePanel::GetInstance().SetInTime(0.3f);
-	FadePanel::GetInstance().FadeIn();
 
 	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM,DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
@@ -82,8 +79,8 @@ void TitleScene::Update()
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)|| GamePad::GetInstance().Stick().y < -0.3f) {
-		selectNum_--;
-		selectNum_ %= 2;
+		selectNum_++;
+		selectNum_ %=2;
 		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}

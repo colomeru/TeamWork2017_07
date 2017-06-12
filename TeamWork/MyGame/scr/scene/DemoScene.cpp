@@ -95,8 +95,14 @@ bool DemoScene::IsEnd() const
 Scene DemoScene::Next() const
 {
 	return Scene::Title;
+
 }
 
 void DemoScene::End()
 {
+	FadePanel::GetInstance().SetOutTime(0.f);
+	FadePanel::GetInstance().SetInTime(0.3f);
+	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	FadePanel::GetInstance().FadeOut();
+
 }

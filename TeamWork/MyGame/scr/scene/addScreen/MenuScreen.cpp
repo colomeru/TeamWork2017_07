@@ -94,7 +94,10 @@ MenuScreen::MenuScreen() :stageNum(0)
 		sStar_[i].position_ = Vector2(randX, randY);
 		sStar_[i].isAlpha_ = 0.0f;
 		sStar_[i].timer_ = 0.0f;
+		prevPos_[i] = sStar_[i].position_;
+		ssAlpha_[i] = 0.0f;
 	}
+	waitTime_ = { 10.0f,7.0f,20.0f,12.0f,34.0f,16.0f,19.0,24.0f,19.0f,15.0f };
 
 	//カラス
 	anmManager_.Add(SPRITE_ID::CROW_ANM_01_SPRITE);
@@ -395,6 +398,11 @@ void MenuScreen::Pattern2Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[1], drawNightSize);
 	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[0], drawNightSize);
 
+	//流れ星
+	for (int i = 0; i < sStarNum_; i++) {
+		Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, ssAlpha_[i]);
+	}
+
 	//カラス
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
 	anmManager_.Draw(crowPos_[2] + cFrom_[2] * 0.7f, origin, Vector2::One, 1.0f);
@@ -557,17 +565,22 @@ void MenuScreen::Star()
 //流れ星
 void MenuScreen::ShootingStar()
 {
-	if (stageNum = 8) {
+	if (stageNum >= 7) {
 		for (int i = 0; i < sStarNum_; i++) {
 			sStar_[i].timer_ += Time::DeltaTime;
-			sStar_[i].timer_ = MathHelper::Min(sStar_[i].timer_, WaitTime_);
-			if (sStar_[i].timer_ >= WaitTime_) {
-				sStar_[i].position_ += Vector2(-2.0f, 1.0f);
-
+			ssAlpha_[i] = MathHelper::Clamp(ssAlpha_[i], 0.0f, 1.0f);
+			if (sStar_[i].timer_ >= waitTime_[i]) {
+				sStar_[i].position_ += Vector2(-20.0f, 10.0f);
+				ssAlpha_[i] += 0.25f;
+				if (ssAlpha_[i] >= 1.0f) ssAlpha_[i] -= 0.25f;
+				if (sStar_[i].timer_ >= waitTime_[i] + 0.5f) {
+					sStar_[i].timer_ = 0.0f;
+					sStar_[i].position_ = prevPos_[i];
+					ssAlpha_[i] = 0.0f;
+				}
 			}
 		}
 	}
-
 }
 
 //カラス
@@ -611,8 +624,6 @@ void MenuScreen::Crow()
 	//	crowPos_[i].x = MathHelper::Clamp(crowPos_[i].x, -302.0f, WINDOW_WIDTH + 302.0f);
 	//	cTimer_[i] = MathHelper::Min(cTimer_[i], interval_[i]);
 	//}
-
-
 
 }
 

@@ -130,7 +130,9 @@ private:
 	//—¬‚ê¯
 	std::array<StarStruct, 10> sStar_;
 	int sStarNum_;
-	const float WaitTime_ = 10.0f;
+	std::array<float, 10> waitTime_;
+	std::array<Vector2, 10> prevPos_;
+	std::array<float, 10> ssAlpha_;
 
 	//ƒJƒ‰ƒX
 	std::array<Vector2, 3> crowPos_;

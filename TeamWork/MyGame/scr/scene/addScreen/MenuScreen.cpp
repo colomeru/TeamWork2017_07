@@ -12,7 +12,7 @@
 #include"../GamePlayDefine.h"
 #include"../../cheat/CheatData.h"
 
-const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 370.0f, WINDOW_HEIGHT / 2.0f),
+const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 390.0f, WINDOW_HEIGHT / 2.0f),
 							Vector2(429.5f, WINDOW_HEIGHT - 54.25f) };
 
 //コンストラクタ
@@ -428,7 +428,7 @@ void MenuScreen::Pattern2Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE,Vector2(0.0f,WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f,0.5f));
 
 	//カーソルを描画
-	Sprite::GetInstance().Draw(SPRITE_ID::SNAKE_SPRITE, cursorPos, Vector2(32.0f, 32.0f), 1.0f, Vector2::One, true, false);
+	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect);
 
 	//カラス
 	anmManager_.Draw(crowPos_[0] + cFrom_[0], origin, Vector2::One, 1.0f);
@@ -436,25 +436,23 @@ void MenuScreen::Pattern2Draw() const
 
 
 	if (BuildMode == 1) {
-		DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum);
-		DrawFormatString(0, 60, GetColor(255, 255, 255), "pos %f %f", pos.x, pos.y);
-		DrawFormatString(0, 80, GetColor(255, 255, 255), "ease %f", ease);
-		DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis);
-		DrawFormatString(0, 120, GetColor(255, 255, 255), "velocity %f %f", velocity.x, velocity.y);
-		DrawFormatString(0, 140, GetColor(255, 255, 255), "meveDis %f %f", moveDis.x, moveDis.y);
-		DrawFormatString(0, 160, GetColor(255, 255, 255), "modify %f %f", modify.x, modify.y);
-		DrawFormatString(0, 180, GetColor(255, 255, 255), "mag %f", mag);
-		for (int i = 0; i < 30; i++) {
-			DrawFormatString(0, 200 + i * 20, GetColor(255, 255, 255), "isAlpha %f", star_[i].isAlpha_);
-		}
-		for (int i = 0; i < 3; i++) {
-			DrawFormatString(1600, 0 + i * 20, GetColor(255, 255, 255), "cTimer_ %f", cTimer_[i]);
-			DrawFormatString(1600, 60 + i * 20, GetColor(255, 255, 255), "crowPos_X %f", crowPos_[i].x);
-			DrawFormatString(1600, 120 + i * 20, GetColor(255, 255, 255), "cVelocity_X %f", cVelocity_[i].x);
-			DrawFormatString(1600, 180 + i * 20, GetColor(255, 255, 255), "cDis_ %f", cDis_[i]);
-
-		}
-
+		//DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum);
+		//DrawFormatString(0, 60, GetColor(255, 255, 255), "pos %f %f", pos.x, pos.y);
+		//DrawFormatString(0, 80, GetColor(255, 255, 255), "ease %f", ease);
+		//DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis);
+		//DrawFormatString(0, 120, GetColor(255, 255, 255), "velocity %f %f", velocity.x, velocity.y);
+		//DrawFormatString(0, 140, GetColor(255, 255, 255), "meveDis %f %f", moveDis.x, moveDis.y);
+		//DrawFormatString(0, 160, GetColor(255, 255, 255), "modify %f %f", modify.x, modify.y);
+		//DrawFormatString(0, 180, GetColor(255, 255, 255), "mag %f", mag);
+		//for (int i = 0; i < 30; i++) {
+		//	DrawFormatString(0, 200 + i * 20, GetColor(255, 255, 255), "isAlpha %f", star_[i].isAlpha_);
+		//}
+		//for (int i = 0; i < 3; i++) {
+		//	DrawFormatString(1600, 0 + i * 20, GetColor(255, 255, 255), "cTimer_ %f", cTimer_[i]);
+		//	DrawFormatString(1600, 60 + i * 20, GetColor(255, 255, 255), "crowPos_X %f", crowPos_[i].x);
+		//	DrawFormatString(1600, 120 + i * 20, GetColor(255, 255, 255), "cVelocity_X %f", cVelocity_[i].x);
+		//	DrawFormatString(1600, 180 + i * 20, GetColor(255, 255, 255), "cDis_ %f", cDis_[i]);
+		//}
 	}
 }
 

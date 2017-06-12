@@ -17,7 +17,7 @@ public:
 	//コンストラクタ
 	ProgressMeter(){}
 	//コンストラクタ
-	ProgressMeter(World* world, int stageLength);
+	ProgressMeter(World* world, int stageLength,Vector2 position);
 	//デストラクタ
 	~ProgressMeter();
 	//初期化

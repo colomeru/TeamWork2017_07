@@ -94,7 +94,7 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
-	changeCount_ = 300;
+	changeCount_ = 240;
 	currentStage_ = CheatData::getInstance().GetSelectStage();
 	//FadePanel::GetInstance().Initialize();
 	//FadePanel::GetInstance().SetInTime(0.2f);
@@ -441,7 +441,7 @@ void GamePlayScene::nextUpdate()
 	stageEffectScreen_.Update();
 	
 	changeCount_--;
-	if (changeCount_ <= 0) setNextMode(6);
+	if (changeCount_ <= 0) setNextMode(3);
 	bgScreen_.DownCeil();
 
 	//if (ply1->) {

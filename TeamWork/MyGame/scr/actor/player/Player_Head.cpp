@@ -41,7 +41,7 @@ Player_Head::~Player_Head()
 void Player_Head::Update()
 {
 	//自分が死んでたら更新を行わない
-	if (player_->GetPHeadDead(myNumber_))return;
+	//if (player_->GetPHeadDead(myNumber_))return;
 	//服を噛んでいる時は、頭の色を赤く、離すと元の色に戻していく
 	if (player_->GetIsClearMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ -= 10;
 	if (player_->GetIsResistMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ += 10;
@@ -102,7 +102,7 @@ void Player_Head::Update()
 
 	parameter_.mat.Translation(toMatPos);
 
-
+	if (player_->GetPHeadDead(myNumber_))return;
 	if (player_->GetIsShootModeEnd()&&player_->GetCurHead()==myNumber_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::PHEAD_CLOTHES_COL);
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::HANGER_ACTOR, COL_ID::BOX_HANGER_COL);

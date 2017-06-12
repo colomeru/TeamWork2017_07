@@ -215,7 +215,7 @@ public:
 
 		world_->sendMessage(EventMessage::START_LANE_CHANGE);
 		//PHeadChanger();
-		SetMode(MODE_FALL);
+		//SetMode(MODE_FALL);
 	}
 	void setCurPHeadSPos(const Vector2& sPos);
 	void setMaxLaneSize(int size) {
@@ -325,9 +325,9 @@ private:
 		//velocity_ = nextVel_;
 		pendulumVect_ = nextVel_;
 
-		playerMode_ = MODE_FALL;
+		if(GetIsBiteMode())playerMode_ = MODE_SLIP;
 		//“ª‚Ì’·‚³‚ðƒŠƒZƒbƒg
-		PHeadChanger();
+		//PHeadChanger();
 
 		worldSetMyDatas();
 	}

@@ -13,7 +13,7 @@
 #include"../../cheat/CheatData.h"
 
 const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 390.0f, WINDOW_HEIGHT / 2.0f),
-							Vector2(429.5f, WINDOW_HEIGHT - 54.25f) };
+							Vector2(400.0f, WINDOW_HEIGHT - 54.25f) };
 
 //コンストラクタ
 MenuScreen::MenuScreen() :stageNum(0)
@@ -159,7 +159,7 @@ bool MenuScreen::CheckPreviousStage(int sNum)
 void MenuScreen::OpenNextStage(int sNum)
 {
 	if (sNum == 0)return;
-	if (CheatData::getInstance().GetClearData(sNum-1))
+	if (CheatData::getInstance().GetClearData(sNum - 1))
 	{
 		panel[sNum + 1].isDraw = true;
 		panel[sNum + 1].alpha = 1.0f;
@@ -210,7 +210,7 @@ void MenuScreen::Pattern1Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT))
 	{
-		cursorPos = Vector2(CursorPos[1].x + 429.5f,CursorPos[1].y + 54.25f);
+		cursorPos = Vector2(CursorPos[1].x + 429.5f, CursorPos[1].y + 54.25f);
 		backSelect = true;
 	}
 	else if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
@@ -385,14 +385,15 @@ void MenuScreen::Pattern2Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_BACK_SPRITE, bgPos_ + from * 0.7f, Vector2(bgSize.x / 2.0f - 100.0f, bgSize.y), Vector2(1.5f, 1.5f), 1.0f, false);
 
 	//星
-	for (int i = 0; i < starNum_; i++) {
-		Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, star_[i].position_, star_[i].isAlpha_);
-	}
+	/*パターン１*/
+	//for (int i = 0; i < starNum_; i++) {
+	//	Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, star_[i].position_, star_[i].isAlpha_);
+	//}
 	Vector2 drawNightSize = Vector2(WINDOW_WIDTH / nightSize.x, WINDOW_HEIGHT / nightSize.y);
 	/*パターン２*/
-	//Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE, Vector2::Zero, Vector2::Zero, drawNightSize, starAlpha_[2], false);
-	//Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE, Vector2::Zero, Vector2::Zero, drawNightSize, starAlpha_[1], false);
-	//Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE, Vector2::Zero, Vector2::Zero, drawNightSize, starAlpha_[0], false);
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[2], drawNightSize);
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[1], drawNightSize);
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[0], drawNightSize);
 
 	//カラス
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
@@ -425,7 +426,7 @@ void MenuScreen::Pattern2Draw() const
 
 	//戻るパネルを描画
 	//DrawBox(CursorPos[1].x, CursorPos[1].y, CursorPos[1].x + 354.5f, CursorPos[1].y + 108.5f, GetColor(255, 0, 0), 1);
-	Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE,Vector2(0.0f,WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f,0.5f));
+	Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE, Vector2(0.0f, WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f, 0.5f));
 
 	//カーソルを描画
 	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect);
@@ -495,61 +496,61 @@ bool MenuScreen::IsInputAny() const
 void MenuScreen::Star()
 {
 	alphaValue_ = 0.007 * (9 - stageNum);
-	if (stageNum == 8) {
-		for (int i = 0; i < starNum_; i++) {
-			star_[i].isAlpha_ += alphaValue_;
-		}
-	}
-	else if (stageNum == 7) {
-		for (int i = 0; i < 20; i++) {
-			star_[i].isAlpha_ += alphaValue_;
-		}
-		for (int i = 20; i < starNum_; i++) {
-			star_[i].isAlpha_ -= alphaValue_;
-		}
-	}
-	else if (stageNum == 6) {
-		for (int i = 0; i < 5; i++) {
-			star_[i].isAlpha_ += alphaValue_;
-		}
-		for (int i = 5; i < starNum_; i++) {
-			star_[i].isAlpha_ -= alphaValue_;
-		}
-	}
-	else {
-		for (int i = 0; i < starNum_; i++) {
-			star_[i].isAlpha_ -= alphaValue_;
-		}
-	}
-
-	for (int i = 0; i < starNum_; i++) {
-		star_[i].isAlpha_ = MathHelper::Clamp(star_[i].isAlpha_, 0.0f, 1.0f);
-	}
-
-	/*パターン２(フルサイズ画像版(失敗))*/
+	/*パターン１(ランダム生成)*/
 	//if (stageNum == 8) {
-	//	starAlpha_[0] += alphaValue_;
-	//	starAlpha_[1] += alphaValue_;
-	//	starAlpha_[2] += alphaValue_;
+	//	for (int i = 0; i < starNum_; i++) {
+	//		star_[i].isAlpha_ += alphaValue_;
+	//	}
 	//}
 	//else if (stageNum == 7) {
-	//	starAlpha_[0] += alphaValue_;
-	//	starAlpha_[1] += alphaValue_;
-	//	starAlpha_[2] -= alphaValue_;
+	//	for (int i = 0; i < 20; i++) {
+	//		star_[i].isAlpha_ += alphaValue_;
+	//	}
+	//	for (int i = 20; i < starNum_; i++) {
+	//		star_[i].isAlpha_ -= alphaValue_;
+	//	}
 	//}
 	//else if (stageNum == 6) {
-	//	starAlpha_[0] += alphaValue_;
-	//	starAlpha_[1] -= alphaValue_;
-	//	starAlpha_[2] -= alphaValue_;
+	//	for (int i = 0; i < 5; i++) {
+	//		star_[i].isAlpha_ += alphaValue_;
+	//	}
+	//	for (int i = 5; i < starNum_; i++) {
+	//		star_[i].isAlpha_ -= alphaValue_;
+	//	}
 	//}
 	//else {
-	//	starAlpha_[0] -= alphaValue_;
-	//	starAlpha_[1] -= alphaValue_;
-	//	starAlpha_[2] -= alphaValue_;
+	//	for (int i = 0; i < starNum_; i++) {
+	//		star_[i].isAlpha_ -= alphaValue_;
+	//	}
 	//}
-	//for (int i = 0; i < 3; i++) {
-	//	starAlpha_[i] = MathHelper::Clamp(starAlpha_[i], 0.0f, 1.0f);
+	//for (int i = 0; i < starNum_; i++) {
+	//	star_[i].isAlpha_ = MathHelper::Clamp(star_[i].isAlpha_, 0.0f, 1.0f);
 	//}
+
+	/*パターン２(フルサイズ画像版)*/
+	if (stageNum == 8) {
+		starAlpha_[0] += alphaValue_;
+		starAlpha_[1] += alphaValue_;
+		starAlpha_[2] += alphaValue_;
+	}
+	else if (stageNum == 7) {
+		starAlpha_[0] += alphaValue_;
+		starAlpha_[1] += alphaValue_;
+		starAlpha_[2] -= alphaValue_;
+	}
+	else if (stageNum == 6) {
+		starAlpha_[0] += alphaValue_;
+		starAlpha_[1] -= alphaValue_;
+		starAlpha_[2] -= alphaValue_;
+	}
+	else {
+		starAlpha_[0] -= alphaValue_;
+		starAlpha_[1] -= alphaValue_;
+		starAlpha_[2] -= alphaValue_;
+	}
+	for (int i = 0; i < 3; i++) {
+		starAlpha_[i] = MathHelper::Clamp(starAlpha_[i], 0.0f, 1.0f);
+	}
 
 }
 
@@ -625,12 +626,12 @@ void MenuScreen::SE()
 	}
 	if (backSelect == false &&
 		(Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
+			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
 	if (backSelect == true &&
 		(Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
+			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
 		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
 	}
 

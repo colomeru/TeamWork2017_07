@@ -49,6 +49,7 @@ void ProgressMeter::Update()
 
 	//プレイヤーアイコン座標
 	pIconPos_ = Vector2(pPos.x * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y + pPosY_);
+	pIconPos_.x = MathHelper::Clamp(pIconPos_.x, meterPos_.x, meterPos_.x + meterLen_ - pIconSize_.x / 4);
 
 }
 

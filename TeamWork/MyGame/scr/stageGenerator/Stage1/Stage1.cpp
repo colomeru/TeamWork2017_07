@@ -179,11 +179,11 @@ void Stage1::GoalClothes_Add(int i, int j, int data, int laneNum)
 	switch (data)
 	{
 	case 1: {
-		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -200)));
+		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -800)));
 		break;
 	}
 	case 2: {
-		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<MoveGoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -200)));
+		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<MoveGoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -800)));
 		break;
 	}
 	}

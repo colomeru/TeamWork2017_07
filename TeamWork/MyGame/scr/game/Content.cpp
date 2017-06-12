@@ -78,8 +78,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("bird.png", SPRITE_ID::BIRD_SPRITE);
 	sprite.Load("whitescreen.png", SPRITE_ID::WHITE_SCREEN_SPRITE);
 	sprite.Load("blackscreen.png", SPRITE_ID::BLACK_SCREEN_SPRITE);
-	sprite.Load("goal.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
-	sprite.Load("testGoalClothes.png", SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE);
+	sprite.Load("GoalIvy.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
 	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE, 6, Point(3, 2), Point(150, 300));	
 	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE, 6, Point(3, 2), Point(200, 200));	
 	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);

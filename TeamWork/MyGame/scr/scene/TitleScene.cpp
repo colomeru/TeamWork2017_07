@@ -19,6 +19,9 @@ TitleScene::TitleScene() :
 	{
 		handleMessage(msg, param);
 	});
+
+	posList_.push_back(Vector2(200.f, 750.f));
+	posList_.push_back(Vector2(200.f, 930.f));
 }
 TitleScene::~TitleScene()
 {
@@ -37,7 +40,8 @@ void TitleScene::Initialize()
 	bgScreen_.Init();
 	sinCount_ = 0;
 
-	FadePanel::GetInstance().SetInTime(1.0f);
+	FadePanel::GetInstance().SetOutTime(0.f);
+	FadePanel::GetInstance().SetInTime(0.3f);
 	FadePanel::GetInstance().FadeIn();
 
 	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM,DX_PLAYTYPE_LOOP);
@@ -78,16 +82,17 @@ void TitleScene::Update()
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP)|| GamePad::GetInstance().Stick().y < -0.3f) {
-		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 750.f), 0.2f);
 		selectNum_--;
+		selectNum_ %= 2;
+		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) || GamePad::GetInstance().Stick().y>0.3f) {
-		TweenManager::GetInstance().Add(Linear, &selectPos_, Vector2(200.f, 930.f), 0.2f);
 		selectNum_++;
+		selectNum_ %= 2;
+		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
-	selectNum_ %= 2;
 	for (int i = 0; i < alpha_.size(); i++) {
 		if (i == selectNum_) {
 			alpha_[i] = MathHelper::Sin(sinCount_);
@@ -144,6 +149,9 @@ void TitleScene::End()
 {
 	Sound::GetInstance().StopBGM();
 	world_->Clear();
+
+	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	FadePanel::GetInstance().FadeOut();
 }
 
 void TitleScene::handleMessage(EventMessage message, void * param)

@@ -22,6 +22,7 @@
 #include"../tween/TweenManager.h"
 #include"../actor/Effects/PlayerEffect/PlayerMetamorEffect.h"
 #include"../cheat/CheatData.h"
+#include"../fade/FadePanel.h"
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
@@ -300,6 +301,9 @@ void GamePlayScene::End()
 	Sound::GetInstance().StopBGM();
 
 	TweenManager::GetInstance().Clear();
+
+	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	FadePanel::GetInstance().FadeOut();
 }
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
@@ -469,7 +473,7 @@ void GamePlayScene::setNextMode(int mode) {
 		if(currentStage_!=Stage::Stage8)
 			CheatData::getInstance().SetSelectStage(nextStageList_[currentStage_]);
 		gameClearScreen_.Init();
-		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount());
+		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(),currentStage_);
 		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);
 		//gameClearScreen_.SetStarCount();
 		break;

@@ -38,7 +38,7 @@ void UIScreen::Update(const Vector2& playerPos)
 void UIScreen::Draw() const
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
-	DrawBox(1000, 0, 1920, 200, GetColor(128, 128, 128), TRUE);
+	DrawBox(1000, 0, 1920, 230, GetColor(128, 128, 128), TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	meter_.Draw();
@@ -48,8 +48,8 @@ void UIScreen::Draw() const
 	
 	//DrawScore::getInstance().Draw(Vector2(1000, 200), score_, 6);
 	Vector2 origin=Sprite::GetInstance().GetSize(SPRITE_ID::BITECOUNT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(1400, 140), origin, Vector2(0.5f,0.5f));
-	DrawScore::getInstance().Draw(Vector2(1500, 120), (int)roundf(fscore_), 6,Vector2(0.5f,0.5f));
+	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(1400, 170), origin, Vector2(0.5f,0.5f));
+	DrawScore::getInstance().Draw(Vector2(1500, 150), (int)roundf(fscore_), 6,Vector2(0.5f,0.5f));
 }
 
 void UIScreen::End()

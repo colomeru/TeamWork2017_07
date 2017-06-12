@@ -1,9 +1,11 @@
 #include "PlayerDeadHead.h"
+#include"../../Def.h"
 
 PlayerDeadHead::PlayerDeadHead(IWorld * world, const Vector2& position) :
 	Actor(world), sinCount_(0)
 {
-	position_ = position;
+	//position_ = position;
+	position_ = Vector2(WINDOW_WIDTH/2,WINDOW_HEIGHT);
 }
 
 PlayerDeadHead::~PlayerDeadHead()
@@ -14,7 +16,7 @@ void PlayerDeadHead::Update()
 {
 	sinCount_+=3;
 	sinCount_ %= 360;
-	position_.x = MathHelper::Sin(sinCount_)*150.f;
+	position_.x = WINDOW_WIDTH / 5+ MathHelper::Sin(sinCount_)*150.f;
 	position_.y -= 5.f;
 
 	if (position_.y <= -600) {

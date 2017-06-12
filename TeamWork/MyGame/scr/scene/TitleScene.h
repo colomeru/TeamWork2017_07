@@ -43,6 +43,7 @@ private:
 	Scene			nextScene_;
 
 	std::vector<float> alpha_;
+	std::vector<Vector2> posList_;
 	int sinCount_;
 
 	bool isPushKey_;

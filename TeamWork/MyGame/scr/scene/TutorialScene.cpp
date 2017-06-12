@@ -39,9 +39,9 @@ TutorialScene::~TutorialScene()
 
 void TutorialScene::Initialize()
 {
+
 	isEnd_ = false;
 	isRetry_=false;
-	FadePanel::GetInstance().Initialize();
 
 	world_->Initialize();
 
@@ -125,6 +125,9 @@ void TutorialScene::End()
 	// ‰Šú‰»
 	world_->Clear();
 	bgScreen_.End();
+
+	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	FadePanel::GetInstance().FadeOut();
 }
 
 void TutorialScene::handleMessage(EventMessage message, void * param)

@@ -4,6 +4,7 @@
 #include"../Scene.h"
 #include"../../math/Vector2.h"
 #include"screenSupport\DrawStar.h"
+#include"../../stageGenerator/Stage.h"
 
 class GameClearScreen
 {
@@ -16,7 +17,7 @@ public:
 	// •`‰æ
 	void Draw() const;
 
-	void SetScore(int score, int count);
+	void SetScore(int score, int count, Stage stage);
 	void SetHeadCount();
 	void SetStarCount();
 	void SetFullStarCount();
@@ -38,8 +39,11 @@ private:
 	std::vector<Vector2> cursorPos_;
 	Vector2 cursorDrawPos_;
 
+	std::map<Stage,int> stageNumList_;
+
 	DrawStar dstar_;
 	bool isHeadDraw_;
 	bool isShowScore_;
 	bool isKeyOnceScore_;
+	Stage stage_;
 };

@@ -23,6 +23,15 @@ GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 	cursorPos_.push_back(Vector2(400, 600));
 	cursorPos_.push_back(Vector2(400, 800));
 
+	stageNumList_[Stage::Stage1] = 0;
+	stageNumList_[Stage::Stage2] = 1;
+	stageNumList_[Stage::Stage3] = 2;
+	stageNumList_[Stage::Stage4] = 3;
+	stageNumList_[Stage::Stage5] = 4;
+	stageNumList_[Stage::Stage6] = 5;
+	stageNumList_[Stage::Stage7] = 6;
+	stageNumList_[Stage::Stage8] = 7;
+
 	cursorDrawPos_ = cursorPos_[inputCount_];
 }
 
@@ -35,7 +44,7 @@ void GameClearScreen::Init()
 	fscore_ = 0.f;
 	fheadCount_ = 0.f;
 	cursorDrawPos_ = cursorPos_[inputCount_];
-
+	stage_ = Stage::Stage1;
 	isKeyOnceScore_ = false;
 	isShowScore_=true;
 	isHeadDraw_ = false;
@@ -122,10 +131,11 @@ void GameClearScreen::Draw() const
 
 }
 
-void GameClearScreen::SetScore(int score, int count) {
+void GameClearScreen::SetScore(int score, int count,Stage stage) {
 	score_ = score;
 	headCount_ = count;
 	TweenManager::GetInstance().Add(Linear, &fscore_, (float)score, 1.f, [=] {SetHeadCount(); });
+	stage_ = stage;
 }
 
 void GameClearScreen::SetHeadCount() {
@@ -136,7 +146,7 @@ void GameClearScreen::SetHeadCount() {
 
 void GameClearScreen::SetStarCount() {
 	starCount_ = 1;
-	if (score_ >= 5000) {
+	if (score_ >= ScoreList[stageNumList_[stage_]]) {
 		starCount_++;
 	}
 	if (headCount_ >= 5) {
@@ -148,7 +158,7 @@ void GameClearScreen::SetStarCount() {
 }
 void GameClearScreen::SetFullStarCount() {
 	starCount_ = 1;
-	if (score_ >= 5000) {
+	if (score_ >= ScoreList[stageNumList_[stage_]]) {
 		starCount_++;
 	}
 	if (headCount_ >= 5) {

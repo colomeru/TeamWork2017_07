@@ -5,6 +5,18 @@ static const float mxmSize = 1.5f;
 static const int defSinC = 90;
 
 
+//星3に必要なスコアのリスト
+static const int ScoreList[8]{
+	1000,//ステージ1
+	1500,//ステージ2
+	2000,//ステージ3
+	2500,//ステージ4
+	3000,//ステージ5
+	3500,//ステージ6
+	4000,//ステージ7
+	5000 //ステージ8
+};
+
 //風が吹くまでの基本時間(フレーム数)
 static const int defWindTime[8]{
 800,//ステージ1

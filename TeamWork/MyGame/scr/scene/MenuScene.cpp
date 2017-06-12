@@ -1,8 +1,8 @@
 #include "MenuScene.h"
 #include "../time/Time.h"
 #include "../math/MathHelper.h"
-#include "../graphic//Sprite.h"
-
+#include "../graphic/Sprite.h"
+#include"../fade/FadePanel.h"
 MenuScene::MenuScene() :
 	nextScene_(Scene::GamePlay)
 {
@@ -68,6 +68,8 @@ void MenuScene::End()
 {
 	// ‰Šú‰»
 	world_->Clear();
+	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	FadePanel::GetInstance().FadeOut();
 }
 
 void MenuScene::handleMessage(EventMessage message, void * param)

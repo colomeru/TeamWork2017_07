@@ -14,9 +14,9 @@ Actor::Actor(IWorld * world, Actor * parent) :
 	laneNum_(0),
 	isDraw_(true),
 	isUpdate_(true),
-	spriteAlpha_(1.f),
 	drawAddPos_(Vector2::Zero)
 {
+	parameter_.spriteAlpha_=1.f;
 	laneChangeFunctionMap_[-1] = std::bind(&Actor::CamMoveUp, this);
 	laneChangeFunctionMap_[1] = std::bind(&Actor::CamMoveDown, this);
 }

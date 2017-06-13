@@ -1,4 +1,5 @@
 #pragma once
+#include <array>
 #include <vector>
 #include <map>
 #include"../Scene.h"
@@ -42,8 +43,8 @@ private:
 	float whiteScreenAlpha_;
 	float whiteScreenAlphaAdd_;
 	std::map<int, SPRITE_ID> BGList_;
-	std::vector<int> lanePos_;
+	int lanePos_[3];
 	std::map<SPRITE_ID,int> clothesAddPos_;
 	std::vector<TitleLaneClothes> clothes_;
-	std::vector<SPRITE_ID> clotheslist_;
+	std::array<SPRITE_ID,2> clotheslist_;
 };

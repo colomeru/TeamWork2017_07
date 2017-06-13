@@ -45,7 +45,7 @@ void Bird::Draw() const
 {
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
 	//Sprite::GetInstance().Draw(SPRITE_ID::BIRD_SPRITE, drawPos_, origin, spriteAlpha_, Vector2::One, 0);
-	anmManager_.Draw(drawPos_, origin,Vector2::One,spriteAlpha_);
+	anmManager_.Draw(drawPos_, origin,Vector2::One, parameter_.spriteAlpha_);
 }
 
 void Bird::OnUpdate()

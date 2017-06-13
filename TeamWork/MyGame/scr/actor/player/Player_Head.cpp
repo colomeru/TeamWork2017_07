@@ -151,20 +151,20 @@ void Player_Head::Draw() const
 
 		if (player_->GetIsShootMode())
 		{
-			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_SPRITE, drawPos_, headOrigin, parameter_.spriteAlpha_, Vector2::One, angle, true, false);
 		}
 		else if (biteSpriteTimer_ > 0.01f) {
-			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_END_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_END_SPRITE, drawPos_, headOrigin, parameter_.spriteAlpha_, Vector2::One, angle, true, false);
 
 		}
 		else {
-			Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
-			Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One, angle, true, false);
+			Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, parameter_.spriteAlpha_, Vector2::One, angle, true, false);
+			Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*parameter_.spriteAlpha_, Vector2::One, angle, true, false);
 		}
 	}
 	else {
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
-		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, headOrigin, parameter_.spriteAlpha_, Vector2::One, angle, true, false);
 		//Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One);
 		//Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One);
 

@@ -48,7 +48,7 @@ void DemoScene::Update()
 	timeCount_++;
 	LoadWashMachineFrame_++; LoadWashMachineFrame_ %= animSize;
 
-	if (currentLoadCount_ <= 0.0f && !isEnd_)
+	if (currentLoadCount_ <= 0.1f && !isEnd_)
 	{
 		FadePanel::GetInstance().AddCollBack([=]() {
 			SetBackgroundColor(153, 204, 255);

@@ -61,7 +61,7 @@ void BaseClothes::Draw() const
 	//Vector2 crcOrigin2 = Sprite::GetInstance().GetSize(SPRITE_ID::BASE_CLOTHES_02_SPRITE) / 2;
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 20);
 	Vector2 hangPos = GetDrawPosVect(fulcrum_);
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2(0.8f, 1.0f), angle_);
 	//Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	//Sprite::GetInstance().Draw(SPRITE_ID::BASE_CLOTHES_02_SPRITE, drawPos_, crcOrigin2, spriteAlpha_, Vector2::One, angle_);
 	PatternDraw();
@@ -129,12 +129,12 @@ void BaseClothes::PatternDraw() const
 	{
 	case BaseDrawPattern::Orange: {
 		Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
-		Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+		Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 		break;
 	}
 	case BaseDrawPattern::SkyBlue: {
 		Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
-		Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+		Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 		break;
 	}
 	}

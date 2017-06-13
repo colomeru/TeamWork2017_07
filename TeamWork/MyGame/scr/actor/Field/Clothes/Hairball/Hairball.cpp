@@ -60,7 +60,7 @@ void Hairball::Update()
 void Hairball::Draw() const
 {
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::HAIRBALL_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::HAIRBALL_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HAIRBALL_SPRITE, drawPos_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 }
 
 void Hairball::OnUpdate()

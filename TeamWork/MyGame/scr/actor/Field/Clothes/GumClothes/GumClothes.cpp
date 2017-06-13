@@ -93,8 +93,8 @@ void GumClothes::Draw() const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GUM_SPRITE) / 2;
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
 	Vector2 hangPos = GetDrawPosVect(fulcrum_);
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
-	Sprite::GetInstance().Draw(SPRITE_ID::GUM_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::GUM_SPRITE, drawPos_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	DrawClothesFeces();
 
 	if (BuildMode != 1) return;

@@ -1,6 +1,8 @@
 #include "MovieScene.h"
 #include "../time/Time.h"
 #include "../Def.h"
+#include "../fade/FadePanel.h"
+#include "../tween/TweenManager.h"
 
 
 const float MovieEndTime = 94.0f;
@@ -20,6 +22,9 @@ void MovieScene::Initialize()
 	movieView_.Play(DEMO_MOVIE);
 	timer = 0;
 	isEnd_ = false;		
+	FadePanel::GetInstance().Initialize();
+	FadePanel::GetInstance().SetInTime(0.0f);
+	FadePanel::GetInstance().FadeIn();
 }
 
 void MovieScene::Update()
@@ -28,8 +33,12 @@ void MovieScene::Update()
 	
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)||timer >= MovieEndTime) {
 		timer = 0;
-		movieView_.Stop(DEMO_MOVIE);
-		isEnd_ = true;
+		FadePanel::GetInstance().AddCollBack([=]() {
+			SetBackgroundColor(153, 204, 255);
+			isEnd_ = true;
+		});
+		FadePanel::GetInstance().SetOutTime(1.0f);
+		FadePanel::GetInstance().FadeOut();
 	}	
 }
 

@@ -11,7 +11,7 @@ const int SceneManager::MaxStageCount = 6;
 
 // コンストラクタ
 SceneManager::SceneManager() :
-	mStageCount(6), nectSceneName_(Scene::Title)
+	mStageCount(6), nectSceneName_(Scene::Demo)
 {
 
 }
@@ -24,15 +24,23 @@ void SceneManager::Initialize()
 	TweenManager::GetInstance().Initialize();
 	timer = 0;
 	FadeTrigger = false;
+	FadePanel::GetInstance().Initialize();
+	FadePanel::GetInstance().SetInTime(0.0f);
+	FadePanel::GetInstance().FadeIn();
 }
 
 // 更新
 void SceneManager::Update()
 {
-	timer += Time::DeltaTime;
+	if (nectSceneName_ != Scene::Demo) {
+		timer += Time::DeltaTime;
+	}
 	if (!FadePanel::GetInstance().IsAction())
 		mCurrentScene->Update();
-
+	if (Keyboard::GetInstance().AnyTriggerDown()
+		|| GamePad::GetInstance().AnyTriggerDown()) {
+		timer = 0;
+	}
 	TweenManager::GetInstance().Update(Time::DeltaTime);
 	TweenManager::GetInstance().Remove();
 	FadePanel::GetInstance().Update(Time::DeltaTime);
@@ -55,26 +63,39 @@ void SceneManager::End()
 // シーン変更
 void SceneManager::Change()
 {
-	if (Keyboard::GetInstance().AnyTriggerDown()
-		||GamePad::GetInstance().AnyTriggerDown()) {
-		timer = 0;
-	}
-	if (timer > 5.0f) {
+	/*FadePanel::GetInstance().AddCollBack([=]() {
+				
+	});*/
+	if (timer >5.0f && FadeTrigger == false)
+	{
 		if (nectSceneName_ == Scene::Title) {
-			Change(Scene::Movie);
+			FadeTrigger = true;
+			FadePanel::GetInstance().AddCollBack([=]() {
+				SetBackgroundColor(153, 204, 255);
+				Change(Scene::Movie);
+			});
+			FadePanel::GetInstance().SetOutTime(1.0f);
+			FadePanel::GetInstance().FadeOut();
 			timer = 0;
 			return;
 		}
 		else if (nectSceneName_ != Scene::Movie) {
-			Change(Scene::Title);
-			timer = 0;
+			FadeTrigger = true;
+			FadePanel::GetInstance().AddCollBack([=]() {
+				SetBackgroundColor(153, 204, 255);
+				Change(Scene::Title);
+			});
+			FadePanel::GetInstance().SetOutTime(1.0f);
+			FadePanel::GetInstance().FadeOut();
+			timer = 0;			
 			return;
-		}
+		}		
 	}
 	if (mCurrentScene->IsEnd())
 	{
 		Change(mCurrentScene->Next());
 		timer = 0;
+		FadeTrigger = false;
 	}
 }
 

@@ -14,7 +14,4 @@ public:
 	virtual void Init(Scene name)   = 0;
 	// I—¹ˆ—
 	virtual void Final(Scene name)  = 0;
-
-	virtual int GetStageCount() const = 0;
-	virtual void SetStageCount(int n) = 0;
 };

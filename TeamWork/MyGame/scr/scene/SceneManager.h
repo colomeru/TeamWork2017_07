@@ -36,32 +36,25 @@ public:
 	// 終了処理を指定する
 	virtual void Final(Scene name) override;
 
-	virtual int GetStageCount() const override
-	{
-		return mStageCount;
-	}
-	virtual void SetStageCount(int n) override;
-
-	__declspec(property(get = GetStageCount, put = SetStageCount)) int StageCount;
-
-private:
-	void SceneChangeAfterFade();
-	void SetFadeInOutSpeed();
 private:
 	// コピー禁止
 	SceneManager(const SceneManager& other) = default;
 	SceneManager& operator = (const SceneManager& other) = default;
 
-public:
-	static const int MaxStageCount;
-	float timer;
-	bool FadeTrigger;
+	// シーン強制終了
+	void SceneReset();
 
 private:
-	// シーン
-	std::unordered_map<Scene, IScenePtr> mScenes;
+	// シーンマップ
+	std::unordered_map<Scene, IScenePtr> sceneMap_;
 	// 現在のシーン
-	IScenePtr	mCurrentScene;
-	int			mStageCount;
-	Scene nectSceneName_;
+	IScenePtr	currentScene_;
+
+	/* シーン強制終了用 */
+	// 終了フラグ
+	bool		isEnd_;
+	// 認識ハンドル兼デバッグ用カウント
+	float		timer_;
+	//
+	float		freeTime_;
 };

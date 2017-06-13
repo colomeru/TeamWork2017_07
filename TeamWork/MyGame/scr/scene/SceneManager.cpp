@@ -7,173 +7,138 @@
 #include <algorithm>
 #include"../tween/TweenManager.h"
 
-const int SceneManager::MaxStageCount = 6;
-
 // コンストラクタ
 SceneManager::SceneManager() :
-	mStageCount(6), nectSceneName_(Scene::Demo)
+	isEnd_(false),
+	timer_(0.0f),
+	freeTime_(60.0f)
 {
-
 }
 
 // 更新前初期化
 void SceneManager::Initialize()
 {
 	End();
-	mScenes.clear();
-	TweenManager::GetInstance().Initialize();
-	timer = 0;
-	FadeTrigger = false;
-	FadePanel::GetInstance().Initialize();
-	FadePanel::GetInstance().SetInTime(0.0f);
-	FadePanel::GetInstance().FadeIn();
+	sceneMap_.clear();
 }
 
 // 更新
 void SceneManager::Update()
 {
+	currentScene_->Update();
+	FadePanel::GetInstance().Update(Time::DeltaTime);
 
-	if (nectSceneName_ != Scene::Demo) {
-		timer += Time::DeltaTime;
-	}
-
-	//timer += Time::DeltaTime;
-	//if (!FadePanel::GetInstance().IsAction())
-		mCurrentScene->Update();
-	if (Keyboard::GetInstance().AnyTriggerDown()
-		|| GamePad::GetInstance().AnyTriggerDown()) {
-		timer = 0;
-	}
 	TweenManager::GetInstance().Update(Time::DeltaTime);
 	TweenManager::GetInstance().Remove();
-	FadePanel::GetInstance().Update(Time::DeltaTime);
+
+	// 放置時リセット
+	if (Keyboard::GetInstance().AnyTriggerDown() || Keyboard::GetInstance().AnyStateDown() ||
+		GamePad::GetInstance().AnyTriggerDown() || GamePad::GetInstance().AnyStateDown())
+		SceneReset();
 }
 
 // 描画
 void SceneManager::Draw() const
 {
-	//if (!FadePanel::GetInstance().IsAction())
-	mCurrentScene->Draw();
+	currentScene_->Draw();
 	FadePanel::GetInstance().Draw();
+
+	if (BuildMode > 0)
+	{
+		DrawFormatString(0, WINDOW_HEIGHT - 20, GetColor(255, 255, 255), "FPS:[%0.1f]", FPS::GetFPS);
+		DrawFormatString(0, WINDOW_HEIGHT - 40, GetColor(255, 255, 255), "TIME_TO_LEAVE[%f]", timer_);
+	}
 }
 
 // 終了
 void SceneManager::End()
 {
-	mCurrentScene->End();
+	currentScene_->End();
 	TweenManager::GetInstance().Clear();
 }
+
 // シーン変更
 void SceneManager::Change()
 {
-	/*FadePanel::GetInstance().AddCollBack([=]() {
-				
-	});*/
-	if (FadeTrigger == false)
+	if (currentScene_->IsEnd())
+		Change(currentScene_->Next());
+
+	if (isEnd_)
 	{
-		if (timer >= 60.0f && nectSceneName_ == Scene::Title) {
-			FadeTrigger = true;
-			FadePanel::GetInstance().AddCollBack([=]() {
-				SetBackgroundColor(153, 204, 255);
-				Change(Scene::Movie);
-			});
-			FadePanel::GetInstance().SetOutTime(1.0f);
-			FadePanel::GetInstance().FadeOut();
-			timer = 0;
-			FadeTrigger = false;
-			return;
-			
+		Scene now = Scene::None;
+		for (auto& scene : sceneMap_)
+		{
+			if (currentScene_ == scene.second)
+				now = scene.first;
 		}
-		else if (timer >= 180.0f && nectSceneName_ != Scene::Movie) {
-			FadeTrigger = true;
-			FadePanel::GetInstance().AddCollBack([=]() {
-				SetBackgroundColor(153, 204, 255);
-				Change(Scene::Title);
-			});
-			FadePanel::GetInstance().SetOutTime(1.0f);
-			FadePanel::GetInstance().FadeOut();
-			timer = 0;			
-			FadeTrigger = false;
+		if (now == Scene::Demo)
 			return;
-		}
-	}
-	if (mCurrentScene->IsEnd())
-	{
-		Change(mCurrentScene->Next());
-		timer = 0;
+
+		if (now == Scene::Title)
+			Change(Scene::Movie);
+		else
+			Change(Scene::Title);
+		isEnd_ = false;
 	}
 }
 
 // シーンの追加
 void SceneManager::Add(Scene name, const IScenePtr & scene)
 {
-	mScenes[name] = scene;
+	sceneMap_[name] = scene;
 }
 
 void SceneManager::SetScene(Scene name)
 {
-	mCurrentScene = mScenes[name];
-	mCurrentScene->Initialize();
+	currentScene_ = sceneMap_[name];
+	currentScene_->Initialize();
 }
 
 // シーン変更
 void SceneManager::Change(Scene name)
 {
-	//if (FadePanel::GetInstance().IsAction())return;
 	Scene now = Scene::None;
-	for (auto& scene : mScenes)
+	for (auto& scene : sceneMap_)
 	{
-		if (mCurrentScene == scene.second)
+		if (currentScene_ == scene.second)
 			now = scene.first;
 	}
 	if (name == now)
 		return;
 
-	nectSceneName_ = name;
-
-	//SetFadeInOutSpeed();
-	//FadePanel::GetInstance().AddCollBack([this] {End(); });
-	//FadePanel::GetInstance().AddCollBack([this] {SceneChangeAfterFade(); });
-	//FadePanel::GetInstance().FadeOut();
 	End();
-	mCurrentScene = mScenes[name];
-	mCurrentScene->Initialize();
+	currentScene_ = sceneMap_[name];
+	currentScene_->Initialize();
+
+	if (name == Scene::Title)
+		freeTime_ = 60.0f;
+	else if (name == Scene::Movie)
+		return;
+	else
+		freeTime_ = 180.0f;
+
+	SceneReset();
 }
 
 // 初期化を指定する
 void SceneManager::Init(Scene name)
 {
-	mScenes.at(name)->Initialize();
+	sceneMap_.at(name)->Initialize();
 }
 
 // 終了処理を指定する
 void SceneManager::Final(Scene name)
 {
-	mScenes.at(name)->End();
+	sceneMap_.at(name)->End();
 }
 
-void SceneManager::SetStageCount(int n)
+void SceneManager::SceneReset()
 {
-	mStageCount = MathHelper::Clamp(n, 0, SceneManager::MaxStageCount);
-}
-
-void SceneManager::SceneChangeAfterFade()
-{
-	Stage targetStage = mCurrentScene->SendStage();
-	mCurrentScene = mScenes[nectSceneName_];
-	mCurrentScene->ReceiveStage(targetStage);
-	mCurrentScene->Initialize();
-
-	//FadePanel::GetInstance().Initialize();	
-	//FadePanel::GetInstance().AddCollBack([this] {mCurrentScene->Initialize(); });
-	FadePanel::GetInstance().FadeIn();
-
-}
-
-void SceneManager::SetFadeInOutSpeed()
-{
-	FadePanel::GetInstance().Initialize();
-	FadePanel::GetInstance().SetOutTime(0.2f);
-	FadePanel::GetInstance().SetInTime(0.4f);
-
+	// ３分間放置されたらリセット
+	TweenManager::GetInstance().DelayCancel(&timer_);
+	TweenManager::GetInstance().Delay(freeTime_, [=]() {
+		FadePanel::GetInstance().SetOutTime(0.5f);
+		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+		FadePanel::GetInstance().FadeOut();
+	}, &timer_);
 }

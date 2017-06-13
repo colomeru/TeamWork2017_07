@@ -23,5 +23,5 @@ void DropClothes::Update()
 void DropClothes::Draw() const
 {
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
-	Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 }

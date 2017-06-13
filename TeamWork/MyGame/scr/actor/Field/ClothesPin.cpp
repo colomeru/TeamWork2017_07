@@ -10,7 +10,7 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes,
 {
 	parameter_.ID = ACTOR_ID::PIN_ACTOR;
 	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(50.f, 50.f);
+	parameter_.size = Vector2(50.0f, 50.0f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -59,6 +59,13 @@ void ClothesPin::Update()
 
 void ClothesPin::Draw() const
 {
+	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE) / 2;
+	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, origin, parent_->GetParameter().spriteAlpha_, Vector2::One, angle_ + 180);
+
+	if (BuildMode != 1)return;
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
@@ -79,13 +86,6 @@ void ClothesPin::Draw() const
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 
-	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE) / 2;
-	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
-	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, origin, 1.f, Vector2::One, angle_);
-
-	if (BuildMode != 1)return;
 
 }
 

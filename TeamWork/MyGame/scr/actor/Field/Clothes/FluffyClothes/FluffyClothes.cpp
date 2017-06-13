@@ -87,8 +87,8 @@ void FluffyClothes::Draw() const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::BASE_CLOTHES_SPRITE) / 2;
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
 	Vector2 hangPos = GetDrawPosVect(fulcrum_);
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, spriteAlpha_, Vector2::One, angle_);
-	Sprite::GetInstance().SplitDraw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, drawFrame_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().SplitDraw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	//Sprite::GetInstance().Draw(SPRITE_ID::FLUFFY_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
 	DrawClothesFeces();
 

@@ -7,6 +7,7 @@
 #include "ClothesFeces\ClothesFeces.h"
 #include "DropClothes\DropClothes.h"
 #include "../../Effects/PlayerEffect/SwordAttackEffect.h"
+#include "../../../sound/sound.h"
 
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
@@ -27,6 +28,7 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 
 Clothes::~Clothes()
 {
+	Sound::GetInstance().StopSE(SE_ID::SLASH_SE);
 	localPoints.clear();
 	collisionPoints.clear();
 }
@@ -51,37 +53,38 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::PLAYER_SWORD_ACTOR:
 	{
-		if (cuttingState_ == ClothesCuttingState::Normal)
+		if (cuttingState_ != ClothesCuttingState::Normal) break;
+		int rand = Random::GetInstance().Range(0, 2);
+		switch (rand)
 		{
-			int rand = Random::GetInstance().Range(0, 2);
-			switch (rand)
-			{
-			case 0: {
-				cuttingState_ = ClothesCuttingState::RightUpSlant;
-				drawFrame_ = 1;
-				SetSpriteID();
-				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
-				world_->Add(
-					ACTOR_ID::CLOTHES_DROPING_ACTOR, 
-					std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
-					);
-				SetLocalPoints();
-				break;
-			}
-			case 1: {
-				cuttingState_ = ClothesCuttingState::LeftUpSlant;
-				drawFrame_ = 2;
-				SetSpriteID();
-				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
-				world_->Add(
-					ACTOR_ID::CLOTHES_DROPING_ACTOR, 
-					std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
-					);
-				SetLocalPoints();
-				break;
-			}
-			}
+		case 0: {
+			cuttingState_ = ClothesCuttingState::RightUpSlant;
+			drawFrame_ = 1;
+			SetSpriteID();
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
+			world_->Add(
+				ACTOR_ID::CLOTHES_DROPING_ACTOR,
+				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
+				);
+			Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
+			SetLocalPoints();
+			break;
 		}
+		case 1: {
+			cuttingState_ = ClothesCuttingState::LeftUpSlant;
+			drawFrame_ = 2;
+			SetSpriteID();
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
+			world_->Add(
+				ACTOR_ID::CLOTHES_DROPING_ACTOR,
+				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
+				);
+			Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
+			SetLocalPoints();
+			break;
+		}
+		}
+
 		isHit_ = true;
 		break;
 	}

@@ -9,7 +9,7 @@ ClothesFeces::ClothesFeces(IWorld * world, int laneNum, Vector2 pos, Actor* clot
 {
 	parameter_.ID = ACTOR_ID::CLOTHES_DROPING_ACTOR;
 	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(32.f, 32.f);
+	parameter_.size = Vector2(32.0f, 32.0f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -45,6 +45,8 @@ void ClothesFeces::Update()
 void ClothesFeces::Draw() const
 {
 	auto pos = GetDrawPosVect(position_);
-	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRDS_DROPPING_SPRITE);
-	Sprite::GetInstance().Draw(SPRITE_ID::BIRDS_DROPPING_SPRITE, pos, origin, spriteAlpha_, Vector2::One, angle_);
+	Vector2 size = Sprite::GetInstance().GetSize(SPRITE_ID::BIRDS_DROPPING_SPRITE);
+	Vector2 origin = Vector2(size.x / 3, size.y);
+	Sprite::GetInstance().Draw(
+		SPRITE_ID::BIRDS_DROPPING_SPRITE, parent_->GetDrawPos(), origin, parent_->GetParameter().spriteAlpha_, Vector2(3.0f, 1.0f), angle_);
 }

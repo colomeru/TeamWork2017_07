@@ -35,26 +35,7 @@ MenuScreen::MenuScreen() :stageNum(0)
 	stageList_[7] = Stage::Stage7;
 	stageList_[8] = Stage::Stage8;
 
-	//backPos = Vector2(0.0f, WINDOW_HEIGHT - 100.0f);
-	//cursorPos = Vector2(panel[0].position.x - 350.0f, panel[0].position.y);
-	cursorPos = CursorPos[0];
-	backSelect = false;
-
 	//
-	dis = disN = 0.0f;
-	pos = Vector2(WINDOW_WIDTH / 4.0f, height - 50.0f);
-	gPos = Vector2(WINDOW_WIDTH / 4.0f, height - 50.0f);
-
-	timer_ = 0.0f;
-	from = 0.0f;
-	ease = 0.0f;
-	moveDis = Vector2(0.0f, 0.0f);
-	velocity = Vector2(0.0f, 0.0f);
-	modify = Vector2(0.0f, 0.0f);
-	mag = 50.0f;
-	builPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f);
-	bgPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f);
-	wwwPos_ = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT);
 
 	bgHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::STAGE_SELECT_BACK_SPRITE);
 	builHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::STAGE_SELECT_M_SPRITE);
@@ -84,6 +65,7 @@ MenuScreen::MenuScreen() :stageNum(0)
 		star_[i].position_ = Vector2(randX, randY);
 		star_[i].isAlpha_ = 0.0f;
 		star_[i].timer_ = 0.0f;
+		star_[i].scale_ = 1.0f;
 	}
 
 	//流れ星
@@ -96,6 +78,7 @@ MenuScreen::MenuScreen() :stageNum(0)
 		sStar_[i].timer_ = 0.0f;
 		prevPos_[i] = sStar_[i].position_;
 		ssAlpha_[i] = 0.0f;
+		sStar_[i].scale_ = 1.0f;
 	}
 	waitTime_ = { 10.0f,7.0f,20.0f,12.0f,34.0f,16.0f,19.0,24.0f,19.0f,15.0f };
 
@@ -130,6 +113,26 @@ void MenuScreen::Init()
 	for (int i = 0; i < 8; i++) {
 		OpenNextStage(i);
 	}
+
+	
+	stageNum = CheatData::getInstance().GetStartStage();
+	dis = stageNum * betDis_;
+	cursorPos = CursorPos[0];
+	backSelect = false;
+	disN = 0.0f;
+	pos = Vector2(WINDOW_WIDTH / 4.0f, height - 50.0f);
+	gPos = Vector2(WINDOW_WIDTH / 4.0f, height - 50.0f);
+	timer_ = 0.0f;
+	from = Vector2(0.0f, stageNum * betDis_);
+	ease = 0.0f;
+	moveDis = Vector2(0.0f, 0.0f);
+	velocity = Vector2(0.0f, 0.0f);
+	modify = Vector2(0.0f, 0.0f);
+	mag = 50.0f;
+	builPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f);
+	bgPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f);
+	wwwPos_ = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT);
+
 }
 
 //更新
@@ -345,14 +348,14 @@ void MenuScreen::Pattern2Update()
 	}
 
 	//ステージをクリアしたら次のステージを解放する
-	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) &&
-		stageNum != 8 && //ステージ9以外
-		backSelect == false) //戻るを選択していなければ
-	{
-		//06/11宮内コメントアウト
-		//OpenNextStage(stageNum);
-	}
+	//if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) &&
+	//	stageNum != 8 && //ステージ9以外
+	//	backSelect == false) //戻るを選択していなければ
+	//{
+	//	//06/11宮内コメントアウト
+	//	//OpenNextStage(stageNum);
+	//}
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::V))
 	{
@@ -445,7 +448,7 @@ void MenuScreen::Pattern2Draw() const
 
 
 	if (BuildMode == 1) {
-		//DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum);
+		DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum);
 		//DrawFormatString(0, 60, GetColor(255, 255, 255), "pos %f %f", pos.x, pos.y);
 		//DrawFormatString(0, 80, GetColor(255, 255, 255), "ease %f", ease);
 		//DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis);
@@ -577,6 +580,7 @@ void MenuScreen::ShootingStar()
 					sStar_[i].timer_ = 0.0f;
 					sStar_[i].position_ = prevPos_[i];
 					ssAlpha_[i] = 0.0f;
+					sStar_[i].scale_ = Random::GetInstance().Range(0.5f, 1.5f);
 				}
 			}
 		}
@@ -593,12 +597,11 @@ void MenuScreen::Crow()
 			cDis_[i] = 0.0f;
 			crowPos_[i].x = WINDOW_WIDTH + 302.0f;
 		}
-
 		if (cTimer_[i] >= interval_[i] - 1.0f) {
 			cTimer_[i] = 0.0f;
-
 		}
 		if (cTimer_[i] == 0.0f) {
+			if (stageNum >= 7 && crowPos_[i].x == WINDOW_WIDTH + 302.0f) return;
 			crowPos_[i] += cVelocity_[i];
 		}
 
@@ -655,5 +658,6 @@ Stage MenuScreen::GetGamePlayStage() const
 
 void MenuScreen::InputSelectStage()
 {
+	CheatData::getInstance().SetStartStage(stageNum);
 	CheatData::getInstance().SetSelectStage(stageList_[stageNum]);
 }

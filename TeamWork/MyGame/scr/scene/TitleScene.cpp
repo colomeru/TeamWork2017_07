@@ -9,6 +9,8 @@
 #include"../tween/TweenManager.h"
 #include"../sound/sound.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
+#include "../cheat/CheatData.h"
+
 
 TitleScene::TitleScene() :
 	nextScene_(Scene::Menu)
@@ -157,6 +159,7 @@ void TitleScene::End()
 {
 	Sound::GetInstance().StopBGM();
 	world_->Clear();
+	CheatData::getInstance().SetStartStage(0);
 
 	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
 	//FadePanel::GetInstance().FadeOut();

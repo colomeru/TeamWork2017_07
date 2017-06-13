@@ -28,6 +28,7 @@ public:
 		Vector2 position_;
 		float isAlpha_;
 		float timer_;
+		float scale_;
 	};
 
 
@@ -35,6 +36,7 @@ public:
 	MenuScreen();
 	//デストラクタ
 	~MenuScreen();
+	//初期化
 	void Init();
 	//更新
 	void Update();

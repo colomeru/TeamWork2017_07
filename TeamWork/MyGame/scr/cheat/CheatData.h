@@ -4,7 +4,7 @@
 
 class CheatData {
 private:
-	CheatData():selectStage_(Stage::Stage1) {
+	CheatData():selectStage_(Stage::Stage1),startStageNum_(0) {
 		clearStage.resize(8, false);
 	}
 	~CheatData(){}
@@ -26,8 +26,17 @@ public:
 	Stage GetSelectStage()const {
 		return selectStage_;
 	}
+	void SetStartStage(const int s) {
+		startStageNum_ = s;
+	}
+	int GetStartStage()const {
+		return startStageNum_;
+	}
+
 private:
 	std::vector<bool> clearStage;
 
 	Stage selectStage_;
+
+	int startStageNum_;
 };

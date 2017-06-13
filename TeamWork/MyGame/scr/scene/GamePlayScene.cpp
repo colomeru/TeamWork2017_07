@@ -21,6 +21,8 @@
 #include"../actor/Field/Enemys/EnemyCharas/ClothesTapper.h"
 #include"../tween/TweenManager.h"
 #include"../actor/Effects/PlayerEffect/PlayerMetamorEffect.h"
+#include"../cheat/CheatData.h"
+#include"../fade/FadePanel.h"
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
@@ -71,6 +73,15 @@ GamePlayScene::GamePlayScene() :
 	defWindTime_[Stage::Stage7] = defWindTime[6];
 	defWindTime_[Stage::Stage8] = defWindTime[7];
 
+	stagenum_[Stage::Stage1] = 0;
+	stagenum_[Stage::Stage2] = 1;
+	stagenum_[Stage::Stage3] = 2;
+	stagenum_[Stage::Stage4] = 3;
+	stagenum_[Stage::Stage5] = 4;
+	stagenum_[Stage::Stage6] = 5;
+	stagenum_[Stage::Stage7] = 6;
+	stagenum_[Stage::Stage8] = 7;
+
 	bgScreen_ = BackgroundScreen(world_.get());
 	changeScreen_=LaneChangeScreen(world_.get());
 	uiScreen_ = UIScreen(world_.get());
@@ -83,6 +94,8 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
+	changeCount_ = 240;
+	currentStage_ = CheatData::getInstance().GetSelectStage();
 	//FadePanel::GetInstance().Initialize();
 	//FadePanel::GetInstance().SetInTime(0.2f);
 	//FadePanel::GetInstance().SetOutTime(0.2f);
@@ -91,7 +104,7 @@ void GamePlayScene::Initialize()
 	//シーン遷移系の初期化
 	{
 		gamePlayMode_ = 0;
-		nextScene_ = Scene::Credit;
+		nextScene_ = Scene::Title;
 		pauseScreen_.Init();
 		gameOverScreen_.Init();
 		gameClearScreen_.Init();
@@ -102,7 +115,7 @@ void GamePlayScene::Initialize()
 	//FadePanel::GetInstance().FadeIn();
 	world_->Initialize();
 	// アクター生成
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
+	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
 
 	//Vector3 position_ = posit;
 	//Vector3 target_ = posit;
@@ -168,7 +181,7 @@ void GamePlayScene::Initialize()
 
 	stageEffectScreen_.Init(currentStage_);
 	
-	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_]);
+	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_],DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.5f);
 }
 
@@ -288,6 +301,9 @@ void GamePlayScene::End()
 	Sound::GetInstance().StopBGM();
 
 	TweenManager::GetInstance().Clear();
+
+	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	FadePanel::GetInstance().FadeOut();
 }
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
@@ -332,6 +348,9 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 		uiScreen_.AddScore(100);
 		break;
 	}
+	case EventMessage::PLAYER_DEAD: {
+		setNextMode(2);
+	}
 	default:
 		break;
 	}
@@ -366,7 +385,6 @@ void GamePlayScene::baseUpdate()
 		//ply1->curPHeadSlip(true);
 		setNextMode(3);
 	}
-	if (ply1->isPlayerDead())setNextMode(2);
 	//if (world_->GetIsGameClear())setNextMode(3);
 
 	bgScreen_.Update();
@@ -407,17 +425,25 @@ void GamePlayScene::clearUpdate()
 			currentStage_ = nextStageList_[currentStage_];
 			Initialize();
 			//setNextMode(6);
+
 		}
 	}
+
 
 }
 
 void GamePlayScene::nextUpdate()
 {
+
 	world_->Update();
 	bgScreen_.Update();
 	changeScreen_.Update();
 	stageEffectScreen_.Update();
+	
+	changeCount_--;
+	if (changeCount_ <= 0) setNextMode(3);
+	bgScreen_.DownCeil();
+
 	//if (ply1->) {
 	//	End();
 	//	currentStage_ = nextStageList_[currentStage_];
@@ -430,7 +456,35 @@ void GamePlayScene::nextSwitchUpdate()
 	//End();
 	//currentStage_ = nextStageList_[currentStage_];
 	//Initialize();
+}
 
+void GamePlayScene::setNextMode(int mode) {
+	gamePlayMode_ = mode;
+	switch (gamePlayMode_)
+	{
+	case 2: {
+		gameOverScreen_.Init();
+		Sound::GetInstance().PlayBGM(BGM_ID::GAME_OVER_BGM);
+
+		break;
+	}
+	case 3: {
+		CheatData::getInstance().SetClearData(stagenum_[currentStage_], true);
+		if(currentStage_!=Stage::Stage8)
+			CheatData::getInstance().SetSelectStage(nextStageList_[currentStage_]);
+		gameClearScreen_.Init();
+		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(),currentStage_);
+		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);
+		//gameClearScreen_.SetStarCount();
+		break;
+	}
+	case 4: {
+		pauseScreen_.Init();
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+	}
+	default:
+		break;
+	}
 }
 
 void GamePlayScene::startUpdate()

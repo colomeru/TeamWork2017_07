@@ -40,6 +40,8 @@ void BackgroundScreen::Init(Stage currentStage)
 	//characters_.push_back(new BackgroundPill(world_,Vector2(pPos.x+2000, 200)));
 	//characters_.push_back(new BackgroundPill(world_,Vector2(pPos.x+2000,700)));
 	currentStage_ = currentStage;
+	
+	 ceilPos = Vector2(0, -200.f);
 }
 
 void BackgroundScreen::Update()
@@ -71,13 +73,13 @@ void BackgroundScreen::Update()
 
 void BackgroundScreen::Draw() const
 {
-	SetDrawBright(100.0f, 100.f, 100.f);
+	//SetDrawBright(100.0f, 100.f, 100.f);
 
 	Vector2 camPos(world_->GetInv().Translation().x/2,0);
 	camPos.x = (int)camPos.x % (int)Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x;
 	float myds=world_->GetKeepDatas().changeLaneLerpPos_;
 	Vector2 addpos=Vector2::Lerp(Vector2::Zero,Vector2(0,30),myds) *world_->GetKeepDatas().nextLane_;
-	Vector2 bgPos = Vector2(0,Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).y-WINDOW_HEIGHT) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	Vector2 bgPos = Vector2(0,Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).y-WINDOW_HEIGHT-30) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
 	bgPos += (camPos);
 	Vector2 BGSize = Vector2(Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x, 0);
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), bgPos- BGSize);
@@ -91,10 +93,9 @@ void BackgroundScreen::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
 	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos+ fenceSize);
 	
-	Vector2 ceilPos = Vector2::Zero - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_] +Sprite::GetInstance().GetSize(SPRITE_ID::CEILING_SPRITE).y- defDrawPointYAdd[1]);
 	Sprite::GetInstance().Draw(SPRITE_ID::CEILING_SPRITE, ceilPos);
 
-	SetDrawBright(255, 255, 255);
+	//SetDrawBright(255, 255, 255);
 
 	//for (auto& bgC : characters_) {
 	//	bgC->Draw();
@@ -148,4 +149,10 @@ void BackgroundScreen::addBGCharacters()
 		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2900, 300)));
 		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 3200, 0)));
 		//}
+}
+
+void BackgroundScreen::DownCeil()
+{
+	ceilPos.y += 2;
+	ceilPos.y = min(ceilPos.y,0);
 }

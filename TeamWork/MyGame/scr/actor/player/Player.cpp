@@ -12,6 +12,8 @@
 #include"../Effects/PlayerEffect/PlayerBiteEffect.h"
 #include"../Effects/PlayerEffect/GetSwordEffect.h"
 #include"PlayerNeckDraw.h"
+#include"PlayerDeadPin.h"
+#include"PlayerDeadHead.h"
 #include"../../sound/sound.h"
 
 static const float headShotPower = 0.3f;
@@ -83,6 +85,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	updateFunctionMap_[MODE_SLIP] = std::bind(&Player::SlipUpdate, this);
 	updateFunctionMap_[MODE_RESIST] = std::bind(&Player::ResistUpdate, this);
 	updateFunctionMap_[MODE_CLEAR] = std::bind(&Player::ClearUpdate, this);
+	updateFunctionMap_[MODE_PLAYERDEAD] = std::bind(&Player::DeadUpdate, this);
 
 	worldSetMyDatas();
 	StartPlayerSet();
@@ -106,6 +109,7 @@ Player::~Player()
 	mRot_spd.clear();
 	correctionLens.clear();
 	drawPoints.clear();
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 }
 
 void Player::Update()
@@ -134,6 +138,8 @@ void Player::Update()
 	PlayerInputControl();
 	//自分の状態に応じた更新
 	updateFunctionMap_[playerMode_]();
+	//死亡条件を満たしたらDeadする(SetModeは同モードなら更新を行わない)
+	if (isPlayerDead())SetMode(MODE_PLAYERDEAD);
 
 	if (position_.y >= WINDOW_HEIGHT) {
 		SetNextLane(1,LaneChangeType::LaneChange_Fall);
@@ -817,8 +823,12 @@ void Player::SetDrawNeck(const Vector2 & bodyPoint, const Vector2 & headPoint)
 
 void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 {
+	//MultとfPosの数がここで合わなくなる
 	fPos_.clear();
+	multiplePos.clear();
 	correctionLens.clear();
+	mRot.clear();
+	mRot_spd.clear();
 
 	Vector2 vel(bodyPoint - headPoint);
 	int s = (int)round(vel.Length() / oneLength);
@@ -836,6 +846,9 @@ void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 	DrawPos p;
 	for (int i = 0; i < s; i++) {
 		fPos_.push_back(headPoint+(vel*i));
+		multiplePos.push_back(headPoint + (vel*(i+1)));
+		mRot.push_back(0);
+		mRot_spd.push_back(0);
 	}
 
 
@@ -989,36 +1002,54 @@ void Player::SetMode(int pMode) {
 		{
 		case MODE_FALL: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_SHOOT: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().PlaySE(SE_ID::HEAD_SHOOT_SE, DX_PLAYTYPE_LOOP);
 			break;
 		}
 		case MODE_SHOOT_END: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_BITE: {
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
 			break;
 		}
 		case MODE_SLIP: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_RESIST: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
 		case MODE_CLEAR: {
 
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			break;
+		}
+		case MODE_PLAYERDEAD: {
+
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerDeadHead>(world_, position_));
+			
+			for (int i = 0; i < 8; i++) {
+				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerDeadPin>(world_, position_));
+			}
+			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			break;
 		}
@@ -1226,9 +1257,11 @@ void Player::ShootUpdate()
 			CurPHeadLengPlus(headShotPower);
 		}
 		else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
+			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 		}
 		else {
+			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		}
 
@@ -1433,11 +1466,16 @@ void Player::ClearUpdate()
 		pendulumVect_ *= 3.f;
 		Vector2 shiftPos_;
 		shiftPos_.x = max(abs(pendulumVect_.x), 30.f)*sign(pendulumVect_.x);
-		shiftPos_.y = max(abs(pendulumVect_.y), 30.f)*sign(pendulumVect_.y);
+		shiftPos_.y = max(abs(pendulumVect_.y), 40.f)*sign(pendulumVect_.y);
 
 		pendulumVect_ = shiftPos_;
 	}
 	if (position_.y <= -WINDOW_HEIGHT*2.f) {
 		world_->sendMessage(EventMessage::PLAY_NEXT_STAGE);
 	}
+}
+
+void Player::DeadUpdate()
+{
+	position_ += velocity_ + pendulumVect_;
 }

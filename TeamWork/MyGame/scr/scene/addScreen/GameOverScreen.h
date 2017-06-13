@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include"../Scene.h"
+#include"../../math/Vector2.h"
 
 class GameOverScreen
 {
@@ -21,4 +22,6 @@ private:
 	std::vector<Scene> changeSceneList_;
 	std::vector<float> textAlphaList_;
 	std::vector<float> textSizeList_;
+	std::vector<Vector2> cursorPos_;
+	Vector2 cursorDrawPos_;
 };

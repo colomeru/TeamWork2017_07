@@ -42,25 +42,7 @@ public:
 		currentStage_ = stage;
 	}
 private:
-	void setNextMode(int mode) {
-		gamePlayMode_ = mode;
-		switch (gamePlayMode_)
-		{
-		case 2: {
-			gameOverScreen_.Init();
-			break;
-		}
-		case 3: {
-			gameClearScreen_.Init();
-			break;
-		}
-		case 4: {
-			pauseScreen_.Init();
-		}
-		default:
-			break;
-		}
-	}
+	void setNextMode(int mode);
 private:
 	void startUpdate();
 	void baseUpdate();
@@ -106,6 +88,8 @@ private:
 	int maxLaneCount;
 	float stageLen_;
 
+	int changeCount_;
+
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
 
@@ -114,6 +98,8 @@ private:
 	std::map<Stage,BGM_ID> stageBGMList_;
 
 	std::map<Stage, int> defWindTime_;
+	
+	std::map<Stage, int> stagenum_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
 

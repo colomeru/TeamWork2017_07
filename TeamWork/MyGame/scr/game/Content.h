@@ -2,6 +2,7 @@
 
 class Sprite;
 class Model;
+class FontManager;
 class Sound;
 class File;
 
@@ -11,6 +12,7 @@ public:
 	Content() = default;
 	~Content() = default;
 
+	void NotAsyncLoadSprite(Sprite& sprite, Model& model);
 	///<summary>
 	/// ‰æ‘œ‚ğ“Ç‚İ‚Ş
 	///</summary>
@@ -26,6 +28,7 @@ public:
 	///</summary>
 	void LoadSound(Sound& sound);
 
+	void LoadFont(FontManager& font);
 	///<summary>
 	/// ”ñ“¯Šú“Ç‚İ‚İ‚ğ—LŒø‰»
 	///</summary>

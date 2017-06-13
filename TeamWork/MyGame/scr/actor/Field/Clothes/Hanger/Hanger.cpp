@@ -38,11 +38,12 @@ void Hanger::Update()
 		parent_ = nullptr;
 		return;
 	}
-	if (isStop_) return;
-
 	if (isCheckCol_ && isUpdate_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
 	}
+
+	if (isStop_) return;
+
 	//Hanger‚ð‚Â‚©‚ñ‚¾Û‚ÌPlayer‚ÌˆÚ“®ˆ—
 	velocity_ = Vector2(10.0f, 0.0f);
 	Vector2 pos = parent_->GetPosition() + velocity_;
@@ -70,15 +71,16 @@ void Hanger::Draw() const
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
 	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
-	if (BuildMode == 1) {
-		DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-		DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-		DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-		DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	}
 
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos_, hangOrigin, spriteAlpha_, Vector2::One, angle_);
+
+	if (BuildMode != 1) return;
+	DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
+	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
+	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+
 }
 
 void Hanger::OnUpdate()
@@ -101,14 +103,14 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::STAGE_ACTOR:
 	{
-		if (isStop_) return;
+		//if (isStop_) return;
 		if (position_.x >= other.GetPosition().x) return;
+		isStop_ = true;
+		if (player_->GetRot() > 80) return;
 		player_->SetMode(MODE_SLIP);
 		//player_->PHeadChanger();
-		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
-		isStop_ = true;
+		//static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
 		parent_ = nullptr;
-		player_ = nullptr;
 		break;
 	}
 	default:

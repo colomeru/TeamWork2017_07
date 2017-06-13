@@ -4,6 +4,7 @@
 #include "../scene/DemoScene.h"
 #include "../scene/TitleScene.h"
 #include "../scene/MenuScene.h"
+#include "../scene/TutorialScene.h"
 #include "../scene/GamePlayScene.h"
 #include "../scene/CreditScene.h"
 #include "../scene/EndingScene.h"
@@ -12,6 +13,8 @@
 #include "../graphic/Model.h"
 #include "../graphic/Sprite.h"
 #include "../sound/sound.h"
+#include "../graphic/FontManager.h"
+
 
 void Game1::Initialize()
 {
@@ -21,6 +24,9 @@ void Game1::Initialize()
 	Model::GetInstance().Initialize();
 	Sprite::GetInstance().Initialize();
 	Sound::GetInstance().Initialize();
+	FontManager::GetInstance().Initialize();
+
+	mContent.NotAsyncLoadSprite(Sprite::GetInstance(), Model::GetInstance());
 
 	// ”ñ“¯Šú“Ç‚İ‚İŠJn
 	mContent.EnableASync();
@@ -29,6 +35,7 @@ void Game1::Initialize()
 	mContent.LoadSprite(Sprite::GetInstance(), Model::GetInstance());
 	mContent.LoadModel(Model::GetInstance(), false);
 	mContent.LoadSound(Sound::GetInstance());
+	mContent.LoadFont(FontManager::GetInstance());
 
 	// ”ñ“¯Šú“Ç‚İ‚İI—¹
 	mContent.DisableASync();
@@ -40,6 +47,7 @@ void Game1::Initialize()
 	mSceneManager.Add(Scene::Demo, std::make_shared<DemoScene>());
 	mSceneManager.Add(Scene::Title, std::make_shared<TitleScene>());
 	mSceneManager.Add(Scene::Menu, std::make_shared<MenuScene>());
+	mSceneManager.Add(Scene::Tutorial, std::make_shared<TutorialScene>());
 	mSceneManager.Add(Scene::GamePlay, std::make_shared<GamePlayScene>());
 	mSceneManager.Add(Scene::Credit, std::make_shared<CreditScene>());
 	mSceneManager.Add(Scene::Ending, std::make_shared<EndingScene>());

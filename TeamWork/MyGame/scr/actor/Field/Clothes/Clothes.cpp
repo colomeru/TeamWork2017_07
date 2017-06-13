@@ -1,7 +1,6 @@
 #include "Clothes.h"
 #include "../MyGame/scr/math/MyFuncionList.h"
 #include "../MyGame/scr/game/Random.h"
-#include "../../player/Player.h"
 #include "Hanger\Hanger.h"
 #include "../MyGame/scr/scene/GamePlayDefine.h"
 #include "../MyGame/scr/tween/TweenManager.h"
@@ -12,10 +11,12 @@
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	:Actor(world)
-	,isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
-	,fulcrum_(0, 0), rot_(90.0f), rot_spd_(0.8f), length_(125.0f), gravity_(0.3f), friction_(1.0f)
-	,count_(0),clothesState_(ClothesState::BEGIN_WIND),cuttingState_(ClothesCuttingState::Normal),weight_(weight),drawFrame_(0),is_Droping_(false)
+	, isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
+	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f), count_(0)
+	, clothesState_(ClothesState::WINDLESS), cuttingState_(ClothesCuttingState::Normal), weight_(weight), drawFrame_(0)
+	, is_Droping_(false), clothesFeces_(nullptr), player_(nullptr)
 {
+	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
 	dNumber_ = 0.0f;
 
 	localPoints.clear();
@@ -40,14 +41,11 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 		if (!isWind_ && !is_Droping_) {
 			parent_ = &other;
 			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-			static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
-			static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
-			static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
-		}
-		if (is_Droping_) {
-			parent_ = &other;
-			static_cast<Player*>(parent_->GetParent())->SetMode(MODE_SLIP);
-			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
+			player_ = static_cast<Player*>(parent_->GetParent());
+			player_->CurHeadBite(other.GetPosition());
+			player_->SetIsBiteMode(true);
+			player_->SetOtherClothesID_(clothes_ID);
+			break;
 		}
 		break;
 	}
@@ -91,7 +89,8 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 		if (is_Droping_ || isPendulum_) return;
 		Vector2 pos = other.GetPosition() - fulcrum_;
-		world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
+		clothesFeces_ = std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor());
+		//world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
 		is_Droping_ = true;
 		other.Dead();
 		break;
@@ -110,14 +109,16 @@ void Clothes::OnMessage(EventMessage message, void * param)
 		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
 		if (rand > frequencyWind) break;
-		rot_spd_ -= weight_;
-		basePosition_ = position_;
-		float dRand = Random::GetInstance().Range(0.0f, 2.0f);
-		TweenManager::GetInstance().Delay(dRand, [&]() { 
-			isPendulum_ = true; }, &dNumber_);
-		//rot_spd_ -= weight_;
-		//basePosition_ = position_;
-		//isPendulum_ = true;
+		float dRand = Random::GetInstance().Range(0.0f, 1.5f);
+		TweenManager::GetInstance().Delay(
+			dRand,
+			[&]() {
+			rot_spd_ = 1.7f;
+			rot_spd_ -= weight_;
+			basePosition_ = position_;
+			clothesState_ = ClothesState::BEGIN_WIND; },
+			&dNumber_
+			);
 		break;
 	}
 	}
@@ -125,6 +126,8 @@ void Clothes::OnMessage(EventMessage message, void * param)
 
 void Clothes::Pendulum(Vector2 fulcrum, float length)
 {
+	beforePos_ = position_;
+
 	//現在の重りの位置
 	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
 	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
@@ -165,9 +168,10 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
 
 	//角度を画像に反映
-	auto angle = rot_ - 90;
-	angle_ = angle;
+	angle_ = rot_ - 90;
 	
+	if (clothesState_ == ClothesState::WINDLESS) return;
+
 	count_++;
 
 	switch (count_)
@@ -191,27 +195,30 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 void Clothes::ShakesClothes()
 {
-	if (isPendulum_ && isDraw_) {
+	if (isDraw_) {
 		Pendulum(fulcrum_, length_);
 
 		switch (clothesState_)
 		{
-		case ClothesState::BEGIN_STRONG_WIND:
-			rot_spd_ = 2.5f;
+		case ClothesState::BEGIN_STRONG_WIND: {
+			rot_spd_ = 4.0f;
 			rot_spd_ -= weight_;
 			isWind_ = true;
 			TweenManager::GetInstance().Delay(15.0f, [=]() {isWind_ = false; });
 			clothesState_ = ClothesState::STRONG_WIND;
 			WindSwing();
 			break;
-		case ClothesState::ATTENUATE_WIND:
+		}
+		case ClothesState::ATTENUATE_WIND: {
 			isFriction_ = true;
 			break;
-		case ClothesState::POSSIBLE_BITE:
+		}
+		case ClothesState::POSSIBLE_BITE: {
 			isWind_ = false;
 			break;
-		case ClothesState::END_WIND:
-			rot_spd_ = 0.8f;
+		}
+		case ClothesState::END_WIND: {
+			rot_spd_ = 0.08f;
 			rot_ = 90.0f;
 			friction_ = 1.0f;
 			angle_ = 0;
@@ -219,9 +226,10 @@ void Clothes::ShakesClothes()
 			isFriction_ = false;
 			count_ = 0;
 			isPendulum_ = false;
-			clothesState_ = ClothesState::BEGIN_WIND;
+			clothesState_ = ClothesState::WINDLESS;
 			world_->sendMessage(EventMessage::END_WIND);
 			break;
+		}
 		default:
 			break;
 		}
@@ -274,14 +282,40 @@ void Clothes::SetLocalPoints()
 		break;
 	}
 	case ClothesCuttingState::RightUpSlant: {
+		clothesFeces_ = nullptr;
+		is_Droping_ = false;
 		SetRightUpSlant();
 		break;
 	}
 	case ClothesCuttingState::LeftUpSlant: {
+		clothesFeces_ = nullptr;
+		is_Droping_ = false;
 		SetLeftUpSlant();
 		break;
 	}
 	}
+}
+
+void Clothes::UpdateClothesFeces()
+{
+	if (clothesFeces_ != nullptr && is_Droping_ && cuttingState_ == Normal)
+		clothesFeces_->Update();
+}
+
+void Clothes::DrawClothesFeces() const
+{
+	if (clothesFeces_ != nullptr && is_Droping_ && cuttingState_ == Normal)
+		clothesFeces_->Draw();
+}
+
+void Clothes::Synchronize()
+{
+	if (parent_ == nullptr || player_== nullptr || !player_->GetIsBiteMode()) return;
+
+	pendulumVec_ = (position_ - beforePos_);
+	auto pos = parent_->GetPosition() + pendulumVec_;
+	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
+	player_->setCurPHeadSPos(pos);
 }
 
 void Clothes::SetNormal()

@@ -18,7 +18,7 @@ public:
 	virtual Vector2 GetStageSize() const override {
 		return stageSize_;
 	}
-
+	void CreateClothes();
 private:
 	//ƒsƒ“’Ç‰ÁŠÖ”
 	void Pin_Add(int i, int j, int data, int laneNum);

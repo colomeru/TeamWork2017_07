@@ -7,9 +7,10 @@
 #include"../Field/ClothesPin.h"
 #include"../Effects/PlayerEffect/PlayerFatigueEffect.h"
 #include"../../sound/sound.h"
+#include"../../time/Time.h"
 
 Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNumber)
-	:Actor(world, targetP)
+	:Actor(world, targetP), biteSpriteTimer_(0.0f)
 	, isHit_(false), isBitePoint_(false), player_(targetP), myNumber_(myNumber), isHitOnce(true), posAddVect_(Vector2::Zero), fatigueCheckColor_(0),isBiteSlipWind_(false), isAlreadyCreateSplash_(false)
 {
 	spriteId_ = SPRITE_ID::OROCHI_HEAD_SPRITE;
@@ -30,6 +31,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 
 	colFuncMap_[COL_ID::PHEAD_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_Circle_Capsules, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::BOX_HANGER_COL] = std::bind(&CollisionFunction::IsHit_PHead_Hanger, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	colFuncMap_[COL_ID::PHEAD_GOAL_COL] = std::bind(&CollisionFunction::IsHit_PHead_Goal, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 Player_Head::~Player_Head()
@@ -39,7 +41,7 @@ Player_Head::~Player_Head()
 void Player_Head::Update()
 {
 	//自分が死んでたら更新を行わない
-	if (player_->GetPHeadDead(myNumber_))return;
+	//if (player_->GetPHeadDead(myNumber_))return;
 	//服を噛んでいる時は、頭の色を赤く、離すと元の色に戻していく
 	if (player_->GetIsClearMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ -= 10;
 	if (player_->GetIsResistMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ += 10;
@@ -53,6 +55,10 @@ void Player_Head::Update()
 	if (player_->GetCurHead()==myNumber_&&fatigueCheckColor_ >= 200)CreateFatigueEffect();
 
 	fatigueCheckColor_ = MathHelper::Clamp(fatigueCheckColor_, 0,255);
+	
+	biteSpriteTimer_ -= Time::DeltaTime;
+	biteSpriteTimer_ = max(biteSpriteTimer_,0.0f);
+
 	//Vector2 posAddP = position_;
 	
 	//風に吹かれた服に当たってかつ吹かれていない服につかめてない場合のみ落ちる
@@ -96,10 +102,11 @@ void Player_Head::Update()
 
 	parameter_.mat.Translation(toMatPos);
 
-
+	if (player_->GetPHeadDead(myNumber_))return;
 	if (player_->GetIsShootModeEnd()&&player_->GetCurHead()==myNumber_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::PHEAD_CLOTHES_COL);
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::HANGER_ACTOR, COL_ID::BOX_HANGER_COL);
+		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::GOAL_ACTOR, COL_ID::PHEAD_GOAL_COL);
 	}
 	
 }
@@ -141,8 +148,19 @@ void Player_Head::Draw() const
 			angle = 270;
 		}
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
-		Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_,Vector2::One, angle,true,false);
-		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One, angle, true, false);
+
+		if (player_->GetIsShootMode())
+		{
+			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+		}
+		else if (biteSpriteTimer_ > 0.01f) {
+			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SHOOT_END_SPRITE, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+
+		}
+		else {
+			Sprite::GetInstance().Draw(spriteId_, drawPos_, headOrigin, spriteAlpha_, Vector2::One, angle, true, false);
+			Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE, drawPos_, headOrigin, ((float)fatigueCheckColor_ / 255.f)*spriteAlpha_, Vector2::One, angle, true, false);
+		}
 	}
 	else {
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;

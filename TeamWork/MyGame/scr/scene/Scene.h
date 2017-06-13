@@ -7,6 +7,7 @@ enum class Scene
 	Demo,
 	Title,
 	Menu,
+	Tutorial,
 	GamePlay,
 	Credit,
 	Ending,

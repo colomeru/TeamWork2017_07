@@ -48,6 +48,10 @@ private:
 	// コールバック呼び出し
 	void Invoke();
 
+	/* コピー禁止 */
+	TweenObject(const TweenObject&) = delete;
+	TweenObject& operator = (const TweenObject&) = delete;
+
 private:
 	// ease関数
 	std::function<float(float, float, float, float, float)> func_;

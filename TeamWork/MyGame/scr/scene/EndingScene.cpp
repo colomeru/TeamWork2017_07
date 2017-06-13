@@ -173,7 +173,7 @@ void EndingScene::Initialize()
 	stageManager.SetStage(Stage::Stage1);
 	stageLen = stageManager.GetStageSize(Stage::Stage1).x;
 
-	meter_ = ProgressMeter(world_.get(), stageLen);
+	meter_ = ProgressMeter(world_.get(), stageLen,Vector2(300.0f,300.0f));
 	meter_.Initialize();
 }
 
@@ -192,9 +192,9 @@ void EndingScene::Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LSHIFT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM4))
 	{
-		//MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f);
+		MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f,150.0f);
 	}
-	MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f,150.0f);
+	//MultipleInit(neckLengh, Vector2(800.0f, 300.0f), 0.0f,150.0f);
 
 
 	//ŽlŠp‚Ì“–‚½‚è”»’è
@@ -692,7 +692,6 @@ void EndingScene::Multiple()
 
 		if (i == 0)mRot_spd[i] = mRot_spd[i] + sub;
 		else mRot_spd[i] = (mRot_spd[i - 1] + sub) * 0.8f;
-
 
 		//anyPos2[i] = fPos[i];
 

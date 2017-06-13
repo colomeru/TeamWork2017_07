@@ -9,7 +9,7 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::GOAL_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(400.0f, 200.0f);
+	parameter_.size = Vector2(200.0f, 1500.0f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -41,7 +41,7 @@ void GoalClothes::Draw() const
 {
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos_ - Vector2(0, 200), crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
 	if (BuildMode != 1) return;
 	//if (!collisionPoints.empty()) {

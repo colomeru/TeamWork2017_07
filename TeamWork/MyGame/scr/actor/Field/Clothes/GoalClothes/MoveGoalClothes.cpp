@@ -8,7 +8,7 @@ MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::GOAL_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(200.0f, 600.0f);
+	parameter_.size = Vector2(200.0f, 1500.0f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -40,8 +40,8 @@ void MoveGoalClothes::Update()
 
 void MoveGoalClothes::Draw() const
 {
-	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::MOVE_GOAL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos_ - Vector2(0, 200), crcOrigin, spriteAlpha_, Vector2::One, angle_);
 
 	if (BuildMode != 1) return;
 	//if (!collisionPoints.empty()) {

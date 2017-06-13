@@ -13,7 +13,7 @@ DropClothes::DropClothes(IWorld * world, Vector2 pos, int laneNum, SPRITE_ID spr
 
 	drawFrame_ = drawFrame + 3;
 
-	TweenManager::GetInstance().Loop(EaseInQuart, &position_.y, WINDOW_HEIGHT, 3.0f, [=]() { Dead(); });
+	TweenManager::GetInstance().Add(EaseInQuart, &position_.y, WINDOW_HEIGHT, 3.0f, [=]() { Dead(); });
 }
 
 void DropClothes::Update()

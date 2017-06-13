@@ -32,9 +32,12 @@ void SceneManager::Initialize()
 // XV
 void SceneManager::Update()
 {
+
 	if (nectSceneName_ != Scene::Demo) {
 		timer += Time::DeltaTime;
 	}
+
+	//timer += Time::DeltaTime;
 	if (!FadePanel::GetInstance().IsAction())
 		mCurrentScene->Update();
 	if (Keyboard::GetInstance().AnyTriggerDown()

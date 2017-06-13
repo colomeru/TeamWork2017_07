@@ -1,8 +1,8 @@
 #include "MenuScene.h"
 #include "../time/Time.h"
 #include "../math/MathHelper.h"
-#include "../graphic//Sprite.h"
-
+#include "../graphic/Sprite.h"
+#include"../fade/FadePanel.h"
 MenuScene::MenuScene() :
 	nextScene_(Scene::GamePlay)
 {
@@ -22,7 +22,8 @@ MenuScene::~MenuScene()
 void MenuScene::Initialize()
 {
 	isEnd_ = false;
-	
+	menu.Init();
+	nextScene_ = Scene::GamePlay;
 }
 
 void MenuScene::Update()
@@ -32,16 +33,19 @@ void MenuScene::Update()
 	world_->Update();
 
 	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))){
+		if (menu.GetIsBackSelect())nextScene_ = Scene::Title;
+		else if (menu.GetIsTutorialSelect())nextScene_ = Scene::Tutorial;
 		isEnd_ = true;
-
+		menu.InputSelectStage();
 	}
 	menu.Update();
 }
 
 void MenuScene::Draw() const
 {
-	DrawFormatString(0, 00, GetColor(255, 255, 255), "MenuScene");
+	//DrawFormatString(0, 00, GetColor(255, 255, 255), "MenuScene");
 	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 	menu.Draw();
@@ -64,6 +68,8 @@ void MenuScene::End()
 {
 	// 初期化
 	world_->Clear();
+	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	FadePanel::GetInstance().FadeOut();
 }
 
 void MenuScene::handleMessage(EventMessage message, void * param)

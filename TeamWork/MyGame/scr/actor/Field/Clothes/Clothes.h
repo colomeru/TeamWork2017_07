@@ -1,5 +1,6 @@
 #pragma once
 #include "../../Actor.h"
+#include "../../player/Player.h"
 #include "../MyGame/scr/game/ID.h"
 #include <array>
 #include <vector>
@@ -10,6 +11,7 @@ class Clothes : public Actor
 protected:
 	enum ClothesState
 	{
+		WINDLESS,				//風が吹いていない状態
 		BEGIN_WIND,				//風の吹き始め
 		BEGIN_STRONG_WIND,		//強い風の吹き始め
 		STRONG_WIND,			//強い風が吹いている
@@ -75,6 +77,13 @@ public:
 	void SetPointsUpdate();
 	//切断状態による当たり判定のポイントの設定
 	void SetLocalPoints();
+	//服に付着した鳥の糞の更新
+	void UpdateClothesFeces();
+	//服に付着した鳥の糞の描画
+	void DrawClothesFeces() const;
+
+	//頭を服に同期させる振り子
+	void Synchronize();
 
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
@@ -108,6 +117,18 @@ protected:
 	ClothesState clothesState_;
 	//服の切断状態
 	ClothesCuttingState cuttingState_;
+	//
+	float dNumber_;
+	//服に付着した糞
+	ActorPtr clothesFeces_;
+
+	//プレイヤー
+	Player* player_;
+	//振り子の移動量
+	Vector2 pendulumVec_;
+	//振り子の移動前の位置
+	Vector2 beforePos_;
+
 
 	//振り子関連(服用)
 	//振り子フラグ
@@ -132,6 +153,4 @@ protected:
 	float friction_;
 	//振り子カウント
 	int count_;
-
-	float dNumber_;
 };

@@ -193,7 +193,7 @@ void Player::Draw() const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
 	float aHeadAngle = (360 / pHeads_.size());
 	float angle = currentHead_*aHeadAngle + aHeadAngle*(headChangeTime_ / defHeadChangeTime);
-	Sprite::GetInstance().Draw(spriteId_, GetDrawPosVect(position_), crcOrigin, spriteAlpha_, Vector2::One,angle);
+	Sprite::GetInstance().Draw(spriteId_, GetDrawPosVect(position_), crcOrigin, parameter_.spriteAlpha_, Vector2::One,angle);
 	
 	if (!pHeadDead_[currentHead_]) {
 
@@ -1452,7 +1452,7 @@ void Player::ClearUpdate()
 	for (auto& i : mRot_spd) {
 		i*=1.025f;
 	}
-	if (mRot.front()<-45.0f) {
+	if (mRot.front()<-22.5f) {
 		PHeadLengthReset();
 		pendulumVect_.x *= 0.98f;
 		pendulumVect_.y *= 0.98f;
@@ -1465,7 +1465,8 @@ void Player::ClearUpdate()
 		DeformationDraw();
 		pendulumVect_ *= 3.f;
 		Vector2 shiftPos_;
-		shiftPos_.x = max(abs(pendulumVect_.x), 30.f)*sign(pendulumVect_.x);
+		//shiftPos_.x = max(abs(pendulumVect_.x), 30.f)*sign(pendulumVect_.x);
+		shiftPos_.x = 0.f;
 		shiftPos_.y = max(abs(pendulumVect_.y), 40.f)*sign(pendulumVect_.y);
 
 		pendulumVect_ = shiftPos_;

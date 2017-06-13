@@ -96,7 +96,7 @@ public:
 			//drawPos_.y += defDrawLinePosY[drawLane + 1];
 
 			drawLane = MathHelper::Abs(drawLane);
-			spriteAlpha_ = alphaSetter[drawLane];
+			parameter_.spriteAlpha_ = alphaSetter[drawLane];
 		}
 
 		isCheckCol_ =	(world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[2] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[3])
@@ -108,7 +108,7 @@ public:
 	//レーン移動時限定のアップデート、virtualだが、Player以外はoverrideしないようにする事
 	virtual bool CamMoveUpdate() {
 		CamMoveOnlyUpdate();
-		spriteAlpha_ = 0.5f;
+		parameter_.spriteAlpha_ = 0.5f;
 		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
 		drawPos_ = GetDrawPosVect(position_);
 		return true;
@@ -226,8 +226,6 @@ protected:
 	bool isCheckCol_;
 	//自身が描画する画像のID
 	SPRITE_ID spriteId_;
-	//不透明度(0.f~1.f)
-	float spriteAlpha_;
 	// ワールド
 	IWorld*				world_;
 	// コリジョンファンクション

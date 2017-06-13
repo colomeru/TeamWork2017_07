@@ -40,7 +40,7 @@ void BirdsDropping::Update()
 void BirdsDropping::Draw() const
 {
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRDS_DROPPING_SPRITE);
-	Sprite::GetInstance().Draw(SPRITE_ID::BIRDS_DROPPING_SPRITE, drawPos_, origin, spriteAlpha_, Vector2::One, 0);
+	Sprite::GetInstance().Draw(SPRITE_ID::BIRDS_DROPPING_SPRITE, drawPos_, origin, parameter_.spriteAlpha_, Vector2::One, 0);
 }
 
 void BirdsDropping::OnUpdate()

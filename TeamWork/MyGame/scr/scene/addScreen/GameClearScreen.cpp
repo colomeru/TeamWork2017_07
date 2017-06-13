@@ -8,6 +8,7 @@
 #include"../../tween/TweenManager.h"
 #include"screenSupport\DrawScore.h"
 #include"../../sound/sound.h"
+#include"../../fade/FadePanel.h"
 
 GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 {
@@ -70,6 +71,7 @@ bool GameClearScreen::Update(Scene & nextScene)
 		return false;
 	}
 
+	if (!FadePanel::GetInstance().IsClearScreen()) return false;
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;

@@ -55,6 +55,8 @@ void TitleScene::Update()
 	bgScreen_.Update();
 	world_->Update();
 
+	if (!FadePanel::GetInstance().IsClearScreen()) return;
+
 	if (!isPushKey_) {
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 			SetNextPanel();

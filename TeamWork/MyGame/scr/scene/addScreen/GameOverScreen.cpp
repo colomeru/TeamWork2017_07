@@ -7,6 +7,7 @@
 #include"../GamePlayDefine.h"
 #include"../../tween/TweenManager.h"
 #include"../../sound/sound.h"
+#include"../../fade/FadePanel.h"
 
 GameOverScreen::GameOverScreen() :inputCount_(0), sinCount_(defSinC)
 {
@@ -41,6 +42,8 @@ void GameOverScreen::Init()
 
 bool GameOverScreen::Update(Scene& nextScene)
 {
+	if (!FadePanel::GetInstance().IsClearScreen()) return false;
+
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;
 		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);

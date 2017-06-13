@@ -7,6 +7,7 @@
 #include"../GamePlayDefine.h"
 #include"../../tween/TweenManager.h"
 #include"../../sound/sound.h"
+#include"../../fade/FadePanel.h"
 
 PauseScreen::PauseScreen() :inputCount_(0), sinCount_(defSinC)
 {
@@ -42,6 +43,8 @@ void PauseScreen::Init()
 
 bool PauseScreen::Update(Scene& nextScene)
 {
+	if (!FadePanel::GetInstance().IsClearScreen()) return false;
+
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
 		inputCount_++;
 		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);

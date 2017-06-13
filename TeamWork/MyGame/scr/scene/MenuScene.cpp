@@ -37,13 +37,15 @@ void MenuScene::Update()
 
 	// 終了
 	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))){
-		if (menu.GetIsBackSelect())nextScene_ = Scene::Title;
-		else if (menu.GetIsTutorialSelect())nextScene_ = Scene::Tutorial;
-		FadePanel::GetInstance().AddCollBack([=] {
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)))
+	{
+		if (menu.GetIsBackSelect())
+			nextScene_ = Scene::Title;
+		else if (menu.GetIsTutorialSelect())
+			nextScene_ = Scene::Tutorial;
+
+		FadePanel::GetInstance().AddCollBack([=] { 
 			isEnd_ = true;
-			FadePanel::GetInstance().SetInTime(0.5f, 0.5f);
-			FadePanel::GetInstance().FadeIn(); 
 		});
 		FadePanel::GetInstance().FadeOut();
 		menu.InputSelectStage();

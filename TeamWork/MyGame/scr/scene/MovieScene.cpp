@@ -5,7 +5,7 @@
 #include "../tween/TweenManager.h"
 
 
-const float MovieEndTime = 94.0f;
+const float MovieEndTime = 93.2f;
 
 MovieScene::MovieScene() :
 	nextScene_(Scene::Title)
@@ -31,7 +31,7 @@ void MovieScene::Update()
 {
 	timer += Time::DeltaTime;
 	
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)||timer >= MovieEndTime) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)||timer >= MovieEndTime) {
 		timer = 0;
 		FadePanel::GetInstance().AddCollBack([=]() {
 			SetBackgroundColor(153, 204, 255);

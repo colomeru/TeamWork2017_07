@@ -43,7 +43,9 @@ void TitleScene::Initialize()
 
 	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM,DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
-
+	FadePanel::GetInstance().Initialize();
+	FadePanel::GetInstance().SetInTime(0.0f);
+	FadePanel::GetInstance().FadeIn();
 	isTrigger_ = true;
 }
 
@@ -71,7 +73,12 @@ void TitleScene::Update()
 	*/
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		if (selectNum_ == 0) {
-			isEnd_ = true;			
+			FadePanel::GetInstance().AddCollBack([=]() {
+				SetBackgroundColor(153, 204, 255);
+				isEnd_ = true;
+			});
+			FadePanel::GetInstance().SetOutTime(1.0f);
+			FadePanel::GetInstance().FadeOut();
 		}
 		else if (selectNum_ == 1) {
 			GameFrame::GameEnd();
@@ -104,7 +111,6 @@ void TitleScene::Update()
 			alpha_[i] = 1.f;
 		}
 	}
-
 }
 
 void TitleScene::Draw() const
@@ -117,10 +123,7 @@ void TitleScene::Draw() const
 	auto drawpos = Vector2(WINDOW_WIDTH / 2, 450) ;
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, drawpos, origin, Vector2::One);
-	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-	//DrawCapsule3D(pos1, pos2, 4.0f, 8, GetColor(255, 255, 0), GetColor(255, 255, 0), FALSE);
 
-	
 	Vector2 pborigin = Sprite::GetInstance().GetSize(SPRITE_ID::PRESS_B_SPRITE) / 2;
 	if(!isPushKey_)Sprite::GetInstance().Draw(SPRITE_ID::PRESS_B_SPRITE, Vector2(WINDOW_WIDTH/2, 800.0f),pborigin,MathHelper::Sin(sinCount_),Vector2::One);
 

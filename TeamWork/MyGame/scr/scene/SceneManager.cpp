@@ -38,7 +38,7 @@ void SceneManager::Update()
 	}
 
 	//timer += Time::DeltaTime;
-	if (!FadePanel::GetInstance().IsAction())
+	//if (!FadePanel::GetInstance().IsAction())
 		mCurrentScene->Update();
 	if (Keyboard::GetInstance().AnyTriggerDown()
 		|| GamePad::GetInstance().AnyTriggerDown()) {
@@ -69,9 +69,9 @@ void SceneManager::Change()
 	/*FadePanel::GetInstance().AddCollBack([=]() {
 				
 	});*/
-	if (timer >5.0f && FadeTrigger == false)
+	if (FadeTrigger == false)
 	{
-		if (nectSceneName_ == Scene::Title) {
+		if (timer >= 60.0f && nectSceneName_ == Scene::Title) {
 			FadeTrigger = true;
 			FadePanel::GetInstance().AddCollBack([=]() {
 				SetBackgroundColor(153, 204, 255);
@@ -80,9 +80,11 @@ void SceneManager::Change()
 			FadePanel::GetInstance().SetOutTime(1.0f);
 			FadePanel::GetInstance().FadeOut();
 			timer = 0;
+			FadeTrigger = false;
 			return;
+			
 		}
-		else if (nectSceneName_ != Scene::Movie) {
+		else if (timer >= 180.0f && nectSceneName_ != Scene::Movie) {
 			FadeTrigger = true;
 			FadePanel::GetInstance().AddCollBack([=]() {
 				SetBackgroundColor(153, 204, 255);
@@ -91,14 +93,14 @@ void SceneManager::Change()
 			FadePanel::GetInstance().SetOutTime(1.0f);
 			FadePanel::GetInstance().FadeOut();
 			timer = 0;			
+			FadeTrigger = false;
 			return;
-		}		
+		}
 	}
 	if (mCurrentScene->IsEnd())
 	{
 		Change(mCurrentScene->Next());
 		timer = 0;
-		FadeTrigger = false;
 	}
 }
 

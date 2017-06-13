@@ -68,19 +68,6 @@ MenuScreen::MenuScreen() :stageNum(0)
 		star_[i].scale_ = 1.0f;
 	}
 
-	//流れ星
-	sStarNum_ = 10;
-	for (int i = 0; i < sStarNum_; i++) {
-		int randX = Random::GetInstance().Range(0, WINDOW_WIDTH);
-		int randY = Random::GetInstance().Range(0, WINDOW_HEIGHT);
-		sStar_[i].position_ = Vector2(randX, randY);
-		sStar_[i].isAlpha_ = 0.0f;
-		sStar_[i].timer_ = 0.0f;
-		prevPos_[i] = sStar_[i].position_;
-		ssAlpha_[i] = 0.0f;
-		sStar_[i].scale_ = 1.0f;
-	}
-	waitTime_ = { 10.0f,7.0f,20.0f,12.0f,34.0f,16.0f,19.0,24.0f,19.0f,15.0f };
 
 	//カラス
 	anmManager_.Add(SPRITE_ID::CROW_ANM_01_SPRITE);
@@ -100,7 +87,6 @@ MenuScreen::MenuScreen() :stageNum(0)
 	spriteTurn_ = { true,false,true };
 	cFrom_ = { 0.0f,0.0f,0.0f };
 	cDis_ = { 0.0f,0.0f,0.0f };
-
 }
 
 //デストラクタ
@@ -133,6 +119,19 @@ void MenuScreen::Init()
 	bgPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f);
 	wwwPos_ = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT);
 
+	//流れ星
+	sStarNum_ = 10;
+	for (int i = 0; i < sStarNum_; i++) {
+		int randX = Random::GetInstance().Range(0, WINDOW_WIDTH);
+		int randY = Random::GetInstance().Range(0, WINDOW_HEIGHT);
+		sStar_[i].position_ = Vector2(randX, randY);
+		sStar_[i].isAlpha_ = 0.0f;
+		sStar_[i].timer_ = 0.0f;
+		prevPos_[i] = sStar_[i].position_;
+		ssAlpha_[i] = 0.0f;
+		sStar_[i].scale_ = 1.0f;
+	}
+	waitTime_ = { 10.0f,7.0f,20.0f,12.0f,34.0f,16.0f,19.0,24.0f,19.0f,15.0f };
 }
 
 //更新

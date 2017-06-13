@@ -85,6 +85,16 @@ GamePlayScene::GamePlayScene() :
 	bgScreen_ = BackgroundScreen(world_.get());
 	changeScreen_=LaneChangeScreen(world_.get());
 	uiScreen_ = UIScreen(world_.get());
+
+	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test"), 60));
+	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
+	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage1>(world_.get(), std::string("Stage2"), 60));
+	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage1>(world_.get(), std::string("Stage3"), 60));
+	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage1>(world_.get(), std::string("Stage4"), 60));
+	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage1>(world_.get(), std::string("Stage5"), 60));
+	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage1>(world_.get(), std::string("Stage6"), 60));
+	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage1>(world_.get(), std::string("Stage7"), 60));
+
 }
 
 GamePlayScene::~GamePlayScene()
@@ -121,14 +131,6 @@ void GamePlayScene::Initialize()
 
 	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
 
-	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test"), 60));
-	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
-	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage1>(world_.get(), std::string("Stage2"), 60));
-	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage1>(world_.get(), std::string("Stage3"), 60));
-	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage1>(world_.get(), std::string("Stage4"), 60));
-	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage1>(world_.get(), std::string("Stage5"), 60));
-	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage1>(world_.get(), std::string("Stage6"), 60));
-	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage1>(world_.get(), std::string("Stage7"), 60));
 
 	//ステージの最大レーン数(後々MapGeneratorからレーン数を受け取れるようにする)
 	int stageLaneSize = 3;
@@ -294,6 +296,7 @@ void GamePlayScene::End()
 {
 	//FadePanel::GetInstance().FadeOut();
 	// 初期化
+	ply1 = nullptr;
 	world_->Clear();
 	bgScreen_.End();
 
@@ -434,6 +437,7 @@ void GamePlayScene::clearUpdate()
 		if (nextScene_ == Scene::GamePlay) {
 			FadePanel::GetInstance().AddCollBack([=]() { 
 				currentStage_ = nextStageList_[currentStage_];
+				End();
 				Initialize(); 
 			});
 		}

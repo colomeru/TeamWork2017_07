@@ -43,8 +43,8 @@ void TitleScene::Initialize()
 
 	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM,DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
-	FadePanel::GetInstance().Initialize();
-	FadePanel::GetInstance().SetInTime(0.0f);
+	//FadePanel::GetInstance().Initialize();
+	FadePanel::GetInstance().SetInTime(0.5f);
 	FadePanel::GetInstance().FadeIn();
 	isTrigger_ = true;
 }
@@ -156,8 +156,8 @@ void TitleScene::End()
 	Sound::GetInstance().StopBGM();
 	world_->Clear();
 
-	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	FadePanel::GetInstance().FadeOut();
+	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	//FadePanel::GetInstance().FadeOut();
 }
 
 void TitleScene::handleMessage(EventMessage message, void * param)

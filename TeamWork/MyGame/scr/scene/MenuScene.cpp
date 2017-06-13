@@ -24,6 +24,8 @@ void MenuScene::Initialize()
 	isEnd_ = false;
 	menu.Init();
 	nextScene_ = Scene::GamePlay;
+	FadePanel::GetInstance().SetInTime(0.5f);
+	FadePanel::GetInstance().FadeIn();
 }
 
 void MenuScene::Update()
@@ -31,13 +33,19 @@ void MenuScene::Update()
 	
 	// 更新
 	world_->Update();
+	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
 	// 終了
 	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))){
 		if (menu.GetIsBackSelect())nextScene_ = Scene::Title;
 		else if (menu.GetIsTutorialSelect())nextScene_ = Scene::Tutorial;
-		isEnd_ = true;
+		FadePanel::GetInstance().AddCollBack([=] {
+			isEnd_ = true;
+			FadePanel::GetInstance().SetInTime(0.5f, 0.5f);
+			FadePanel::GetInstance().FadeIn(); 
+		});
+		FadePanel::GetInstance().FadeOut();
 		menu.InputSelectStage();
 	}
 	menu.Update();
@@ -68,8 +76,8 @@ void MenuScene::End()
 {
 	// 初期化
 	world_->Clear();
-	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	FadePanel::GetInstance().FadeOut();
+	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	//FadePanel::GetInstance().FadeOut();
 }
 
 void MenuScene::handleMessage(EventMessage message, void * param)

@@ -65,12 +65,20 @@ void TutorialScene::Initialize()
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stage.GetStageSize()+Vector2(150,0), Vector2(0, 0)));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stage.GetStageSize()+Vector2(150,0), Vector2(0, 0)));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stage.GetStageSize()+Vector2(150,0), Vector2(0, 0)));
+
+	FadePanel::GetInstance().SetInTime(0.5f);
+	FadePanel::GetInstance().FadeIn();
 }
 
 void TutorialScene::Update()
 {
 	// 更新
 	world_->Update();
+
+	bgScreen_.Update();
+	textScreen_.Update();
+
+	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
 	//風テスト
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
@@ -81,18 +89,19 @@ void TutorialScene::Update()
 	//Camera::GetInstance().Target.Set(target_);
 	//Camera::GetInstance().Update();
 
-	bgScreen_.Update();
-	textScreen_.Update();
 
 	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)|| GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
-		isEnd_ = true;
-
-	if (isRetry_) {
-		End();
-		Initialize();
-
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
+	{
+		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+		FadePanel::GetInstance().FadeOut();
 	}
+
+	//if (isRetry_) {
+	//	End();
+	//	Initialize();
+
+	//}
 }
 
 void TutorialScene::Draw() const
@@ -126,8 +135,8 @@ void TutorialScene::End()
 	world_->Clear();
 	bgScreen_.End();
 
-	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	FadePanel::GetInstance().FadeOut();
+	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	//FadePanel::GetInstance().FadeOut();
 }
 
 void TutorialScene::handleMessage(EventMessage message, void * param)
@@ -155,8 +164,12 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 	case EventMessage::ADD_SCORE:
 		break;
 	case EventMessage::PLAYER_DEAD:
-		isRetry_ = true;
+	{
+		//isRetry_ = true;
+		FadePanel::GetInstance().AddCollBack([=]() { Initialize(); });
+		FadePanel::GetInstance().FadeOut();
 		break;
+	}
 	default:
 		break;
 	}

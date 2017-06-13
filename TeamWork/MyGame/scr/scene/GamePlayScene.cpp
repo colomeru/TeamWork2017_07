@@ -96,9 +96,6 @@ void GamePlayScene::Initialize()
 {
 	changeCount_ = 240;
 	currentStage_ = CheatData::getInstance().GetSelectStage();
-	//FadePanel::GetInstance().Initialize();
-	//FadePanel::GetInstance().SetInTime(0.2f);
-	//FadePanel::GetInstance().SetOutTime(0.2f);
 
 	isEnd_ = false;
 	//シーン遷移系の初期化
@@ -110,9 +107,6 @@ void GamePlayScene::Initialize()
 		gameClearScreen_.Init();
 		bgScreen_.Init(currentStage_);
 	}
-	// フェードパネル初期化
-	//FadePanel::GetInstance().Initialize();
-	//FadePanel::GetInstance().FadeIn();
 	world_->Initialize();
 	// アクター生成
 	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
@@ -183,6 +177,11 @@ void GamePlayScene::Initialize()
 	
 	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_],DX_PLAYTYPE_LOOP);
 	Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.5f);
+
+	// フェードパネル初期化
+	//FadePanel::GetInstance().Initialize();
+	FadePanel::GetInstance().SetInTime(1.0f, 0.5f);
+	FadePanel::GetInstance().FadeIn();
 }
 
 void GamePlayScene::Update()
@@ -300,10 +299,10 @@ void GamePlayScene::End()
 
 	Sound::GetInstance().StopBGM();
 
-	TweenManager::GetInstance().Clear();
+	//TweenManager::GetInstance().Clear();
 
-	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	FadePanel::GetInstance().FadeOut();
+	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	//FadePanel::GetInstance().FadeOut();
 }
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
@@ -361,8 +360,10 @@ void GamePlayScene::baseUpdate()
 	// 更新
 	world_->Update();
 	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
-		isEnd_ = true;
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
+		FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
+		FadePanel::GetInstance().FadeOut();
+	}
 
 	int randT = Random::GetInstance().Range(0, 3);
 	windTime_ -= randT;
@@ -399,7 +400,11 @@ void GamePlayScene::pauseUpdate()
 			setNextMode(1);
 			TweenManager::GetInstance().Play();
 		}
-		else isEnd_ = true;
+		else {
+			//isEnd_ = true;
+			FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
+			FadePanel::GetInstance().FadeOut();
+		}
 	}
 
 }
@@ -407,11 +412,18 @@ void GamePlayScene::pauseUpdate()
 void GamePlayScene::overUpdate()
 {
 	if (gameOverScreen_.Update(nextScene_)) {
-		isEnd_ = true;
 		if (nextScene_ == Scene::GamePlay) {
-			End();
-			Initialize();
+			FadePanel::GetInstance().AddCollBack([=]() { Initialize(); });
 		}
+		else {
+			FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+		}
+		FadePanel::GetInstance().FadeOut();
+		//isEnd_ = true;
+		//if (nextScene_ == Scene::GamePlay) {
+		//	End();
+		//	Initialize();
+		//}
 	}
 
 }
@@ -419,17 +431,25 @@ void GamePlayScene::overUpdate()
 void GamePlayScene::clearUpdate()
 {
 	if (gameClearScreen_.Update(nextScene_)) {
-		isEnd_ = true;
 		if (nextScene_ == Scene::GamePlay) {
-			End();
-			currentStage_ = nextStageList_[currentStage_];
-			Initialize();
+			FadePanel::GetInstance().AddCollBack([=]() { 
+				currentStage_ = nextStageList_[currentStage_];
+				Initialize(); 
+			});
+		}
+		else {
+			FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+		}
+		FadePanel::GetInstance().FadeOut();
+
+		//isEnd_ = true;
+		//if (nextScene_ == Scene::GamePlay) {
+		//	End();
+		//	currentStage_ = nextStageList_[currentStage_];
+		//	Initialize();
 			//setNextMode(6);
 
-		}
 	}
-
-
 }
 
 void GamePlayScene::nextUpdate()

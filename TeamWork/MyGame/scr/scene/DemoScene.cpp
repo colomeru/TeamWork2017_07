@@ -100,9 +100,9 @@ Scene DemoScene::Next() const
 
 void DemoScene::End()
 {
-	FadePanel::GetInstance().SetOutTime(0.f);
-	FadePanel::GetInstance().SetInTime(0.3f);
-	FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	FadePanel::GetInstance().FadeOut();
+	//FadePanel::GetInstance().SetOutTime(0.f);
+	//FadePanel::GetInstance().SetInTime(0.3f);
+	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
+	//FadePanel::GetInstance().FadeOut();
 
 }

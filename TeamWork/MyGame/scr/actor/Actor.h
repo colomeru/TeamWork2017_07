@@ -226,8 +226,6 @@ protected:
 	bool isCheckCol_;
 	//自身が描画する画像のID
 	SPRITE_ID spriteId_;
-	//不透明度(0.f~1.f)
-	float spriteAlpha_;
 	// ワールド
 	IWorld*				world_;
 	// コリジョンファンクション

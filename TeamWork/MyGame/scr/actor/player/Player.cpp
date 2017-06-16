@@ -28,7 +28,7 @@ const float correctionWidth = 1.8f;
 const float oneLength = 30.f;
 
 Player::Player(IWorld * world,int maxLaneSize, int startLane)
-	:Actor(world), isUseKey_(true), clearAddRot_(0.0f),
+	:Actor(world), isUseKey_(true), clearAddRot_(0.0f), isTutorialText_(false),
 	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.5f), currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false),/* isCanChangeLane_(false),*/
@@ -120,6 +120,7 @@ Player::~Player()
 
 void Player::Update()
 {
+	if (isTutorialText_)return;
 
 	chainLockCoolTime_--;
 	chainLockCoolTime_ = MathHelper::Clamp(chainLockCoolTime_, 0, defChainLockCoolTime_);
@@ -171,7 +172,8 @@ void Player::Draw() const
 	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
 
 	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = drawPos_;
+	//auto pos = drawPos_;
+	auto pos = GetDrawPosVect(position_);
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
 
 	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
@@ -488,7 +490,8 @@ void Player::deadLine()
 	else if (position_.y >= 500 && playerMode_ != MODE_BITE) {
 		//world_->FreeCameraPosY(true);
 		SetNextLane(1, LaneChangeType::LaneChange_Fall);
-		
+		world_->FreeCameraPosY(false);
+
 	}
 	else if (position_.y >= 300 && playerMode_ != MODE_BITE) {
 		world_->FreeCameraPosY(true);
@@ -1151,6 +1154,7 @@ void Player::SetNextLane(int addNum, LaneChangeType changeType) {
 		world_->UpdateDrawPos();
 		UpdateMultiplePos();
 		DeformationDraw();
+
 		//world_->inv(Matrix::CreateTranslation(Vector3(position_,0)));
 		//world_->SetIsChangeFrame(true);
 		//CheatData::getInstance().SetCamStop(true);
@@ -1451,26 +1455,26 @@ void Player::BiteUpdate()
 				pHeads_[currentHead_]->GetPosition().y < position_.y) {
 				rot_spd_ += (spdLimit);
 				for (auto& spd : mRot_spd) {
-					spd += (spdLimit);
+					spd += (spdLimit)*2;
 				}
 			}
+
+			slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
+			if (slipCount_ <= 0.f) {
+				SetMode(MODE_SLIP);
+				//首を殺して
+				pHeadDead_[currentHead_] = true;
+				//スティックをロックする
+				isCanNextHeadRot = false;
+				isSlipped_ = true;
+				//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
+				pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
+				//changeHead();
+				//ここやばいかも？
+				PHeadChanger();
+			}
+			slipCount_ = max(slipCount_, 0.f);
 		}
-		slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
-		if (slipCount_ <= 0.f) {
-			SetMode(MODE_SLIP);
-			//首を殺して
-			pHeadDead_[currentHead_] = true;
-			//スティックをロックする
-			isCanNextHeadRot = false;
-			isSlipped_ = true;
-			//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
-			pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
-			//changeHead();
-			//ここやばいかも？
-			PHeadChanger();
-		}
-		slipCount_ = max(slipCount_, 0.f);
-		
 		DeformationDraw();
 
 }

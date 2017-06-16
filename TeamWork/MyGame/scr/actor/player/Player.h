@@ -83,7 +83,7 @@ public:
 		if (changeType_ == LaneChangeType::LaneChange_Normal) {
 			return;
 		}
-		drawPos_ = GetDrawPosVect(position_);
+		//drawPos_ = GetDrawPosVect(position_);
 		LaneChangeFall();
 	}
 	virtual void LaneChangeFall() override {
@@ -208,6 +208,8 @@ public:
 	//}
 	void SetNextLane(int addNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal);
 	void setCurPHeadSPos(const Vector2& sPos) {
+		if (isTutorialText_) return;
+
 		//pHeads_[currentHead_]->setPHeadStopPos(sPos);
 		SetMultiplePos(sPos - stopPos_);
 		stopPos_ = sPos;
@@ -256,6 +258,13 @@ public:
 	bool GetIsClearShoot()const;
 	Actor* GetCurrentHead() const;
 	void deadLine();
+	void SetUseKey(bool key) {
+		isUseKey_ = key;
+	}
+	bool GetUseKey()const { return isUseKey_; }
+	void SetIsTutorialTextWriting(bool is) {
+		isTutorialText_ = is;
+	}
 private:
 	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius);
 	void Multiple();
@@ -309,13 +318,8 @@ private:
 		//~‚è‚é
 		else if (updateNum > 0) {
 			if (changeType == LaneChangeType::LaneChange_Fall) {
-
-			}
-			else {
 				nextVel_ = pendulumVect_ / 2;
-				//position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
 				pGrav_ *= 0.3f;
-				//laneNum_ += updateNum;
 			}
 		}
 	
@@ -331,6 +335,8 @@ private:
 		//“ª‚Ì’·‚³‚ğƒŠƒZƒbƒg
 		//PHeadChanger();
 		//PHeadLengthReset();
+
+		world_->sendMessage(EventMessage::LANE_CHANGE_FALL_END);
 
 		worldSetMyDatas();
 	}
@@ -444,6 +450,7 @@ private:
 	bool isClearShoot_;
 
 	bool isUseKey_;
+	bool isTutorialText_;
 	CLOTHES_ID otherClothesID_;
 	LaneChangeType changeType_;
 	//ŠŠ‚éŠÔ‚Ì”{”(•–ˆ)

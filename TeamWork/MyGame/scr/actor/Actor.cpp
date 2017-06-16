@@ -79,8 +79,9 @@ void Actor::LateComUpdate() {
 
 		//‚â‚é
 		{
+			auto pos = GetDrawPosVect(position_);
 			Vector2 pdPos = GetFreeActorDrawPos(world_->GetKeepDatas().playerPos_,world_->GetKeepDatas().playerLane_);
-			float toplayerlength = drawPos_.y- pdPos.y;
+			float toplayerlength = pos.y- pdPos.y;
 			toplayerlength = abs(toplayerlength);
 			float addalpha=1-toplayerlength / 500;
 			addalpha /= 4;

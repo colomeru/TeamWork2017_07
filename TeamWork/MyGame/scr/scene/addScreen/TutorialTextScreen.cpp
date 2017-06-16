@@ -6,6 +6,7 @@
 #include"../../Def.h"
 #include"../GamePlayDefine.h"
 #include"../../input/Keyboard.h"
+#include"../../input/GamePad.h"
 #include"../../time/Time.h"
 #include"../../graphic/FontManager.h"
 
@@ -47,23 +48,57 @@ void TutorialTextScreen::Init(const std::string& filename)
 	textChangeTimeCount_ = defTextChangeTime;
 }
 
-void TutorialTextScreen::Update()
+//void TutorialTextScreen::Update()
+//{
+//	sinCount_+=5; sinCount_ %= 360;
+//
+//	textCount_++;
+//	if (textCount_/textSpeed >= GetMaxTextSize()){
+//		textChangeTimeCount_ -= Time::DeltaTime;
+//
+//	}
+//	if (textChangeTimeCount_ <= 0.0f) {
+//		textChangeTimeCount_ = defTextChangeTime;
+//		currentTextLine_++;
+//		
+//		//currentTextLine_ = min(currentTextLine_, drawText_.size() - 1);
+//	
+//		if (currentTextLine_>=drawText_.size()/3) {
+//			currentTextLine_ = 0;
+//		}
+//
+//		textCount_ = 0;
+//	}
+//
+//	textCount_ = min(textCount_, GetMaxTextSize()*textSpeed);
+//
+//}
+
+bool TutorialTextScreen::TutorialUpdate()
 {
-	sinCount_+=5; sinCount_ %= 360;
+	sinCount_ += 5; sinCount_ %= 360;
 
 	textCount_++;
-	if (textCount_/textSpeed >= GetMaxTextSize()){
+	if (textCount_ / textSpeed >= GetMaxTextSize()) {
 		textChangeTimeCount_ -= Time::DeltaTime;
 
 	}
-	if (textChangeTimeCount_ <= 0.0f) {
+	//if (textChangeTimeCount_ <= 0.0f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)||GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+		if (textCount_ < GetMaxTextSize()*textSpeed) {
+			textCount_ = GetMaxTextSize()*textSpeed;
+			return false;
+		}
+
 		textChangeTimeCount_ = defTextChangeTime;
 		currentTextLine_++;
-		
-		//currentTextLine_ = min(currentTextLine_, drawText_.size() - 1);
-	
-		if (currentTextLine_>=drawText_.size()/3) {
-			currentTextLine_ = 0;
+
+
+		if (currentTextLine_ >= drawText_.size() / 3) {
+			currentTextLine_ = drawText_.size() / 3 - 1;
+			//currentTextLine_ = 0;
+			//textCount_ = 0;
+			return true;
 		}
 
 		textCount_ = 0;
@@ -71,6 +106,7 @@ void TutorialTextScreen::Update()
 
 	textCount_ = min(textCount_, GetMaxTextSize()*textSpeed);
 
+	return false;
 }
 
 void TutorialTextScreen::Draw() const

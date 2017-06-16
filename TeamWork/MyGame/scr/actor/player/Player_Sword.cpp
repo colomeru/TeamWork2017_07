@@ -27,11 +27,11 @@ void Player_Sword::Draw() const
 	if (!GetUseSword())return;
 	Vector2 startDP = GetDrawPosVect(swordStartPos_);
 	Vector2 endDP = GetDrawPosVect(swordEndPos_);
-
-	Vector2 vel = endDP-drawPos_;
+	auto pos = GetDrawPosVect(position_);
+	Vector2 vel = endDP- pos;
 	float angle = MathAngle(vel);
 	Vector2 origin(Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).x/2,0);
-	Sprite::GetInstance().Draw(SPRITE_ID::SWORD_SPRITE, drawPos_,origin, Vector2::One, angle);
+	Sprite::GetInstance().Draw(SPRITE_ID::SWORD_SPRITE, pos,origin, Vector2::One, angle);
 
 	if (BuildMode != 1)return;
 	DrawLine(startDP.x, startDP.y, endDP.x, endDP.y, GetColor(0, 0, 255));

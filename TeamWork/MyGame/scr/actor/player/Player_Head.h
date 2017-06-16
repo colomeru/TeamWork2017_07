@@ -35,7 +35,7 @@ public:
 			return;
 		}
 		LaneChangeFall();
-		drawPos_ = GetDrawPosVect(position_);
+		//drawPos_ = GetDrawPosVect(position_);
 
 	}
 

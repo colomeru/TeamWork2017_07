@@ -27,7 +27,7 @@ void PlayerDeadPin::Update()
 void PlayerDeadPin::Draw() const
 {
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE)/2;
-	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, origin,1.f, Vector2::One,angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, GetDrawPosVect(position_), origin,1.f, Vector2::One,angle_);
 }
 
 void PlayerDeadPin::OnUpdate()

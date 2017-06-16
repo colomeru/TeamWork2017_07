@@ -40,11 +40,9 @@ void GameFrame::Run()
 		Update();
 		fps.Update();
 
-		if (!CheatData::getInstance().GetCamStopOneTime()) {
-			ClearDrawScreen(&screen);
-			ClearDrawScreenZBuffer(&screen);
-			Draw();
-		}
+		ClearDrawScreen(&screen);
+		ClearDrawScreenZBuffer(&screen);
+		Draw();		
 
 		ScreenFlip();
 		//ScreenFlip‚ªŒÄ‚Î‚ê‚Ä‚¢‚é‚Ì‚Å‚¢‚ç‚È‚¢

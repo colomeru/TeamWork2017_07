@@ -18,5 +18,6 @@ void SwordAttackEffect::Update()
 
 void SwordAttackEffect::Draw() const
 {
-	effectMgr_.DrawEffect(drawPos_);
+	auto pos = GetDrawPosVect(position_);
+	effectMgr_.DrawEffect(pos);
 }

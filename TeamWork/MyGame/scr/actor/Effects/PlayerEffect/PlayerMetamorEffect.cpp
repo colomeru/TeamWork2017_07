@@ -26,6 +26,7 @@ void PlayerMetamorEffect::Draw() const
 {
 	if (delay_ >= 0.0f)return;
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, 180);
-	effectMgr_.DrawEffect(drawPos_);
+	auto pos = GetDrawPosVect(position_);
+	effectMgr_.DrawEffect(pos);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 }

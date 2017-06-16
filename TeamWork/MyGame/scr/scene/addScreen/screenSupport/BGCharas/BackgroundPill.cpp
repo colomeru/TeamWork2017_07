@@ -6,6 +6,7 @@
 BackgroundPill::BackgroundPill(IWorld* world, const Vector2& position):
 	BackgroundCharacters(world,position)
 {
+	position_ = position;
 	Vector2 toPos = Vector2(world->GetKeepDatas().playerPos_.x-Random::GetInstance().Range(2000, 3000), position.y);
 	float time = Random::GetInstance().Range(0.5f, 3.f);
 	EaseType type = EaseType::EaseInCirc;
@@ -25,9 +26,11 @@ void BackgroundPill::Update()
 
 void BackgroundPill::Draw() const
 {
+
 	//Vector2 drawPos = GetDrawPosVect(position
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::WIND_SPRITE)/2;
-	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, drawPos_, origin, 1.f, Vector2::One, 0.f,true, false);
+	auto pos = GetDrawPosVect(position_);
+	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, pos, origin, 1.f, Vector2::One, 0.f,true, false);
 
 }
 

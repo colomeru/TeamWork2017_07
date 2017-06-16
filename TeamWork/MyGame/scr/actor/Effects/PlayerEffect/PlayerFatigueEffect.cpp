@@ -24,5 +24,6 @@ void PlayerFatigueEffect::Update()
 void PlayerFatigueEffect::Draw() const
 {
 	if (delay_ >= 0.0f)return;
-	effectMgr_.DrawEffect(drawPos_);
+	auto pos = GetDrawPosVect(position_);
+	effectMgr_.DrawEffect(pos);
 }

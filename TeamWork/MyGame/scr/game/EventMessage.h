@@ -7,6 +7,7 @@ enum class EventMessage
 	ATTENUATE_WIND,		//風の威力の減衰
 	END_WIND,			//風が終了
 	START_LANE_CHANGE,
+	END_LANE_CHANGE,
 	GOAL_FLAG,			//ゴールフラグ
 	GAME_CLEAR_FLAG,	//ステージ終了フラグ
 	TAPPER_DEAD,	//叩き死亡

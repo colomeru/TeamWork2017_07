@@ -39,11 +39,11 @@ void CharacterAnmManager::Update()
 		return;
 	}
 	timeCount_ += reverse_*Time::DeltaTime;
-
-	if (((int)roundf((timeCount_*60.f) / anmChangeFrame_)) >= anmID_.size()-1||timeCount_<0.0f) {
+	int timeInt = (int)roundf((timeCount_*60.f) / anmChangeFrame_);
+	if (timeInt >= anmID_.size()-1||timeCount_<0.001f) {
 		anmEnd_ = true;
 	}
-	timeCount_ =  MathHelper::Clamp(timeCount_,0.0f, GetAnmEndTime()- defFrameTime*anmChangeFrame_);
+	timeCount_ =  MathHelper::Clamp(timeCount_,0.0f, anmID_.size() - 1);
 
 }
 
@@ -60,8 +60,9 @@ void CharacterAnmManager::Draw(const Vector2& position,const Vector2& origin,con
 
 
 	if (BuildMode != 1)return;
-	
-	DrawFormatString(700, 300, GetColor(255, 255, 255), "%d", targetFrame);
+	int timeInt = (int)roundf((timeCount_*60.f) / anmChangeFrame_);
+
+	DrawFormatString(700, 300, GetColor(255, 255, 255), "%d", timeInt);
 }
 
 void CharacterAnmManager::Clear()

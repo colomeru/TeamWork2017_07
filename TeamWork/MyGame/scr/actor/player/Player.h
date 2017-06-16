@@ -68,7 +68,13 @@ public:
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 	virtual bool CamMoveUpdate() {
-		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+		if (world_->GetKeepDatas().nextLane_ < 0) {
+			CamMoveUp();
+		}
+		else {
+			CamMoveDown();
+		}
+
 		return true;
 	}
 	virtual void CamMoveUp()override {
@@ -200,24 +206,15 @@ public:
 	//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
 	//	isCanChangeLane_ = isCanChange;
 	//}
-	void SetNextLane(int addNum,LaneChangeType changeType=LaneChangeType::LaneChange_Normal) {
-		if (laneNum_ + addNum > (maxLaneSize_-1) || laneNum_ + addNum<0)return;
-		
-		changeType_ = changeType;
-		//if (!isLaneChangeFall()&&addNum>0) {
-		//	//world_->UnlockCameraPosY();
-		//	position_.y -= defDrawLinePosY[1];
-		//	world_->InitializeInv(position_);
-		//	UpdateLaneNum(addNum, changeType_);
-		//	return;
-		//}
-		world_->ChangeCamMoveMode(addNum);
+	void SetNextLane(int addNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal);
+	void setCurPHeadSPos(const Vector2& sPos) {
+		//pHeads_[currentHead_]->setPHeadStopPos(sPos);
+		SetMultiplePos(sPos - stopPos_);
+		stopPos_ = sPos;
+		//Vector2 lngPs = pHeads_[currentHead_]->GetPosition() - position_;
+		//MultipleInit(lngPs.Length(), stopPos_, MathAngle(position_ - pHeadPoses_[currentHead_], Vector2::Down));
 
-		world_->sendMessage(EventMessage::START_LANE_CHANGE);
-		//PHeadChanger();
-		//SetMode(MODE_FALL);
 	}
-	void setCurPHeadSPos(const Vector2& sPos);
 	void setMaxLaneSize(int size) {
 		maxLaneSize_ = size;
 	}
@@ -257,6 +254,8 @@ public:
 	bool GetIsSwordActive()const;
 	bool GetIsClearBite()const;
 	bool GetIsClearShoot()const;
+	Actor* GetCurrentHead() const;
+	void deadLine();
 private:
 	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius);
 	void Multiple();
@@ -295,11 +294,10 @@ private:
 	}
 	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
-
 	void UpdateLaneNum(int updateNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal) {
 		if (updateNum == 0)return;
-		if (laneNum_+updateNum > (maxLaneSize_-1) || laneNum_ + updateNum<0)return;
-		
+		if (laneNum_ + updateNum > (maxLaneSize_ - 1) || laneNum_ + updateNum < 0)return;
+
 		//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
 		Vector2 nextVel_;
 		//上がるとき
@@ -310,13 +308,17 @@ private:
 		}
 		//降りる時
 		else if (updateNum > 0) {
-			nextVel_ = pendulumVect_ / 2;
-			pGrav_ *= 0.3f;
-			if (changeType == LaneChangeType::LaneChange_Fall) position_.y += (defDrawLinePosY[0] - defDrawLinePosY[1])*fallAddPosMult;
+			if (changeType == LaneChangeType::LaneChange_Fall) {
+
+			}
 			else {
+				nextVel_ = pendulumVect_ / 2;
 				//position_.y += defDrawLinePosY[0] - defDrawLinePosY[1];
+				pGrav_ *= 0.3f;
+				//laneNum_ += updateNum;
 			}
 		}
+	
 		laneNum_ += updateNum;
 		//レーン最大範囲を超えたらVectの補正を行わない
 
@@ -328,6 +330,7 @@ private:
 		if(GetIsBiteMode())playerMode_ = MODE_SLIP;
 		//頭の長さをリセット
 		//PHeadChanger();
+		//PHeadLengthReset();
 
 		worldSetMyDatas();
 	}
@@ -349,6 +352,8 @@ private:
 	using PSwordPtr = std::shared_ptr<Player_Sword>;
 	//ステージの最大レーン数
 	int maxLaneSize_;
+
+	int addscorelist_[3];
 
 	float spdLimit;
 
@@ -436,6 +441,7 @@ private:
 	//Head回転をロックする(スティックを0に戻す事でリセット)
 	bool isCanNextHeadRot;
 
+	bool isClearShoot_;
 
 	bool isUseKey_;
 	CLOTHES_ID otherClothesID_;

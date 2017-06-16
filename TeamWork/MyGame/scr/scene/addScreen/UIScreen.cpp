@@ -48,8 +48,8 @@ void UIScreen::Draw() const
 	
 	//DrawScore::getInstance().Draw(Vector2(1000, 200), score_, 6);
 	Vector2 origin=Sprite::GetInstance().GetSize(SPRITE_ID::BITECOUNT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(1400, 170), origin, Vector2(0.5f,0.5f));
-	DrawScore::getInstance().Draw(Vector2(1500, 150), (int)roundf(fscore_), 6,Vector2(0.5f,0.5f));
+	int uipos=DrawScore::getInstance().Draw(Vector2(1900, 170), (int)roundf(fscore_), 5,Vector2(0.5f,0.5f));
+	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(uipos-origin.x, 170), origin, Vector2(0.5f, 0.5f));
 }
 
 void UIScreen::End()
@@ -58,8 +58,12 @@ void UIScreen::End()
 
 void UIScreen::AddScore(int score)
 {
-	float toscore = fscore_ + score;
-	toscore = min(toscore, 999999);
+	if ((int)roundf(fscore_) < iscore_) {
+		TweenManager::GetInstance().Cancel(&fscore_);
+		fscore_ = iscore_;
+	}
+	float toscore = iscore_ + score;
+	toscore = min(toscore, 99999);
 	iscore_ = (int)roundf(toscore);
 	TweenManager::GetInstance().Add(EaseType::Linear, &fscore_, toscore, 0.5f);
 

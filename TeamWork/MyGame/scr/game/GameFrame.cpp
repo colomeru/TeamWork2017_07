@@ -1,6 +1,7 @@
 #include "GameFrame.h"
 #include <DxLib.h>
 #include "../Def.h"
+#include"../cheat/CheatData.h"
 
 bool GameFrame::mIsEnd = false;
 
@@ -11,7 +12,7 @@ void GameFrame::Run()
 	SetLogDrawOutFlag(FALSE);
 	SetOutApplicationLogValidFlag(FALSE);
 	SetGraphMode(WINDOW_WIDTH, WINDOW_HEIGHT, COLOR_BIT_DEPTH, REFRESH_RATE);
-	//SetWindowSizeExtendRate(0.7f, 0.7f);
+	SetWindowSizeExtendRate(0.7f, 0.7f);
 	SetBackgroundColor(0, 0, 0);
 	SetMainWindowText(GAMENAME);
 	SetZBufferBitDepth(24);
@@ -19,7 +20,7 @@ void GameFrame::Run()
 	SetWriteZBuffer3D(TRUE);
 	SetWaitVSyncFlag(TRUE);
 
-	ChangeWindowMode(FALSE);		// ウィンドウモード
+	ChangeWindowMode(TRUE);		// ウィンドウモード
 
 	if (DxLib_Init() == -1)		// DXライブラリ初期化処理
 	{
@@ -39,10 +40,11 @@ void GameFrame::Run()
 		Update();
 		fps.Update();
 
-		ClearDrawScreen(&screen);
-		ClearDrawScreenZBuffer(&screen);
-
-		Draw();
+		if (!CheatData::getInstance().GetCamStopOneTime()) {
+			ClearDrawScreen(&screen);
+			ClearDrawScreenZBuffer(&screen);
+			Draw();
+		}
 
 		ScreenFlip();
 		//ScreenFlipが呼ばれているのでいらない

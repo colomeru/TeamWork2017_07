@@ -47,7 +47,12 @@ public:
 	virtual void ChangeCamMoveMode(int addNum) = 0;
 	virtual bool GetIsCamChangeMode()const = 0;
 	virtual bool isChangeFrame()const = 0;
-	
+	virtual void SetIsChangeFrame(bool is) = 0;
+
 	virtual void StartModeUpdate()=0;
-	virtual void UnlockCameraPosY() = 0;
+	virtual void UnLockCameraPosY() = 0;
+	virtual void FreeCameraPosY(bool is) = 0;
+	virtual bool GetIsFreeCamY_()const=0;
+	virtual void UpdateDrawPos() = 0;
+	virtual Matrix& GetChangeInv() = 0;
 };

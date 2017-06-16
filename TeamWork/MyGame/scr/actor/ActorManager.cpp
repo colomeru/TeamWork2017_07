@@ -128,3 +128,11 @@ std::list<ActorPtr> ActorManager::GetList() const
 {
 	return actorPtr;
 }
+
+void ActorManager::DrawUpdate()
+{
+	for (auto& actor : actorPtr) {
+		actor->DrawUpdate();
+	}
+
+}

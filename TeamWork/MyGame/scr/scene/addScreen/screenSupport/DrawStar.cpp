@@ -51,9 +51,15 @@ void DrawStar::Draw(const Vector2& position) const
 	if (!isSetStar_)return;
 	int drawCount = (int)roundf(fstarCount_);
 	if (isFullStar_)drawCount = starCount_;
-
+	
+	Vector2 targethalfSize = Vector2(Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::SCORE_STAR_SPRITE).x / 2, 0.f);
 	for (int i = 0; i < drawCount; i++) {
-		Sprite::GetInstance().SplitDraw(SPRITE_ID::SCORE_STAR_SPRITE, position+ Vector2(Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::SCORE_STAR_SPRITE).x*i,0.f), timeCount_[i]/ speed);
+		Vector2 drawPos = position;// + Vector2(Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::SCORE_STAR_SPRITE).x*i, 0.f);
+
+		drawPos -= targethalfSize;
+		drawPos -= (drawCount - 1)*targethalfSize;
+		drawPos += (targethalfSize * 2)*i;
+		Sprite::GetInstance().SplitDraw(SPRITE_ID::SCORE_STAR_SPRITE, drawPos, timeCount_[i]/ speed);
 	}
 }
 

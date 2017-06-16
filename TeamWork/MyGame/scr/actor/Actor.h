@@ -12,6 +12,7 @@
 #include"../math/Vector3.h"
 #include"../world/World.h"
 #include"../graphic/Sprite.h"
+#include"../Def.h"
 
 #include "DxLib.h"
 
@@ -24,7 +25,7 @@ public:
 	// コンストラクタ
 	Actor(IWorld* world, Actor* parent = nullptr);
 	// 仮想デストラクタ
-	virtual ~Actor() = 0;
+	virtual ~Actor();
 	// 更新
 	virtual void Update() = 0;
 	// 描画
@@ -78,38 +79,17 @@ public:
 	void CommonUpdate() {
 		prevPosition_ = position_;
 	}
-	void LateComUpdate() {
-		Vector3 cmpos3d = Vector3(position_.x, position_.y, 0)*world_->GetInv();
-		//drawPos_ = Vector2(cmpos3d.x, cmpos3d.y);
-		//OutputDebugString(std::to_string(world_->GetKeepDatas().playerLane_).c_str());
-		//OutputDebugString("\n");
-		//OutputDebugString(std::to_string(world_->GetKeepDatas().playerLane_).c_str());
-		//OutputDebugString("\n");
-		drawPos_ = GetDrawPosVect(position_);
-
-		int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
-		if (MathHelper::Abs(drawLane) >= 2) {
-			isDraw_ = false;
-		}
-		else {
-			isDraw_ = true;
-			//drawPos_.y += defDrawLinePosY[drawLane + 1];
-
-			drawLane = MathHelper::Abs(drawLane);
-			parameter_.spriteAlpha_ = alphaSetter[drawLane];
-		}
-
-		isCheckCol_ =	(world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[2] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[3])
-						&&laneNum_ == world_->GetKeepDatas().playerLane_;
-		if (world_->isChangeFrame()) {
-
-		}
-	}
+	void LateComUpdate();
 	//レーン移動時限定のアップデート、virtualだが、Player以外はoverrideしないようにする事
 	virtual bool CamMoveUpdate() {
 		CamMoveOnlyUpdate();
 		parameter_.spriteAlpha_ = 0.5f;
-		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+		if (0 > world_->GetKeepDatas().nextLane_) {
+			CamMoveUp();
+		}
+		else {
+			CamMoveDown();
+		}
 		drawPos_ = GetDrawPosVect(position_);
 		return true;
 	}
@@ -143,7 +123,22 @@ public:
 		Vector3 cmpos3d = Vector3(pos.x, pos.y, 0)*world_->GetInv();
 		retPos = Vector2(cmpos3d.x, cmpos3d.y);
 		
-		int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
+		int drawLane;
+		drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
+		
+		if (world_->GetIsFreeCamY_()&&drawLane < 0) {
+			//float endPos=retPos.y + defDrawLinePosY[drawLane + 1];
+			//
+			//retPos.y += world_->GetKeepDatas().fallAddPos_;
+			//retPos += drawAddPos_;
+
+			//retPos.y = max(endPos, retPos.y);
+
+			retPos.y += defDrawLinePosY[drawLane + 1]*1.2f;
+
+			return retPos;
+		}
+
 		if (MathHelper::Abs (drawLane) >= 2) {
 			//isDraw_ = false;
 			retPos.y = -500;
@@ -158,6 +153,44 @@ public:
 		retPos += drawAddPos_;
 		return retPos;
 	}
+	//lanenumを自由に指定してdrawposを算出
+	Vector2 GetFreeActorDrawPos(const Vector2& pos,int laneNum) const{
+		Vector2 retPos;
+
+		Vector3 cmpos3d = Vector3(pos.x, pos.y, 0)*world_->GetInv();
+		retPos = Vector2(cmpos3d.x, cmpos3d.y);
+
+		int drawLane;
+		drawLane = laneNum - world_->GetKeepDatas().playerLane_;
+
+		if (world_->GetIsFreeCamY_() && drawLane < 0) {
+			//float endPos=retPos.y + defDrawLinePosY[drawLane + 1];
+			//
+			//retPos.y += world_->GetKeepDatas().fallAddPos_;
+			//retPos += drawAddPos_;
+
+			//retPos.y = max(endPos, retPos.y);
+
+			retPos.y += defDrawLinePosY[drawLane + 1] * 1.2f;
+
+			return retPos;
+		}
+
+		if (MathHelper::Abs(drawLane) >= 2) {
+			//isDraw_ = false;
+			retPos.y = -500;
+		}
+		else {
+			//isDraw_ = true;
+			retPos.y += defDrawLinePosY[drawLane + 1];
+
+			//drawLane = MathHelper::Abs(drawLane);
+			//spriteAlpha_ = alphaSetter[drawLane];
+		}
+		retPos += drawAddPos_;
+		return retPos;
+	}
+
 	// 自分取得
 	Actor* GetActor() const;
 	// 親取得
@@ -190,7 +223,9 @@ public:
 	}
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
-
+	void DrawUpdate() {
+		drawPos_ = GetDrawPosVect(position_);
+	}
 protected:
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara);
@@ -254,6 +289,6 @@ protected:
 	
 	// ファンクションマップ
 	std::map<COL_ID, std::function<CollisionParameter(const Actor&, const Actor&)>> colFuncMap_;
-	std::map<int, std::function<void()>> laneChangeFunctionMap_;
+	//std::map<int, std::function<void()>> laneChangeFunctionMap_;
 	//std::map<COL_ID, std::function<CollisionParameter(const Actor& sprite2)>> colFuncMap_;
 };

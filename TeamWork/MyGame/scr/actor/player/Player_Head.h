@@ -20,7 +20,12 @@ public:
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
 	virtual bool CamMoveUpdate() {
-		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+		if (world_->GetKeepDatas().nextLane_ < 0) {
+			CamMoveUp();
+		}
+		else {
+			CamMoveDown();
+		}
 		return true;
 	}
 	virtual void CamMoveUp()override {
@@ -45,7 +50,10 @@ public:
 			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
 		}
 	}
-
+	void addPos(const Vector2& addpos) {
+		position_ += addpos;
+	}
+	void UpdatePos();
 	//virtual void SetOtherClothesType(CLOTHES_ID type) override{
 	//	//現在使用している頭の時のみ当たった服の種類をセット
 	//	if (!getIsCurrentHead())return;

@@ -4,6 +4,7 @@
 #include "../conv/DXConverter.h"
 #include "../graphic/Model.h"
 #include"../collision/MyCol.h"
+#include"../math/MyFuncionList.h"
 
 Actor::Actor(IWorld * world, Actor * parent) :
 	world_(world),
@@ -17,12 +18,11 @@ Actor::Actor(IWorld * world, Actor * parent) :
 	drawAddPos_(Vector2::Zero)
 {
 	parameter_.spriteAlpha_=1.f;
-	laneChangeFunctionMap_[-1] = std::bind(&Actor::CamMoveUp, this);
-	laneChangeFunctionMap_[1] = std::bind(&Actor::CamMoveDown, this);
 }
 
 Actor::~Actor()
 {
+
 }
 
 void Actor::Collide(COL_ID id, Actor & other)
@@ -56,6 +56,47 @@ void Actor::SetPose(const Matrix& mat)
 
 void Actor::OnUpdate()
 {
+}
+
+void Actor::LateComUpdate() {
+	Vector3 cmpos3d = Vector3(position_.x, position_.y, 0)*world_->GetInv();
+	//drawPos_ = Vector2(cmpos3d.x, cmpos3d.y);
+	//OutputDebugString(std::to_string(world_->GetKeepDatas().playerLane_).c_str());
+	//OutputDebugString("\n");
+	//OutputDebugString(std::to_string(world_->GetKeepDatas().playerLane_).c_str());
+	//OutputDebugString("\n");
+	drawPos_ = GetDrawPosVect(position_);
+
+	int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
+	if (MathHelper::Abs(drawLane) >= 2) {
+		isDraw_ = false;
+	}
+	else {
+		isDraw_ = true;
+		//drawPos_.y += defDrawLinePosY[drawLane + 1];
+
+		drawLane = MathHelper::Abs(drawLane);
+
+		//‚â‚é
+		{
+			Vector2 pdPos = GetFreeActorDrawPos(world_->GetKeepDatas().playerPos_,world_->GetKeepDatas().playerLane_);
+			float toplayerlength = drawPos_.y- pdPos.y;
+			toplayerlength = abs(toplayerlength);
+			float addalpha=1-toplayerlength / 500;
+			addalpha /= 4;
+			addalpha = MathHelper::Clamp(addalpha, 0.0f, 0.5f);
+			addalpha += 0.75f;
+			if (laneNum_ == world_->GetKeepDatas().playerLane_)addalpha = 1.f;
+			//addalpha = MathHelper::Clamp(addalpha, 0.0f, 1.0f);
+			parameter_.spriteAlpha_ = addalpha;
+		}
+	}
+
+	isCheckCol_ = (world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[2] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[3])
+		&& laneNum_ == world_->GetKeepDatas().playerLane_;
+	if (world_->isChangeFrame()) {
+
+	}
 }
 
 // Ž©•ªŽæ“¾

@@ -28,7 +28,12 @@ public:
 		
 	}
 	virtual bool CamMoveUpdate() {
-		laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+		if (world_->GetKeepDatas().nextLane_ < 0) {
+			CamMoveUp();
+		}
+		else {
+			CamMoveDown();
+		}
 		return true;
 	}
 	virtual void CamMoveUp()override {

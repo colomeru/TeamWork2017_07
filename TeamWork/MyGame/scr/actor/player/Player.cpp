@@ -15,6 +15,7 @@
 #include"PlayerDeadPin.h"
 #include"PlayerDeadHead.h"
 #include"../../sound/sound.h"
+#include"../../cheat/CheatData.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -35,6 +36,10 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), isPlayerFallLane_(false), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero)
 
 {
+	addscorelist_[0] = 300;
+	addscorelist_[1] = 200;
+	addscorelist_[2] = 100;
+
 	laneNum_ = startLane;
 
 	spriteId_ = SPRITE_ID::PBODY_SPRITE;
@@ -90,6 +95,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	worldSetMyDatas();
 	StartPlayerSet();
 
+	isClearShoot_ = false;
 
 	StartPendulum();
 	DeformationDraw();
@@ -138,12 +144,7 @@ void Player::Update()
 	PlayerInputControl();
 	//自分の状態に応じた更新
 	updateFunctionMap_[playerMode_]();
-	//死亡条件を満たしたらDeadする(SetModeは同モードなら更新を行わない)
-	if (isPlayerDead())SetMode(MODE_PLAYERDEAD);
 
-	if (position_.y >= WINDOW_HEIGHT) {
-		SetNextLane(1,LaneChangeType::LaneChange_Fall);
-	}
 	//Headの表示レーンを本体に合わせる
 	SetAllHeadLaneNum();
 
@@ -287,7 +288,7 @@ void Player::OnMessage(EventMessage message, void * param)
 	switch (message) {
 	case EventMessage::GOAL_FLAG: {
 		SetMode(MODE_CLEAR);
-		world_->UnlockCameraPosY();
+		world_->UnLockCameraPosY();
 		isUseKey_ = false;
 		break;
 	}
@@ -467,6 +468,35 @@ bool Player::GetIsClearShoot() const
 {
 	return (mRot.front() < -45.0f&&playerMode_ == MODE_CLEAR);
 }
+Actor* Player::GetCurrentHead() const {
+	return pHeads_[currentHead_].get();
+}
+void Player::deadLine()
+{
+	if (playerMode_ == MODE_CLEAR)return;
+	//死亡条件を満たしたらDeadする(SetModeは同モードなら更新を行わない)
+	if (isPlayerDead())SetMode(MODE_PLAYERDEAD);
+	if (laneNum_ >= 2) {
+		world_->FreeCameraPosY(false);
+
+		if (position_.y >= WINDOW_HEIGHT) {
+
+			//SetNextLane(1,LaneChangeType::LaneChange_Fall);
+		}
+
+	}
+	else if (position_.y >= 500 && playerMode_ != MODE_BITE) {
+		//world_->FreeCameraPosY(true);
+		SetNextLane(1, LaneChangeType::LaneChange_Fall);
+		
+	}
+	else if (position_.y >= 300 && playerMode_ != MODE_BITE) {
+		world_->FreeCameraPosY(true);
+		world_->GetCanChangedKeepDatas().isFallCamMode_ = true;
+		world_->GetCanChangedKeepDatas().fallAddPos_ = 100.f;
+	}
+
+}
 void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radius)
 {
 	mRot.clear();
@@ -611,6 +641,7 @@ void Player::Multiple()
 			//摩擦
 			if (multiplePos[i].y < pHeads_[currentHead_]->GetPosition().y) {
 				friction = 0.9f; //上の振り子の重りより高く上がったら摩擦を増やす
+				world_->FreeCameraPosY(false);
 			}
 		}
 		else {
@@ -950,6 +981,8 @@ void Player::StartPlayerSet() {
 	pHeads_[currentHead_]->StartPlayerHeadBite();
 
 	StartPendulum();
+
+	world_->FreeCameraPosY(false);
 }
 
 int Player::GetCurHead() const {
@@ -962,7 +995,7 @@ void Player::CurHeadBite(const Vector2 & target) {
 
 	CreateBiteEffect();
 	//スコア加算
-	world_->sendMessage(EventMessage::ADD_SCORE);
+	world_->sendMessage(EventMessage::ADD_SCORE, (int*)addscorelist_[laneNum_]);
 
 	SetMode(MODE_BITE);//playerMode_ = MODE_BITE;
 	pGrav_ = defPGravPow;
@@ -1019,6 +1052,7 @@ void Player::SetMode(int pMode) {
 			break;
 		}
 		case MODE_BITE: {
+			world_->FreeCameraPosY(false);
 			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 			Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
@@ -1077,13 +1111,62 @@ void Player::worldSetMyDatas() {
 	world_->GetCanChangedKeepDatas().SetPlayerPos(position_);
 }
 
-void Player::setCurPHeadSPos(const Vector2 & sPos) {
-	//pHeads_[currentHead_]->setPHeadStopPos(sPos);
-	SetMultiplePos(sPos - stopPos_);
-	stopPos_ = sPos;
-	//Vector2 lngPs = pHeads_[currentHead_]->GetPosition() - position_;
-	//MultipleInit(lngPs.Length(), stopPos_, MathAngle(position_ - pHeadPoses_[currentHead_], Vector2::Down));
 
+//void SetIsCanChangeLane(bool isCanChange) {
+//	if (laneChangeCoolTime_ > 0)return;
+//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
+//	isCanChangeLane_ = isCanChange;
+//}
+
+void Player::SetNextLane(int addNum, LaneChangeType changeType) {
+	if (laneNum_ + addNum > (maxLaneSize_ - 1) || laneNum_ + addNum<0)return;
+
+	changeType_ = changeType;
+	//if (!isLaneChangeFall()&&addNum>0) {
+	//	//world_->UnlockCameraPosY();
+	//	position_.y -= defDrawLinePosY[1];
+	//	world_->InitializeInv(position_);
+	//	UpdateLaneNum(addNum, changeType_);
+	//	return;
+	//}
+	if (changeType_ == LaneChangeType::LaneChange_Fall) {
+		world_->GetChangeInv().Translation(world_->GetChangeInv().Translation() + Vector3(0.f, 500.f, 0.f));
+		position_.y -= 500.f;
+		pHeadPoses_[currentHead_] = multiplePos[0];
+		//for (auto& i : fPos_) { i.y -= 500.f; }
+		//for (auto& i : multiplePos) { i.y -= 500.f; }
+		
+		//DeformationDraw();
+		//position_ += velocity_ + pendulumVect_;
+		UpdateLaneNum(addNum, LaneChangeType::LaneChange_Fall);
+		//world_->InitializeInv(position_ -Vector2(0,-10));
+		//world_->InitializeInv(position_+Vector2(0,-80));
+		//world_->InitializeInv(Vector2(position_.x,-50.f));
+		//for (auto& ph : pHeads_) {
+		//	ph->addPos(Vector2(0, -500.f));
+		//}
+		//world_->inv(world_->GetInv());
+		pHeads_[currentHead_]->addPos(Vector2(0, -500.f));
+		HeadPosUpdate();
+		world_->UpdateDrawPos();
+		UpdateMultiplePos();
+		DeformationDraw();
+		//world_->inv(Matrix::CreateTranslation(Vector3(position_,0)));
+		//world_->SetIsChangeFrame(true);
+		//CheatData::getInstance().SetCamStop(true);
+		//world_->GetCanChangedKeepDatas().isFallCamMode_ = true;
+		//world_->GetCanChangedKeepDatas().fallAddPos_ = 100.f;
+		return;
+		//drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+		//drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
+	}
+
+
+	world_->ChangeCamMoveMode(addNum);
+
+	world_->sendMessage(EventMessage::START_LANE_CHANGE);
+	//PHeadChanger();
+	//SetMode(MODE_FALL);
 }
 
 void Player::curPHeadSlip(bool isSlip) {
@@ -1450,13 +1533,20 @@ void Player::ResistUpdate()
 void Player::ClearUpdate()
 {
 	for (auto& i : mRot_spd) {
-		i*=1.025f;
+		i*=1.02f;
+		i = MathHelper::Clamp(i, -60.f, 60.f);
 	}
-	if (mRot.front()<-22.5f) {
-		PHeadLengthReset();
-		pendulumVect_.x *= 0.98f;
+	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT)||isClearShoot_) {
+		if (!isClearShoot_) {
+			isClearShoot_ = true;
+		}
+		//SetMode(MODE_FALL);
+		PHeadChanger();
+		//pendulumVect_.x *= 0.98f;
 		pendulumVect_.y *= 0.98f;
-		position_ += pendulumVect_;
+		pendulumVect_.y = max(50.f,pendulumVect_.y);
+
+		position_ -= pendulumVect_;
 		UpdateMultiplePos();
 		DeformationDraw();
 	}
@@ -1467,11 +1557,12 @@ void Player::ClearUpdate()
 		Vector2 shiftPos_;
 		//shiftPos_.x = max(abs(pendulumVect_.x), 30.f)*sign(pendulumVect_.x);
 		shiftPos_.x = 0.f;
-		shiftPos_.y = max(abs(pendulumVect_.y), 40.f)*sign(pendulumVect_.y);
+		shiftPos_.y = 100.f;
+		//shiftPos_.y = max(abs(pendulumVect_.y), 40.f)*sign(pendulumVect_.y);
 
 		pendulumVect_ = shiftPos_;
 	}
-	if (position_.y <= -WINDOW_HEIGHT*2.f) {
+	if (drawPos_.y <= -300) {
 		world_->sendMessage(EventMessage::PLAY_NEXT_STAGE);
 	}
 }

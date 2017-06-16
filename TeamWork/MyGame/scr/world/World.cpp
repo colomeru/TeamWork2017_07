@@ -34,11 +34,15 @@ void World::Update()
 {
 	if (targetAct_ != nullptr&&!isChangeCam_) {
 		inv(targetMat_);
-		
-		if (isLockedCamY_)targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+
+		if (isLockedCamY_) {
+			if (isFreeCamY_)targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition(), 0));
+			else targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
+		}
 		else {
 			unlockYPos_ -= 3.0f;
 			unlockYPos_ = max(unlockYPos_, -WINDOW_HEIGHT);
+			keepDatas_.camPosY_ = unlockYPos_;
 			targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, unlockYPos_, 0));
 		}
 
@@ -60,11 +64,19 @@ void World::Update()
 		isChangeFrame_ = true;
 		keepDatas_.SetChangeLaneLerpPos_(0.0f);
 	}
+	if (keepDatas_.isFallCamMode_) {
+		keepDatas_.fallAddPos_ -= 10.f;
+		if (keepDatas_.fallAddPos_ <= 0.1f) {
+			keepDatas_.isFallCamMode_=false;
+		}
+	}
 	//actors_.Update();
 	updateFunctionMap_[isChangeCam_]();
 	// 受動更新
 	if (!manualStackActor_.empty()&&!isChangeCam_)
 		manualStackActor_.top()->OnUpdate();
+
+
 
 	// カメラ更新
 	//if (!stackCamera_.empty())
@@ -216,6 +228,10 @@ Matrix World::InitializeInv(Vector2 position)
 	mCurPos = Vector2(inv_.Translation().x, inv_.Translation().y);
 	//移動量を計算
 	//mVelo = mPrePos - mCurPos;
+	OutputDebugString(std::to_string(position.x).c_str());
+	OutputDebugString(":");
+	OutputDebugString(std::to_string(position.y).c_str());
+	OutputDebugString("\n");
 	return inv_;
 }
 

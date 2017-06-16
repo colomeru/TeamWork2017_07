@@ -17,6 +17,7 @@
 #include "../game/Random.h"
 #include "GamePlayDefine.h"
 #include"../actor/Field/ClothesLine.h"
+#include"../tween/TweenManager.h"
 
 TutorialScene::TutorialScene() :
 	nextScene_(Scene::Menu)
@@ -135,6 +136,8 @@ void TutorialScene::End()
 	world_->Clear();
 	bgScreen_.End();
 
+	TweenManager::GetInstance().Clear();
+	
 	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
 	//FadePanel::GetInstance().FadeOut();
 }

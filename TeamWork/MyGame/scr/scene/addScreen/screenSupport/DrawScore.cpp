@@ -1,8 +1,7 @@
 #include "DrawScore.h"
 #include<DxLib.h>
 #include"../../../graphic/Sprite.h"
-#include<sstream>
-#include<iomanip>
+#include"../../../math/MyFuncionList.h"
 #include"../../../math/MathHelper.h"
 
 DrawScore::DrawScore()
@@ -14,22 +13,21 @@ DrawScore::~DrawScore()
 {
 }
 
-void DrawScore::Draw(const Vector2& position,int score,int digit,const Vector2& numberSize)
-{
-	//SPRITE_ID::NUMBER_SPRITE
+int DrawScore::Draw(const Vector2& position,int score,int digit,const Vector2& numberSize)
+{	
+	int maxscore = MathHelper::Pow(10,digit)-1;
+	score = min(score, maxscore);
+	Vector2 baseSize=Vector2(Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x*numberSize.x,
+		Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).y*numberSize.y);
+
+	Vector2 basePos = position-Vector2(DigitLength(score)*baseSize.x,0.f);
+	std::vector<int> drawscore=SligeDigit(score);
 	
-	
-	int drawscore = min(MathHelper::Pow(10, digit - 1), score);
-	if (drawscore > 1)drawscore--;
-
-	std::ostringstream sstr;
-	sstr << std::setw(digit) << std::setfill('0') << score;
-
-	std::string drawscoretext = sstr.str();
-
-	for (int i = 0; i < drawscoretext.size(); i++) {
+	for (int i = 0; i < drawscore.size(); i++) {
 		Sprite::GetInstance().SplitDraw(SPRITE_ID::NUMBER_SPRITE,
-			position+Vector2(numberSpriteSize_*i*numberSize.x,0.f),((int)drawscoretext.at(i))-48,Vector2::Zero,numberSize);
+			basePos+Vector2((baseSize.x)*(i),0.f),drawscore.at(drawscore.size()-1-i), baseSize/2,numberSize);
 	}
-
+	int result = (int)basePos.x;
+	result += Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x*(1-numberSize.x);
+	return result;
 }

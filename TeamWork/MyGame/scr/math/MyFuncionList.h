@@ -2,6 +2,9 @@
 #include"../math/Vector2.h"
 #include"../graphic/DrawPos.h"
 #include"../math/Matrix.h"
+#include"../math/Vector3.h"
+#include"../math/MathHelper.h"
+#include<vector>
 
 template<typename _Tp> inline int sign(_Tp val) {
 	return 1 - (val <= 0) - (val < 0);
@@ -60,4 +63,36 @@ inline DrawPos MathDrawPoint(const Vector2& basePos,const Vector2& dir, int widt
 	p.p3 = drawBasePos - (pHtBNVerticalVec*width);
 
 	return p;
+}
+
+inline int DigitLength(int num) {
+	if (num == 0) {
+		return 1;
+	}
+
+	int count = 0;
+	while (num) {
+		num = num / 10;
+		++count;
+	}
+	return count;
+}
+
+inline std::vector<int> SligeDigit(int num) {
+	int mod = 0;
+	std::vector<int> result;
+
+	if (num == 0) {
+		result.push_back(0);
+		return result;
+	}
+
+	int i = 0;
+	while (num >= 1) {
+		mod = num % 10;
+		num = num / 10;
+		result.push_back(mod);
+	}
+	return result;
+
 }

@@ -104,7 +104,7 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
-	changeCount_ = 240;
+	changeCount_ = 120;
 	currentStage_ = CheatData::getInstance().GetSelectStage();
 
 	isEnd_ = false;
@@ -178,7 +178,7 @@ void GamePlayScene::Initialize()
 	stageEffectScreen_.Init(currentStage_);
 	
 	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_],DX_PLAYTYPE_LOOP);
-	Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.5f);
+	//Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.8f);
 
 	// フェードパネル初期化
 	//FadePanel::GetInstance().Initialize();
@@ -189,8 +189,10 @@ void GamePlayScene::Initialize()
 void GamePlayScene::Update()
 {
 	updateFunctionMap_[gamePlayMode_]();
-	if (!world_->GetIsCamChangeMode()) {
-		changeScreen_.End();
+	if (!world_->GetIsFreeCamY_()) {
+		if (!world_->GetIsCamChangeMode()) {
+			changeScreen_.End();
+		}
 	}
 	uiScreen_.Update(ply1->GetPosition());
 		
@@ -302,7 +304,7 @@ void GamePlayScene::End()
 
 	Sound::GetInstance().StopBGM();
 
-	//TweenManager::GetInstance().Clear();
+	TweenManager::GetInstance().Clear();
 
 	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
 	//FadePanel::GetInstance().FadeOut();
@@ -317,6 +319,16 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 	}
 	case EventMessage::GOAL_FLAG: {
 		world_->PopStackActor();
+		break;
+	}
+	case EventMessage::LANE_CHANGE_FALL: {
+		changeScreen_.Init(WindDir::DOWN);
+
+		break;
+	}
+	case EventMessage::LANE_CHANGE_FALL_END: {
+		changeScreen_.End();
+
 		break;
 	}
 	case EventMessage::START_LANE_CHANGE:{
@@ -347,7 +359,7 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 	}
 	case EventMessage::ADD_SCORE: {
 		//スコア加算、後で修正あり
-		uiScreen_.AddScore(100);
+		uiScreen_.AddScore((int)param);
 		break;
 	}
 	case EventMessage::PLAYER_DEAD: {
@@ -362,11 +374,12 @@ void GamePlayScene::baseUpdate()
 {
 	// 更新
 	world_->Update();
+	ply1->deadLine();
 	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
-		FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
-		FadePanel::GetInstance().FadeOut();
-	}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
+	//	FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
+	//	FadePanel::GetInstance().FadeOut();
+	//}
 
 	int randT = Random::GetInstance().Range(0, 3);
 	windTime_ -= randT;
@@ -416,7 +429,7 @@ void GamePlayScene::overUpdate()
 {
 	if (gameOverScreen_.Update(nextScene_)) {
 		if (nextScene_ == Scene::GamePlay) {
-			FadePanel::GetInstance().AddCollBack([=]() { Initialize(); });
+			FadePanel::GetInstance().AddCollBack([=]() { End(); Initialize(); });
 		}
 		else {
 			FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
@@ -464,7 +477,7 @@ void GamePlayScene::nextUpdate()
 	changeScreen_.Update();
 	stageEffectScreen_.Update();
 	
-	changeCount_--;
+	if(world_->GetKeepDatas().camPosY_<=-WINDOW_HEIGHT)changeCount_--;
 	if (changeCount_ <= 0) setNextMode(3);
 	bgScreen_.DownCeil();
 

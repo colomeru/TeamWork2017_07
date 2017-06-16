@@ -14,7 +14,7 @@ public:
 		return ds;
 	}
 	
-	void Draw(const Vector2& position, int score,int digit, const Vector2& numberSize);
+	int Draw(const Vector2& position, int score,int digit, const Vector2& numberSize);
 
 private:
 	int numberSpriteSize_;

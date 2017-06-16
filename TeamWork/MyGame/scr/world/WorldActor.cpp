@@ -122,6 +122,12 @@ void WorldActor::AddEventMessageListener(std::function<void(EventMessage, void*)
 	lis_.push_back(listener);
 }
 
+void WorldActor::DrawUpdate()
+{
+	EachActor([&](ActorManager& manager) { manager.DrawUpdate(); });
+
+}
+
 // マネージャーを巡回
 void WorldActor::EachActor(std::function<void(ActorManager&)> func)
 {

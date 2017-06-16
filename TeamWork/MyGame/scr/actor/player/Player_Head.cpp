@@ -245,6 +245,33 @@ void Player_Head::OnMessage(EventMessage message, void * param)
 {
 }
 
+void Player_Head::UpdatePos()
+{
+	if (player_->GetCurHead() == myNumber_)player_->SetStopPos(position_);
+	auto basePos = player_->GetHeadPos(myNumber_);
+
+	//プレイヤーから各ヘッドまでの長さ、(32,32のLength)*自分の首の長さ
+	Vector2 vel = basePos - player_->GetPosition();
+	//自分の首の向き*自分の首に設定されている長さ
+	if (player_->GetCurHead() == myNumber_ && (player_->GetIsSlipped() || world_->GetIsCamChangeMode() || player_->GetIsClearShoot())) {
+		//vel = player_->GetHeadPosAddVect();
+		position_ = player_->GetSlipHeadPoint();
+	}
+	else {
+		Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
+		//スリップしたかを調べて
+		//if (player_->GetCurHead() == myNumber_&&player_->GetIsSlipped()) {
+		//Playerがスリップ状態に入った時点でposAddVectを指定してもらい、その位置に首を固定する
+		//position_ = basePos + posAddVect_;
+		//}
+		//else {
+		//通常時は首の長さに対応した位置に補正する
+		position_ = basePos + bPlusLngPos;
+		//}
+	}
+
+}
+
 void Player_Head::CreateFatigueEffect()
 {
 	if (isAlreadyCreateSplash_)return;

@@ -4,11 +4,13 @@
 
 FontManager::~FontManager()
 {
+	End();
+	fontids_.clear();
 }
 
 void FontManager::Initialize()
 {
-	InitFontToHandle();
+	End();
 	fontids_.clear();
 	SetFontSize(16);
 }
@@ -33,4 +35,9 @@ void FontManager::DrawTextApplyFont(int x, int y, unsigned int color, FONT_ID id
 	DrawFormatStringToHandle(x, y, color, fontids_[id], text.c_str());
 
 
+}
+
+void FontManager::End()
+{
+	InitFontToHandle();
 }

@@ -4,7 +4,7 @@
 
 class CheatData {
 private:
-	CheatData():selectStage_(Stage::Stage1),startStageNum_(0) {
+	CheatData():selectStage_(Stage::Stage1),startStageNum_(0), CamStop_(false){
 		clearStage.resize(8, false);
 	}
 	~CheatData(){}
@@ -32,6 +32,14 @@ public:
 	int GetStartStage()const {
 		return startStageNum_;
 	}
+	void SetCamStop(bool is) {
+		CamStop_ = is;
+	}
+	bool GetCamStopOneTime() {
+		bool result = CamStop_;
+		CamStop_ = false;
+		return result;
+	}
 
 private:
 	std::vector<bool> clearStage;
@@ -39,4 +47,5 @@ private:
 	Stage selectStage_;
 
 	int startStageNum_;
+	bool CamStop_;
 };

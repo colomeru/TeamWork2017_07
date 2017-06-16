@@ -40,6 +40,7 @@ public:
 	// ƒŠƒXƒg‚Ìæ“¾
 	std::list<ActorPtr> GetList() const;
 
+	void DrawUpdate();
 private:
 	std::list<ActorPtr>	actorPtr;
 };

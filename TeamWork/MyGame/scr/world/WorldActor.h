@@ -45,7 +45,7 @@ public:
 	void HandleMessage(EventMessage message, void* param);
 	// イベントリスナーの追加
 	void AddEventMessageListener(std::function<void(EventMessage, void*)> listener);
-
+	void DrawUpdate();
 private:
 	// マネージャーを巡回
 	void EachActor(std::function<void(ActorManager&)> func);

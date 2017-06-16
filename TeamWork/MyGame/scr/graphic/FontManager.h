@@ -21,6 +21,8 @@ public:
 
 	//フォントを利用した文字列描画
 	void DrawTextApplyFont(int x,int y,unsigned int color,FONT_ID id,const std::string& text,...);
+
+	void End();
 private:
 	std::map<FONT_ID, int> fontids_;
 };

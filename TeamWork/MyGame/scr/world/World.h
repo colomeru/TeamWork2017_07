@@ -13,16 +13,22 @@ static const float defDrawLineChangePosY[5] = { -400,0,500,1000,1500 };
 struct KeepDatas {
 	//playerの現在のレーン
 	int playerLane_;
+	int prevPlayerLane_;
 	//次のレーンの方向を代入する(-1～1)
 	int nextLane_;
 	Vector2 playerPos_;
 	Vector2 startPointPos_;
 	float changeLaneLerpPos_;
-
-	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero,Vector2 sPPos=Vector2::Zero, int nextLane = 0) :playerLane_(lane), playerPos_(pos),startPointPos_(sPPos), nextLane_(nextLane), changeLaneLerpPos_(0.f){}
+	bool isFallCamMode_;
+	float fallAddPos_;
+	float camPosY_;
+	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero,Vector2 sPPos=Vector2::Zero, int nextLane = 0,bool isFallCamMode=false,float fallAddPos=0.f) :playerLane_(lane), prevPlayerLane_(lane), playerPos_(pos),startPointPos_(sPPos), nextLane_(nextLane), changeLaneLerpPos_(0.f), isFallCamMode_(isFallCamMode), fallAddPos_(fallAddPos), camPosY_(0.f){}
 
 	//playerの現レーンを更新する
 	void SetPlayerLane(const int& pLane) {
+		if (playerLane_ == pLane)return;
+
+		prevPlayerLane_ = playerLane_;
 		playerLane_ = pLane;
 	}
 	//playerの現レーンを変更する
@@ -94,6 +100,9 @@ public:
 	virtual Matrix GetInv()override {
 		return inv_;
 	}
+	virtual Matrix& GetChangeInv()override {
+		return inv_;
+	}
 	virtual void SetScroolPos(const Vector2& pos) override {
 		targetMat_.Translation(Vector3(pos.x, pos.y, 0));
 	}
@@ -122,10 +131,23 @@ public:
 	virtual bool isChangeFrame()const {
 		return isChangeFrame_;
 	}
+	virtual void SetIsChangeFrame(bool is) {
+		isChangeFrame_ = is;
+	}
 	virtual void StartModeUpdate()override;
 
-	virtual void UnlockCameraPosY()override {
+	virtual void UnLockCameraPosY()override {
 		isLockedCamY_ = false;
+	}
+	virtual void FreeCameraPosY(bool is) {
+		if (isFreeCamY_ == is)return;
+		isFreeCamY_ = is;
+	}
+	virtual bool GetIsFreeCamY_()const {
+		return isFreeCamY_;
+	}
+	virtual void UpdateDrawPos() {
+		actors_.DrawUpdate();
 	}
 
 private:
@@ -149,7 +171,10 @@ private:
 	bool isChangeCam_;
 	int addNum_;
 	bool isChangeFrame_;
+	//クリア用
 	bool isLockedCamY_;
+	//ゲームプレイ用
+	bool isFreeCamY_;
 	std::map<bool, std::function<void()>> updateFunctionMap_;
 
 	Matrix inv_;

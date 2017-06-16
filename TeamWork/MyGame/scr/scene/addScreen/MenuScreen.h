@@ -99,7 +99,6 @@ private:
 	Vector2 gPos;
 	Vector2 dir; //ˆÚ“®•ûŒü
 	float dis;
-	float disN;
 	Vector2 from;
 	float ease;
 	bool test;

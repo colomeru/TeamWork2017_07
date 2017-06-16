@@ -17,7 +17,7 @@ ProgressMeter::ProgressMeter(World * world, int stageLength, Vector2 position) :
 	startHandle_ = Sprite::GetInstance().GetHandle(SPRITE_ID::HITO_SPRITE);
 	goalHandle_ = Sprite::GetInstance().GetHandle(SPRITE_ID::HITO_SPRITE);
 
-	pinSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE);
+	pinSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE);
 	pIconSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::SNAKE_SPRITE);
 	laneSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::METER_SPRITE);
 	startSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::METER_START_SPRITE);
@@ -80,7 +80,7 @@ void ProgressMeter::Draw() const
 	//ƒsƒ“‚ð•`‰æ
 	world_->EachActor(ACTOR_ID::PIN_ACTOR, [=](Actor& other) {
 		PinStruct pin = { other.GetLaneNum(), other.GetPosition().x };
-		Sprite::GetInstance().Draw(SPRITE_ID::NECK_CHAIN1_SPRITE, Vector2(pin.posX * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y + pin.lane * dis_ + pinSize_.y / 8), Vector2(pinSize_.x / 2, pinSize_.y / 2), Vector2::One, 1.0f, false);
+		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, Vector2(pin.posX * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y + pin.lane * dis_ + pinSize_.y / 8), Vector2(pinSize_.x / 4, pinSize_.y / 4), Vector2(0.5f,0.5f), 180.0f);
 	});
 
 }

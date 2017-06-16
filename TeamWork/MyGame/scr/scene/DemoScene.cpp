@@ -42,13 +42,13 @@ void DemoScene::Initialize()
 
 void DemoScene::Update()
 {
-	if (!FadePanel::GetInstance().IsClearScreen())
+	if (!FadePanel::GetInstance().IsClearScreen() || FadePanel::GetInstance().IsAction())
 		return;
 
 	timeCount_++;
 	LoadWashMachineFrame_++; LoadWashMachineFrame_ %= animSize;
 
-	if (currentLoadCount_ <= 0.1f && !isEnd_)
+	if (currentLoadCount_ <= 0.0f && !isEnd_)
 	{
 		FadePanel::GetInstance().AddCollBack([=]() {
 			SetBackgroundColor(153, 204, 255);

@@ -105,7 +105,6 @@ void MenuScreen::Init()
 	dis = stageNum * betDis_;
 	cursorPos = CursorPos[0];
 	backSelect = false;
-	disN = 0.0f;
 	pos = Vector2(WINDOW_WIDTH / 4.0f, height - 50.0f);
 	gPos = Vector2(WINDOW_WIDTH / 4.0f, height - 50.0f);
 	timer_ = 0.0f;
@@ -370,6 +369,8 @@ void MenuScreen::Pattern2Update()
 
 	Star();
 
+	ShootingStar();
+
 	Crow();
 
 	anmManager_.Update();
@@ -381,6 +382,12 @@ void MenuScreen::Pattern2Update()
 //ÉpÉ^Å[ÉìÇQï`âÊ
 void MenuScreen::Pattern2Draw() const
 {
+
+	//ó¨ÇÍêØ
+	for (int i = 0; i < sStarNum_; i++) {
+		Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, ssAlpha_[i], Vector2(sStar_[i].scale_, sStar_[i].scale_));
+	}
+
 	//îwåi
 	static auto bgSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_BACK_SPRITE);
 	static auto builSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_M_SPRITE);
@@ -400,10 +407,6 @@ void MenuScreen::Pattern2Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[1], drawNightSize);
 	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[0], drawNightSize);
 
-	//ó¨ÇÍêØ
-	for (int i = 0; i < sStarNum_; i++) {
-		Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, ssAlpha_[i]);
-	}
 
 	//ÉJÉâÉX
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
@@ -465,6 +468,7 @@ void MenuScreen::Pattern2Draw() const
 		//	DrawFormatString(1600, 180 + i * 20, GetColor(255, 255, 255), "cDis_ %f", cDis_[i]);
 		//}
 	}
+
 }
 
 //"è„"Ç™ì¸óÕÇ≥ÇÍÇΩÇ©
@@ -579,7 +583,7 @@ void MenuScreen::ShootingStar()
 					sStar_[i].timer_ = 0.0f;
 					sStar_[i].position_ = prevPos_[i];
 					ssAlpha_[i] = 0.0f;
-					sStar_[i].scale_ = Random::GetInstance().Range(0.5f, 1.5f);
+					sStar_[i].scale_ = Random::GetInstance().Range(0.5f, 2.5f);
 				}
 			}
 		}

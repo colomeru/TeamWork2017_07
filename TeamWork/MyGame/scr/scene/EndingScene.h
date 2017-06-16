@@ -39,10 +39,6 @@ public:
 	virtual void End() override;
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
-	////単振り子
-	//void Pendulum();
-	////二重振り子
-	//void Double(Vector2 fPos);
 	//多重振り子
 	void Multiple();
 	//変形描画
@@ -51,35 +47,11 @@ public:
 	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius); //首の長さ、支点、角度、半径
 
 private:
-	//float size;
-	//float vertical;
-	//float horizontal;
-	//float alpha;
-	//float distanceH;
-	//float distanceV;
-	//float absH;
-	//float absV;
-	//float distanceC;
-	//float cAlpha;
-	//float aAlpha;
-	//Vector2 absC;
-	//Vector2 arrowSize;
-	//Vector2 particleSize;
-	//Vector2 arrowPos;
-	//Vector2 particlePos;
-	//Vector2 centerPos;
-	//Vector2 circlePos;
-	//Vector2 circleSize;
-	//Vector2 cCenterPos;
 	bool turn;
 	vector<int> v;
 	float friction; //摩擦
 
 	//ここから振り子
-	//float fx; //支点x座標
-	//float fy; //支点y座標
-	//float rot; //角度
-	//float rot_spd; //角速度
 	float length; //紐の長さ
 	float g; //重力加速度
 	Vector2 spherePos; //重りの位置

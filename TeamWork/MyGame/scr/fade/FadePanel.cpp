@@ -148,6 +148,11 @@ void FadePanel::AddCollBack(std::function<void()> collback)
 	callbacks_.push_back(collback);
 }
 
+int FadePanel::Count() const
+{
+	return stateStack_.size();
+}
+
 // フェードインアップデート
 void FadePanel::FadeInUpdate(float deltaTime)
 {

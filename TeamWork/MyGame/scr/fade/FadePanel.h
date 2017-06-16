@@ -71,6 +71,8 @@ public:
 	// コールバック関登録(ラムダで関数追加)
 	void AddCollBack(std::function<void()> collback);
 
+	int Count() const;
+
 private:
 	// フェードインアップデート
 	void FadeInUpdate(float deltaTime);

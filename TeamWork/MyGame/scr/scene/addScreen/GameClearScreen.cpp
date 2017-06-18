@@ -195,15 +195,15 @@ void GameClearScreen::ScoreUpdate()
 
 void GameClearScreen::ScoreDraw() const
 {
-	int bcposx=DrawScore::getInstance().Draw(Vector2(1600,750.f),
+	int bcposx=DrawScore::getInstance().Draw(Vector2(1500,760.f),
 		(int)roundf(fscore_), 5,Vector2::One);
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BITECOUNT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(bcposx-origin.x, 750), origin, Vector2::One);
+	Sprite::GetInstance().Draw(SPRITE_ID::BITECOUNT_SPRITE, Vector2(580, 750), origin, Vector2::One);
 
 	if (!isHeadDraw_)return;
 
 	//DrawScore::getInstance().Draw(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x * 0.5f, 900.f),
-	int hcposx=DrawScore::getInstance().Draw(Vector2(1600, 950.f),
+	int hcposx=DrawScore::getInstance().Draw(Vector2(1500, 960.f),
 		(int)roundf(fheadCount_), 1, Vector2::One);
 	Vector2 horigin = Sprite::GetInstance().GetSize(SPRITE_ID::HEADCOUNT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::HEADCOUNT_SPRITE, Vector2(hcposx-horigin.x, 950), horigin, Vector2::One);

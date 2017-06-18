@@ -318,8 +318,8 @@ private:
 		//~‚è‚éŽž
 		else if (updateNum > 0) {
 			if (changeType == LaneChangeType::LaneChange_Fall) {
-				nextVel_ = pendulumVect_ / 2;
-				pGrav_ *= 0.3f;
+				nextVel_ = pendulumVect_ / 3;
+				pGrav_ *= 0.1f;
 			}
 		}
 	

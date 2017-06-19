@@ -21,8 +21,7 @@
 #include"../actor/Field/Enemys/TutorialManager.h"
 
 static int maxTextCount[maxTutorialNum]{
-	3,
-	1,
+	2,
 	1,
 	1
 };
@@ -44,17 +43,14 @@ TutorialScene::TutorialScene() :
 	StageNameList_[0] = "Tutorial1";
 	StageNameList_[1] = "Tutorial2";
 	StageNameList_[2] = "Tutorial3";
-	StageNameList_[3] = "Tutorial4";
 
 	TextAddList_[0] = ("_1");
 	TextAddList_[1] = ("_2");
 	TextAddList_[2] = ("_3");
-	TextAddList_[3] = ("_4");
 
 	setLockFuncList_.push_back([this](int i) {SetLock1(i); });
 	setLockFuncList_.push_back([this](int i) {SetLock2(i); });
 	setLockFuncList_.push_back([this](int i) {SetLock3(i); });
-	setLockFuncList_.push_back([this](int i) {SetLock4(i); });
 }
 
 TutorialScene::~TutorialScene()
@@ -181,6 +177,7 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 	switch (message)
 	{
 	case EventMessage::BEGIN_WIND:
+		UnLock(UnLockType::StartWind);
 		break;
 	case EventMessage::STRONG_WIND:
 		break;
@@ -200,8 +197,17 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 		UnLock(UnLockType::KillTapper);
 		break;
 	}
-	case EventMessage::LANE_CHANGE_FALL_END :{
+	case EventMessage::LANE_CHANGE_END :{
 		UnLock(UnLockType::ChangeLane);
+		break;
+	}
+	case EventMessage::USE_SWORD: {
+		UnLock(UnLockType::UseSword);
+		break;
+	}
+	case EventMessage::LANE_CHANGE_UP_END: {
+		UnLock(UnLockType::ChangeLaneUp);
+
 		break;
 	}
 	case EventMessage::PLAY_NEXT_STAGE:
@@ -282,13 +288,11 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLane, false));
 		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
 		break;
 	}
 	case 1: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLane, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneUp, false));
 		break;
 	}
 	default:
@@ -302,16 +306,12 @@ void TutorialScene::SetLock2(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLane, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		break;
-	}
-	case 1: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLane, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::UseSword, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::KillTapper, false));
 		break;
 	}
 	default:
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
 		break;
 	}
 }
@@ -321,35 +321,13 @@ void TutorialScene::SetLock3(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLane, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		break;
-	}
-	case 1: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLane, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::StartWind, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::StartWind, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::StartWind, false));
 		break;
 	}
 	default:
-		break;
-	}
-
-}
-
-void TutorialScene::SetLock4(int tutorialLockNum)
-{
-	switch (tutorialLockNum)
-	{
-	case 0: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::KillTapper, false));
-		break;
-	}
-	case 1: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLane, false));
-		break;
-	}
-	default:
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
 		break;
 	}
 

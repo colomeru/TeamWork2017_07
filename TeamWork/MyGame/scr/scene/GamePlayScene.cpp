@@ -326,7 +326,7 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 
 		break;
 	}
-	case EventMessage::LANE_CHANGE_FALL_END: {
+	case EventMessage::LANE_CHANGE_END: {
 		changeScreen_.End();
 
 		break;

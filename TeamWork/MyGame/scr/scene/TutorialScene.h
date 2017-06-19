@@ -11,7 +11,7 @@
 #include "addScreen\BackgroundScreen.h"
 #include "addScreen/TutorialTextScreen.h"
 
-static const int maxTutorialNum = 4;
+static const int maxTutorialNum = 3;
 
 class TutorialManager;
 
@@ -20,8 +20,12 @@ class TutorialScene : public IScene
 public:
 	enum UnLockType {
 		ChangeLane,
+		ChangeLaneUp,
 		BiteClothes,
+		PlayPendulum,
 		KillTapper,
+		UseSword,
+		StartWind,
 		Dummy,
 	};
 public:
@@ -63,7 +67,6 @@ private:
 	void SetLock1(int tutorialLockNum);
 	void SetLock2(int tutorialLockNum);
 	void SetLock3(int tutorialLockNum);
-	void SetLock4(int tutorialLockNum);
 
 private:
 	void ChangeNextTutorial();

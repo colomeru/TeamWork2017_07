@@ -314,6 +314,8 @@ private:
 			nextVel_ = Vector2(0, -15.f);
 			pGrav_ = 0.f;
 			//position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
+			
+			world_->sendMessage(EventMessage::LANE_CHANGE_UP_END);
 		}
 		//~‚è‚éŽž
 		else if (updateNum > 0) {
@@ -336,7 +338,7 @@ private:
 		//PHeadChanger();
 		//PHeadLengthReset();
 
-		world_->sendMessage(EventMessage::LANE_CHANGE_FALL_END);
+		world_->sendMessage(EventMessage::LANE_CHANGE_END);
 
 		worldSetMyDatas();
 	}

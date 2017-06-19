@@ -24,6 +24,8 @@ private:
 
 	int timeCount_;
 
+	int windCount_;
+
 	float resurTimer_;
 	bool isResur_;
 

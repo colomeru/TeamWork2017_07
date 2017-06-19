@@ -1325,6 +1325,12 @@ void Player::FallUpdate()
 			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
+		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+			pHeads_[currentHead_]->SetBiteSprite();
+			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
+		
+
+		}
 	}
 		position_ += velocity_ + pendulumVect_;
 
@@ -1340,15 +1346,16 @@ void Player::ShootUpdate()
 {
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
-		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
-			CurPHeadLengPlus(headShotPower);
-		}
-		else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
+		if (Keyboard::GetInstance().KeyTriggerUp(KEYCODE::N)) {
+			//else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 		}
+		else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+			CurPHeadLengPlus(headShotPower);
+		}
 		else {
-			pHeads_[currentHead_]->SetBiteSprite();
+			//pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		}
 
@@ -1413,6 +1420,7 @@ void Player::BiteUpdate()
 		if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 			if (!pSword_->GetUseSword()) {
 				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_, pSword_->GetPosition(), pSword_.get()));
+				world_->sendMessage(EventMessage::USE_SWORD);
 				pSword_->SetUseSword(true);
 				Sound::GetInstance().PlaySE(SE_ID::CREATE_SWORD_SE);
 			}

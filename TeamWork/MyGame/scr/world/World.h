@@ -103,7 +103,7 @@ public:
 	virtual Matrix& GetChangeInv()override {
 		return inv_;
 	}
-	virtual void SetScroolPos(const Vector2& pos) override {
+	virtual void SetScrollPos(const Vector2& pos) override {
 		targetMat_.Translation(Vector3(pos.x, pos.y, 0));
 	}
 	//共有データを更新する、変更を行わない値の引数は、元のKeepDatasの値を渡す事

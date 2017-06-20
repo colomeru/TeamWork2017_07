@@ -196,12 +196,14 @@
     <ClCompile Include="scr\actor\Field\Enemys\EnemyGenerator.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\Enemys.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\TutorialManager.cpp" />
+    <ClCompile Include="scr\actor\player\CreditPlayer.cpp" />
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
     <ClCompile Include="scr\actor\player\Player3.cpp" />
     <ClCompile Include="scr\actor\player\PlayerDeadHead.cpp" />
     <ClCompile Include="scr\actor\player\PlayerDeadPin.cpp" />
     <ClCompile Include="scr\actor\player\PlayerEffectManager.cpp" />
+    <ClCompile Include="scr\actor\player\PlayerFallPin.cpp" />
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\player\Player_Sword.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
@@ -247,6 +249,8 @@
     <ClCompile Include="scr\scene\addScreen\PauseScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.cpp" />
+    <ClCompile Include="scr\scene\addScreen\screenSupport\CreditText.cpp" />
+    <ClCompile Include="scr\scene\addScreen\screenSupport\CreditTextGenerator.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\DrawScore.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\DrawStar.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\ProgressMeter.cpp" />
@@ -256,6 +260,7 @@
     <ClCompile Include="scr\scene\addScreen\TitleBGScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\TutorialTextScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\UIScreen.cpp" />
+    <ClCompile Include="scr\scene\Credit2Scene.cpp" />
     <ClCompile Include="scr\scene\CreditScene.cpp" />
     <ClCompile Include="scr\scene\DemoScene.cpp" />
     <ClCompile Include="scr\scene\EndingScene.cpp" />
@@ -318,12 +323,14 @@
     <ClInclude Include="scr\actor\Field\Enemys\Enemys.h" />
     <ClInclude Include="scr\actor\Field\Enemys\TutorialList.h" />
     <ClInclude Include="scr\actor\Field\Enemys\TutorialManager.h" />
+    <ClInclude Include="scr\actor\player\CreditPlayer.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />
     <ClInclude Include="scr\actor\player\Player3.h" />
     <ClInclude Include="scr\actor\player\PlayerDeadHead.h" />
     <ClInclude Include="scr\actor\player\PlayerDeadPin.h" />
     <ClInclude Include="scr\actor\player\PlayerEffectManager.h" />
+    <ClInclude Include="scr\actor\player\PlayerFallPin.h" />
     <ClInclude Include="scr\actor\player\PlayerNeckDraw.h" />
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\player\Player_Sword.h" />
@@ -383,6 +390,8 @@
     <ClInclude Include="scr\scene\addScreen\screenSupport\BackgroundCharacters.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.h" />
+    <ClInclude Include="scr\scene\addScreen\screenSupport\CreditText.h" />
+    <ClInclude Include="scr\scene\addScreen\screenSupport\CreditTextGenerator.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\DrawScore.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\DrawStar.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\ProgressMeter.h" />
@@ -393,6 +402,7 @@
     <ClInclude Include="scr\scene\addScreen\TitleBGScreen.h" />
     <ClInclude Include="scr\scene\addScreen\TutorialTextScreen.h" />
     <ClInclude Include="scr\scene\addScreen\UIScreen.h" />
+    <ClInclude Include="scr\scene\Credit2Scene.h" />
     <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />
     <ClInclude Include="scr\scene\EndingScene.h" />

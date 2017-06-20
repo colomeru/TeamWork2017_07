@@ -7,7 +7,7 @@ public:
 	//コンストラクタ
 	TestClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin = false);
 	//デストラクタ
-	~TestClothes();
+	virtual ~TestClothes() override;
 	//更新
 	virtual void Update() override;
 	//描画

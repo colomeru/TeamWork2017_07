@@ -16,12 +16,17 @@ DropClothes::DropClothes(IWorld * world, Vector2 pos, int laneNum, SPRITE_ID spr
 	TweenManager::GetInstance().Add(EaseInQuart, &position_.y, WINDOW_HEIGHT, 3.0f, [=]() { Dead(); });
 }
 
+DropClothes::~DropClothes()
+{
+}
+
 void DropClothes::Update()
 {
 }
 
 void DropClothes::Draw() const
 {
+	auto drawPos = GetDrawPosVect(position_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
-	Sprite::GetInstance().SplitDraw(spriteId_, drawPos_, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 }

@@ -63,8 +63,9 @@ void TestClothes::Update()
 
 void TestClothes::Draw() const
 {
+	auto drawPos = GetDrawPosVect(position_);
 	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = drawPos_;
+	auto pos = drawPos;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
 
 	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;

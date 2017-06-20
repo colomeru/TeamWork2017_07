@@ -28,6 +28,7 @@ HairballGenerator::HairballGenerator(IWorld * world, int laneNum, Vector2 pos, i
 
 HairballGenerator::~HairballGenerator()
 {
+	player_ = nullptr;
 }
 
 void HairballGenerator::Update()

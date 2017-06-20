@@ -9,7 +9,7 @@ public:
 	//コンストラクタ
 	ClothesLine(IWorld* world, int laneNum,const Vector2& endPos, Vector2 pos);
 	//デストラクタ
-	~ClothesLine();
+	virtual ~ClothesLine() override;
 	//更新
 	virtual void Update() override;
 	virtual void LateUpdate() override;

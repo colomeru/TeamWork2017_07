@@ -30,6 +30,10 @@ ClothesFeces::ClothesFeces(IWorld * world, int laneNum, Vector2 pos, Actor* clot
 	SetPose(mat);
 }
 
+ClothesFeces::~ClothesFeces()
+{
+}
+
 void ClothesFeces::Update()
 {
 	angle_ = parent_->GetAngle();

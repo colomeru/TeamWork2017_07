@@ -8,7 +8,7 @@ public:
 	// コンストラクタ
 	HairballGenerator(IWorld* world, int lane_num, Vector2 pos, int hairballCnt);
 	// デストラクタ
-	~HairballGenerator();
+	virtual ~HairballGenerator() override;
 	// 更新
 	virtual void Update() override;
 	//描画

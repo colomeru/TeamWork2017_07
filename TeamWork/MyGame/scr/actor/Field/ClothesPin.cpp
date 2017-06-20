@@ -59,15 +59,13 @@ void ClothesPin::Update()
 
 void ClothesPin::Draw() const
 {
-	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TEST_SPRITE) / 2;
-	//Sprite::GetInstance().Draw(SPRITE_ID::TEST_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 255, 0), TRUE);
+	auto drawPos = GetDrawPosVect(position_);
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos_, origin, parent_->GetParameter().spriteAlpha_, Vector2::One, angle_ + 180);
+	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos, origin, parent_->GetParameter().spriteAlpha_, Vector2::One, angle_ + 180);
 
 	if (BuildMode != 1)return;
 	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = drawPos_;
+	auto pos = drawPos;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
 
 	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;

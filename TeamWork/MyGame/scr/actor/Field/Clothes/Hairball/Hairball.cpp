@@ -55,12 +55,15 @@ void Hairball::Update()
 	velocity_ = Vector2(-10.0f, 0.0f);
 
 	position_ += velocity_;
+
+	angle_++;
 }
 
 void Hairball::Draw() const
 {
+	auto drawPos = GetDrawPosVect(position_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::HAIRBALL_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::HAIRBALL_SPRITE, drawPos_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HAIRBALL_SPRITE, drawPos, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 }
 
 void Hairball::OnUpdate()

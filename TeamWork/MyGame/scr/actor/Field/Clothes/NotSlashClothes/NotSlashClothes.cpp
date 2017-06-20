@@ -1,13 +1,9 @@
-#include "BaseClothes.h"
-#include "../../player/Player.h"
-#include "../../player/Player_Head.h"
-#include "../MyGame/scr/game/Random.h"
-#include "../../../graphic/Sprite.h"
+#include "NotSlashClothes.h"
 
-BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin)
+NotSlashClothes::NotSlashClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
 {
-	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
+	clothes_ID = CLOTHES_ID::NOT_SLASH_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100.0f, 200.0f);
@@ -22,12 +18,12 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	SetPointsUpdate();
 }
 
-BaseClothes::~BaseClothes()
+NotSlashClothes::~NotSlashClothes()
 {
-	baseLocalPoints_.clear();
+	localPoints.clear();
 }
 
-void BaseClothes::Update()
+void NotSlashClothes::Update()
 {
 	if (parent_ != nullptr) {
 		if (!static_cast<Player*>(parent_->GetParent())->GetIsBiteMode()) {
@@ -37,19 +33,13 @@ void BaseClothes::Update()
 
 	ShakesClothes();
 	WindSwing();
-
-	SetPointsUpdate();
 	Synchronize();
+	SetPointsUpdate();
 	UpdateClothesFeces();
 }
 
-void BaseClothes::Draw() const
+void NotSlashClothes::Draw() const
 {
-	if (spriteId_ == SPRITE_ID::BASE_CLOTHES_SPRITE) {
-		Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 20);
-		Vector2 hangPos = GetDrawPosVect(fulcrum_);
-		Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2(0.8f, 1.0f), angle_);
-	}
 	auto drawPos = GetDrawPosVect(position_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
 	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
@@ -71,16 +61,11 @@ void BaseClothes::Draw() const
 	}
 }
 
-void BaseClothes::OnUpdate()
+void NotSlashClothes::OnUpdate()
 {
 }
 
-void BaseClothes::SetLocalPoints()
-{
-	pointManager_.SetLocalPoints(spriteId_, baseLocalPoints_, length_);
-}
-
-void BaseClothes::SetPointsUpdate()
+void NotSlashClothes::SetPointsUpdate()
 {
 	collisionPoints.clear();
 
@@ -91,16 +76,49 @@ void BaseClothes::SetPointsUpdate()
 		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
 
 	auto p1
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][0]) * mat;
+		= Matrix::CreateTranslation(localPoints[0]) * mat;
 	auto p2
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][1]) * mat;
+		= Matrix::CreateTranslation(localPoints[1]) * mat;
 	auto p3
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][2]) * mat;
+		= Matrix::CreateTranslation(localPoints[2]) * mat;
 	auto p4
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][3]) * mat;
+		= Matrix::CreateTranslation(localPoints[3]) * mat;
 
 	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
 	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
 	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
 	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
+}
+
+void NotSlashClothes::SetLocalPoints()
+{
+	switch (spriteId_)
+	{
+	case SPRITE_ID::NOT_SLASH_CLOTHES_SPRITE: {
+		SetPoints01();
+		break;
+	}
+	case SPRITE_ID::NOT_SLASH_CLOTHES_02_SPRITE: {
+		SetPoints02();
+		break;
+	}
+	default:
+		break;
+	}
+}
+
+void NotSlashClothes::SetPoints01()
+{
+	localPoints.push_back(Vector3(-65, 0 + length_, 0));
+	localPoints.push_back(Vector3(-65, 90 + length_, 0));
+	localPoints.push_back(Vector3(65, 90 + length_, 0));
+	localPoints.push_back(Vector3(65, 0 + length_, 0));
+}
+
+void NotSlashClothes::SetPoints02()
+{
+	localPoints.push_back(Vector3(-65, 0 + length_, 0));
+	localPoints.push_back(Vector3(-65, 90 + length_, 0));
+	localPoints.push_back(Vector3(65, 90 + length_, 0));
+	localPoints.push_back(Vector3(65, 0 + length_, 0));
 }

@@ -28,7 +28,10 @@ public:
 	/// “®‰æ‚ÌÄ¶ˆÊ’u‚ğ•ÏX‚·‚é(/•b)
 	///</summary>
 	void Seek(const std::string& handle, float time);
+	
 
+
+	void Delete();
 	///<summary>
 	/// “®‰æ‚ÌŒ»İ‚ÌÄ¶ˆÊ’u‚ğó‚¯æ‚é(/•b)
 	///</summary>

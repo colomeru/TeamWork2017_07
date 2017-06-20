@@ -47,7 +47,7 @@ void MovieScene::Draw() const
 	movieView_.Draw();
 }
 
-bool MovieScene::IsEnd() const
+bool MovieScene::IsEnd() const  
 {
 	return isEnd_;
 }
@@ -59,6 +59,7 @@ Scene MovieScene::Next() const
 
 void MovieScene::End()
 {
+	movieView_.Delete();
 }
 
 void MovieScene::handleMessage(EventMessage message, void * param)

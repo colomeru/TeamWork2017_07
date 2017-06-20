@@ -301,5 +301,6 @@ enum CLOTHES_ID
 	HAIRBALL,			//毛玉
 	START_CLOTHES,		//スタート用の服
 	NOT_SHAKE_CLOTHES,	//揺れない服
-	NOT_SLASH_CLOTHES	//切れない服
+	NOT_SLASH_CLOTHES,	//切れない服
+	TEXT_CLOTHES,		//テキストの服
 };

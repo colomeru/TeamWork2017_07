@@ -10,6 +10,7 @@ enum class Scene
 	Tutorial,
 	GamePlay,
 	Credit,
+	Credit2,
 	Ending,
 	Movie
 };

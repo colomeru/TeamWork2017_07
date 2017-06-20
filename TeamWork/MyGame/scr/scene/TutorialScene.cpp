@@ -21,7 +21,7 @@
 #include"../actor/Field/Enemys/TutorialManager.h"
 
 static int maxTextCount[maxTutorialNum]{
-	2,
+	3,
 	1,
 	1
 };
@@ -191,6 +191,10 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 		break;
 	case EventMessage::GAME_CLEAR_FLAG:
 		break;
+	case EventMessage::LANE_CHANGE_FALL: {
+		UnLock(UnLockType::ChangeLaneFall);
+		break;
+	}
 	case EventMessage::TAPPER_DEAD:{
 		enemGenerator_->StartTapperResurrectTimer();
 		
@@ -293,6 +297,12 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 	}
 	case 1: {
 		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneUp, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
+		break;
+	}
+	case 2: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneFall, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
 		break;
 	}
 	default:

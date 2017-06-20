@@ -322,7 +322,6 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 		break;
 	}
 	case EventMessage::LANE_CHANGE_FALL: {
-		changeScreen_.Init(WindDir::DOWN);
 
 		break;
 	}

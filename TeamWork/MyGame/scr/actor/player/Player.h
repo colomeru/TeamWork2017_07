@@ -322,6 +322,8 @@ private:
 			if (changeType == LaneChangeType::LaneChange_Fall) {
 				nextVel_ = pendulumVect_ / 3;
 				pGrav_ *= 0.1f;
+
+				world_->sendMessage(EventMessage::LANE_CHANGE_FALL);
 			}
 		}
 	

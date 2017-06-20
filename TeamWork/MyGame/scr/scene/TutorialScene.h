@@ -21,6 +21,7 @@ public:
 	enum UnLockType {
 		ChangeLane,
 		ChangeLaneUp,
+		ChangeLaneFall,
 		BiteClothes,
 		PlayPendulum,
 		KillTapper,

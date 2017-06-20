@@ -16,6 +16,7 @@
 #include"PlayerDeadHead.h"
 #include"../../sound/sound.h"
 #include"../../cheat/CheatData.h"
+#include"PlayerFallPin.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -1240,6 +1241,8 @@ void Player::CurPHeadLengPlus(float addPow) {
 				//chainLock_ = false;
 				chainAddLength_ += 2.f;
 				chainAddLengthMath_ += 2.f;
+				Vector2 toPos = pHeadPoses_[trgNum] - position_;
+				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_, pHeads_[trgNum]->GetPosition(), toPos));
 				pHeadDead_[trgNum] = true;
 			}
 			else {
@@ -1465,6 +1468,8 @@ void Player::BiteUpdate()
 			if (slipCount_ <= 0.f) {
 				SetMode(MODE_SLIP);
 				//首を殺して
+				Vector2 toPos = pHeadPoses_[currentHead_]- position_;
+				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_,pHeads_[currentHead_]->GetPosition(),toPos));
 				pHeadDead_[currentHead_] = true;
 				//スティックをロックする
 				isCanNextHeadRot = false;

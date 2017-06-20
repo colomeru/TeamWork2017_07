@@ -85,6 +85,8 @@ public:
 		return stageNum == 0;
 	}
 	void InputSelectStage();
+	void ResetBG();
+
 private:
 	int stageNum = 0; //ステージ番号
 	const float height = WINDOW_HEIGHT / 4.0f * 2.0f; //パネル１のy座標

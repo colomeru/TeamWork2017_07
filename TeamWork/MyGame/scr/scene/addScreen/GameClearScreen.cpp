@@ -188,6 +188,11 @@ void GameClearScreen::ScoreUpdate()
 			isShowScore_ = false;
 		}
 	}
+	if (isKeyOnceScore_) {
+		fscore_ = score_;
+		fheadCount_ = headCount_;
+
+	}
 	dstar_.Update();
 
 	if (dstar_.GetStarFull())isKeyOnceScore_ = true;

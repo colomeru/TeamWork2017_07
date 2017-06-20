@@ -1178,13 +1178,13 @@ void Player::curPHeadSlip(bool isSlip) {
 }
 
 void Player::PHeadChanger(int rot) {
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
+	if(!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
 
 	Vector2 addVec = position_- pHeadPoses_[currentHead_];
 	addVec=addVec.Normalize()*32.f;
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f, addVec));
+	if (!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f, addVec));
 
 	Sound::GetInstance().PlaySE(SE_ID::CHANGE_HEAD_SE);
 	//StartPendulum();
@@ -1291,6 +1291,7 @@ void Player::CurPHeadLengPlus(float addPow) {
 
 void Player::CreateBiteEffect()
 {
+	if (pHeadDead_[currentHead_])return;
 	Vector2 vel = pHeads_[currentHead_]->GetPosition() - position_;
 	vel = vel.Normalize();
 	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerBiteEffect>(world_, pHeads_[currentHead_]->GetPosition() + vel * 30));
@@ -1355,7 +1356,6 @@ void Player::ShootUpdate()
 			CurPHeadLengPlus(headShotPower);
 		}
 		else {
-			//pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		}
 
@@ -1418,7 +1418,7 @@ void Player::BiteUpdate()
 				Sound::GetInstance().PlaySE(SE_ID::CREATE_SWORD_SE);
 			}
 		}
-		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
+		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM5) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 				//pSword_->SetUseSword(true);
 				SetNextLane(1);
@@ -1432,7 +1432,7 @@ void Player::BiteUpdate()
 		}
 
 //		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-		if (GamePad::GetInstance().ButtonStateUp(PADBUTTON::NUM2) && Keyboard::GetInstance().KeyStateUp(KEYCODE::N)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
 			//if (GetIsBiteMode()) {
 			SetMode(MODE_FALL);
 			//Head‚ðŒð‘ã‚·‚é

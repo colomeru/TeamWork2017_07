@@ -104,7 +104,7 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
-	changeCount_ = 120;
+	changeCount_ = 600;
 	currentStage_ = CheatData::getInstance().GetSelectStage();
 
 	isEnd_ = false;

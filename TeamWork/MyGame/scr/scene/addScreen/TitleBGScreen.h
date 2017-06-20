@@ -14,7 +14,13 @@ private:
 		SPRITE_ID drawID;
 		int laneNum;
 		int lanePos;
-		TitleLaneClothes(SPRITE_ID id, int num, int pos) :drawID(id), laneNum(num), lanePos(pos) {
+		float rotate;
+		float maxAngle;
+		float windPower;
+		float sinCount_;
+		Vector2 clothOrigin;
+		TitleLaneClothes(SPRITE_ID id, int num, int pos,float rotate,float maxAngle,float windPower,const Vector2& origin) :drawID(id),maxAngle(maxAngle),windPower(windPower), laneNum(num), lanePos(pos), rotate(rotate),clothOrigin(origin) {
+			sinCount_ = 0.f;
 		}
 	};
 
@@ -30,7 +36,8 @@ public:
 	
 private:
 	void WhiteScreenMinus();
-	void DrawClothes(int laneNum, int xpos,SPRITE_ID clothestype)const;
+	void DrawClothes(const TitleLaneClothes& clothes)const;
+
 private:
 	
 	int currentStage_;
@@ -44,7 +51,6 @@ private:
 	float whiteScreenAlphaAdd_;
 	std::map<int, SPRITE_ID> BGList_;
 	int lanePos_[3];
-	std::map<SPRITE_ID,int> clothesAddPos_;
 	std::vector<TitleLaneClothes> clothes_;
-	std::array<SPRITE_ID,2> clotheslist_;
+	std::array<SPRITE_ID,19> clotheslist_;
 };

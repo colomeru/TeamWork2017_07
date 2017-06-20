@@ -27,6 +27,4 @@ public:
 private:
 	Player* player_;
 	Actor* player_Head_;
-	Vector2 basePos_;
-	float timeCount_;
 };

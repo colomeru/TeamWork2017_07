@@ -22,8 +22,13 @@ public:
 	virtual void FastUpdate()override {
 		isUpdate_ = true;
 	}
-	virtual bool CamMoveUpdate() {
-		//laneChangeFunctionMap_[world_->GetKeepDatas().nextLane_]();
+	virtual bool CamMoveUpdate() override{
+		if (0 > world_->GetKeepDatas().nextLane_) {
+			CamMoveUp();
+		}
+		else {
+			CamMoveDown();
+		}
 		return true;
 	}
 	virtual void LateUpdate() {

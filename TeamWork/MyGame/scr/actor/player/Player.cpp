@@ -1549,10 +1549,10 @@ void Player::ClearUpdate()
 	}
 	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT)||isClearShoot_) {
 		if (!isClearShoot_) {
+			PHeadChanger();
 			isClearShoot_ = true;
 		}
 		//SetMode(MODE_FALL);
-		PHeadChanger();
 		//pendulumVect_.x *= 0.98f;
 		pendulumVect_.y *= 0.98f;
 		pendulumVect_.y = max(50.f,pendulumVect_.y);

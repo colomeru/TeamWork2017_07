@@ -22,7 +22,8 @@ TweenObject::~TweenObject()
 
 void TweenObject::Update(const float deltaTime)
 {
-	updateFunc_(deltaTime);
+	if (!isEnd_)
+		updateFunc_(deltaTime);
 }
 
 bool TweenObject::IsEnd() const
@@ -147,6 +148,5 @@ void TweenObject::Invoke()
 	if (callback_ != nullptr)
 	{
 		callback_();
-		callback_ = nullptr;
 	}
 }

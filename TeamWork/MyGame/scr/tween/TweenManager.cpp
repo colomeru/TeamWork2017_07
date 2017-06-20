@@ -7,40 +7,40 @@ TweenManager::TweenManager() :
 	loopCount_(0),
 	updateType_(UpdateType::Common)
 {
-	tweenList_.clear();
+	Clear();
 	easeFuncMap_.clear();
 
-	easeFuncMap_[EaseType::Linear] = std::bind(&Easing::LinearFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInQuad] = std::bind(&Easing::EaseInQuadFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutQuad] = std::bind(&Easing::EaseOutQuadFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutQuad] = std::bind(&Easing::EaseInOutQuadFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInCubic] = std::bind(&Easing::EaseInCubicFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutCubic] = std::bind(&Easing::EaseOutCubicFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutCubic] = std::bind(&Easing::EaseInOutCubicFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInQuart] = std::bind(&Easing::EaseInQuartFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutQuart] = std::bind(&Easing::EaseOutQuartFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutQuart] = std::bind(&Easing::EaseInOutQuartFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInQuint] = std::bind(&Easing::EaseInQuintFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutQuint] = std::bind(&Easing::EaseOutQuintFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutQuint] = std::bind(&Easing::EaseInOutQuintFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInSine] = std::bind(&Easing::EaseInSineFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutSine] = std::bind(&Easing::EaseOutSineFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutSine] = std::bind(&Easing::EaseInOutSineFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInExpo] = std::bind(&Easing::EaseInExpoFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutExpo] = std::bind(&Easing::EaseOutExpoFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutExpo] = std::bind(&Easing::EaseInOutExpoFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInCirc] = std::bind(&Easing::EaseInCircFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutCirc] = std::bind(&Easing::EaseOutCircFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutCirc] = std::bind(&Easing::EaseInOutCircFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInElastic] = std::bind(&Easing::EaseInElasticFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutElastic] = std::bind(&Easing::EaseOutElasticFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::Linear]			 = std::bind(&Easing::LinearFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInQuad]		 = std::bind(&Easing::EaseInQuadFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutQuad]		 = std::bind(&Easing::EaseOutQuadFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutQuad]	 = std::bind(&Easing::EaseInOutQuadFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInCubic]		 = std::bind(&Easing::EaseInCubicFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutCubic]	 = std::bind(&Easing::EaseOutCubicFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutCubic]	 = std::bind(&Easing::EaseInOutCubicFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInQuart]		 = std::bind(&Easing::EaseInQuartFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutQuart]	 = std::bind(&Easing::EaseOutQuartFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutQuart]	 = std::bind(&Easing::EaseInOutQuartFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInQuint]		 = std::bind(&Easing::EaseInQuintFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutQuint]	 = std::bind(&Easing::EaseOutQuintFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutQuint]	 = std::bind(&Easing::EaseInOutQuintFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInSine]		 = std::bind(&Easing::EaseInSineFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutSine]		 = std::bind(&Easing::EaseOutSineFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutSine]	 = std::bind(&Easing::EaseInOutSineFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInExpo]		 = std::bind(&Easing::EaseInExpoFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutExpo]		 = std::bind(&Easing::EaseOutExpoFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutExpo]	 = std::bind(&Easing::EaseInOutExpoFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInCirc]		 = std::bind(&Easing::EaseInCircFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutCirc]		 = std::bind(&Easing::EaseOutCircFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutCirc]	 = std::bind(&Easing::EaseInOutCircFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInElastic]	 = std::bind(&Easing::EaseInElasticFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutElastic]	 = std::bind(&Easing::EaseOutElasticFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
 	easeFuncMap_[EaseType::EaseInOutElastic] = std::bind(&Easing::EaseInOutElasticFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInBack] = std::bind(&Easing::EaseInBackFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutBack] = std::bind(&Easing::EaseOutBackFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutBack] = std::bind(&Easing::EaseInOutBackFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInBounce] = std::bind(&Easing::EaseInBounceFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseOutBounce] = std::bind(&Easing::EaseOutBounceFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
-	easeFuncMap_[EaseType::EaseInOutBounce] = std::bind(&Easing::EaseInOutBounceFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInBack]		 = std::bind(&Easing::EaseInBackFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutBack]		 = std::bind(&Easing::EaseOutBackFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutBack]	 = std::bind(&Easing::EaseInOutBackFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInBounce]	 = std::bind(&Easing::EaseInBounceFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseOutBounce]	 = std::bind(&Easing::EaseOutBounceFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
+	easeFuncMap_[EaseType::EaseInOutBounce]  = std::bind(&Easing::EaseInOutBounceFunc, ease_, std::placeholders::_1, std::placeholders::_2, std::placeholders::_3, std::placeholders::_4, std::placeholders::_5);
 }
 
 TweenManager::~TweenManager()
@@ -133,11 +133,6 @@ void TweenManager::StopAll()
 		ease->Stop();
 }
 
-void TweenManager::Delay(const float delay, const std::function<void()>& func, float * debug)
-{
-	Add(debug, Linear, 0.0f, 1.0f, delay, func);
-}
-
 void TweenManager::SetLoopCount(const int count)
 {
 	loopCount_ = count;
@@ -171,15 +166,6 @@ void TweenManager::Add(float* value, const EaseType& type, const float b, const 
 			return;
 		}
 	}
-	//for (auto& e : tweenList_)
-	//{
-	//	if (e->GetValuePointer() == value && value != nullptr)
-	//	{
-	//		e = tweenPtr;
-	//		return;
-	//	}
-	//}
-	//tweenList_.push_back(tweenPtr);
 }
 
 void TweenManager::Add(Vector2 * value, const EaseType & type, const Vector2 & b, const Vector2 & c, const float d, const std::function<void()>& callback, const float s)
@@ -266,6 +252,46 @@ void TweenManager::LoopOnce(float * value, const EaseType & type, const float b,
 	ResetOption();
 }
 
+void TweenManager::LoopOnce(Vector2 * value, const EaseType & type, const Vector2 & b, const Vector2 & c, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = 1;
+	updateType_ = UpdateType::Loop;
+	Add(value, type, b, c, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopOnce(Vector3 * value, const EaseType & type, const Vector3 & b, const Vector3 & c, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = 1;
+	updateType_ = UpdateType::Loop;
+	Add(value, type, b, c, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopOnce(const EaseType & type, float * from, const float to, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = 1;
+	updateType_ = UpdateType::Loop;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopOnce(const EaseType & type, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = 1;
+	updateType_ = UpdateType::Loop;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopOnce(const EaseType & type, Vector3 * from, const Vector3 & to, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = 1;
+	updateType_ = UpdateType::Loop;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
 void TweenManager::LoopCount(float * value, const EaseType & type, const int count, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
@@ -274,11 +300,91 @@ void TweenManager::LoopCount(float * value, const EaseType & type, const int cou
 	ResetOption();
 }
 
+void TweenManager::LoopCount(Vector2 * value, const EaseType & type, const int count, const Vector2 b, const Vector2 c, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = count;
+	updateType_ = UpdateType::Loop;
+	Add(value, type, b, c, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopCount(Vector3 * value, const EaseType & type, const int count, const Vector3 & b, const Vector3 & c, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = count;
+	updateType_ = UpdateType::Loop;
+	Add(value, type, b, c, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopCount(const EaseType & type, const int count, float * from, const float to, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = count;
+	updateType_ = UpdateType::Loop;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopCount(const EaseType & type, const int count, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = count;
+	updateType_ = UpdateType::Loop;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopCount(const EaseType & type, const int count, Vector3 * from, const Vector3 & to, const float d, const std::function<void()>& callback, const float s)
+{
+	loopCount_ = count;
+	updateType_ = UpdateType::Loop;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
 void TweenManager::LoopPingPong(float * value, const EaseType & type, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
 	updateType_ = UpdateType::PingPong;
 	Add(value, type, b, c, d, callback, s);
 	ResetOption();
+}
+
+void TweenManager::LoopPingPong(Vector2 * value, const EaseType & type, const Vector2 b, const Vector2 c, const float d, const std::function<void()>& callback, const float s)
+{
+	updateType_ = UpdateType::PingPong;
+	Add(value, type, b, c, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopPingPong(Vector3 * value, const EaseType & type, const Vector3 & b, const Vector3 & c, const float d, const std::function<void()>& callback, const float s)
+{
+	updateType_ = UpdateType::PingPong;
+	Add(value, type, b, c, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopPingPong(const EaseType & type, float * from, const float to, const float d, const std::function<void()>& callback, const float s)
+{
+	updateType_ = UpdateType::PingPong;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopPingPong(const EaseType & type, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+{
+	updateType_ = UpdateType::PingPong;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::LoopPingPong(const EaseType & type, Vector3 * from, const Vector3 & to, const float d, const std::function<void()>& callback, const float s)
+{
+	updateType_ = UpdateType::PingPong;
+	Add(from, type, *from, to - *from, d, callback, s);
+	ResetOption();
+}
+
+void TweenManager::Delay(const float delay, const std::function<void()>& func, float * debug)
+{
+	Add(debug, Linear, 0.0f, 1.0f, delay, func);
 }
 
 bool TweenManager::Cancel(const float * value)

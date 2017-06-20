@@ -1,6 +1,9 @@
 #pragma once
 #include "../StageGenerator.h"
+#include "../../game/ID.h"
 #include <queue>
+#include <vector>
+#include <map>
 
 class Stage1 : public StageGenerator
 {
@@ -18,8 +21,8 @@ public:
 	virtual Vector2 GetStageSize() const override {
 		return stageSize_;
 	}
-	void CreateClothes();
-private:
+	virtual void CreateClothes();
+protected:
 	//ƒsƒ“’Ç‰ÁŠÖ”
 	void Pin_Add(int i, int j, int data, int laneNum);
 	//•’Ç‰ÁŠÖ”
@@ -27,7 +30,8 @@ private:
 	//ƒS[ƒ‹’Ç‰ÁŠÖ”i‚Qí—Ş‚ÌƒS[ƒ‹j
 	void GoalClothes_Add(int i, int j, int data, int laneNum);
 
-private:
+protected:
 	std::queue<bool> pin_list;
 	int hairballCnt_;
+	std::map<CLOTHES_ID, std::vector<SPRITE_ID>> spriteIdMap_;
 };

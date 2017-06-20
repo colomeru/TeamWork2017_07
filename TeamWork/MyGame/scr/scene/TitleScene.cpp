@@ -72,7 +72,7 @@ void TitleScene::Update()
 	// XV
 	// I—¹
 	/*Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
-	Camera::GetInstance().Target.Set(Vector3(0,0,0));
+	Camera::GetInstance().Target.Set(Vector3(0,0 ,0));
 	Camera::GetInstance().Update();
 	*/
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {

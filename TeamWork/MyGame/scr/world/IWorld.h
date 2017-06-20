@@ -55,4 +55,5 @@ public:
 	virtual bool GetIsFreeCamY_()const=0;
 	virtual void UpdateDrawPos() = 0;
 	virtual Matrix& GetChangeInv() = 0;
+	virtual void SetMaxSize(int size) = 0;
 };

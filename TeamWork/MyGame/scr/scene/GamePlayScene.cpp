@@ -159,6 +159,7 @@ void GamePlayScene::Initialize()
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
 
+	world_->SetMaxSize((int)stageLen_-WINDOW_WIDTH/2);
 
 	//Camera::GetInstance().SetRange(0.f, 1000.f);
 	//Camera::GetInstance().SetViewAngle(60.f);
@@ -410,10 +411,18 @@ void GamePlayScene::baseUpdate()
 
 void GamePlayScene::pauseUpdate()
 {
-	if (pauseScreen_.Update(nextScene_)) {
+	PauseScreen::returnGameType backType;
+	if (pauseScreen_.Update(nextScene_, backType)) {
 		if (nextScene_ == Scene::GamePlay) {
-			setNextMode(1);
-			TweenManager::GetInstance().Play();
+			if (backType == PauseScreen::returnGameType::Resume) {
+				setNextMode(1);
+				TweenManager::GetInstance().Play();
+			}
+			else {
+				FadePanel::GetInstance().AddCollBack([=]() { End(); Initialize(); });
+				FadePanel::GetInstance().FadeOut();
+
+			}
 		}
 		else {
 			//isEnd_ = true;

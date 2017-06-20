@@ -149,7 +149,9 @@ public:
 	virtual void UpdateDrawPos() {
 		actors_.DrawUpdate();
 	}
-
+	virtual void SetMaxSize(int size) override{
+		maxSize_ = size;
+	}
 private:
 	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
 	{
@@ -166,6 +168,8 @@ private:
 	}
 
 private:
+	int maxSize_;
+
 	float camShootSpd_;
 	//カメラ更新用のUpdateへ移行する
 	bool isChangeCam_;

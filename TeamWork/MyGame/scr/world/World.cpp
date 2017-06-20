@@ -4,7 +4,7 @@
 #include"../Def.h"
 
 // コンストラクタ
-World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isLockedCamY_(true), unlockYPos_(0.0f)
+World::World() :targetAct_(nullptr), keepDatas_(), isChangeCam_(false), addNum_(0),inv_(), isChangeFrame_(false), camShootSpd_(0.f), isLockedCamY_(true), unlockYPos_(0.0f),maxSize_(999999)
 {
 	updateFunctionMap_[false] = std::bind(&WorldActor::Update, &actors_);
 	updateFunctionMap_[true] = std::bind(&WorldActor::ChangeLaneUpdate, &actors_);
@@ -182,7 +182,7 @@ void World::inv(const Matrix & mat)
 	playerMat = mat;
 
 	//最大最小値の指定(0,999999は後で消そう)
-	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, 0, 999999);
+	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, 0, maxSize_);
 	float clampPosY = MathHelper::Clamp((int)playerMat.Translation().y, -10000, 999999);
 
 	//if (scrool.scroolJudge.x == 0)

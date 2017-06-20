@@ -43,7 +43,7 @@ void SceneManager::Draw() const
 	currentScene_->Draw();
 	FadePanel::GetInstance().Draw();
 
-	if (BuildMode > 0)
+	if (BuildMode == 1)
 	{
 		DrawFormatString(0, WINDOW_HEIGHT - 20, GetColor(255, 255, 255), "FPS:[%0.1f]", FPS::GetFPS);
 		DrawFormatString(0, WINDOW_HEIGHT - 40, GetColor(255, 255, 255), "TIME_TO_LEAVE[%f]", timer_);

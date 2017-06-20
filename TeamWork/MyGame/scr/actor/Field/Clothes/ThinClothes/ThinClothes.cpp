@@ -18,6 +18,7 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	parameter_.ClothSegmentPoints_.push_back(Vector2(0.f, 100.f));
 	parameter_.ClothSegmentPoints_.push_back(Vector2(100.f, 100.f));
 
+	spriteId_ = SPRITE_ID::TOWEL_CLOTHES_SPRITE;
 	laneNum_ = laneNum;
 
 	position_ = pos;
@@ -64,31 +65,9 @@ void ThinClothes::Update()
 
 void ThinClothes::Draw() const
 {
-	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = drawPos_;
-	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
-
-	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
-	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
-	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
-	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
-	//auto seg = Vector3(+sizeVec.x, 0)*is;
-	//ç∂è„,âEè„,ç∂â∫,âEâ∫
-	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
-	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
-	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
-	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
-	//DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-	//DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(204, 204, 204), TRUE);
-	//Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2 + Vector2(0, 50);
-	//Sprite::GetInstance().Draw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, crcOrigin, spriteAlpha_, Vector2::One, angle_);
+	auto drawPos = GetDrawPosVect(position_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2;
-	Sprite::GetInstance().SplitDraw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos_, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().SplitDraw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	DrawClothesFeces();
 
 	if (BuildMode != 1) return;

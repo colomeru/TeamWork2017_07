@@ -1321,11 +1321,11 @@ void Player::FallUpdate()
 			isCanNextHeadRot = true;
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
-		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 		
@@ -1346,12 +1346,12 @@ void Player::ShootUpdate()
 {
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
-		if (Keyboard::GetInstance().KeyTriggerUp(KEYCODE::N)) {
+		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)|| GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
 			//else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 		}
-		else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+		else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
 			CurPHeadLengPlus(headShotPower);
 		}
 		else {
@@ -1359,7 +1359,7 @@ void Player::ShootUpdate()
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
@@ -1391,15 +1391,8 @@ void Player::ShootEndUpdate()
 			isCanNextHeadRot = true;
 		}
 
-		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
-		}
-		else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
-		}
-		else {
-			//	playerMode_ = MODE_FALL;
-		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			SetMode(MODE_SHOOT);// playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
@@ -1438,7 +1431,8 @@ void Player::BiteUpdate()
 			}
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+//		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonStateUp(PADBUTTON::NUM2) && Keyboard::GetInstance().KeyStateUp(KEYCODE::N)) {
 			//if (GetIsBiteMode()) {
 			SetMode(MODE_FALL);
 			//Head‚ðŒð‘ã‚·‚é

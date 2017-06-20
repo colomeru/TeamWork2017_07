@@ -103,8 +103,12 @@ CollisionParameter CollisionFunction::IsHit_PSword_Clothes(const Actor & sprite1
 	std::vector<Vector2> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite2))->GetCollisionPoints();
 	if (collisionPoints.empty()) return CollisionParameter(COL_ID::BOX_SEGMENT_COL, false, Vector2());
 
-	Segment seg1;
 	auto player_Sword = static_cast<Player_Sword*>(const_cast<Actor*>(&sprite1));
+	auto sword_Parent = static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()));
+	if(!sword_Parent->GetIsSwordActive()) 	
+		return CollisionParameter(COL_ID::PSWORD_CLOTHES_COL, false);
+
+	Segment seg1;
 	auto startPos = player_Sword->GetSwordStartPos();
 	auto endPos = player_Sword->GetSwordEndPos();
 	MyCol::CreateSegment(&seg1, startPos, endPos);
@@ -121,8 +125,7 @@ CollisionParameter CollisionFunction::IsHit_PSword_Clothes(const Actor & sprite1
 	bool isHitCheck = false;
 	for (int i = 0; i < 3; i++) {
 		if (MyCol::Col_Segment_Segment(seg1, seg2[i], segPoint)) {
-			auto sword_Parent = static_cast<Player*>(const_cast<Actor*>(player_Sword->GetParent()));
-			if(sword_Parent->GetPlayerSwordAngle() > 90 && sword_Parent->GetIsSwordActive())
+			if(sword_Parent->GetPlayerSwordAngle() > 90)
 				isHitCheck = true;
 		}
 	}

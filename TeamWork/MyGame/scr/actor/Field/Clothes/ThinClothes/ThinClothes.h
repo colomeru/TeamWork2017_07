@@ -8,7 +8,7 @@ public:
 	//コンストラクタ
 	ThinClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin = false);
 	//デストラクタ
-	~ThinClothes();
+	virtual ~ThinClothes() override;
 	//更新
 	virtual void Update() override;
 	//描画

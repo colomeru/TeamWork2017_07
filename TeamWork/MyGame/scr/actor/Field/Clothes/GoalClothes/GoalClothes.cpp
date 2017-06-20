@@ -39,9 +39,10 @@ void GoalClothes::Update()
 
 void GoalClothes::Draw() const
 {
+	auto drawPos = GetDrawPosVect(position_);
 	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos_ - Vector2(0, 200), crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos - Vector2(0, 200), crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
 	if (BuildMode != 1) return;
 	//if (!collisionPoints.empty()) {

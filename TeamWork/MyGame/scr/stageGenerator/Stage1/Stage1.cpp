@@ -9,6 +9,9 @@
 #include "../../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
 #include "../../actor/Field/Clothes/GoalClothes/GoalClothes.h"
 #include "../../actor/Field/Clothes/GoalClothes/MoveGoalClothes.h"
+#include "../../actor/Field/Clothes/StartClothes/StartClothes.h"
+#include "../../actor/Field/Clothes/NotShakeClothes/NotShakeClothes.h"
+#include "../../actor/Field/Clothes/NotSlashClothes/NotSlashClothes.h"
 #include "../../actor/Field/ClothesPin.h"
 #include "../MyGame/scr/game/Random.h"
 
@@ -17,11 +20,29 @@ Stage1::Stage1(IWorld * world, std::string & fileName, int hairballCnt)
 	:StageGenerator(world, fileName)
 	, hairballCnt_(hairballCnt)
 {
+	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_SPRITE);
+	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_02_SPRITE);
+	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_03_SPRITE);
+	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_04_SPRITE);
+	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_05_SPRITE);
+	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_06_SPRITE);
+	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_07_SPRITE);
+
+	spriteIdMap_[CLOTHES_ID::FLUFFY_CLOTHES].push_back(SPRITE_ID::FLUFFY_SPRITE);
+	spriteIdMap_[CLOTHES_ID::FLUFFY_CLOTHES].push_back(SPRITE_ID::FLUFFY_02_SPRITE);
+	spriteIdMap_[CLOTHES_ID::FLUFFY_CLOTHES].push_back(SPRITE_ID::FLUFFY_03_SPRITE);
+
+	spriteIdMap_[CLOTHES_ID::NOT_SHAKE_CLOTHES].push_back(SPRITE_ID::NOT_SHAKE_CLOTHES_SPRITE);
+	spriteIdMap_[CLOTHES_ID::NOT_SHAKE_CLOTHES].push_back(SPRITE_ID::NOT_SHAKE_CLOTHES_02_SPRITE);
+
+	spriteIdMap_[CLOTHES_ID::NOT_SLASH_CLOTHES].push_back(SPRITE_ID::NOT_SLASH_CLOTHES_SPRITE);
+	spriteIdMap_[CLOTHES_ID::NOT_SLASH_CLOTHES].push_back(SPRITE_ID::NOT_SLASH_CLOTHES_02_SPRITE);
 }
 
 //デストラクタ
 Stage1::~Stage1()
 {
+	spriteIdMap_.clear();
 }
 
 //ステージ読み込み
@@ -38,6 +59,14 @@ void Stage1::AddStage()
 	auto col = csvReader_.columns();		//全体の列数
 	int laneNum = 0;
 	stageSize_ = Vector2(col, row) * STAGE_TIP_SIZE;
+
+	//スタートの服の生成
+	world_->Add(ACTOR_ID::STAGE_ACTOR,std::make_shared<StartClothes>(
+		world_, 
+		CLOTHES_ID::START_CLOTHES, 
+		world_->GetKeepDatas().playerLane_, 
+		Vector2(STAGE_TIP_SIZE, 0), 
+		0.5f, false));
 
 	//csvの行(row)と列(col)から位置を出し、オブジェクト判別し、生成
 	for (int i = 0; i < row; i++) {
@@ -122,8 +151,10 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 	switch (data)
 	{
 	case 1: {
+		int sRand = Random::GetInstance().Range(0, spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].size());
 		float weight = Random::GetInstance().Range(0.0f, 1.5f);
-		auto base = std::make_shared<BaseClothes>(world_, CLOTHES_ID::BASE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, pin_list.front());
+		auto base = std::make_shared<BaseClothes>(
+			world_, CLOTHES_ID::BASE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, spriteIdMap_[CLOTHES_ID::BASE_CLOTHES][sRand], pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, base);
 		if(pin_list.front())
 			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), base.get(), base->GetFulcrum()));
@@ -153,8 +184,10 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 5: {
+		int sRand = Random::GetInstance().Range(0, spriteIdMap_[CLOTHES_ID::FLUFFY_CLOTHES].size());
 		float weight = Random::GetInstance().Range(0.0f, 1.5f);
-		auto fluffy = std::make_shared<FluffyClothes>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, pin_list.front());
+		auto fluffy = std::make_shared<FluffyClothes>(
+			world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, spriteIdMap_[CLOTHES_ID::FLUFFY_CLOTHES][sRand], pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, fluffy);
 		if (pin_list.front())
 			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), fluffy.get(), fluffy->GetFulcrum()));
@@ -167,6 +200,26 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		world_->Add(ACTOR_ID::STAGE_ACTOR, thin);
 		if (pin_list.front())
 			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), thin.get(), thin->GetFulcrum()));
+		pin_list.pop();
+		break;
+	}	
+	case 7: {
+		int sRand = Random::GetInstance().Range(0, spriteIdMap_[CLOTHES_ID::NOT_SHAKE_CLOTHES].size());
+		auto notShake = std::make_shared<NotShakeClothes>(
+			world_, CLOTHES_ID::NOT_SHAKE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, 0.0f, spriteIdMap_[CLOTHES_ID::NOT_SHAKE_CLOTHES][sRand], pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, notShake);
+		if (pin_list.front())
+			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), notShake.get(), notShake->GetFulcrum()));
+		pin_list.pop();
+		break;
+	}
+	case 8: {
+		int sRand = Random::GetInstance().Range(0, spriteIdMap_[CLOTHES_ID::NOT_SLASH_CLOTHES].size());
+		auto notSlash = std::make_shared<NotSlashClothes>(
+			world_, CLOTHES_ID::NOT_SLASH_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, 0.0f, spriteIdMap_[CLOTHES_ID::NOT_SLASH_CLOTHES][sRand], pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, notSlash);
+		if (pin_list.front())
+			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), notSlash.get(), notSlash->GetFulcrum()));
 		pin_list.pop();
 		break;
 	}

@@ -72,8 +72,9 @@ void Hanger::Draw() const
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
 	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
 
+	auto drawPos = GetDrawPosVect(position_);
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos_, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
 	if (BuildMode != 1) return;
 	DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));

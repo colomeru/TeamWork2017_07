@@ -7,7 +7,7 @@ public:
 	//コンストラクタ
 	ClothesPin(IWorld* world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum);
 	//デストラクタ
-	~ClothesPin();
+	virtual ~ClothesPin() override;
 	//更新
 	virtual void Update() override;
 	//描画

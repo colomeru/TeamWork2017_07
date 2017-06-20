@@ -6,6 +6,14 @@
 #include <vector>
 #include <map>
 
+enum CuttingState
+{
+	Normal,					//通常
+	RightUpSlant,			//右斜め上に向かって切れてる
+	LeftUpSlant,			//左斜め上に向かって切れてる
+};
+
+
 class Clothes : public Actor
 {
 protected:
@@ -20,18 +28,11 @@ protected:
 		END_WIND,				//風が終了
 	};
 
-	enum ClothesCuttingState
-	{
-		Normal,					//通常
-		RightUpSlant,			//右斜め上に向かって切れてる
-		LeftUpSlant,			//左斜め上に向かって切れてる
-	};
-
 public:
 	//コンストラクタ
 	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight);
 	//デストラクタ
-	virtual ~Clothes();
+	virtual ~Clothes() override;
 	//更新
 	virtual void Update() = 0;
 	//描画
@@ -54,7 +55,7 @@ public:
 		return collisionPoints;
 	}
 	//切断状態の取得
-	ClothesCuttingState GetCuttingState() {
+	CuttingState GetCuttingState() {
 		return cuttingState_;
 	}
 	//画像のコマ番号の取得
@@ -74,15 +75,15 @@ public:
 	//強い風によるプレイヤーへの作用
 	void WindSwing();
 	//服の当たり判定の設定
-	void SetPointsUpdate();
+	virtual void SetPointsUpdate();
 	//切断状態による当たり判定のポイントの設定
-	void SetLocalPoints();
+	virtual void SetLocalPoints();
 	//服に付着した鳥の糞の更新
 	void UpdateClothesFeces();
 	//服に付着した鳥の糞の描画
 	void DrawClothesFeces() const;
 
-	//頭を服に同期させる振り子
+	//プレイヤーを服に同期させる振り子
 	void Synchronize();
 
 	//コピー禁止
@@ -95,8 +96,6 @@ private:
 	void SetNormal();
 	void SetRightUpSlant();
 	void SetLeftUpSlant();
-	//服のIDによるスプライトのID設定
-	void SetSpriteID();
 
 protected:
 	//衝突しているか
@@ -116,7 +115,7 @@ protected:
 	//服の状態
 	ClothesState clothesState_;
 	//服の切断状態
-	ClothesCuttingState cuttingState_;
+	CuttingState cuttingState_;
 	//
 	float dNumber_;
 	//服に付着した糞

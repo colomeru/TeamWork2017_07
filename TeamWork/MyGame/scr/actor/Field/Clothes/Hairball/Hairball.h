@@ -9,7 +9,7 @@ public:
 	//コンストラクタ
 	Hairball(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
 	//デストラクタ
-	~Hairball();
+	virtual ~Hairball() override;
 	//更新
 	virtual void Update() override;
 	//描画
@@ -22,6 +22,5 @@ public:
 	virtual void OnMessage(EventMessage message, void* param) override;
 
 private:
-	Player* player_;
 	Player_Head* player_Head_;
 };

@@ -8,15 +8,17 @@
 #include "DropClothes\DropClothes.h"
 #include "../../Effects/PlayerEffect/SwordAttackEffect.h"
 #include "../../../sound/sound.h"
+#include "../../player/Player_Head.h"
 
 //ÉRÉìÉXÉgÉâÉNÉ^
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	:Actor(world)
 	, isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
 	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f), count_(0)
-	, clothesState_(ClothesState::WINDLESS), cuttingState_(ClothesCuttingState::Normal), weight_(weight), drawFrame_(0)
+	, clothesState_(ClothesState::WINDLESS), cuttingState_(CuttingState::Normal), weight_(weight), drawFrame_(0)
 	, is_Droping_(false), clothesFeces_(nullptr), player_(nullptr)
 {
+	clothes_ID = clothes;
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
 	dNumber_ = 0.0f;
 
@@ -31,6 +33,7 @@ Clothes::~Clothes()
 	Sound::GetInstance().StopSE(SE_ID::SLASH_SE);
 	localPoints.clear();
 	collisionPoints.clear();
+	player_ = nullptr;
 }
 
 //ìñÇΩÇËîªíËèàóù
@@ -53,14 +56,13 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::PLAYER_SWORD_ACTOR:
 	{
-		if (cuttingState_ != ClothesCuttingState::Normal) break;
+		if (cuttingState_ != CuttingState::Normal || clothes_ID == CLOTHES_ID::NOT_SLASH_CLOTHES) break;
 		int rand = Random::GetInstance().Range(0, 2);
 		switch (rand)
 		{
 		case 0: {
-			cuttingState_ = ClothesCuttingState::RightUpSlant;
+			cuttingState_ = CuttingState::RightUpSlant;
 			drawFrame_ = 1;
-			SetSpriteID();
 			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
 			world_->Add(
 				ACTOR_ID::CLOTHES_DROPING_ACTOR,
@@ -71,9 +73,8 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 			break;
 		}
 		case 1: {
-			cuttingState_ = ClothesCuttingState::LeftUpSlant;
+			cuttingState_ = CuttingState::LeftUpSlant;
 			drawFrame_ = 2;
-			SetSpriteID();
 			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
 			world_->Add(
 				ACTOR_ID::CLOTHES_DROPING_ACTOR,
@@ -96,6 +97,10 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 		//world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
 		is_Droping_ = true;
 		other.Dead();
+		if (player_ == nullptr || parent_ == nullptr) return;
+		player_->SetMode(MODE_SLIP);
+		player_ = nullptr;
+		parent_ = nullptr;
 		break;
 	}
 	}
@@ -159,9 +164,6 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 	//ñÄéC
 	rot_ *= friction_;
-
-	//äpë¨ìxÇÃêßå¿
-	//rot_spd_ = MathHelper::Clamp(rot_spd_, -2.8f, 2.8f);
 
 	//äpìxÇ…äpë¨ìxÇâ¡éZ
 	rot_ += rot_spd_;
@@ -280,17 +282,17 @@ void Clothes::SetLocalPoints()
 	localPoints.clear();
 	switch (cuttingState_)
 	{
-	case ClothesCuttingState::Normal: {
+	case CuttingState::Normal: {
 		SetNormal();
 		break;
 	}
-	case ClothesCuttingState::RightUpSlant: {
+	case CuttingState::RightUpSlant: {
 		clothesFeces_ = nullptr;
 		is_Droping_ = false;
 		SetRightUpSlant();
 		break;
 	}
-	case ClothesCuttingState::LeftUpSlant: {
+	case CuttingState::LeftUpSlant: {
 		clothesFeces_ = nullptr;
 		is_Droping_ = false;
 		SetLeftUpSlant();
@@ -332,13 +334,6 @@ void Clothes::SetNormal()
 		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
-	case CLOTHES_ID::BASE_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
 	case CLOTHES_ID::GUM_CLOTHES: {
 		localPoints.push_back(Vector3(-60, 0 + length_, 0));
 		localPoints.push_back(Vector3(-60, 90 + length_, 0));
@@ -346,14 +341,14 @@ void Clothes::SetNormal()
 		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
-	case CLOTHES_ID::FLUFFY_CLOTHES: {
-		localPoints.push_back(Vector3(-90, -20 + length_, 0));
-		localPoints.push_back(Vector3(-90, 90 + length_, 0));
-		localPoints.push_back(Vector3(90, 90 + length_, 0));
-		localPoints.push_back(Vector3(90, -20 + length_, 0));
+	case CLOTHES_ID::THIN_CLOTHES: {
+		localPoints.push_back(Vector3(-60, 0 + length_, 0));
+		localPoints.push_back(Vector3(-60, 90 + length_, 0));
+		localPoints.push_back(Vector3(60, 90 + length_, 0));
+		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
-	case CLOTHES_ID::THIN_CLOTHES: {
+	case CLOTHES_ID::START_CLOTHES: {
 		localPoints.push_back(Vector3(-60, 0 + length_, 0));
 		localPoints.push_back(Vector3(-60, 90 + length_, 0));
 		localPoints.push_back(Vector3(60, 90 + length_, 0));
@@ -376,13 +371,6 @@ void Clothes::SetRightUpSlant()
 		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
-	case CLOTHES_ID::BASE_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
 	case CLOTHES_ID::GUM_CLOTHES: {
 		localPoints.push_back(Vector3(-60, 0 + length_, 0));
 		localPoints.push_back(Vector3(-60, 50 + length_, 0));
@@ -390,14 +378,14 @@ void Clothes::SetRightUpSlant()
 		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
-	case CLOTHES_ID::FLUFFY_CLOTHES: {
-		localPoints.push_back(Vector3(-90, -20 + length_, 0));
-		localPoints.push_back(Vector3(-90, 50 + length_, 0));
-		localPoints.push_back(Vector3(90, 10 + length_, 0));
-		localPoints.push_back(Vector3(90, -20 + length_, 0));
+	case CLOTHES_ID::THIN_CLOTHES: {
+		localPoints.push_back(Vector3(-60, 0 + length_, 0));
+		localPoints.push_back(Vector3(-60, 50 + length_, 0));
+		localPoints.push_back(Vector3(60, 30 + length_, 0));
+		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
-	case CLOTHES_ID::THIN_CLOTHES: {
+	case CLOTHES_ID::START_CLOTHES: {
 		localPoints.push_back(Vector3(-60, 0 + length_, 0));
 		localPoints.push_back(Vector3(-60, 50 + length_, 0));
 		localPoints.push_back(Vector3(60, 30 + length_, 0));
@@ -420,25 +408,11 @@ void Clothes::SetLeftUpSlant()
 		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
-	case CLOTHES_ID::BASE_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
 	case CLOTHES_ID::GUM_CLOTHES: {
 		localPoints.push_back(Vector3(-60, 0 + length_, 0));
 		localPoints.push_back(Vector3(-60, 30 + length_, 0));
 		localPoints.push_back(Vector3(60, 50 + length_, 0));
 		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::FLUFFY_CLOTHES: {
-		localPoints.push_back(Vector3(-90, -20 + length_, 0));
-		localPoints.push_back(Vector3(-90, 10 + length_, 0));
-		localPoints.push_back(Vector3(90, 40 + length_, 0));
-		localPoints.push_back(Vector3(90, -20 + length_, 0));
 		break;
 	}
 	case CLOTHES_ID::THIN_CLOTHES: {
@@ -448,29 +422,16 @@ void Clothes::SetLeftUpSlant()
 		localPoints.push_back(Vector3(60, 0 + length_, 0));
 		break;
 	}
+	case CLOTHES_ID::START_CLOTHES: {
+		localPoints.push_back(Vector3(-60, 0 + length_, 0));
+		localPoints.push_back(Vector3(-60, 30 + length_, 0));
+		localPoints.push_back(Vector3(60, 50 + length_, 0));
+		localPoints.push_back(Vector3(60, 0 + length_, 0));
+		break;
+	}
 	default:
 		break;
 	}
 
 }
 
-void Clothes::SetSpriteID()
-{
-	switch (clothes_ID)
-	{
-	case GUM_CLOTHES: {
-		spriteId_ = SPRITE_ID::GUM_SPRITE;
-		break;
-	}
-	case FLUFFY_CLOTHES: {
-		spriteId_ = SPRITE_ID::FLUFFY_SPRITE;
-		break;
-	}
-	case THIN_CLOTHES: {
-		spriteId_ = SPRITE_ID::TOWEL_CLOTHES_SPRITE;
-		break;
-	}
-	default:
-		break;
-	}
-}

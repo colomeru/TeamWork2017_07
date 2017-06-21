@@ -11,7 +11,7 @@
 #include "addScreen\BackgroundScreen.h"
 #include "addScreen/TutorialTextScreen.h"
 
-static const int maxTutorialNum = 3;
+static const int maxTutorialNum = 2;
 
 class TutorialManager;
 
@@ -27,6 +27,7 @@ public:
 		KillTapper,
 		UseSword,
 		StartWind,
+		ChangeHead,
 		Dummy,
 	};
 public:
@@ -67,7 +68,6 @@ private:
 	//各チュートリアルステージ用のセット関数、テキストが変わるたびに呼ぶこと
 	void SetLock1(int tutorialLockNum);
 	void SetLock2(int tutorialLockNum);
-	void SetLock3(int tutorialLockNum);
 
 private:
 	void ChangeNextTutorial();
@@ -96,7 +96,7 @@ private:
 
 	std::string StageNameList_[maxTutorialNum];
 	
-	std::string TextAddList_[maxTutorialNum];
+	std::string TextAddList_[4];
 
 	float dummy_;
 

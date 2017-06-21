@@ -1182,6 +1182,8 @@ void Player::PHeadChanger(int rot) {
 	if(!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
+	
+	world_->sendMessage(EventMessage::CHANGE_HEAD);
 
 	Vector2 addVec = position_- pHeadPoses_[currentHead_];
 	addVec=addVec.Normalize()*32.f;

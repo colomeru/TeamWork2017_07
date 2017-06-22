@@ -71,6 +71,8 @@ private:
 
 private:
 	void ChangeNextTutorial();
+
+	void ResetLockNum();
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;

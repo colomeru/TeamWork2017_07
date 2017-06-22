@@ -58,13 +58,13 @@ TutorialScene::~TutorialScene()
 void TutorialScene::Initialize()
 {
 	currentTutorialNum_ = 0;
+	ResetLockNum();
 	SceneInit();
 }
 
 void TutorialScene::SceneInit()
 {
 
-	tutorialLockNum_ = 0;
 	isEnd_ = false;
 	world_->Initialize();
 
@@ -344,7 +344,12 @@ void TutorialScene::ChangeNextTutorial()
 		FadePanel::GetInstance().FadeOut();
 	}
 	else {
-		FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); SceneInit(); });
+		FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); ResetLockNum(); SceneInit(); });
 		FadePanel::GetInstance().FadeOut();
 	}
+}
+
+void TutorialScene::ResetLockNum()
+{
+	tutorialLockNum_ = 0;
 }

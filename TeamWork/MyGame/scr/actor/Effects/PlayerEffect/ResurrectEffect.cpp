@@ -1,4 +1,5 @@
 #include "ResurrectEffect.h"
+#include"../../../math/Vector2.h"
 
 ResurrectEffect::ResurrectEffect(IWorld * world, const Vector2& position, Actor* target) :
 	Effect(world, SPRITE_ID::RESURRECT_EFFECT_SPRITE,1),target_(target),addVec_(target->GetPosition()- position)
@@ -22,5 +23,5 @@ void ResurrectEffect::Update()
 void ResurrectEffect::Draw() const
 {
 	auto pos = GetDrawPosVect(position_);
-	effectMgr_.DrawEffect(pos);
+	effectMgr_.DrawEffect(pos,0,Vector2(2.f,2.f));
 }

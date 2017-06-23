@@ -182,7 +182,7 @@ bool MenuScreen::CheckNextStage(int sNum)
 //パターン１更新
 void MenuScreen::Pattern1Update()
 {
-	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP)) &&
 		backSelect == false) //戻るを選択していなければ
 	{
@@ -190,7 +190,7 @@ void MenuScreen::Pattern1Update()
 		timer_ = 0.0f;
 		dis = -150.0f;
 	}
-	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN)) &&
 		backSelect == false) //戻るを選択していなければ
 	{
@@ -213,14 +213,14 @@ void MenuScreen::Pattern1Update()
 	}
 
 	//左を押すと「戻る」にカーソルを移動
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT))
 	{
 		cursorPos = Vector2(CursorPos[1].x + 429.5f, CursorPos[1].y + 54.25f);
 		backSelect = true;
 	}
-	else if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
-		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
+	else if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) ||
+		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN))
 	{
@@ -477,21 +477,21 @@ void MenuScreen::Pattern2Draw() const
 //"上"が入力されたか
 bool MenuScreen::IsInputUp() const
 {
-	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP);
 }
 
 //"下"が入力されたか
 bool MenuScreen::IsInputDown() const
 {
-	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN);
 }
 
 //"左/A"のいずれかが入力されたか
 bool MenuScreen::IsInputLeft() const
 {
-	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1);
 }
@@ -499,7 +499,7 @@ bool MenuScreen::IsInputLeft() const
 //"上/下/右"のいずれかが入力されたか
 bool MenuScreen::IsInputAny() const
 {
-	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::UP) ||
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) ||
 		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
 		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RIGHT) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP) ||
@@ -640,7 +640,7 @@ void MenuScreen::Crow()
 void MenuScreen::SE()
 {
 	if (IsInputAny() ||
-		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::LEFT) ||
+		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT)) {
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}

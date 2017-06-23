@@ -47,7 +47,7 @@ void Credit2Scene::Initialize()
 	world_->Initialize();
 
 	player_ = std::make_shared<CreditPlayer>(world_.get());
-	credit_ = std::make_shared<CreditText>(world_.get(),CLOTHES_ID::TEXT_CLOTHES,1, Vector2(0.0f, 0.0f));
+	//credit_ = std::make_shared<CreditText>(world_.get(),CLOTHES_ID::TEXT_CLOTHES, 1, Vector2(0.0f, 0.0f),0);
 
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
 	world_->PushStackActor(player_);
@@ -61,15 +61,15 @@ void Credit2Scene::Initialize()
 
 	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
 
-	//world_->SetTarget(player_.get());
-	world_->SetTarget(credit_.get());
+	world_->SetTarget(player_.get());
+	//world_->SetTarget(credit_.get());
 
 
 	bgScreen_.Init(Stage::Stage1);
 	textScreen_.Init("Tutorial.txt");
 
 	//world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stage.GetStageSize() + Vector2(150, 0), Vector2(0, 0)));
-	//world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stage.GetStageSize() + Vector2(150, 0), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stage.GetStageSize() + Vector2(WINDOW_WIDTH + 100, 0), Vector2(-150, 0)));
 	//world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stage.GetStageSize() + Vector2(150, 0), Vector2(0, 0)));
 
 	//
@@ -88,7 +88,7 @@ void Credit2Scene::Initialize()
 	operate_ = true;
 
 	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditText>(world_.get(), Vector2(500, 500)));
-	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditTextGenerator>(world_.get(), Vector2(500, 0)));
+	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditTextGenerator>(world_.get(), Vector2(500, 100)));
 
 
 	FadePanel::GetInstance().SetInTime(0.5f);
@@ -161,12 +161,12 @@ void Credit2Scene::Update()
 
 	Scroll();
 
-	if ((Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M) ||
-		GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2)) &&
-		IsCollision()) {
-		playerStatte_ = BITE;
-		player_->SetIsBiteMode(true);
-	}
+	//if ((Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M) ||
+	//	GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2)) &&
+	//	IsCollision()) {
+	//	playerStatte_ = BITE;
+	//	player_->SetIsBiteMode(true);
+	//}
 
 	if (IsCollision()) test = true;
 	else test = false;
@@ -183,8 +183,11 @@ void Credit2Scene::Draw() const
 	//	DrawBox(min.x, min.y, max.x, max.y, GetColor(0, 255 - 20 * i, 20 * i), 1);
 	//}
 
+	Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, Vector2(-150, 350));
+
 	// 描画
 	world_->Draw(3, world_->GetKeepDatas().playerLane_);
+
 
 	//textScreen_.Draw();
 
@@ -291,18 +294,23 @@ void Credit2Scene::PlayerRestart()
 	if ((ScreenOut() || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) &&
 		operate_) {
 		operate_ = false;
+
+		player_->PHeadLengthReset();
+		player_->AllResurrectHead();
+		player_->SetIsBiteMode(true);
+		player_->PHeadLengthReset();
 		playerStatte_ = RESTART;
 		pHeadPos_ = player_->GetCurrentPHeadPosition(); //プレイヤー座標
 		player_->GravityReset();
 		player_->CurHeadBite(pHeadPos_);
-		player_->SetIsBiteMode(true);
+		//player_->SetIsBiteMode(true);
 		player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);
 		TweenManager::GetInstance().Add(EaseOutExpo, &pHeadPos_, startPos_, 2.0f);
 	}
 
 	//スタート位置に戻ったら
-	if (((pHeadPos_.x >= startPos_.x - 1.0f && pHeadPos_.x <= startPos_.x + 1.0f) &&
-		(pHeadPos_.y >= startPos_.y - 1.0f && pHeadPos_.y <= startPos_.y + 1.0f)) &&
+	if (((pHeadPos_.x >= startPos_.x - 2.0f && pHeadPos_.x <= startPos_.x + 2.0f) &&
+		(pHeadPos_.y >= startPos_.y - 2.0f && pHeadPos_.y <= startPos_.y + 2.0f)) &&
 		!operate_) {
 		operate_ = true;
 	}

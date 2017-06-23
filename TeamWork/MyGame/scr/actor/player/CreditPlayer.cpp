@@ -58,6 +58,7 @@ CreditPlayer::CreditPlayer(IWorld * world, int maxLaneSize, int startLane)
 		* Matrix::CreateTranslation(Vector3::Zero);
 
 	position_ = Vector2(0, 0);
+
 	prevPosition_ = position_;
 
 	slipCountMult_[CLOTHES_ID::BASE_CLOTHES]
@@ -104,6 +105,7 @@ CreditPlayer::CreditPlayer(IWorld * world, int maxLaneSize, int startLane)
 
 	StartPendulum();
 	DeformationDraw();
+
 }
 
 //デストラクタ
@@ -163,6 +165,7 @@ void CreditPlayer::Update()
 	worldSetMyDatas();
 
 	laneNum_ = 1;
+
 }
 
 //最初の更新
@@ -248,7 +251,7 @@ void CreditPlayer::OnMessage(EventMessage message, void * param)
 	case EventMessage::GOAL_FLAG: {
 		SetMode(MODE_CLEAR);
 		world_->UnLockCameraPosY();
-		
+
 		isUseKey_ = false;
 		break;
 	}
@@ -277,11 +280,11 @@ void CreditPlayer::CamMoveUp() {
 
 //
 void CreditPlayer::CamMoveDown() {
-//	if (changeType_ == LaneChangeType::LaneChange_Normal) {
-//		return;
-//	}
-//	drawPos_ = GetDrawPosVect(position_);
-	//LaneChangeFall();
+	//	if (changeType_ == LaneChangeType::LaneChange_Normal) {
+	//		return;
+	//	}
+	//	drawPos_ = GetDrawPosVect(position_);
+		//LaneChangeFall();
 }
 
 //
@@ -478,7 +481,7 @@ void CreditPlayer::deadLine()
 	if (isPlayerDead())SetMode(MODE_PLAYERDEAD);
 	if (laneNum_ >= 2) {
 		world_->FreeCameraPosY(false);
-		
+
 	}
 	else if (position_.y >= 500 && playerMode_ != MODE_BITE) {
 		//SetNextLane(1, LaneChangeType::LaneChange_Fall);
@@ -1170,6 +1173,14 @@ void CreditPlayer::PHeadLengthReset() {
 		pHL = 2.f;
 	}
 }
+
+void CreditPlayer::AllResurrectHead()
+{
+	for (int i = 0; i < pHeads_.size(); i++) {
+		ResurrectHead();
+	}
+}
+
 
 //
 void CreditPlayer::CurPHeadLengPlus(float addPow) {

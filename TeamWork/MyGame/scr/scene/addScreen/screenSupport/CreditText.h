@@ -5,7 +5,7 @@
 class CreditText : public Clothes/*,std::enable_shared_from_this<CreditText>*/ {
 public:
 	//
-	CreditText(IWorld* world, CLOTHES_ID id,int laneNum, Vector2 position);
+	CreditText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, int frame);
 	//
 	~CreditText();
 	//
@@ -17,4 +17,7 @@ public:
 
 private:
 	CreditPlayer* player_;
+	int frame_;
+	Vector2 modify_;
+	float f1, f2;
 };

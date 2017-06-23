@@ -1,5 +1,6 @@
 #pragma once
 #include "../../../actor/Actor.h"
+#include <vector>
 
 
 class CreditTextGenerator : public Actor {
@@ -14,6 +15,15 @@ public:
 	virtual void Draw() const override;
 
 private:
+	void ClothAdd();
+
+private:
 	float timer_;
-	const float DefTime = 3.0f;
+	const float DefTime = 0.5f;
+	int frame_;
+	std::vector<SPRITE_ID> id_;
+	int idCount_;
+	float interval_;
+	bool test_;
+	float loopHandle_;
 };

@@ -3,23 +3,32 @@
 #include "../../../actor/player/Player_Head.h"
 #include "../../../game/ID.h"
 
-CreditText::CreditText(IWorld* world, CLOTHES_ID id,int laneNum, Vector2 position) :
-	Clothes(world, id, laneNum, 0.0f)
+CreditText::CreditText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, int frame) :
+	Clothes(world, id, laneNum, 0.0f), modify_(Vector2::Zero), f1(0.0f), f2(0.0f)
 {
-	laneNum_=world_->GetKeepDatas().playerLane_;
+	spriteId_ = sprite;
+	frame_ = frame;
+	laneNum_ = world_->GetKeepDatas().playerLane_;
 	position_ = position;
-	parameter_.size = Vector2(800, 200);
+	parameter_.size = Vector2(300, 300);
 	parameter_.radius = 32.0f;
-	//TweenManager::GetInstance().Add(Linear, &position_, Vector2(-parameter_.size.x, position_.y), 5.0f, [=]() {Dead(); });
-	//TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(-parameter_.size.x, fulcrum_.y), 5.0f);
+	fulcrum_ = Vector2(position_.x, position_.y - parameter_.size.y / 2.0f);
+	auto nameCount = Sprite::GetInstance().GetSliptFrameSize(sprite);
+	//auto toX = -parameter_.size.x * 2.0f - 320 * (nameCount - frame);
+	auto toX = -400 - 370 * (nameCount - frame);
+	TweenManager::GetInstance().Add(Linear, &position_, Vector2(toX, position_.y), 10.0f, [=]() {Dead(); });
+	TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(toX, fulcrum_.y), 10.0f);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
-	fulcrum_ = Vector2(position_.x, position_.y - parameter_.size.y / 2.0f);
 	localPoints.push_back(Vector3(-parameter_.size.x / 2.0f, 0.0f, 0.0f));
 	localPoints.push_back(Vector3(-parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
 	localPoints.push_back(Vector3(parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
 	localPoints.push_back(Vector3(parameter_.size.x / 2.0f, 0.0f, 0.0f));
 	SetPointsUpdate();
+
+	//TweenManager::GetInstance().Add(Linear, &modify_, Vector2(toX, parent_->GetPosition().y), 5.0f);
+	//TweenManager::GetInstance().Add(Linear, &velocity_, Vector2(toX, velocity_.y), 10.0f);
+
 }
 
 CreditText::~CreditText()
@@ -28,9 +37,13 @@ CreditText::~CreditText()
 
 void CreditText::Update()
 {
-	velocity_ = Vector2(-10.0f, 0.0f);
-	position_ += velocity_;
-	fulcrum_ += velocity_;
+	f1 = position_.x;
+	velocity_ = Vector2(f1 - f2, 0.0f);
+	f2 = position_.x;
+
+	//velocity_ = Vector2(-10.0f, 0.0f);
+	//position_ += velocity_;
+	//fulcrum_ += velocity_;
 	SetPointsUpdate();
 
 	if (parent_ == nullptr || player_ == nullptr) return;
@@ -53,10 +66,13 @@ void CreditText::Update()
 void CreditText::Draw() const
 {
 	auto drawPos = GetDrawPosVect(position_);
-
 	auto min = drawPos - Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f);
 	auto max = drawPos + Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f);
-	DrawBox(min.x, min.y, max.x, max.y, GetColor(0, 255, 0), 1);
+	//DrawBox(min.x, min.y, max.x, max.y, GetColor(0, 255, 0), 1);
+
+	Sprite::GetInstance().SplitDraw(SPRITE_ID::BASE_CLOTHES_04_SPRITE, Vector2(drawPos.x, drawPos.y - 100.0f), 0, Vector2(100, 100), Vector2(2.0f, 2.0f));
+
+	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, frame_, Vector2(150, 150), Vector2::One);
 
 	if (BuildMode != 1) return;
 	if (!collisionPoints.empty()) {

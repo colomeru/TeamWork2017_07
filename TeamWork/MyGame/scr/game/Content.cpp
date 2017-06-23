@@ -21,16 +21,16 @@ void Content::NotAsyncLoadSprite(Sprite & sprite, Model & model)
 	sprite.Load("load/load_00006.png", SPRITE_ID::LOAD_ANM_6_SPRITE);
 	sprite.Load("load/load_00007.png", SPRITE_ID::LOAD_ANM_7_SPRITE);
 	sprite.Load("load/load_00008.png", SPRITE_ID::LOAD_ANM_8_SPRITE);
-	
+
 }
 
 // 画像を読み込む
 void Content::LoadSprite(Sprite& sprite, Model& model)
 {
 	WorkFolder::SetWorkFolder("res/Sprite/");
-	sprite.Load("particle.bmp",SPRITE_ID::TEST_SPRITE);
+	sprite.Load("particle.bmp", SPRITE_ID::TEST_SPRITE);
 	sprite.Load("3219116.png", SPRITE_ID::TEST2_SPRITE);
-	sprite.Load("arrow.png",SPRITE_ID::ARROW_SPRITE);
+	sprite.Load("arrow.png", SPRITE_ID::ARROW_SPRITE);
 	sprite.Load("title_background.png", SPRITE_ID::TITLE_SPRITE);
 	sprite.Load("circle.png", SPRITE_ID::CIRCLE_SPRITE);
 	sprite.Load("sphere.png", SPRITE_ID::SPHERE_SPRITE);
@@ -38,7 +38,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("snake.png", SPRITE_ID::SNAKE_SPRITE);
 	sprite.Load("clip.png", SPRITE_ID::PLAYER_HEAD_SPRITE);
 	sprite.Load("orochi_4.png", SPRITE_ID::PLAYER_HEAD_FATIGUE_SPRITE);
-	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE, 6, Point(3, 2), Point(200, 240));	
+	sprite.Load("baseClothes.png", SPRITE_ID::BASE_CLOTHES_SPRITE, 6, Point(3, 2), Point(200, 240));
 	sprite.Load("baseClothes02.png", SPRITE_ID::BASE_CLOTHES_02_SPRITE, 6, Point(3, 2), Point(200, 240));
 	sprite.Load("baseClothes03.png", SPRITE_ID::BASE_CLOTHES_03_SPRITE, 6, Point(3, 2), Point(200, 240));
 	sprite.Load("baseClothes04.png", SPRITE_ID::BASE_CLOTHES_04_SPRITE, 6, Point(3, 2), Point(200, 240));
@@ -106,7 +106,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("whitescreen.png", SPRITE_ID::WHITE_SCREEN_SPRITE);
 	sprite.Load("blackscreen.png", SPRITE_ID::BLACK_SCREEN_SPRITE);
 	sprite.Load("GoalIvy.png", SPRITE_ID::GOAL_CLOTHES_SPRITE);
-	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE, 6, Point(3, 2), Point(150, 300));	
+	sprite.Load("towel.png", SPRITE_ID::TOWEL_CLOTHES_SPRITE, 6, Point(3, 2), Point(150, 300));
 	sprite.Load("meter_sprite.png", SPRITE_ID::METER_SPRITE);
 	sprite.Load("chain_1.png", SPRITE_ID::NECK_CHAIN1_SPRITE);
 	sprite.Load("chain_2.png", SPRITE_ID::NECK_CHAIN2_SPRITE);
@@ -121,7 +121,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("goalUI.png", SPRITE_ID::TITLE_EXIT_SPRITE);
 	sprite.Load("pressBkey.png", SPRITE_ID::PRESS_B_SPRITE);
 	sprite.Load("titlepole.png", SPRITE_ID::TITLE_POLE_SPRITE);
-	
+
 	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(128, 120));
 	sprite.Load("scorestar.png", SPRITE_ID::SCORE_STAR_SPRITE, 7, Point(7, 1), Point(240, 240));
 	sprite.Load("stage_select_night_1.png", SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE);
@@ -149,8 +149,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("effect/playereffect/sword_effect.png", SPRITE_ID::GET_SWORD_EFFECT_SPRITE, 15, Point(5, 3), Point(260, 260));
 	sprite.Load("effect/playereffect/Splash.png", SPRITE_ID::FATIGUE_EFFECT_SPRITE, 5, Point(5, 1), Point(184, 180));
 	sprite.Load("effect/playereffect/swordeffect.png", SPRITE_ID::SWORD_ATTACK_EFFECT_SPRITE, 10, Point(5, 2), Point(120, 120));
-	sprite.Load("effect/playereffect/resurrect.png", SPRITE_ID::RESURRECT_EFFECT_SPRITE,48,Point(6,8),Point(128,128));
-	
+	sprite.Load("effect/playereffect/resurrect.png", SPRITE_ID::RESURRECT_EFFECT_SPRITE, 48, Point(6, 8), Point(128, 128));
+
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
 	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);
@@ -160,7 +160,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("tataki/tatakianime_00006.png", SPRITE_ID::CLOTHES_TAP_06_SPRITE);
 	sprite.Load("tataki/tatakianime_00007.png", SPRITE_ID::CLOTHES_TAP_07_SPRITE);
 	sprite.Load("tataki/tatakianime_00008.png", SPRITE_ID::CLOTHES_TAP_08_SPRITE);
-	
+
 	sprite.Load("tatakikiri/tatakianimekiri01.png", SPRITE_ID::CLOTHES_TAP_DEAD_01_SPRITE);
 	sprite.Load("tatakikiri/tatakianimekiri02.png", SPRITE_ID::CLOTHES_TAP_DEAD_02_SPRITE);
 	sprite.Load("tatakikiri/tatakianimekiri03.png", SPRITE_ID::CLOTHES_TAP_DEAD_03_SPRITE);
@@ -188,6 +188,13 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("crow/crow_00006.png", SPRITE_ID::CROW_ANM_06_SPRITE);
 	sprite.Load("crow/crow_00007.png", SPRITE_ID::CROW_ANM_07_SPRITE);
 	sprite.Load("crow/crow_00008.png", SPRITE_ID::CROW_ANM_08_SPRITE);
+
+	sprite.Load("negishi.png", SPRITE_ID::CREDIT_NEGISHI_SPRITE, 4, Point(4, 1), Point(300, 300));
+	sprite.Load("miyauchi.png", SPRITE_ID::CREDIT_MIYAUCHI_SPRITE, 4, Point(4, 1), Point(300, 300));
+	sprite.Load("saito.png", SPRITE_ID::CREDIT_SAITO_SPRITE, 4, Point(4, 1), Point(300, 300));
+	sprite.Load("sugiura.png", SPRITE_ID::CREDIT_SUGIURA_SPRITE, 4, Point(4, 1), Point(300, 300));
+	sprite.Load("kuwabara.png", SPRITE_ID::CREDIT_KUWABARA_SPRITE, 4, Point(4, 1), Point(300, 300));
+	sprite.Load("sim2.png", SPRITE_ID::CREDIT_SIM_SPRITE, 4, Point(4, 1), Point(300, 300));
 
 }
 
@@ -233,8 +240,8 @@ void Content::LoadSound(Sound& sound)
 	sound.LoadSE("se/createsword.mp3", SE_ID::CREATE_SWORD_SE);
 	sound.LoadSE("se/slash.mp3", SE_ID::SLASH_SE);
 	sound.LoadSE("se/resurrect.mp3", SE_ID::RESURRECT_SE);
-	
-	
+
+
 }
 
 void Content::LoadFont(FontManager& font)

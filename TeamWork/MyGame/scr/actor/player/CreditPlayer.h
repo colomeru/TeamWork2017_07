@@ -169,7 +169,8 @@ public:
 	void GravityReset();
 	//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
 	void PHeadLengthReset();
-
+	//死亡した頭を全て回復
+	void AllResurrectHead();
 
 private:
 	//
@@ -320,6 +321,7 @@ private:
 	bool isUseKey_;
 	CLOTHES_ID otherClothesID_;
 	LaneChangeType changeType_;
+
 	//滑る時間の倍数(服毎)
 	std::map<CLOTHES_ID, float> slipCountMult_;
 

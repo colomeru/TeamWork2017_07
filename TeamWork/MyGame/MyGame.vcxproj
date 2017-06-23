@@ -167,6 +167,7 @@
     <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerBiteEffect.cpp" />
     <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerFatigueEffect.cpp" />
     <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerMetamorEffect.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\ResurrectEffect.cpp" />
     <ClCompile Include="scr\actor\Effects\PlayerEffect\SwordAttackEffect.cpp" />
     <ClCompile Include="scr\actor\enemy\Enemy.cpp" />
     <ClCompile Include="scr\actor\Field\ClothesLine.cpp" />
@@ -189,6 +190,7 @@
     <ClCompile Include="scr\actor\Field\Clothes\StartClothes\StartClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\UpHanger\UpHanger.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\Bird.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.cpp" />
@@ -293,6 +295,7 @@
     <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerBiteEffect.h" />
     <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerFatigueEffect.h" />
     <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerMetamorEffect.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\ResurrectEffect.h" />
     <ClInclude Include="scr\actor\Effects\PlayerEffect\SwordAttackEffect.h" />
     <ClInclude Include="scr\actor\enemy\Enemy.h" />
     <ClInclude Include="scr\actor\Field\ClothesLine.h" />
@@ -315,6 +318,7 @@
     <ClInclude Include="scr\actor\Field\Clothes\StartClothes\StartClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\UpHanger\UpHanger.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\Bird.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.h" />

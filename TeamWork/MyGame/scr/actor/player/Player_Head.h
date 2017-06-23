@@ -60,7 +60,10 @@ public:
 	//
 	//	player_->SetOtherClothesID_(type);
 	//}
-
+	void ResurrectHead() {
+			player_->ResurrectHead();
+			return;
+	}
 	void StartPlayerHeadBite() {
 		isHit_ = true;
 		isBitePoint_ = false;

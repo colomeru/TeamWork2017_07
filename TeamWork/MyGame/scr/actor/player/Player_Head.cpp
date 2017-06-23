@@ -196,12 +196,6 @@ void Player_Head::OnUpdate()
 
 void Player_Head::OnCollide(Actor& other, CollisionParameter colpara)
 {
-	//Œ‹\‚¢‚ç‚È‚­‚È‚Á‚Ä‚é‚©‚çÁ‚¹‚é‚Æ‚±‚¯‚·
-	if (colpara.colID == COL_ID::PLAYER_PIN_COL) {
-		player_->ResurrectHead();
-		static_cast<ClothesPin*>(&other)->ClearThis();
-		return;
-	}
 
 	if (player_->GetPHeadDead(myNumber_))return;
 

@@ -4,6 +4,7 @@
 enum SPRITE_ID;
 struct Vector2;
 #include<string>
+#include"../../math/Vector2.h"
 
 class PlayerEffectManager {
 public:
@@ -11,7 +12,7 @@ public:
 	~PlayerEffectManager();
 
 	void Update();
-	void DrawEffect(const Vector2& position, float angle=0.0f)const;
+	void DrawEffect(const Vector2& position, float angle=0.0f, const Vector2& size=Vector2::One)const;
 	bool GetIsEnd()const;
 private:
 	int maxFrame_;

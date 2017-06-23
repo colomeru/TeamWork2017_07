@@ -4,6 +4,7 @@
 #include "../../graphic/Sprite.h"
 #include "Clothes\Clothes.h"
 #include "../../Def.h"
+#include"../player/Player_Head.h"
 
 ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum)
 	:Actor(world, clothes)
@@ -91,8 +92,15 @@ void ClothesPin::OnUpdate()
 {
 }
 
-void ClothesPin::OnCollide(Actor * other, CollisionParameter colpara)
+void ClothesPin::OnCollide(Actor& other, CollisionParameter colpara)
 {
+	if (parameter_.isDead)return;
+	if (colpara.colID == COL_ID::PLAYER_PIN_COL) {
+		static_cast<Player_Head*>(&other)->ResurrectHead();
+		ClearThis();
+		return;
+	}
+
 }
 
 void ClothesPin::OnMessage(EventMessage message, void * param)

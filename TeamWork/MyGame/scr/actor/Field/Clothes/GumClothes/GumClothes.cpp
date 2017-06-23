@@ -1,11 +1,14 @@
 #include "GumClothes.h"
 #include "../MyGame/scr/game/Random.h"
 #include "../../ClothesPin.h"
+#include "../../../player/Player_Head.h"
+#include "../../../Effects/PlayerEffect/SwordAttackEffect.h"
+#include "../DropClothes\DropClothes.h"
+#include "../ClothesFeces\ClothesFeces.h"
+#include "../../../../sound/sound.h"
 
 GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
-	//,player_(nullptr)
-	//,player_Head_(nullptr)
 {
 	clothes_ID = CLOTHES_ID::GUM_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -16,22 +19,30 @@ GumClothes::GumClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
+	spriteId_ = SPRITE_ID::BASE_CLOTHES_SPRITE;
 	laneNum_ = laneNum;
 
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, length_);
+	fulcrum_ = position_ - Vector2(0, length_ + 15);
 
-	localPoints.push_back(Vector3(-60, 0 + length_, 0));
-	localPoints.push_back(Vector3(-60, 90 + length_, 0));
-	localPoints.push_back(Vector3(60, 90 + length_, 0));
-	localPoints.push_back(Vector3(60, 0 + length_, 0));
+	SetLocalPoints();
 
 	SetPointsUpdate();
 
-	//if (is_Pin)
-	//	world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
+	spriteSize_ = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::BASE_CLOTHES_SPRITE);
+	//(左上、右上、左中段、右中段、左下、右下)
+	deformPos_.push_back(Vector2(fulcrum_.x - spriteSize_.x / 2, fulcrum_.y));
+	deformPos_.push_back(Vector2(fulcrum_.x + spriteSize_.x / 2, fulcrum_.y));
+	deformPos_.push_back(deformPos_[0] + Vector2(0, 50));
+	deformPos_.push_back(deformPos_[1] + Vector2(0, 50));
+	deformPos_.push_back(deformPos_[2] + Vector2(0, spriteSize_.y - 50));
+	deformPos_.push_back(deformPos_[3] + Vector2(0, spriteSize_.y - 50));
+	rot_ = 90.0f;
+	rot_spd_ = -3.0f;
 
-	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
+	for (int i = 0; i < deformPos_.size(); i++) {
+		rot_spds_.push_back(rot_spd_);
+	}
 }
 
 GumClothes::~GumClothes()
@@ -49,54 +60,36 @@ void GumClothes::Update()
 	ShakesClothes();
 	WindSwing();
 
+	Deform();
+
 	SetPointsUpdate();
 	Synchronize();
 	UpdateClothesFeces();
-
-	//if (isCheckCol_ && isUpdate_) {
-	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	//}
-
-	//if (player_Head_ == nullptr || player_ == nullptr)return;
-
-	//if (player_->GetIsSlipped()) {
-	//	player_Head_->SetPosAddVect(Vector2(10.0f, 0.0f));
-	//	player_ = nullptr;
-	//	player_Head_ = nullptr;
-	//}
-
-	isHit_ = false;
 }
 
 void GumClothes::Draw() const
 {
-	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = drawPos_;
-	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
+	auto drawPos = GetDrawPosVect(position_);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::GUM_SPRITE) / 2;
+	//Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
+	//Vector2 hangPos = GetDrawPosVect(fulcrum_);
+	//Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+	//Sprite::GetInstance().SplitDraw(SPRITE_ID::GUM_SPRITE, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
-	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
-	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
-	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
-	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
-	//auto seg = Vector3(+sizeVec.x, 0)*is;
-	//左上,右上,左下,右下
-	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
-	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
-	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
-	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
-	//DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-	//DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+	//(左上、右上、左中段、右中段、左下、右下)
+	auto dPos0 = GetDrawPosVect(deformPos_[0]);
+	auto dPos1 = GetDrawPosVect(deformPos_[1]);
+	auto dPos2 = GetDrawPosVect(deformPos_[2]);
+	auto dPos3 = GetDrawPosVect(deformPos_[3]);
+	auto dPos4 = GetDrawPosVect(deformPos_[4]);
+	auto dPos5 = GetDrawPosVect(deformPos_[5]);
+	
+	DrawRectModiGraph(dPos0.x, dPos0.y, dPos1.x, dPos1.y, dPos3.x, dPos3.y, dPos2.x, dPos2.y,
+		0, 0, spriteSize_.x, 50, Sprite::GetInstance().GetHandle(SPRITE_ID::BASE_CLOTHES_SPRITE, drawFrame_), 1);
+	DrawRectModiGraph(dPos2.x, dPos2.y, dPos3.x, dPos3.y, dPos5.x, dPos5.y, dPos4.x, dPos4.y,
+		0, 50, spriteSize_.x, spriteSize_.y - 50, Sprite::GetInstance().GetHandle(SPRITE_ID::BASE_CLOTHES_SPRITE, drawFrame_), 1);
 
-	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GUM_SPRITE) / 2;
-	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
-	Vector2 hangPos = GetDrawPosVect(fulcrum_);
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
-	Sprite::GetInstance().Draw(SPRITE_ID::GUM_SPRITE, drawPos_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	DrawClothesFeces();
-
 	if (BuildMode != 1) return;
 	if (!collisionPoints.empty()) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
@@ -112,10 +105,14 @@ void GumClothes::Draw() const
 		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
 
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 153, 0), TRUE);
-	//DrawLine(pos.x - seg.x, pos.y - seg.y, pos.x + seg.x, pos.y + seg.y, GetColor(255, 255, 255));
-
-	//DrawFormatString(100, 120, GetColor(255, 255, 255), "lanenum %d", laneNum_);
+	DrawCircle(dPos2.x, dPos2.y, 16, GetColor(255, 255, 0));
+	DrawCircle(dPos3.x, dPos3.y, 16, GetColor(255, 255, 0));
+	DrawCircle(dPos4.x, dPos4.y, 16, GetColor(255, 255, 0));
+	DrawCircle(dPos5.x, dPos5.y, 16, GetColor(255, 255, 0));
+	DrawLine(dPos2.x, dPos2.y, dPos3.x, dPos3.y, GetColor(255, 255, 0));
+	DrawLine(dPos3.x, dPos3.y, dPos5.x, dPos5.y, GetColor(255, 255, 0));
+	DrawLine(dPos5.x, dPos5.y, dPos4.x, dPos4.y, GetColor(255, 255, 0));
+	DrawLine(dPos4.x, dPos4.y, dPos2.x, dPos2.y, GetColor(255, 255, 0));
 }
 
 void GumClothes::OnUpdate()
@@ -128,16 +125,118 @@ void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 	case ACTOR_ID::PLAYER_HEAD_ACTOR:
 	{
-		if (!isWind_) {
+		if (!isWind_ && !is_Droping_) {
 			parent_ = &other;
 			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-			static_cast<Player*>(parent_->GetParent())->CurHeadBite(other.GetPosition());
-			static_cast<Player*>(parent_->GetParent())->SetIsBiteMode(true);
-			static_cast<Player*>(parent_->GetParent())->SetOtherClothesID_(clothes_ID);
+			player_ = static_cast<Player*>(parent_->GetParent());
+			player_->CurHeadBite(other.GetPosition());
+			player_->SetIsBiteMode(true);
+			player_->SetOtherClothesID_(clothes_ID);
+			break;
 		}
 		break;
 	}
-	default:
+	case ACTOR_ID::PLAYER_SWORD_ACTOR:
+	{
+		if (cuttingState_ != CuttingState::Normal) break;
+		int rand = Random::GetInstance().Range(0, 2);
+		switch (rand)
+		{
+		case 0: {
+			cuttingState_ = CuttingState::RightUpSlant;
+			drawFrame_ = 1;
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
+			world_->Add(
+				ACTOR_ID::CLOTHES_DROPING_ACTOR,
+				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
+				);
+			Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
+			SetLocalPoints();
+			break;
+		}
+		case 1: {
+			cuttingState_ = CuttingState::LeftUpSlant;
+			drawFrame_ = 2;
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
+			world_->Add(
+				ACTOR_ID::CLOTHES_DROPING_ACTOR,
+				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
+				);
+			Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
+			SetLocalPoints();
+			break;
+		}
+		}
+
+		isHit_ = true;
 		break;
 	}
+	case ACTOR_ID::ENEMY_ACTOR:
+	{
+		if (is_Droping_ || isPendulum_) return;
+		Vector2 pos = other.GetPosition() - fulcrum_;
+		clothesFeces_ = std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor());
+		//world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
+		is_Droping_ = true;
+		other.Dead();
+		if (player_ == nullptr) return;
+		player_->SetMode(MODE_SLIP);
+		player_ = nullptr;
+		parent_ = nullptr;
+		break;
+	}
+	}
+}
+
+void GumClothes::Deform()
+{
+
+	//auto r = 0.0f;
+	//for (int i = 2; i < deformPos_.size(); i++) {
+	//	r = MathHelper::ATan(deformPos_[i].y - deformPos_[i - 2].y, deformPos_[i].x - deformPos_[i - 2].x);
+	//}
+	Pendulum(deformPos_, rot_spd_, 0);
+
+	//float dRot = MathHelper::Abs(rot_spd_);
+	////float dRot = (MathHelper::Abs(rot_) - 90.0f) / 45.0f;
+	////float dRot2 = MathHelper::Abs(rot_spd_);
+	////float dRot2 = (MathHelper::Abs(rot_) - 90.0f) / 30.0f;
+	////中心から左に振るとき
+	//if (rot_ > 90.0f && rot_spd_ > 0.0f) {
+	//	deformPos_[2] += Vector2(0, -dRot);
+	//	deformPos_[3] += Vector2(0, dRot);
+	//	//deformPos_[4] += Vector2(dRot2, -dRot);
+	//	//deformPos_[5] += Vector2(dRot2, dRot);
+
+	//}	
+	////右から中心に振るとき
+	//if (rot_ < 90.0f && rot_spd_ > 0.0f) {
+	//	deformPos_[2] += Vector2(0, -dRot);
+	//	deformPos_[3] += Vector2(0, dRot);
+	//	//deformPos_[4] += Vector2(dRot2, -dRot);
+	//	//deformPos_[5] += Vector2(dRot2, dRot);
+
+	//}
+	////左から中心に振るとき
+	//if (rot_ > 90.0f && rot_spd_ < 0.0f) {
+	//	deformPos_[2] += Vector2(0, dRot);
+	//	deformPos_[3] += Vector2(0, -dRot);
+	//	//deformPos_[4] += Vector2(-dRot2, dRot);
+	//	//deformPos_[5] += Vector2(-dRot2, -dRot);
+	//}
+	////中心から右に振るとき
+	//if (rot_ < 90.0f && rot_spd_ < 0.0f) {
+	//	deformPos_[2] += Vector2(0, dRot);
+	//	deformPos_[3] += Vector2(0, -dRot);
+	//	//deformPos_[4] += Vector2(-dRot2, dRot);
+	//	//deformPos_[5] += Vector2(-dRot2, -dRot);
+	//}
+
+	//auto r = std::floor(rot_);
+	//if (r == 90) {
+	//	deformPos_[2] = deformPos_[1] + Vector2(0, 50);
+	//	deformPos_[3] = deformPos_[0] + Vector2(0, 50);
+	//	deformPos_[4] = deformPos_[0] + Vector2(0, spriteSize_.y);
+	//	deformPos_[5] = deformPos_[1] + Vector2(0, spriteSize_.y);
+	//}
 }

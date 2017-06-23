@@ -1,6 +1,5 @@
 #pragma once
 #include "../Clothes.h"
-#include "../MyGame/scr/actor/player/Player_Head.h"
 
 //ゴムの服
 class GumClothes : public Clothes, public std::enable_shared_from_this<GumClothes>
@@ -9,7 +8,7 @@ public:
 	//コンストラクタ
 	GumClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin = false);
 	//デストラクタ
-	~GumClothes();
+	virtual ~GumClothes() override;
 	//更新
 	virtual void Update() override;
 	//描画
@@ -20,6 +19,12 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 
 private:
-	//Player* player_;
-	//Player_Head* player_Head_;
+	void Deform();
+
+private:
+	std::vector<Vector2> deformPos_;
+	std::vector<float> rot_spds_;
+	Vector2 spriteSize_;
+	Vector2 pos_v;
+	Vector2 pos_v2;
 };

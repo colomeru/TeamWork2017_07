@@ -59,13 +59,11 @@ void UpHanger::Draw() const
 	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
 	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
 	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
-	//auto seg = Vector3(+sizeVec.x, 0)*is;
 	//ç∂è„,âEè„,ç∂â∫,âEâ∫
 	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
 	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
 
 	auto drawPos = GetDrawPosVect(position_);
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);

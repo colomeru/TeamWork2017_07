@@ -28,6 +28,15 @@ protected:
 		END_WIND,				//風が終了
 	};
 
+	enum PendulumState
+	{
+		CENTER_LEFT,			//中心から左に振るとき
+		LEFT_CENTER,			//右から中心に振るとき
+		CENTER_RIGHT,			//中心から右に振るとき
+		RIGHT_CENTER,			//右から中心に振るとき
+		NONE
+	};
+
 public:
 	//コンストラクタ
 	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight);
@@ -70,6 +79,7 @@ public:
 
 	//振り子運動(風用)
 	void Pendulum(Vector2 fulcrum, float length);
+	void Pendulum(std::vector<Vector2>& deformPos, float rot_spd, float length);
 	//風による服揺らし
 	void ShakesClothes();
 	//強い風によるプレイヤーへの作用
@@ -96,6 +106,7 @@ private:
 	void SetNormal();
 	void SetRightUpSlant();
 	void SetLeftUpSlant();
+	void PenStateDecision();
 
 protected:
 	//衝突しているか
@@ -120,6 +131,8 @@ protected:
 	float dNumber_;
 	//服に付着した糞
 	ActorPtr clothesFeces_;
+	//振り子の状態
+	PendulumState penState_;
 
 	//プレイヤー
 	Player* player_;

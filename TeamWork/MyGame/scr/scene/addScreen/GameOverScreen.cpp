@@ -64,7 +64,7 @@ bool GameOverScreen::Update(Scene& nextScene)
 
 	drawUpdate();
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		nextScene = changeSceneList_[inputCount_];
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 

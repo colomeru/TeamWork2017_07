@@ -911,41 +911,6 @@ void Player::SetDrawNeckParts(const Vector2 & bodyPoint, const Vector2 & headPoi
 		}
 		p = MathDrawPoint(fPos_[i], dir, resWidth, oneLength);
 		drawPoints.push_back(p);
-	//	//Vector2 v = fPos_[i] - multiplePos[i];
-	//	Vector2 n = Vector2(-v.y, v.x).Normalize();
-	//	if (i == 0) {
-	//		p.p0 = fPos_[i] + n * resWidth * correctionWidth * 1.2f;
-	//		p.p1 = fPos_[i] - n * resWidth * correctionWidth * 1.2f;
-	//		if (v.Length() > 0) {
-	//			p.p2 = headPoint - n * resWidth * correctionWidth * 1.2f;
-	//			p.p3 = headPoint + n * resWidth * correctionWidth * 1.2f;
-	//			p.p2 -= v.Normalize() * correctionHeight * correctionWidth;
-	//			p.p3 -= v.Normalize() * correctionHeight * correctionWidth;
-	//			p.p0 += v.Normalize() * correctionHeight * correctionWidth;
-	//			p.p1 += v.Normalize() * correctionHeight * correctionWidth;
-	//			drawPoints.push_back(p);
-	//		}
-	//	}
-	//	else if (fPos_.size() - 1 == i) {
-	//		p.p0 = fPos_[i] + n * resWidth;
-	//		p.p1 = fPos_[i] - n * resWidth;
-	//		if (v.Length() > 0) {
-	//			p.p2 = p.p1 - v.Normalize() * 76.0f * correctionLens.back();
-	//			p.p3 = p.p0 - v.Normalize() * 76.0f * correctionLens.back();
-	//			drawPoints.push_back(p);
-	//		}
-	//	}
-	//	else {
-	//		p.p0 = fPos_[i] + n * resWidth;
-	//		p.p1 = fPos_[i] - n * resWidth;
-	//		if (v.Length() > 0) {
-	//			p.p2 = fPos_[i-1] - n * resWidth;
-	//			p.p3 = fPos_[i - 1] + n * resWidth;
-	//			p.p2 -= v.Normalize() * correctionHeight;
-	//			p.p3 -= v.Normalize() * correctionHeight;
-	//			drawPoints.push_back(p);
-	//		}
-	//	}
 	}
 
 }
@@ -1021,6 +986,7 @@ void Player::ResurrectHead() {
 		}
 		if (!pHeadDead_[trgNum])continue;
 		world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<ResurrectEffect>(world_, position_,pHeads_[trgNum].get()));
+		Sound::GetInstance().PlaySE(SE_ID::RESURRECT_SE);
 
 		pHeadDead_[trgNum] = false;
 		break;
@@ -1585,5 +1551,10 @@ void Player::ClearUpdate()
 
 void Player::DeadUpdate()
 {
+	pGrav_ += defPGravPow;
+	velocity_.y = pGrav_*pGrav_*defGravAddPow;
 	position_ += velocity_ + pendulumVect_;
+
+	UpdateMultiplePos();
+	DeformationDraw();
 }

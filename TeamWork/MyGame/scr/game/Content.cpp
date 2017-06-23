@@ -232,6 +232,7 @@ void Content::LoadSound(Sound& sound)
 	sound.LoadSE("se/fallout.mp3", SE_ID::FALL_OUT_SE);
 	sound.LoadSE("se/createsword.mp3", SE_ID::CREATE_SWORD_SE);
 	sound.LoadSE("se/slash.mp3", SE_ID::SLASH_SE);
+	sound.LoadSE("se/resurrect.mp3", SE_ID::RESURRECT_SE);
 	
 	
 }

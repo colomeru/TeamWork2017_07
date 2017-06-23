@@ -12,16 +12,20 @@
 PauseScreen::PauseScreen() :inputCount_(0), sinCount_(defSinC)
 {
 	changeSceneList_.push_back(Scene::GamePlay);
+	changeSceneList_.push_back(Scene::GamePlay);
 	changeSceneList_.push_back(Scene::Menu);
 
 	textAlphaList_.push_back(1.f);
 	textAlphaList_.push_back(1.f);
+	textAlphaList_.push_back(1.f);
 
 	textSizeList_.push_back(1.f);
 	textSizeList_.push_back(1.f);
+	textSizeList_.push_back(1.f);
 
-	cursorPos_.push_back(Vector2(400, 600));
-	cursorPos_.push_back(Vector2(400, 800));
+	cursorPos_.push_back(Vector2(400, 500));
+	cursorPos_.push_back(Vector2(400, 700));
+	cursorPos_.push_back(Vector2(400, 900));
 
 	cursorDrawPos_ = cursorPos_[inputCount_];
 
@@ -41,7 +45,7 @@ void PauseScreen::Init()
 
 }
 
-bool PauseScreen::Update(Scene& nextScene)
+bool PauseScreen::Update(Scene& nextScene, returnGameType& type)
 {
 	if (!FadePanel::GetInstance().IsClearScreen()) return false;
 
@@ -70,6 +74,9 @@ bool PauseScreen::Update(Scene& nextScene)
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		nextScene = changeSceneList_[inputCount_];
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+
+		if (inputCount_ == 0)type = returnGameType::Resume;
+		else if (inputCount_ == 1)type = returnGameType::Retry;
 		return true;
 	}
 	return false;
@@ -85,13 +92,17 @@ void PauseScreen::Draw() const
 	Vector2 GOorig = Sprite::GetInstance().GetSize(SPRITE_ID::PAUSE_TEXT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::PAUSE_TEXT_SPRITE, GOposit, GOorig, 1.f, Vector2::One);
 
-	Vector2 RTposit = Vector2(WINDOW_WIDTH / 2, 600.f);
+	Vector2 RTposit = Vector2(WINDOW_WIDTH / 2, 500.f);
 	Vector2 RTorig = Sprite::GetInstance().GetSize(SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One/**textSizeList_[0]*/);
 
-	Vector2 BTposit = Vector2(WINDOW_WIDTH / 2, 800.f);
+	Vector2 RYposit = Vector2(WINDOW_WIDTH / 2, 700.f);
+	Vector2 RYorig = Sprite::GetInstance().GetSize(SPRITE_ID::RETRY_TEXT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::RETRY_TEXT_SPRITE, RYposit, RYorig, textAlphaList_[1], Vector2::One/**textSizeList_[0]*/);
+
+	Vector2 BTposit = Vector2(WINDOW_WIDTH / 2, 900.f);
 	Vector2 BTorig = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[1], Vector2::One/**textSizeList_[1]*/);
+	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[2], Vector2::One/**textSizeList_[1]*/);
 
 	Vector2 CSorig = Sprite::GetInstance().GetSize(SPRITE_ID::OROCHI_CURSOR_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorDrawPos_, CSorig, Vector2::One);

@@ -33,7 +33,7 @@ public:
 	virtual void inv(const Matrix& mat) = 0;
 	virtual Matrix InitializeInv(Vector2 position) = 0;
 	virtual Matrix GetInv() = 0;
-	virtual void SetScroolPos(const Vector2& pos) = 0;
+	virtual void SetScrollPos(const Vector2& pos) = 0;
 	//スクロール対象の設定
 	virtual void SetTarget(Actor* tgt) = 0;
 	// 操作アクターセット
@@ -55,4 +55,5 @@ public:
 	virtual bool GetIsFreeCamY_()const=0;
 	virtual void UpdateDrawPos() = 0;
 	virtual Matrix& GetChangeInv() = 0;
+	virtual void SetMaxSize(int size) = 0;
 };

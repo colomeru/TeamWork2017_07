@@ -21,9 +21,8 @@
 #include"../actor/Field/Enemys/TutorialManager.h"
 
 static int maxTextCount[maxTutorialNum]{
-	2,
-	1,
-	1
+	4,
+	2
 };
 
 TutorialScene::TutorialScene() :
@@ -42,15 +41,14 @@ TutorialScene::TutorialScene() :
 
 	StageNameList_[0] = "Tutorial1";
 	StageNameList_[1] = "Tutorial2";
-	StageNameList_[2] = "Tutorial3";
 
 	TextAddList_[0] = ("_1");
 	TextAddList_[1] = ("_2");
 	TextAddList_[2] = ("_3");
+	TextAddList_[3] = ("_4");
 
 	setLockFuncList_.push_back([this](int i) {SetLock1(i); });
 	setLockFuncList_.push_back([this](int i) {SetLock2(i); });
-	setLockFuncList_.push_back([this](int i) {SetLock3(i); });
 }
 
 TutorialScene::~TutorialScene()
@@ -60,13 +58,13 @@ TutorialScene::~TutorialScene()
 void TutorialScene::Initialize()
 {
 	currentTutorialNum_ = 0;
+	ResetLockNum();
 	SceneInit();
 }
 
 void TutorialScene::SceneInit()
 {
 
-	tutorialLockNum_ = 0;
 	isEnd_ = false;
 	world_->Initialize();
 
@@ -191,6 +189,13 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 		break;
 	case EventMessage::GAME_CLEAR_FLAG:
 		break;
+	case EventMessage::CHANGE_HEAD: {
+		UnLock(UnLockType::ChangeHead);
+	}
+	case EventMessage::LANE_CHANGE_FALL: {
+		UnLock(UnLockType::ChangeLaneFall);
+		break;
+	}
 	case EventMessage::TAPPER_DEAD:{
 		enemGenerator_->StartTapperResurrectTimer();
 		
@@ -292,7 +297,18 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 		break;
 	}
 	case 1: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeHead, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
+		break;
+	}
+	case 2: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneFall, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
+		break;
+	}
+	case 3: {
 		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneUp, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
 		break;
 	}
 	default:
@@ -310,28 +326,16 @@ void TutorialScene::SetLock2(int tutorialLockNum)
 		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::KillTapper, false));
 		break;
 	}
+	case 1: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
+		break;
+	}
 	default:
 		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
 		break;
 	}
 }
 
-void TutorialScene::SetLock3(int tutorialLockNum)
-{
-	switch (tutorialLockNum)
-	{
-	case 0: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::StartWind, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::StartWind, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::StartWind, false));
-		break;
-	}
-	default:
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
-		break;
-	}
-
-}
 
 void TutorialScene::ChangeNextTutorial()
 {
@@ -340,7 +344,12 @@ void TutorialScene::ChangeNextTutorial()
 		FadePanel::GetInstance().FadeOut();
 	}
 	else {
-		FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); SceneInit(); });
+		FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); ResetLockNum(); SceneInit(); });
 		FadePanel::GetInstance().FadeOut();
 	}
+}
+
+void TutorialScene::ResetLockNum()
+{
+	tutorialLockNum_ = 0;
 }

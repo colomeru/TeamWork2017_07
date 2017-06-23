@@ -16,6 +16,7 @@
 #include"PlayerDeadHead.h"
 #include"../../sound/sound.h"
 #include"../../cheat/CheatData.h"
+#include"PlayerFallPin.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -1178,13 +1179,15 @@ void Player::curPHeadSlip(bool isSlip) {
 }
 
 void Player::PHeadChanger(int rot) {
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
+	if(!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
+	
+	world_->sendMessage(EventMessage::CHANGE_HEAD);
 
 	Vector2 addVec = position_- pHeadPoses_[currentHead_];
 	addVec=addVec.Normalize()*32.f;
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f, addVec));
+	if (!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f, addVec));
 
 	Sound::GetInstance().PlaySE(SE_ID::CHANGE_HEAD_SE);
 	//StartPendulum();
@@ -1240,6 +1243,8 @@ void Player::CurPHeadLengPlus(float addPow) {
 				//chainLock_ = false;
 				chainAddLength_ += 2.f;
 				chainAddLengthMath_ += 2.f;
+				Vector2 toPos = pHeadPoses_[trgNum] - position_;
+				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_, pHeads_[trgNum]->GetPosition(), toPos));
 				pHeadDead_[trgNum] = true;
 			}
 			else {
@@ -1291,6 +1296,7 @@ void Player::CurPHeadLengPlus(float addPow) {
 
 void Player::CreateBiteEffect()
 {
+	if (pHeadDead_[currentHead_])return;
 	Vector2 vel = pHeads_[currentHead_]->GetPosition() - position_;
 	vel = vel.Normalize();
 	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerBiteEffect>(world_, pHeads_[currentHead_]->GetPosition() + vel * 30));
@@ -1355,7 +1361,6 @@ void Player::ShootUpdate()
 			CurPHeadLengPlus(headShotPower);
 		}
 		else {
-			//pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		}
 
@@ -1418,7 +1423,7 @@ void Player::BiteUpdate()
 				Sound::GetInstance().PlaySE(SE_ID::CREATE_SWORD_SE);
 			}
 		}
-		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
+		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM5) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 				//pSword_->SetUseSword(true);
 				SetNextLane(1);
@@ -1432,7 +1437,7 @@ void Player::BiteUpdate()
 		}
 
 //		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-		if (GamePad::GetInstance().ButtonStateUp(PADBUTTON::NUM2) && Keyboard::GetInstance().KeyStateUp(KEYCODE::N)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
 			//if (GetIsBiteMode()) {
 			SetMode(MODE_FALL);
 			//Headを交代する
@@ -1465,6 +1470,8 @@ void Player::BiteUpdate()
 			if (slipCount_ <= 0.f) {
 				SetMode(MODE_SLIP);
 				//首を殺して
+				Vector2 toPos = pHeadPoses_[currentHead_]- position_;
+				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_,pHeads_[currentHead_]->GetPosition(),toPos));
 				pHeadDead_[currentHead_] = true;
 				//スティックをロックする
 				isCanNextHeadRot = false;
@@ -1544,10 +1551,10 @@ void Player::ClearUpdate()
 	}
 	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT)||isClearShoot_) {
 		if (!isClearShoot_) {
+			PHeadChanger();
 			isClearShoot_ = true;
 		}
 		//SetMode(MODE_FALL);
-		PHeadChanger();
 		//pendulumVect_.x *= 0.98f;
 		pendulumVect_.y *= 0.98f;
 		pendulumVect_.y = max(50.f,pendulumVect_.y);

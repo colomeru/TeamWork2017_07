@@ -22,7 +22,8 @@ TweenObject::~TweenObject()
 
 void TweenObject::Update(const float deltaTime)
 {
-	updateFunc_(deltaTime);
+	if (!isEnd_)
+		updateFunc_(deltaTime);
 }
 
 bool TweenObject::IsEnd() const
@@ -33,6 +34,7 @@ bool TweenObject::IsEnd() const
 void TweenObject::End()
 {
 	isEnd_ = true;
+	callback_ = nullptr;
 }
 
 void TweenObject::Play(float scale)
@@ -57,12 +59,12 @@ void TweenObject::SetFunction(const TweenFuncParam& func)
 
 void TweenObject::SetLoopType(const UpdateType type)
 {
-	if (type == UpdateType::Common)
-		updateFunc_ = std::function<void(float)>([=](float deltaTime) { CommonUpdate(deltaTime); });
-	else if (type == UpdateType::Loop)
-		updateFunc_ = std::function<void(float)>([=](float deltaTime) { LoopUpdate(deltaTime); });
-	else if (type == UpdateType::PingPong)
-		updateFunc_ = std::function<void(float)>([=](float deltaTime) { PingPongUpdate(deltaTime); });
+	switch (type)
+	{
+	case UpdateType::Common:   updateFunc_ = std::function<void(float)>([=](float deltaTime) { CommonUpdate(deltaTime); }); break;
+	case UpdateType::Loop:	   updateFunc_ = std::function<void(float)>([=](float deltaTime) { LoopUpdate(deltaTime); }); break;
+	case UpdateType::PingPong: updateFunc_ = std::function<void(float)>([=](float deltaTime) { PingPongUpdate(deltaTime); }); break;
+	}
 }
 
 void TweenObject::SetLoopCount(int count)
@@ -80,8 +82,9 @@ void TweenObject::CommonUpdate(float deltaTime)
 
 	if (timer_ >= d_)
 	{
-		isEnd_ = true;
 		Invoke();
+		isEnd_ = true;
+		callback_ = nullptr;
 	}
 }
 
@@ -96,9 +99,8 @@ void TweenObject::LoopUpdate(float deltaTime)
 	if (timer_ >= d_)
 	{
 		// 初期値と移動量を反転
-		auto b = b_ + c_;
+		b_ += c_;
 		c_ *= -1.0f;
-		b_ = b;
 
 		timer_ = 0.0f;
 		sine_ *= -1.0f;
@@ -108,11 +110,11 @@ void TweenObject::LoopUpdate(float deltaTime)
 			Invoke();
 			loopCount_--;
 			loopCount_ = MathHelper::Max(loopCount_, -1);
-		}
 
-		// ループ終了
-		if (loopCount_ == 0)
-			isEnd_ = true;
+			// ループ終了
+			if (loopCount_ == 0)
+				isEnd_ = true;
+		}
 	}
 }
 
@@ -131,8 +133,8 @@ void TweenObject::PingPongUpdate(float deltaTime)
 	else if (timer_ <= 0.0f)
 	{
 		sine_ *= -1.0f;
-		Invoke();
 
+		Invoke();
 		loopCount_--;
 		loopCount_ = MathHelper::Max(loopCount_, -1);
 
@@ -145,8 +147,5 @@ void TweenObject::PingPongUpdate(float deltaTime)
 void TweenObject::Invoke()
 {
 	if (callback_ != nullptr)
-	{
 		callback_();
-		callback_ = nullptr;
-	}
 }

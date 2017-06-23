@@ -30,7 +30,8 @@ public:
 	virtual void Update() = 0;
 	// •`‰æ
 	void BaseDraw()const {
-		if (!isDraw_ || !isUpdate_)return;
+		//if (!isDraw_ || !isUpdate_)return;
+		if (!isDraw_)return;
 		else
 		{
 			int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
@@ -70,7 +71,8 @@ public:
 			isUpdate_ = true;
 		}
 		else {
-			isUpdate_ = (world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[1]);
+			//isUpdate_ = (world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[1]);
+			isUpdate_ = drawPos_.x >= -WINDOW_WIDTH / 2.f&&drawPos_.x <= WINDOW_WIDTH*1.5f;
 		}
 	}
 	virtual void LateUpdate() {
@@ -102,7 +104,8 @@ public:
 	}
 	bool StartModeUpdate() {
 		StartOnlyUpdate();
-		isDraw_ = (world_->GetKeepDatas().startPointPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().startPointPos_.x < cutSize[1]);
+		//isDraw_ = (world_->GetKeepDatas().startPointPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().startPointPos_.x < cutSize[1]);
+		isDraw_ = drawPos_.x >= -WINDOW_WIDTH / 2.f&&drawPos_.x <= WINDOW_WIDTH*1.5f;
 		isUpdate_ = true;
 
 		StartOnlyLateUpdate();

@@ -14,6 +14,7 @@
 #include "../graphic/Sprite.h"
 #include "../sound/sound.h"
 #include "../graphic/FontManager.h"
+#include "../scene/Credit2Scene.h"
 
 
 void Game1::Initialize()
@@ -52,6 +53,7 @@ void Game1::Initialize()
 	mSceneManager.Add(Scene::Credit, std::make_shared<CreditScene>());
 	mSceneManager.Add(Scene::Ending, std::make_shared<EndingScene>());
 	mSceneManager.Add(Scene::Movie, std::make_shared<MovieScene>());
+	mSceneManager.Add(Scene::Credit2, std::make_shared<Credit2Scene>());
 
 	// ƒV[ƒ“‚Ì“Ç‚İ‚İ
 	mSceneManager.SetScene(Scene::Demo);

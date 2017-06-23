@@ -5,7 +5,7 @@
 #include"../../tween/TweenManager.h"
 #include<algorithm>
 #include"../../game/Random.h"
-
+#include"../../math/MyFuncionList.h"
 
 // コンストラクタ
 
@@ -24,10 +24,25 @@ TitleBGScreen::TitleBGScreen() {
 	lanePos_[2]=900;
 
 	clotheslist_[0]=SPRITE_ID::BASE_CLOTHES_SPRITE;
-	clotheslist_[1]=SPRITE_ID::BASE_CLOTHES_02_SPRITE;
+	clotheslist_[1] = SPRITE_ID::BASE_CLOTHES_02_SPRITE;
+	clotheslist_[2] = SPRITE_ID::BASE_CLOTHES_03_SPRITE;
+	clotheslist_[3] = SPRITE_ID::BASE_CLOTHES_04_SPRITE;
+	clotheslist_[4] = SPRITE_ID::BASE_CLOTHES_05_SPRITE;
+	clotheslist_[5] = SPRITE_ID::BASE_CLOTHES_06_SPRITE;
+	clotheslist_[6] = SPRITE_ID::BASE_CLOTHES_07_SPRITE;
+	clotheslist_[7] = SPRITE_ID::BASE_CLOTHES_08_SPRITE;
+	clotheslist_[8] = SPRITE_ID::BASE_CLOTHES_09_SPRITE;
+	clotheslist_[9] = SPRITE_ID::BASE_CLOTHES_10_SPRITE;
+	clotheslist_[10] = SPRITE_ID::BASE_CLOTHES_11_SPRITE;
+	clotheslist_[11] = SPRITE_ID::BASE_CLOTHES_12_SPRITE;
+	clotheslist_[12] = SPRITE_ID::BASE_CLOTHES_13_SPRITE;
+	clotheslist_[13] = SPRITE_ID::BASE_CLOTHES_14_SPRITE;
+	clotheslist_[14] = SPRITE_ID::BASE_CLOTHES_15_SPRITE;
+	clotheslist_[15] = SPRITE_ID::BASE_CLOTHES_16_SPRITE;
+	clotheslist_[16] = SPRITE_ID::BASE_CLOTHES_17_SPRITE;
+	clotheslist_[17] = SPRITE_ID::BASE_CLOTHES_18_SPRITE;
+	clotheslist_[18]=SPRITE_ID::BASE_CLOTHES_19_SPRITE;
 
-	clothesAddPos_[SPRITE_ID::BASE_CLOTHES_SPRITE] = 125;
-	clothesAddPos_[SPRITE_ID::BASE_CLOTHES_02_SPRITE] = 133;
 }
 
 void TitleBGScreen::Init()
@@ -46,15 +61,23 @@ void TitleBGScreen::Update()
 {
 	timeCount_ += plusCount_;
 
-	clothesCreateTime_--;
+	clothesCreateTime_-=Random::GetInstance().Range(1,3);
 	if (clothesCreateTime_ <= 0) {
 		clothesCreateTime_ = Random::GetInstance().Range(20, 60);
-		clothes_.push_back(TitleLaneClothes(clotheslist_[Random::GetInstance().Range(0, clotheslist_.size())], Random::GetInstance().Range(0,3), WINDOW_WIDTH+100));
+		auto clothestype= clotheslist_[Random::GetInstance().Range(0, clotheslist_.size())];
+		int laneNum= Random::GetInstance().Range(0, 3);
+		Vector2 origin=Sprite::GetInstance().GetSplitPieceSize(clothestype)/2;
+		origin.x = 0.f;
+		clothes_.push_back(TitleLaneClothes(clothestype, laneNum, WINDOW_WIDTH+100,20.f,Random::GetInstance().Range(1.f,90.f),Random::GetInstance().Range(2.f,4.f), origin));
+
+		//TweenManager::GetInstance().Add(EaseType::Linear, &clothes_.back().sinCount_, 360.f, 10.f);
 	}
 
 	
 	for (auto& i : clothes_) {
 		i.lanePos -= 10;
+		i.sinCount_ += i.windPower; i.sinCount_ = fmodf(i.sinCount_, 360.f);
+		i.rotate = MathHelper::Sin(i.sinCount_)*i.maxAngle;
 	}
 	auto clothes_itr = std::remove_if(clothes_.begin(), clothes_.end(), [](TitleLaneClothes i) {return i.lanePos <= -200; });
 
@@ -85,7 +108,7 @@ void TitleBGScreen::Draw() const
 	//DrawClothes(1, 300,SPRITE_ID::BASE_CLOTHES_02_SPRITE);
 
 	for (auto i : clothes_) {
-		DrawClothes(i.laneNum, i.lanePos, i.drawID);
+		DrawClothes(i);
 	}
 
 	Sprite::GetInstance().Draw(SPRITE_ID::WHITE_SCREEN_SPRITE, Vector2::Zero, whiteScreenAlpha_);
@@ -104,11 +127,15 @@ void TitleBGScreen::WhiteScreenMinus(){
 	currentStage_++; currentStage_ %= BGList_.size();
 }
 
-void TitleBGScreen::DrawClothes(int laneNum, int xpos, SPRITE_ID clothestype)const
+void TitleBGScreen::DrawClothes(const TitleLaneClothes& clothes)const
 {
 	Vector2 hangOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, Vector2(xpos, lanePos_[laneNum]+25), hangOrigin, 1, Vector2::One, 0);
-	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(clothestype) / 2;
-	Sprite::GetInstance().SplitDraw(clothestype, Vector2(xpos, lanePos_[laneNum]+ clothesAddPos_.at(clothestype)), 0, crcOrigin, 1, Vector2::One, 0);
+	hangOrigin.y = 0;
+	//Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, Vector2(clothes.lanePos, lanePos_[clothes.laneNum]+25), hangOrigin, 1, Vector2::One,clothes.rotate);
+	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(clothes.drawID) / 2;
+	crcOrigin.y = 0;
+
+	Sprite::GetInstance().SplitDraw(clothes.drawID, Vector2(clothes.lanePos, lanePos_[clothes.laneNum]), 0, crcOrigin, 1, Vector2::One, clothes.rotate);
 
 }
+

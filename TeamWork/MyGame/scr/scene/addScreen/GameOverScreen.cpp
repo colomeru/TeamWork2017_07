@@ -88,8 +88,8 @@ void GameOverScreen::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::RETRY_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One/**textSizeList_[0]*/);
 
 	Vector2 BTposit = Vector2(WINDOW_WIDTH / 2, 800.f);
-	Vector2 BTorig = Sprite::GetInstance().GetSize(SPRITE_ID::BACKTITLE_TEXT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[1], Vector2::One/**textSizeList_[1]*/);
+	Vector2 BTorig = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, BTposit, BTorig, textAlphaList_[1], Vector2::One/**textSizeList_[1]*/);
 
 	Vector2 CSorig = Sprite::GetInstance().GetSize(SPRITE_ID::OROCHI_CURSOR_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorDrawPos_, CSorig, Vector2::One);

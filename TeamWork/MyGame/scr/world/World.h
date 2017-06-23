@@ -103,7 +103,7 @@ public:
 	virtual Matrix& GetChangeInv()override {
 		return inv_;
 	}
-	virtual void SetScroolPos(const Vector2& pos) override {
+	virtual void SetScrollPos(const Vector2& pos) override {
 		targetMat_.Translation(Vector3(pos.x, pos.y, 0));
 	}
 	//共有データを更新する、変更を行わない値の引数は、元のKeepDatasの値を渡す事
@@ -149,7 +149,9 @@ public:
 	virtual void UpdateDrawPos() {
 		actors_.DrawUpdate();
 	}
-
+	virtual void SetMaxSize(int size) override{
+		maxSize_ = size;
+	}
 private:
 	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
 	{
@@ -166,6 +168,8 @@ private:
 	}
 
 private:
+	int maxSize_;
+
 	float camShootSpd_;
 	//カメラ更新用のUpdateへ移行する
 	bool isChangeCam_;

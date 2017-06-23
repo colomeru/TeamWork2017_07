@@ -18,4 +18,5 @@ enum class EventMessage
 	LANE_CHANGE_END,
 	LANE_CHANGE_UP_END,
 	USE_SWORD,
+	CHANGE_HEAD,
 };

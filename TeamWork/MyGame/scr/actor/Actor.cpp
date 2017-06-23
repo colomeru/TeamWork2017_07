@@ -68,11 +68,10 @@ void Actor::LateComUpdate() {
 	drawPos_ = GetDrawPosVect(position_);
 
 	int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
-	if (MathHelper::Abs(drawLane) >= 2) {
-		isDraw_ = false;
-	}
-	else {
+	if(drawPos_.x>= -WINDOW_WIDTH/2.f&&drawPos_.x<=WINDOW_WIDTH*1.5f){
 		isDraw_ = true;
+		isUpdate_ = true;
+
 		//drawPos_.y += defDrawLinePosY[drawLane + 1];
 
 		drawLane = MathHelper::Abs(drawLane);
@@ -91,6 +90,10 @@ void Actor::LateComUpdate() {
 			//addalpha = MathHelper::Clamp(addalpha, 0.0f, 1.0f);
 			parameter_.spriteAlpha_ = addalpha;
 		}
+	}
+	else {
+		isDraw_ = false;
+		isUpdate_ = false;
 	}
 
 	isCheckCol_ = (world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[2] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[3])

@@ -314,7 +314,8 @@ private:
 			nextVel_ = Vector2(0, -15.f);
 			pGrav_ = 0.f;
 			//position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
-			
+			PHeadChanger();
+			SetMode(MODE_FALL);
 			world_->sendMessage(EventMessage::LANE_CHANGE_UP_END);
 		}
 		//~‚è‚éŽž
@@ -322,6 +323,8 @@ private:
 			if (changeType == LaneChangeType::LaneChange_Fall) {
 				nextVel_ = pendulumVect_ / 3;
 				pGrav_ *= 0.1f;
+
+				world_->sendMessage(EventMessage::LANE_CHANGE_FALL);
 			}
 		}
 	

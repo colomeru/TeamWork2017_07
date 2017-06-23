@@ -1,10 +1,11 @@
 #include "BirdsDropping.h"
 #include"../../../../math/Easing.h"
+#include"../../../../tween/TweenManager.h"
 
 static const float defDropFallTime = 3.0f;
 
 BirdsDropping::BirdsDropping(IWorld * world, int laneNum, Vector2 pos):
-	Enemys(world,laneNum,pos), basePos_(pos), timeCount_(0.f)
+	Enemys(world,laneNum,pos)
 {
 	Vector2 rad = Sprite::GetInstance().GetSize(SPRITE_ID::BIRDS_DROPPING_SPRITE)/2;
 	parameter_.radius = rad.x;
@@ -15,6 +16,9 @@ BirdsDropping::BirdsDropping(IWorld * world, int laneNum, Vector2 pos):
 	
 	colFuncMap_[COL_ID::DROP_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_Droping_Clothes, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
+
+	TweenManager::GetInstance().Add(EaseType::EaseInExpo, &position_.y, (float)WINDOW_HEIGHT, defDropFallTime, [this] {parameter_.isDead = true; });
+
 }
 
 BirdsDropping::~BirdsDropping()
@@ -23,8 +27,6 @@ BirdsDropping::~BirdsDropping()
 
 void BirdsDropping::Update()
 {
-	position_.y = Easing::EaseInBack(timeCount_, basePos_.y, WINDOW_HEIGHT, defDropFallTime, 1.1f);
-	timeCount_ += 0.016f;
 
 	if (world_->GetKeepDatas().playerLane_ == laneNum_) {
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::DROP_PHEAD_COL);
@@ -32,9 +34,6 @@ void BirdsDropping::Update()
 		
 	}
 
-	if (timeCount_ > defDropFallTime ||laneNum_!=world_->GetKeepDatas().playerLane_) {
-		parameter_.isDead = true;
-	}
 }
 
 void BirdsDropping::Draw() const

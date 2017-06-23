@@ -131,6 +131,8 @@ void MenuScreen::Init()
 		sStar_[i].scale_ = 1.0f;
 	}
 	waitTime_ = { 10.0f,7.0f,20.0f,12.0f,34.0f,16.0f,19.0,24.0f,19.0f,15.0f };
+
+	ResetBG();
 }
 
 //更新
@@ -377,6 +379,7 @@ void MenuScreen::Pattern2Update()
 
 	SE();
 
+	
 }
 
 //パターン２描画
@@ -663,4 +666,15 @@ void MenuScreen::InputSelectStage()
 {
 	CheatData::getInstance().SetStartStage(stageNum);
 	CheatData::getInstance().SetSelectStage(stageList_[stageNum]);
+}
+
+//背景リセット
+void MenuScreen::ResetBG()
+{
+	color_ = bgColor_[stageNum];
+	if (stageNum <= 5) {
+		for (int i = 0; i < 3; i++) {
+			starAlpha_[i] = 0.0f;
+		}
+	}
 }

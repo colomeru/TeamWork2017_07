@@ -33,7 +33,9 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	colFuncMap_[COL_ID::PHEAD_HAIRBALL_COL] = std::bind(&CollisionFunction::IsHit_Circle_Circle, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::PSWORD_HAIRBALL_COL] = std::bind(&CollisionFunction::IsHit_Hairball_PSword, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
-	TweenManager::GetInstance().Delay(6.0f, [=]() {Dead(); });
+	vecY_ = position_.y + 150.0f;
+	TweenManager::GetInstance().Delay(8.0f, [=]() {Dead(); });
+	TweenManager::GetInstance().Loop(EaseInOutQuad, &position_.y, vecY_, 1.5f);
 
 	isHit_ = false;
 

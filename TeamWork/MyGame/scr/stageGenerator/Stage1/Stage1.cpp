@@ -3,6 +3,7 @@
 #include "../../actor/Field/Clothes/BaseClothes.h"
 #include "../../actor/Field/Clothes/TestClothes.h"
 #include "../../actor/Field/Clothes/Hanger/Hanger.h"
+#include "../../actor/Field/Clothes/UpHanger/UpHanger.h"
 #include "../../actor/Field/Clothes/GumClothes/GumClothes.h"
 #include "../../actor/Field/Clothes/FluffyClothes/FluffyClothes.h"
 #include "../../actor/Field/Clothes/ThinClothes/ThinClothes.h"
@@ -61,12 +62,12 @@ void Stage1::AddStage()
 	stageSize_ = Vector2(col, row) * STAGE_TIP_SIZE;
 
 	//スタートの服の生成
-	world_->Add(ACTOR_ID::STAGE_ACTOR,std::make_shared<StartClothes>(
-		world_, 
-		CLOTHES_ID::START_CLOTHES, 
-		world_->GetKeepDatas().playerLane_, 
-		Vector2(STAGE_TIP_SIZE, 0), 
-		0.5f, false));
+	//world_->Add(ACTOR_ID::STAGE_ACTOR,std::make_shared<StartClothes>(
+	//	world_, 
+	//	CLOTHES_ID::START_CLOTHES, 
+	//	world_->GetKeepDatas().playerLane_, 
+	//	Vector2(STAGE_TIP_SIZE, 0), 
+	//	0.5f, false));
 
 	//csvの行(row)と列(col)から位置を出し、オブジェクト判別し、生成
 	for (int i = 0; i < row; i++) {
@@ -223,6 +224,11 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		pin_list.pop();
 		break;
 	}
+	case 9: {
+		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<UpHanger>(world_, CLOTHES_ID::HANGER, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
+		break;
+	}
+
 	}
 
 }
@@ -232,11 +238,11 @@ void Stage1::GoalClothes_Add(int i, int j, int data, int laneNum)
 	switch (data)
 	{
 	case 1: {
-		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -800)));
+		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -600)));
 		break;
 	}
 	case 2: {
-		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<MoveGoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -800)));
+		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<MoveGoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -600)));
 		break;
 	}
 	}

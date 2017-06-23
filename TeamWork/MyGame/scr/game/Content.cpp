@@ -148,9 +148,9 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("effect/tapeffect.png", SPRITE_ID::TAP_EFFECT_SPRITE, 10, Point(10, 1), Point(480, 480));
 	sprite.Load("effect/playereffect/sword_effect.png", SPRITE_ID::GET_SWORD_EFFECT_SPRITE, 15, Point(5, 3), Point(260, 260));
 	sprite.Load("effect/playereffect/Splash.png", SPRITE_ID::FATIGUE_EFFECT_SPRITE, 5, Point(5, 1), Point(184, 180));
-	sprite.Load("effect/playereffect/swordeffect.png", SPRITE_ID::SWORD_ATTACK_EFFECT_SPRITE,10,Point(5,2),Point(120,120));
+	sprite.Load("effect/playereffect/swordeffect.png", SPRITE_ID::SWORD_ATTACK_EFFECT_SPRITE, 10, Point(5, 2), Point(120, 120));
+	sprite.Load("effect/playereffect/resurrect.png", SPRITE_ID::RESURRECT_EFFECT_SPRITE,48,Point(6,8),Point(128,128));
 	
-
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
 	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);

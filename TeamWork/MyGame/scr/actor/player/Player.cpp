@@ -11,6 +11,7 @@
 #include"../Effects/PlayerEffect/PlayerMetamorEffect.h"
 #include"../Effects/PlayerEffect/PlayerBiteEffect.h"
 #include"../Effects/PlayerEffect/GetSwordEffect.h"
+#include"../Effects/PlayerEffect/ResurrectEffect.h"
 #include"PlayerNeckDraw.h"
 #include"PlayerDeadPin.h"
 #include"PlayerDeadHead.h"
@@ -1019,6 +1020,8 @@ void Player::ResurrectHead() {
 			trgNum = trgNum - pHeads_.size();
 		}
 		if (!pHeadDead_[trgNum])continue;
+		world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<ResurrectEffect>(world_, position_,pHeads_[trgNum].get()));
+
 		pHeadDead_[trgNum] = false;
 		break;
 	}

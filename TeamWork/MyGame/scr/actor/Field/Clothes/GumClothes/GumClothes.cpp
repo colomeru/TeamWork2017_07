@@ -84,10 +84,10 @@ void GumClothes::Draw() const
 	auto dPos4 = GetDrawPosVect(deformPos_[4]);
 	auto dPos5 = GetDrawPosVect(deformPos_[5]);
 	
-	DrawRectModiGraph(dPos0.x, dPos0.y, dPos1.x, dPos1.y, dPos3.x, dPos3.y, dPos2.x, dPos2.y,
-		0, 0, spriteSize_.x, 50, Sprite::GetInstance().GetHandle(SPRITE_ID::BASE_CLOTHES_SPRITE, drawFrame_), 1);
-	DrawRectModiGraph(dPos2.x, dPos2.y, dPos3.x, dPos3.y, dPos5.x, dPos5.y, dPos4.x, dPos4.y,
-		0, 50, spriteSize_.x, spriteSize_.y - 50, Sprite::GetInstance().GetHandle(SPRITE_ID::BASE_CLOTHES_SPRITE, drawFrame_), 1);
+	//DrawRectModiGraph(dPos0.x, dPos0.y, dPos1.x, dPos1.y, dPos3.x, dPos3.y, dPos2.x, dPos2.y,
+	//	0, 0, spriteSize_.x, 50, Sprite::GetInstance().GetHandle(SPRITE_ID::BASE_CLOTHES_SPRITE, drawFrame_), 1);
+	//DrawRectModiGraph(dPos2.x, dPos2.y, dPos3.x, dPos3.y, dPos5.x, dPos5.y, dPos4.x, dPos4.y,
+	//	0, 50, spriteSize_.x, spriteSize_.y - 50, Sprite::GetInstance().GetHandle(SPRITE_ID::BASE_CLOTHES_SPRITE, drawFrame_), 1);
 
 	DrawClothesFeces();
 	if (BuildMode != 1) return;

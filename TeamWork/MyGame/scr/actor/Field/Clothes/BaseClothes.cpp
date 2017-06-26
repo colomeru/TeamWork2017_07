@@ -13,7 +13,7 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	parameter_.size = Vector2(100.0f, 200.0f);
 	laneNum_ = laneNum;
 
-	position_ = pos;
+	position_ = pos + Vector2(0, -10);
 	fulcrum_ = position_ - Vector2(0, length_);
 	spriteId_ = spriteId;
 
@@ -45,11 +45,6 @@ void BaseClothes::Update()
 
 void BaseClothes::Draw() const
 {
-	if (spriteId_ == SPRITE_ID::BASE_CLOTHES_SPRITE) {
-		Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 20);
-		Vector2 hangPos = GetDrawPosVect(fulcrum_);
-		Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2(0.8f, 1.0f), angle_);
-	}
 	auto drawPos = GetDrawPosVect(position_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
 	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);

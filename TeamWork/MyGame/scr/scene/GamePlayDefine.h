@@ -19,14 +19,14 @@ static const int ScoreList[8]{
 
 //風が吹くまでの基本時間(フレーム数)
 static const int defWindTime[8]{
-10000000,//ステージ1
-1000,//ステージ2
-700,//ステージ3
-800,//ステージ4
-800,//ステージ5
-800,//ステージ6
-800,//ステージ7
-800	//ステージ8
+1000,//ステージ1
+600,//ステージ2
+500,//ステージ3
+400,//ステージ4
+450,//ステージ5
+500,//ステージ6
+400,//ステージ7
+200	//ステージ8
 };
 //叩きを生成するかどうか
 static const bool isSpawnTapper[8]{
@@ -36,19 +36,19 @@ true,//3
 true,//4
 false,//5
 true,//6
-false,//7
+true,//7
 true//8
 };
 //鳥を生成するまでの時間
 static const int spawnBirfdTime[8]{
 	500,//ステージ1
-	300,//ステージ2
-	300,//ステージ3
-	300,//ステージ4
+	400,//ステージ2
+	400,//ステージ3
+	400,//ステージ4
 	300,//ステージ5
-	300,//ステージ6
-	300,//ステージ7
-	300	//ステージ8
+	200,//ステージ6
+	250,//ステージ7
+	200	//ステージ8
 };
 
 
@@ -73,4 +73,4 @@ static const float startAddTime = 0.005f;
 //画面内の服が揺れる確率（％）
 static const int frequencyWind = 25;
 //毛玉が飛んでくる確率（％）
-static const int frequencyHairBall = 12;
+static const int frequencyHairBall = 30;

@@ -4,6 +4,7 @@
 #include"../math/MathHelper.h"
 #include"../math/Vector3.h"
 #include"../math/Vector2.h"
+#include"../stageGenerator/Stage.h"
 #include <stack>
 
 static const float defDrawLinePosY[3] = { 0,500,1000 };
@@ -22,7 +23,8 @@ struct KeepDatas {
 	bool isFallCamMode_;
 	float fallAddPos_;
 	float camPosY_;
-	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero,Vector2 sPPos=Vector2::Zero, int nextLane = 0,bool isFallCamMode=false,float fallAddPos=0.f) :playerLane_(lane), prevPlayerLane_(lane), playerPos_(pos),startPointPos_(sPPos), nextLane_(nextLane), changeLaneLerpPos_(0.f), isFallCamMode_(isFallCamMode), fallAddPos_(fallAddPos), camPosY_(0.f){}
+	Stage currentStage_;
+	KeepDatas(int lane = 0, Vector2 pos = Vector2::Zero,Vector2 sPPos=Vector2::Zero, int nextLane = 0,bool isFallCamMode=false,float fallAddPos=0.f,Stage currentStage=Stage::Stage1) :playerLane_(lane), currentStage_(currentStage), prevPlayerLane_(lane), playerPos_(pos),startPointPos_(sPPos), nextLane_(nextLane), changeLaneLerpPos_(0.f), isFallCamMode_(isFallCamMode), fallAddPos_(fallAddPos), camPosY_(0.f){}
 
 	//playerÇÃåªÉåÅ[ÉìÇçXêVÇ∑ÇÈ
 	void SetPlayerLane(const int& pLane) {

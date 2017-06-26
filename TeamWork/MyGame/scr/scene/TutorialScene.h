@@ -10,8 +10,9 @@
 #include "GamePlayDefine.h"
 #include "addScreen\BackgroundScreen.h"
 #include "addScreen/TutorialTextScreen.h"
+#include"../actor/Effects/PlayerEffect/ArrowEffectGenerator.h"
 
-static const int maxTutorialNum = 2;
+static const int maxTutorialNum = 5;
 
 class TutorialManager;
 
@@ -28,6 +29,8 @@ public:
 		UseSword,
 		StartWind,
 		ChangeHead,
+		ClearStage,
+		EndStage,
 		Dummy,
 	};
 public:
@@ -68,6 +71,9 @@ private:
 	//各チュートリアルステージ用のセット関数、テキストが変わるたびに呼ぶこと
 	void SetLock1(int tutorialLockNum);
 	void SetLock2(int tutorialLockNum);
+	void SetLock3(int tutorialLockNum);
+	void SetLock4(int tutorialLockNum);
+	void SetLock5(int tutorialLockNum);
 
 private:
 	void ChangeNextTutorial();
@@ -102,10 +108,15 @@ private:
 
 	float dummy_;
 
+	float timeCount_;
+
+	bool isAlreadyPutButton_;
+
 	std::vector<std::pair<UnLockType, bool>> lockList_;
 
 	std::vector<std::function<void(int)>> setLockFuncList_;
 
 	std::shared_ptr<TutorialManager> enemGenerator_;
 
+	ArrowEffectGenerator arrowEffectGenerator_;
 };

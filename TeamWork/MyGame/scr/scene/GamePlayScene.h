@@ -10,6 +10,7 @@
 #include"addScreen/PauseScreen.h"
 #include"addScreen\LaneChangeScreen.h"
 #include"addScreen\StageEffectScreen.h"
+#include"addScreen/AllClearScreen.h"
 #include"addScreen/UIScreen.h"
 
 class Player;
@@ -75,6 +76,7 @@ private:
 	BackgroundScreen bgScreen_;
 	LaneChangeScreen changeScreen_;
 	StageEffectScreen stageEffectScreen_;
+	AllClearScreen allClearScreen_;
 	UIScreen uiScreen_;
 	//Vector3 posit;
 

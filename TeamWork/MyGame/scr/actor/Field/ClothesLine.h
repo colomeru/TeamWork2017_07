@@ -27,4 +27,6 @@ private:
 	int blockSize_;
 
 	Vector2 endPos_;
+
+	Vector2 addPos_;
 };

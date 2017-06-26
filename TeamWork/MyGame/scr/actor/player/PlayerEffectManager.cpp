@@ -25,13 +25,13 @@ void PlayerEffectManager::Update()
 
 
 
-void PlayerEffectManager::DrawEffect(const Vector2& position,float angle,const Vector2& size) const
+void PlayerEffectManager::DrawEffect(const Vector2& position,float angle,const Vector2& size,bool isturn) const
 {
 	int drawFrame = (frameCount_ / anmSpeed_);
 	Vector2 origin = Sprite::GetInstance().GetSplitPieceSize(id_)/2;
 	//origin.x *= size.x;
 	//origin.y *= size.y;
-	Sprite::GetInstance().SplitDraw(id_, position,drawFrame,origin, size,angle);
+	Sprite::GetInstance().SplitDraw(id_, position,drawFrame,origin, size,angle,true,isturn);
 }
 
 bool PlayerEffectManager::GetIsEnd() const

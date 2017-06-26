@@ -115,6 +115,7 @@ void GamePlayScene::Initialize()
 		pauseScreen_.Init();
 		gameOverScreen_.Init();
 		gameClearScreen_.Init();
+		allClearScreen_.Init();
 		bgScreen_.Init(currentStage_);
 	}
 	world_->Initialize();
@@ -155,9 +156,9 @@ void GamePlayScene::Initialize()
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
 	//テスト用
 	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<MyTestCamera>(world_.get()));
-	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
-	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
-	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stageGeneratorManager.GetStageSize(currentStage_), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stageGeneratorManager.GetStageSize(currentStage_)+Vector2(200,0), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stageGeneratorManager.GetStageSize(currentStage_) + Vector2(200, 0), Vector2(0, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stageGeneratorManager.GetStageSize(currentStage_) + Vector2(200, 0), Vector2(0, 0)));
 
 	world_->SetMaxSize((int)stageLen_-WINDOW_WIDTH/2);
 
@@ -185,6 +186,8 @@ void GamePlayScene::Initialize()
 	//FadePanel::GetInstance().Initialize();
 	FadePanel::GetInstance().SetInTime(1.0f, 0.5f);
 	FadePanel::GetInstance().FadeIn();
+
+	world_->GetCanChangedKeepDatas().currentStage_ = currentStage_;
 }
 
 void GamePlayScene::Update()
@@ -274,7 +277,12 @@ void GamePlayScene::Draw() const
 		gameOverScreen_.Draw();
 	}
 	else if (gamePlayMode_ == 3) {
-		gameClearScreen_.Draw();
+		if (currentStage_ == Stage::Stage8) {
+			allClearScreen_.Draw();
+		}
+		else {
+			gameClearScreen_.Draw();
+		}
 	}
 	else if (gamePlayMode_ == 4) {
 		pauseScreen_.Draw();
@@ -454,29 +462,43 @@ void GamePlayScene::overUpdate()
 
 void GamePlayScene::clearUpdate()
 {
-	if (gameClearScreen_.Update(nextScene_)) {
-		if (nextScene_ == Scene::GamePlay) {
-			FadePanel::GetInstance().AddCollBack([=]() { 
-				currentStage_ = nextStageList_[currentStage_];
-				End();
-				Initialize(); 
-			});
+	if (currentStage_ != Stage::Stage8) {
+		if (gameClearScreen_.Update(nextScene_)) {
+			if (nextScene_ == Scene::GamePlay) {
+				if (currentStage_ == Stage::Stage8) {
+					nextScene_ = Scene::Credit2;
+					FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+
+				}
+				else {
+					FadePanel::GetInstance().AddCollBack([=]() {
+						currentStage_ = nextStageList_[currentStage_];
+						End();
+						Initialize();
+					});
+				}
+			}
+			else {
+				FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+			}
+			FadePanel::GetInstance().FadeOut();
+
+			//isEnd_ = true;
+			//if (nextScene_ == Scene::GamePlay) {
+			//	End();
+			//	currentStage_ = nextStageList_[currentStage_];
+			//	Initialize();
+				//setNextMode(6);
+
 		}
-		else {
+	}
+	else {
+		if (allClearScreen_.Update(nextScene_)) {
 			FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+			FadePanel::GetInstance().FadeOut();
 		}
-		FadePanel::GetInstance().FadeOut();
-
-		//isEnd_ = true;
-		//if (nextScene_ == Scene::GamePlay) {
-		//	End();
-		//	currentStage_ = nextStageList_[currentStage_];
-		//	Initialize();
-			//setNextMode(6);
-
 	}
 }
-
 void GamePlayScene::nextUpdate()
 {
 
@@ -517,8 +539,17 @@ void GamePlayScene::setNextMode(int mode) {
 		CheatData::getInstance().SetClearData(stagenum_[currentStage_], true);
 		if(currentStage_!=Stage::Stage8)
 			CheatData::getInstance().SetSelectStage(nextStageList_[currentStage_]);
-		gameClearScreen_.Init();
-		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(),currentStage_);
+		
+		if (currentStage_ == Stage::Stage8) {
+			allClearScreen_.Init();
+			allClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(), currentStage_);
+
+		}
+		else {
+			gameClearScreen_.Init();
+			gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(), currentStage_);
+		}
+		Sound::GetInstance().SetBGMVolume(BGM_ID::STAGE_CLEAR_BGM, 0.7f);
 		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);
 		//gameClearScreen_.SetStarCount();
 		break;

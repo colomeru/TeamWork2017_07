@@ -41,7 +41,7 @@ void World::Update()
 		}
 		else {
 			unlockYPos_ -= 3.0f;
-			unlockYPos_ = max(unlockYPos_, -WINDOW_HEIGHT);
+			unlockYPos_ = max(unlockYPos_, -WINDOW_HEIGHT*1.5f);
 			keepDatas_.camPosY_ = unlockYPos_;
 			targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, unlockYPos_, 0));
 		}
@@ -182,7 +182,7 @@ void World::inv(const Matrix & mat)
 	playerMat = mat;
 
 	//ç≈ëÂç≈è¨ílÇÃéwíË(0,999999ÇÕå„Ç≈è¡ÇªÇ§)
-	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, 0, maxSize_);
+	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, -100, maxSize_);
 	float clampPosY = MathHelper::Clamp((int)playerMat.Translation().y, -10000, 999999);
 
 	//if (scrool.scroolJudge.x == 0)

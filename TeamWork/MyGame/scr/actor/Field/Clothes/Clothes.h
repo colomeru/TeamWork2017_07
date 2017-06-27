@@ -133,14 +133,14 @@ protected:
 	ActorPtr clothesFeces_;
 	//振り子の状態
 	PendulumState penState_;
-
 	//プレイヤー
 	Player* player_;
 	//振り子の移動量
 	Vector2 pendulumVec_;
 	//振り子の移動前の位置
 	Vector2 beforePos_;
-
+	//
+	std::map<Stage, int> frequencyWind_;
 
 	//振り子関連(服用)
 	//振り子フラグ
@@ -159,8 +159,6 @@ protected:
 	float length_;
 	//重力加速度
 	float gravity_;
-	//振り子前の固定位置
-	Vector2 basePosition_;
 	//摩擦
 	float friction_;
 	//振り子カウント

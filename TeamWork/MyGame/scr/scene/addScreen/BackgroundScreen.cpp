@@ -34,6 +34,8 @@ BackgroundScreen::BackgroundScreen(World * world) :world_(world),timeCount_(0)
 
 void BackgroundScreen::Init(Stage currentStage)
 {
+	End();
+
 	timeCount_ = 0;
 	Vector2 pPos = world_->GetKeepDatas().playerPos_;
 	//characters_.push_back(new BackgroundPill(world_ , Vector2(pPos.x+2000, 500)));
@@ -47,9 +49,12 @@ void BackgroundScreen::Init(Stage currentStage)
 void BackgroundScreen::Update()
 {
 	timeCount_++;
-	if (createWindTimeAndPos_.find(timeCount_)!= createWindTimeAndPos_.end()) {
+	if (createWindTimeAndPos_.size() <= 0)return;
+	if (createWindTimeAndPos_.front().windTime_ == timeCount_) {
 		Vector2 pPos = world_->GetKeepDatas().playerPos_;
-		world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, createWindTimeAndPos_[timeCount_]+pPos));
+		world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, createWindTimeAndPos_.front().windPos_ + pPos));
+
+		createWindTimeAndPos_.pop_front();
 	}
 	//std::vector<BackgroundCharacters*>::iterator itr = characters_.begin();
 	//while (itr != characters_.end())
@@ -138,10 +143,10 @@ void BackgroundScreen::addBGCharacters()
 			//world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, Vector2(2000 + (i * 100), charactersPosition_[yPos].y) + pPos));
 
 			int createTime = Random::GetInstance().Range(0, 400);
-
-			createWindTimeAndPos_[createTime] = Vector2(2000, charactersPosition_[yPos].y);
+			createWindTimeAndPos_.push_back(WindTimeAndPos(createTime,Vector2(2000, charactersPosition_[yPos].y)));
+			//createWindTimeAndPos_[createTime] = Vector2(2000, charactersPosition_[yPos].y);
 		}
-
+		createWindTimeAndPos_.sort();
 		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2000, -200)));
 		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2300, 0)));
 		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2500, 200)));

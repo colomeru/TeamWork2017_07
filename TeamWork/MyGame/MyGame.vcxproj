@@ -254,6 +254,7 @@
     <ClCompile Include="scr\scene\addScreen\PauseScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.cpp" />
+    <ClCompile Include="scr\scene\addScreen\screenSupport\CreditPostText.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\CreditText.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\CreditTextGenerator.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\DrawScore.cpp" />
@@ -400,6 +401,7 @@
     <ClInclude Include="scr\scene\addScreen\screenSupport\BackgroundCharacters.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\BackgroundPill.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\BGCharas\LaneChangeWind.h" />
+    <ClInclude Include="scr\scene\addScreen\screenSupport\CreditPostText.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\CreditText.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\CreditTextGenerator.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\DrawScore.h" />

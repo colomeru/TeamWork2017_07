@@ -1,13 +1,14 @@
 #pragma once
 #include "../../../actor/player/CreditPlayer.h"
 #include "../../../actor/Field/Clothes/Clothes.h"
+#include "../../../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
 
-class CreditText : public Clothes/*,std::enable_shared_from_this<CreditText>*/ {
+class CreditPostText : public Clothes/*,std::enable_shared_from_this<CreditText>*/ {
 public:
 	//
-	CreditText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, Vector2 size, int frame);
+	CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, Vector2 size, int frame);
 	//
-	~CreditText();
+	~CreditPostText();
 	//
 	virtual void Update() override;
 	//
@@ -20,4 +21,7 @@ private:
 	int frame_;
 	Vector2 modify_;
 	float f1, f2;
+	Vector2 pos_;
+
+	CharacterAnmManager anmManager_;
 };

@@ -197,6 +197,15 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("sugiura.png", SPRITE_ID::CREDIT_SUGIURA_SPRITE, 4, Point(4, 1), Point(300, 300));
 	sprite.Load("kuwabara.png", SPRITE_ID::CREDIT_KUWABARA_SPRITE, 4, Point(4, 1), Point(300, 300));
 	sprite.Load("sim2.png", SPRITE_ID::CREDIT_SIM_SPRITE, 4, Point(4, 1), Point(300, 300));
+	sprite.Load("nagao.png", SPRITE_ID::CREDIT_NAGAO_SPRITE, 4, Point(4, 1), Point(300, 300));
+	sprite.Load("pl.png", SPRITE_ID::CREDIT_MPL_SPRITE, 1, Point(1, 1), Point(786, 150));
+	sprite.Load("main_pg.png", SPRITE_ID::CREDIT_MPG_SPRITE, 1, Point(1, 1), Point(1302, 150));
+	sprite.Load("sub_pg.png", SPRITE_ID::CREDIT_SPG_SPRITE, 1, Point(1, 1), Point(1291, 150));
+	sprite.Load("designer.png", SPRITE_ID::CREDIT_DESIGNER_SPRITE, 1, Point(1, 1), Point(744, 150));
+	sprite.Load("yokotaoru.png", SPRITE_ID::CREDIT_TOWEL_SPRITE, 1, Point(1, 1), Point(600, 150));
+	sprite.Load("credit_futon.png", SPRITE_ID::CREDIT_FUTON_SPRITE, 1, Point(1, 1), Point(200, 135));
+	sprite.Load("credit_chain.png", SPRITE_ID::CREDIT_CHAIN_SPRITE);
+
 
 }
 

@@ -16,6 +16,7 @@ public:
 
 private:
 	void ClothAdd();
+	void PostAdd();
 
 private:
 	float timer_;
@@ -24,6 +25,9 @@ private:
 	std::vector<SPRITE_ID> id_;
 	int idCount_;
 	float interval_;
-	bool test_;
 	float loopHandle_;
+
+	std::vector<SPRITE_ID> postId_;
+	std::vector<Vector2> postSize_;
+
 };

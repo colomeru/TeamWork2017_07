@@ -69,7 +69,7 @@ void Credit2Scene::Initialize()
 	textScreen_.Init("Tutorial.txt");
 
 	//world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stage.GetStageSize() + Vector2(150, 0), Vector2(0, 0)));
-	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stage.GetStageSize() + Vector2(WINDOW_WIDTH + 100, 0), Vector2(-150, 0)));
+	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stage.GetStageSize() + Vector2(WINDOW_WIDTH + 100, 0), Vector2(-150, 100)));
 	//world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stage.GetStageSize() + Vector2(150, 0), Vector2(0, 0)));
 
 	//
@@ -183,7 +183,6 @@ void Credit2Scene::Draw() const
 	//	DrawBox(min.x, min.y, max.x, max.y, GetColor(0, 255 - 20 * i, 20 * i), 1);
 	//}
 
-	Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, Vector2(-150, 350));
 
 	// •`‰æ
 	world_->Draw(3, world_->GetKeepDatas().playerLane_);

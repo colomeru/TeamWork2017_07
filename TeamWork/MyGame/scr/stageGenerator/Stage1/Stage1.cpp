@@ -93,10 +93,10 @@ void Stage1::AddStage()
 			}
 			case 2: {
 				Clothes_Add(i, j, data, laneNum);
-				world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other){
-					static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
-					//static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
-				});
+				//world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other){
+				//	//static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
+				//	//static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
+				//});
 				break;
 			}
 			case 3: {

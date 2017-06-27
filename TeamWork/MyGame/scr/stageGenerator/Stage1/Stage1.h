@@ -1,5 +1,6 @@
 #pragma once
 #include "../StageGenerator.h"
+#include "../Stage.h"
 #include "../../game/ID.h"
 #include <queue>
 #include <vector>
@@ -41,5 +42,5 @@ protected:
 	int frequencyHairball_;
 	//–Ñ‹Ê‚Ì”ò‚Ô•p“x
 	int hairballCnt_;
-	Stage currentStage_;
+	//Stage currentStage_;
 };

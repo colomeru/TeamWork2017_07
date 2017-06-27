@@ -82,12 +82,12 @@ CreditPlayer::CreditPlayer(IWorld * world, int maxLaneSize, int startLane)
 		pHeadDead_.push_back(false);
 
 		pHeads_[i] = (std::make_shared<Player_Head>(world, player, pHeadPoses_[i], i));
-		world_->Add(ACTOR_ID::PLAYER_HEAD_ACTOR, pHeads_[i]);
+		//world_->Add(ACTOR_ID::PLAYER_HEAD_ACTOR, pHeads_[i]);
 
 		SetMyHeadLaneNum(i);
 	}
 	pSword_ = std::make_shared<Player_Sword>(world, player, position_);
-	world_->Add(ACTOR_ID::PLAYER_SWORD_ACTOR, pSword_);
+	//world_->Add(ACTOR_ID::PLAYER_SWORD_ACTOR, pSword_);
 
 	updateFunctionMap_[MODE_FALL] = std::bind(&CreditPlayer::FallUpdate, this);
 	updateFunctionMap_[MODE_SHOOT] = std::bind(&CreditPlayer::ShootUpdate, this);
@@ -129,7 +129,7 @@ CreditPlayer::~CreditPlayer()
 //更新
 void CreditPlayer::Update()
 {
-
+	return;
 	chainLockCoolTime_--;
 	chainLockCoolTime_ = MathHelper::Clamp(chainLockCoolTime_, 0, defChainLockCoolTime_);
 	//レーン変更のクールタイムを設定
@@ -181,6 +181,7 @@ void CreditPlayer::FastUpdate() {
 //描画
 void CreditPlayer::Draw() const
 {
+	return;
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));

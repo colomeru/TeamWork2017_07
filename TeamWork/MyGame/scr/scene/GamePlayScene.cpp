@@ -86,14 +86,14 @@ GamePlayScene::GamePlayScene() :
 	changeScreen_=LaneChangeScreen(world_.get());
 	uiScreen_ = UIScreen(world_.get());
 
-	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test"), 60));
-	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Stage1"), 60));
-	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage1>(world_.get(), std::string("Stage2"), 60));
-	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage1>(world_.get(), std::string("Stage3"), 60));
-	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage1>(world_.get(), std::string("Stage4"), 60));
-	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage1>(world_.get(), std::string("Stage5"), 60));
-	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage1>(world_.get(), std::string("Stage6"), 60));
-	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage1>(world_.get(), std::string("Stage7"), 60));
+	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test")));
+	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
+	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage1>(world_.get(), std::string("Stage2")));
+	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage1>(world_.get(), std::string("Stage3")));
+	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage1>(world_.get(), std::string("Stage4")));
+	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage1>(world_.get(), std::string("Stage5")));
+	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage1>(world_.get(), std::string("Stage6")));
+	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage1>(world_.get(), std::string("Stage7")));
 
 }
 

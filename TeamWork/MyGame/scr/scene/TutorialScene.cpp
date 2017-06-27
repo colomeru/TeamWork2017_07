@@ -82,7 +82,7 @@ void TutorialScene::SceneInit()
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
 	world_->PushStackActor(player_);
 
-	Stage1 stage(world_.get(), StageNameList_[currentTutorialNum_], 0);
+	Stage1 stage(world_.get(), StageNameList_[currentTutorialNum_]);
 	if (currentTutorialNum_ == maxTutorialNum - 1) stage.LoadStage();
 	else stage.CreateClothes();
 

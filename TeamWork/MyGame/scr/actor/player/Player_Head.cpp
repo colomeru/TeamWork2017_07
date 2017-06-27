@@ -113,7 +113,10 @@ void Player_Head::Update()
 
 void Player_Head::Draw() const
 {
-	if (player_->GetPHeadDead(myNumber_))return;
+	if (player_->GetPHeadDead(myNumber_)) {
+		
+		return;
+	}
 	//auto pos_1 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation());
 	//auto pos_2 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation() + Vector3(0, 10, 0));
 	//DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);

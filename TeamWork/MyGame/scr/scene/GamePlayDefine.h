@@ -51,26 +51,43 @@ static const int spawnBirfdTime[8]{
 	200	//ステージ8
 };
 
+//画面内の服が揺れる確率（％）
+static const int frequencyWind[8]{
+	25,//ステージ1
+	25,//ステージ2
+	25,//ステージ3
+	25,//ステージ4
+	25,//ステージ5
+	25,//ステージ6
+	25,//ステージ7
+	25 //ステージ8
+};
 
-//static const void setWindTime(Stage name) {
-//	switch (name)
-//	{
-//	case Stage::Stage1: {
-//		defWindTime_ = 800;
-//	}
-//	case Stage::Stage2: {
-//		defWindTime_ = 1000;
-//	}
-//	case Stage::Stage3: {
-//		defWindTime_ = 1200;
-//	}
-//	}
-//}
+//毛玉が飛んでくる確率（％）
+static const int frequencyHairBall[8]{
+	12,//ステージ1
+	12,//ステージ2
+	12,//ステージ3
+	12,//ステージ4
+	12,//ステージ5
+	12,//ステージ6
+	12,//ステージ7
+	12 //ステージ8
+};
+
+//毛玉が飛んでくる頻度（フレーム数）
+static const int hairballCnt[8]{
+	60,//ステージ1
+	60,//ステージ2
+	60,//ステージ3
+	60,//ステージ4
+	60,//ステージ5
+	60,//ステージ6
+	60,//ステージ7
+	60 //ステージ8
+};
+
 //ゲーム開始時の全体時間
 static const float startEase = 4.f;
 //ボタン押してるときに進める時間
 static const float startAddTime = 0.005f;
-//画面内の服が揺れる確率（％）
-static const int frequencyWind = 25;
-//毛玉が飛んでくる確率（％）
-static const int frequencyHairBall = 30;

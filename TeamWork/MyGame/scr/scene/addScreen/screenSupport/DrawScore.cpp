@@ -23,11 +23,11 @@ int DrawScore::Draw(const Vector2& position,int score,int digit,const Vector2& n
 	Vector2 basePos = position-Vector2(DigitLength(score)*baseSize.x,0.f);
 	std::vector<int> drawscore=SligeDigit(score);
 	
-	for (int i = 0; i < drawscore.size(); i++) {
+	for (int i = 0; i < (int)drawscore.size(); i++) {
 		Sprite::GetInstance().SplitDraw(SPRITE_ID::NUMBER_SPRITE,
 			basePos+Vector2((baseSize.x)*(i),0.f),drawscore.at(drawscore.size()-1-i), baseSize/2,numberSize);
 	}
 	int result = (int)basePos.x;
-	result += Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x*(1-numberSize.x);
+	result += Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x*(1 - (int)numberSize.x);
 	return result;
 }

@@ -123,7 +123,7 @@ public:
 		else if (MathHelper::Abs(headChangeTime_) > 0)rotTimer = headChangeTime_ * 5;//MathHelper::Abs(defHeadChangeTime/1.f);
 
 		rotTimer+=clearAddRot_;
-		for (int i = 0; i < pHeadPoses_.size(); i++) {
+		for (int i = 0; i < (int)pHeadPoses_.size(); i++) {
 			Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((i + headAngleSetter - currentHead_) * 45)/*+angle_*/ + ((rotTimer)* 45));
 			Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
 			pHeadPoses_[i] = cgToV2;
@@ -154,7 +154,7 @@ public:
 		return pHeadDead_[pHeadNum];
 	}
 	void CurHeadBite(const Vector2& target);
-	void ResurrectHead();
+	bool ResurrectHead();
 	void SetOtherClothesID_(CLOTHES_ID cId) {
 		otherClothesID_ = cId;
 	}
@@ -273,7 +273,7 @@ private:
 	void SetMultiplePos(const Vector2& addpos);
 	//‘½dU‚èŽq‚ð‹­§“I‚ÉˆÚ“®
 	void AddMultiplePos(const Vector2& addPos) {
-		for (int i = 0; i < multiplePos.size(); i++) {
+		for (int i = 0; i < (int)multiplePos.size(); i++) {
 			multiplePos[i] += (addPos);
 			if (i > 0) fPos_[i] = multiplePos[i - 1];
 		}

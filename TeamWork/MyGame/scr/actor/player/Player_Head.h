@@ -60,9 +60,9 @@ public:
 	//
 	//	player_->SetOtherClothesID_(type);
 	//}
-	void ResurrectHead() {
-			player_->ResurrectHead();
-			return;
+	bool ResurrectHead() {
+		return player_->ResurrectHead();
+		
 	}
 	void StartPlayerHeadBite() {
 		isHit_ = true;

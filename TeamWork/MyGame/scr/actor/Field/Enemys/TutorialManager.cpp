@@ -22,7 +22,7 @@ void TutorialManager::Update()
 	resurTimer_ -= Time::DeltaTime;
 	if (isResur_&&resurTimer_ <= 0.0f) {
 		isResur_ = false;
-		world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_, world_->GetKeepDatas().playerLane_, world_->GetKeepDatas().playerPos_ + Vector2(WINDOW_WIDTH, 0.f)));
+		world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_, world_->GetKeepDatas().playerLane_, world_->GetKeepDatas().playerPos_ + Vector2((float)WINDOW_WIDTH, 0.f)));
 	}
 	if (isSpawnWind[stage_]) {
 		windCount_--;

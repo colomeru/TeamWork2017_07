@@ -8,7 +8,7 @@ ClothesLine::ClothesLine(IWorld * world, int laneNum, const Vector2& endPos, Vec
 {
 	parameter_.ID = ACTOR_ID::UI_ACTOR;
 	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(STAGE_TIP_SIZE, 50.f);
+	parameter_.size = Vector2((float)STAGE_TIP_SIZE, 50.f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -43,7 +43,7 @@ void ClothesLine::Draw() const
 {
 	Vector2 pPos = world_->GetKeepDatas().playerPos_;
 
-	float sizex = Sprite::GetInstance().GetSize(SPRITE_ID::GAMEPLAY_LANE_SPRITE).x;
+	float sizex = (int)Sprite::GetInstance().GetSize(SPRITE_ID::GAMEPLAY_LANE_SPRITE).x;
 	
 	float drawx = (float)((int)world_->GetInv().Translation().x %(int)sizex);
 	drawx -= 250.0f;
@@ -55,10 +55,10 @@ void ClothesLine::Draw() const
 	Vector2 vecaddpos = Vector2(0, LaneSorigin.y);
 
 	for (int i = 0; i < 6; i++) {
-		Vector2 drawLPos = drawVec + Vector2(sizex / 2, 0.f)*i;
+		Vector2 drawLPos = drawVec + Vector2(sizex / 2.f, 0.f)*i;
 		if ((drawEndPos).x <= drawLPos.x + sizex){
 			Vector2 lastdp = drawLPos;// -Vector2(0.0f, Sprite::GetInstance().GetSize(SPRITE_ID::LANE_SPRITE).y / 2);
-			Vector2 lastep = drawEndPos + vecaddpos+Vector2(20.0f, Sprite::GetInstance().GetSize(SPRITE_ID::GAMEPLAY_LANE_SPRITE).y/2);
+			Vector2 lastep = drawEndPos + vecaddpos+Vector2(20.0f, (float)Sprite::GetInstance().GetSize(SPRITE_ID::GAMEPLAY_LANE_SPRITE).y/2.f);
 			DrawModiGraph((int)lastdp.x, (int)lastdp.y, (int)lastep.x, (int)lastdp.y, (int)lastep.x, (int)lastep.y, (int)lastdp.x, (int)lastep.y, Sprite::GetInstance().GetHandle(SPRITE_ID::LANE_SPRITE), TRUE);
 			//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SIDE_SPRITE, drawPos_ + vecaddpos, LaneSorigin, spriteAlpha_, Vector2::One, 0.0f);
 			break;

@@ -24,7 +24,7 @@ private:
 	int GetMaxTextSize() {
 		int ret = 0;
 		for (int i = currentTextLine_ * 3; i< currentTextLine_ * 3 + 3; i++) {
-			if (i >= drawText_.size())break;
+			if (i >= (int)drawText_.size())break;
 			ret+=drawText_[i].size();
 		}
 		return ret;

@@ -134,6 +134,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("meter_start.png", SPRITE_ID::METER_GOAL_SPRITE);
 	sprite.Load("chain_1.png", SPRITE_ID::NECK_CHAIN1_SPRITE);
 	sprite.Load("titleselect.png", SPRITE_ID::TITLE_SELECT_SPRITE);
+	sprite.Load("batu.png", SPRITE_ID::BAD_SPRITE);
+	sprite.Load("teamlogo.png", SPRITE_ID::LOGO_SPRITE);
 
 	sprite.Load("stage_select//stage1.png", SPRITE_ID::STAGE_SELECT_1_SPRITE);
 	sprite.Load("stage_select//stage2.png", SPRITE_ID::STAGE_SELECT_2_SPRITE);
@@ -251,6 +253,7 @@ void Content::LoadSound(Sound& sound)
 	sound.LoadSE("se/createsword.mp3", SE_ID::CREATE_SWORD_SE);
 	sound.LoadSE("se/slash.mp3", SE_ID::SLASH_SE);
 	sound.LoadSE("se/resurrect.mp3", SE_ID::RESURRECT_SE);
+	sound.LoadSE("se/batu.mp3", SE_ID::BAD_SE);
 
 
 }

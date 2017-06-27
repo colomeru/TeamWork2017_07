@@ -100,7 +100,7 @@ void MenuScreen::Init()
 		OpenNextStage(i);
 	}
 
-	
+
 	stageNum = CheatData::getInstance().GetStartStage();
 	dis = stageNum * betDis_;
 	cursorPos = CursorPos[0];
@@ -133,6 +133,11 @@ void MenuScreen::Init()
 	waitTime_ = { 10.0f,7.0f,20.0f,12.0f,34.0f,16.0f,19.0,24.0f,19.0f,15.0f };
 
 	ResetBG();
+
+	if (!Sound::GetInstance().IsPlayBGM()) {
+		Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM, DX_PLAYTYPE_LOOP);
+		Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
+	}
 }
 
 //更新
@@ -309,6 +314,7 @@ void MenuScreen::Pattern2Update()
 				cDis_[i] += betDis_;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
+			Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 
 		}
 		if (IsInputDown())
@@ -327,6 +333,7 @@ void MenuScreen::Pattern2Update()
 				cDis_[i] -= betDis_;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
+			Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 
 		}
 	}
@@ -336,15 +343,19 @@ void MenuScreen::Pattern2Update()
 	cursorNum = 0;
 
 	//左を押すと「戻る」にカーソルを移動
-	if (IsInputLeft())
+	if (IsInputLeft() && !backSelect)
 	{
 		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[1], MoveTime);
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 		backSelect = true;
+
 	}
-	else if (IsInputAny())
+	else if (IsInputAny() && backSelect)
 	{
 		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[0], MoveTime);
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 		backSelect = false;
+
 	}
 
 	//ステージをクリアしたら次のステージを解放する
@@ -377,9 +388,9 @@ void MenuScreen::Pattern2Update()
 
 	anmManager_.Update();
 
-	SE();
+	//SE();
 
-	
+
 }
 
 //パターン２描画
@@ -639,11 +650,11 @@ void MenuScreen::Crow()
 //SE
 void MenuScreen::SE()
 {
-	if (IsInputAny() ||
-		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A) ||
-		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT)) {
-		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
-	}
+	//if (IsInputAny() ||
+	//	Keyboard::GetInstance().KeyTriggerDown(KEYCODE::A) ||
+	//	GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::LEFT)) {
+	//	Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
+	//}
 	if (backSelect == false &&
 		(Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
 			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
@@ -655,6 +666,11 @@ void MenuScreen::SE()
 		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
 	}
 
+}
+
+void MenuScreen::End()
+{
+	Sound::GetInstance().StopBGM();
 }
 
 Stage MenuScreen::GetGamePlayStage() const

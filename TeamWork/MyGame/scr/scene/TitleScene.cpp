@@ -157,7 +157,7 @@ Scene TitleScene::Next() const
 
 void TitleScene::End()
 {
-	Sound::GetInstance().StopBGM();
+	//Sound::GetInstance().StopBGM();
 	world_->Clear();
 	CheatData::getInstance().SetStartStage(0);
 

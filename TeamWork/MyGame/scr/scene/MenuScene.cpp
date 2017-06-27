@@ -3,6 +3,8 @@
 #include "../math/MathHelper.h"
 #include "../graphic/Sprite.h"
 #include"../fade/FadePanel.h"
+
+
 MenuScene::MenuScene() :
 	nextScene_(Scene::GamePlay)
 {
@@ -77,7 +79,9 @@ Scene MenuScene::Next() const
 void MenuScene::End()
 {
 	// ‰Šú‰»
+	menu.End();
 	world_->Clear();
+	
 	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
 	//FadePanel::GetInstance().FadeOut();
 }

@@ -136,6 +136,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("titleselect.png", SPRITE_ID::TITLE_SELECT_SPRITE);
 	sprite.Load("batu.png", SPRITE_ID::BAD_SPRITE);
 	sprite.Load("teamlogo.png", SPRITE_ID::LOGO_SPRITE);
+	sprite.Load("biterange.png", SPRITE_ID::BITE_RANGE_SPRITE);
+	sprite.Load("biterange_top.png", SPRITE_ID::BITE_RANGE_TOP_SPRITE);
 
 	sprite.Load("stage_select//stage1.png", SPRITE_ID::STAGE_SELECT_1_SPRITE);
 	sprite.Load("stage_select//stage2.png", SPRITE_ID::STAGE_SELECT_2_SPRITE);

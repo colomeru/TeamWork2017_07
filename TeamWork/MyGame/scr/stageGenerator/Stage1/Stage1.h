@@ -9,7 +9,7 @@ class Stage1 : public StageGenerator
 {
 public:
 	//コンストラクタ
-	Stage1(IWorld* world, std::string& fileName);
+	Stage1(IWorld* world, std::string& fileName, int frequencyWind = 0, int frequencyHairball = 0, int hairballCnt = 0);
 	//デストラクタ
 	virtual ~Stage1() override;
 	//ステージ読み込み
@@ -31,6 +31,15 @@ protected:
 	void GoalClothes_Add(int i, int j, int data, int laneNum);
 
 protected:
+	//ピンがつくかどうか
 	std::queue<bool> pin_list;
+	//服それぞれのスプライトのマップ
 	std::map<CLOTHES_ID, std::vector<SPRITE_ID>> spriteIdMap_;
+	//服が揺れる確率
+	int frequencyWind_;
+	//毛玉が飛んでくる確率
+	int frequencyHairball_;
+	//毛玉の飛ぶ頻度
+	int hairballCnt_;
+	Stage currentStage_;
 };

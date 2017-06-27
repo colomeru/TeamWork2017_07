@@ -6,7 +6,7 @@ class HairballGenerator : public Actor
 {
 public:
 	// コンストラクタ
-	HairballGenerator(IWorld* world, int lane_num, Vector2 pos);
+	HairballGenerator(IWorld* world, int lane_num, Vector2 pos, int frequencyHairball, int hairballCnt);
 	// デストラクタ
 	virtual ~HairballGenerator() override;
 	// 更新
@@ -21,14 +21,18 @@ public:
 	virtual void OnMessage(EventMessage message, void* param) override;
 	
 private:
+	//毛玉生成
 	void GenerateHairball();
 
 private:
 	Player* player_;
 
+	//毛玉生成する
 	int generate_Count_;
-	std::map<Stage, int> frequencyHairBall_;
-	std::map<Stage, int> defGenerate_Count_;
+	//毛玉が飛んでくる確率
+	int frequencyHairball_;
+	//毛玉の生成頻度
+	int defGenerate_Count_;
 	bool is_Generate_;
 
 };

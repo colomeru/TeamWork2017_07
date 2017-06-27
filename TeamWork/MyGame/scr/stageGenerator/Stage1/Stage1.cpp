@@ -13,13 +13,18 @@
 #include "../../actor/Field/Clothes/StartClothes/StartClothes.h"
 #include "../../actor/Field/Clothes/NotShakeClothes/NotShakeClothes.h"
 #include "../../actor/Field/Clothes/NotSlashClothes/NotSlashClothes.h"
+#include "../../actor/Field/Clothes/TutorialClothes/TutorialClothes.h"
 #include "../../actor/Field/ClothesPin.h"
 #include "../MyGame/scr/game/Random.h"
 
 //コンストラクタ
-Stage1::Stage1(IWorld * world, std::string & fileName)
+Stage1::Stage1(IWorld * world, std::string & fileName, int frequencyWind, int frequencyHairball, int hairballCnt)
 	:StageGenerator(world, fileName)
 {
+	frequencyWind_ = frequencyWind;
+	frequencyHairball_ = frequencyHairball;
+	hairballCnt_ = hairballCnt;
+
 	spriteIdMap_.clear();
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_SPRITE);
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_02_SPRITE);
@@ -88,6 +93,10 @@ void Stage1::AddStage()
 			}
 			case 2: {
 				Clothes_Add(i, j, data, laneNum);
+				world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other){
+					static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
+					//static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
+				});
 				break;
 			}
 			case 3: {
@@ -100,7 +109,7 @@ void Stage1::AddStage()
 
 	//毛玉生成クラスの生成
 	for (int i = 0; i < 3; i++) {
-		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, i, Vector2::Zero));
+		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, i, Vector2::Zero, frequencyHairball_, hairballCnt_));
 	}
 }
 void Stage1::CreateClothes() {
@@ -223,6 +232,17 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 	}
 	case 9: {
 		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<UpHanger>(world_, CLOTHES_ID::HANGER, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
+		break;
+	}
+	case 10: {
+		int sRand = Random::GetInstance().Range(0, spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].size());
+		float weight = Random::GetInstance().Range(0.0f, 1.5f);
+		auto base = std::make_shared<TutorialClothes>(
+			world_, CLOTHES_ID::BASE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, spriteIdMap_[CLOTHES_ID::BASE_CLOTHES][sRand], pin_list.front());
+		world_->Add(ACTOR_ID::STAGE_ACTOR, base);
+		if (pin_list.front())
+			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), base.get(), base->GetFulcrum()));
+		pin_list.pop();
 		break;
 	}
 

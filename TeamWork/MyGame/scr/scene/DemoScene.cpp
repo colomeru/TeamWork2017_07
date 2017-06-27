@@ -94,7 +94,7 @@ bool DemoScene::IsEnd() const
 
 Scene DemoScene::Next() const
 {
-	return Scene::Title;
+	return Scene::Logo;
 
 }
 

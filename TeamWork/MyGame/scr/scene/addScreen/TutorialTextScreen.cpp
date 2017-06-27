@@ -30,7 +30,7 @@ void TutorialTextScreen::Init(const std::string& filename)
 	
 	drawText_.push_back(std::vector<char>());
 	int drawtextline = 0;
-	for (int i = 0; i < size; i++) {
+	for (int i = 0; i < (int)size; i++) {
 		char chartex = charbuf[i];
 
 		if (chartex == '\n') {
@@ -94,7 +94,7 @@ bool TutorialTextScreen::TutorialUpdate()
 		currentTextLine_++;
 
 
-		if (currentTextLine_ >= drawText_.size() / 3) {
+		if (currentTextLine_ >= (int)drawText_.size() / 3) {
 			currentTextLine_ = drawText_.size() / 3 - 1;
 			//currentTextLine_ = 0;
 			//textCount_ = 0;
@@ -116,12 +116,12 @@ void TutorialTextScreen::Draw() const
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	std::string drawString_;
-	int forcount = floor(textCount_ / textSpeed);
+	int forcount = (int)floor(textCount_ / textSpeed);
 
 	int alreadyDrawCount = 0;
 	for (int i = currentTextLine_*3;i< currentTextLine_*3+3; i++) {
-		if(i >= drawText_.size())break;
-		for (int x = 0; x < drawText_[i].size(); x++) {
+		if(i >= (int)drawText_.size())break;
+		for (int x = 0; x < (int)drawText_[i].size(); x++) {
 			if (alreadyDrawCount >= forcount)break;
 			
 			char tex= drawText_[i][x];
@@ -135,7 +135,7 @@ void TutorialTextScreen::Draw() const
 
 	FontManager::GetInstance().DrawTextApplyFont(200, 100, GetColor(255, 255, 255), FONT_ID::TUTORIAL_FONT, drawString_.c_str());
 
-	Sprite::GetInstance().Draw(SPRITE_ID::TO_STAGESELECT_SPRITE, Vector2(1500, 200), MathHelper::Sin(sinCount_));
+	Sprite::GetInstance().Draw(SPRITE_ID::TO_STAGESELECT_SPRITE, Vector2(1500.f, 200.f), MathHelper::Sin((float)sinCount_));
 	
 }
 

@@ -15,6 +15,7 @@
 #include "../sound/sound.h"
 #include "../graphic/FontManager.h"
 #include "../scene/Credit2Scene.h"
+#include "../scene/LogoScene.h"
 
 
 void Game1::Initialize()
@@ -46,6 +47,7 @@ void Game1::Initialize()
 
 	// ƒV[ƒ“‚Ì’Ç‰Á
 	mSceneManager.Add(Scene::Demo, std::make_shared<DemoScene>());
+	mSceneManager.Add(Scene::Logo, std::make_shared<LogoScene>());
 	mSceneManager.Add(Scene::Title, std::make_shared<TitleScene>());
 	mSceneManager.Add(Scene::Menu, std::make_shared<MenuScene>());
 	mSceneManager.Add(Scene::Tutorial, std::make_shared<TutorialScene>());

@@ -5,6 +5,7 @@ enum class Scene
 {
 	None,
 	Demo,
+	Logo,
 	Title,
 	Menu,
 	Tutorial,

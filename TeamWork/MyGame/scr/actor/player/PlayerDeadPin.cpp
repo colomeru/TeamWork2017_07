@@ -5,8 +5,8 @@
 PlayerDeadPin::PlayerDeadPin(IWorld * world,const Vector2& position):
 	Actor(world),sinCount_(0), gravity_(Vector2::Zero)
 {
-	direction_.x = Random::GetInstance().Range(-50, 50);
-	direction_.y = Random::GetInstance().Range(-70, -40);
+	direction_.x = Random::GetInstance().Range(-50.f, 50.f);
+	direction_.y = Random::GetInstance().Range(-70.f, -40.f);
 	position_ = position;
 }
 

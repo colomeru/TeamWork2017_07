@@ -5,6 +5,8 @@
 #include "Clothes\Clothes.h"
 #include "../../Def.h"
 #include"../player/Player_Head.h"
+#include"../Effects/PlayerEffect/ResurrectStayEffect.h"
+#include"../../sound/sound.h"
 
 ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum)
 	:Actor(world, clothes)
@@ -80,10 +82,10 @@ void ClothesPin::Draw() const
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
 	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
-	DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+	DrawLine((int)pos1.x, (int)pos1.y, (int)pos2.x, (int)pos2.y, GetColor(255, 255, 255));
+	DrawLine((int)pos1.x, (int)pos1.y, (int)pos3.x, (int)pos3.y, GetColor(255, 255, 255));
+	DrawLine((int)pos2.x, (int)pos2.y, (int)pos4.x, (int)pos4.y, GetColor(255, 255, 255));
+	DrawLine((int)pos3.x, (int)pos3.y, (int)pos4.x, (int)pos4.y, GetColor(255, 255, 255));
 
 
 }
@@ -96,7 +98,10 @@ void ClothesPin::OnCollide(Actor& other, CollisionParameter colpara)
 {
 	if (parameter_.isDead)return;
 	if (colpara.colID == COL_ID::PLAYER_PIN_COL) {
-		static_cast<Player_Head*>(&other)->ResurrectHead();
+		if (!static_cast<Player_Head*>(&other)->ResurrectHead()) {
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<ResurrectStayEffect>(world_, position_));
+			Sound::GetInstance().PlaySE(SE_ID::RESURRECT_SE);
+		}
 		ClearThis();
 		return;
 	}

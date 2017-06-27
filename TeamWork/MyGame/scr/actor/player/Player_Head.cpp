@@ -16,7 +16,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 	spriteId_ = SPRITE_ID::OROCHI_HEAD_SPRITE;
 
 	parameter_.ID = ACTOR_ID::PLAYER_HEAD_ACTOR;
-	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2;
+	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2.f;
 	parameter_.size = Sprite::GetInstance().GetSize(spriteId_);
 	parameter_.HP = 10;
 
@@ -45,7 +45,7 @@ void Player_Head::Update()
 	//服を噛んでいる時は、頭の色を赤く、離すと元の色に戻していく
 	if (player_->GetIsClearMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ -= 10;
 	if (player_->GetIsResistMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ += 10;
-	else if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
+	else if (player_->GetIsBiteMode() && player_->GetCurHead() == myNumber_)fatigueCheckColor_ = (int)MathHelper::Lerp(0.f, 255.f, 1 - player_->GetSlipCount() / defSlipCount);
 	else {
 		fatigueCheckColor_ -= 2;
 		//fatigueCheckColor_ = max(fatigueCheckColor_, 0);
@@ -114,7 +114,17 @@ void Player_Head::Update()
 void Player_Head::Draw() const
 {
 	if (player_->GetPHeadDead(myNumber_)) {
-		
+		if (player_->GetIsClearMode())return;
+
+		if (player_->GetCurHead() == myNumber_) {
+			auto pos = GetDrawPosVect(position_);
+			auto vect= position_ - player_->GetPosition();
+			vect = vect.Normalize();
+			pos += vect * 20.f;
+			Vector2 badOrigin = Sprite::GetInstance().GetSize(BAD_SPRITE) / 2;
+
+			Sprite::GetInstance().Draw(BAD_SPRITE, pos, badOrigin, parameter_.spriteAlpha_, Vector2::One, 0, true, false);
+		}
 		return;
 	}
 	//auto pos_1 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation());

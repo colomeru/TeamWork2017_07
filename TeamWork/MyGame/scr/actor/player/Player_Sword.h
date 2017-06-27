@@ -21,7 +21,7 @@ public:
 	virtual void OnMessage(EventMessage message, void* param);
 	void SetSwordVel(const Vector2& vel) {
 		position_ = player_->GetPosition();
-		swordEndPos_ = position_+(vel*Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).y);
+		swordEndPos_ = position_+(vel*(float)Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).y);
 		//swordStartPos_ = (position_ + swordEndPos_) / 2;
 		
 		swordStartPos_= position_ + (swordEndPos_ - position_).Normalize()*128.f;

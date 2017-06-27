@@ -47,7 +47,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	spriteId_ = SPRITE_ID::PBODY_SPRITE;
 
 	parameter_.ID = ACTOR_ID::PLAYER_ACTOR;
-	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2;
+	parameter_.radius = (float)Sprite::GetInstance().GetSize(spriteId_).x / 2.f;
 	parameter_.size = Sprite::GetInstance().GetSize(spriteId_);
 	parameter_.HP = 10;
 	parameter_.mat
@@ -71,7 +71,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	for (int i = 0; i < 8; i++)
 	{
 		//8方向のうち、各頭に対応した位置を作成
-		Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ((i + headAngleSetter) * 45);
+		Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((float)i + (float)headAngleSetter) * 45.f);
 		Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
 		pHeadPoses_.push_back(cgToV2);
 		pHeadLength_.push_back(defHeadLength);
@@ -196,7 +196,7 @@ void Player::Draw() const
 	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	//DrawCircle(drawPos_.x, drawPos_.y, pHDist.Length(), GetColor(255, 255, 255));
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
-	float aHeadAngle = (360 / pHeads_.size());
+	float aHeadAngle = (360.f / (float)pHeads_.size());
 	float angle = currentHead_*aHeadAngle + aHeadAngle*(headChangeTime_ / defHeadChangeTime);
 	Sprite::GetInstance().Draw(spriteId_, GetDrawPosVect(position_), crcOrigin, parameter_.spriteAlpha_, Vector2::One,angle);
 	
@@ -208,10 +208,10 @@ void Player::Draw() const
 			Vector2 p1 = GetDrawPosVect(p.p1);
 			Vector2 p2 = GetDrawPosVect(p.p2);
 			Vector2 p3 = GetDrawPosVect(p.p3);
-			DrawRectModiGraph(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 0, 0, 41.0f, 76.0f * correctionLens[i], Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
+			DrawRectModiGraphF(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 0, 0, 41, (int)(76.0f * correctionLens[i]), Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
 		}
 	}
-	for (int i = 0; i < pHeads_.size();i++) {
+	for (int i = 0; i < (int)pHeads_.size();i++) {
 		if (i == currentHead_)continue;
 		if (pHeadDead_[i])continue;
 
@@ -510,7 +510,7 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radiu
 	multiplePos.clear();
 	drawPoints.clear();
 
-	int s = len / oneLength;
+	int s = (int)(len / oneLength);
 	correctionLens.clear();
 	std::vector<float> data(s + 1, 0.0f);
 	correctionLens = data;
@@ -582,7 +582,7 @@ void Player::Multiple()
 	Vector2 curdefPos = position_;
 
 	//現在の重りの位置
-	for (int i = 0; i < fPos_.size(); i++)
+	for (int i = 0; i < (int)fPos_.size(); i++)
 	{
 		auto px = fPos_[i].x + MathHelper::Cos(mRot[i]) * (oneLength);
 		auto py = fPos_[i].y + MathHelper::Sin(mRot[i]) * (oneLength);
@@ -697,7 +697,7 @@ void Player::UpdateMultiplePos() {
 	//}
 }
 void Player::SetMultiplePos(const Vector2 & addpos) {
-	for (int i = 0; i < multiplePos.size(); i++) {
+	for (int i = 0; i < (int)multiplePos.size(); i++) {
 		multiplePos[i] += addpos;
 		if (i > 0) fPos_[i] = multiplePos[i - 1];
 	}
@@ -779,32 +779,32 @@ void Player::DeformationDraw()
 	drawPoints.clear();
 
 	DrawPos p;
-	for (int i = 0; i < fPos_.size(); i++) {
+	for (int i = 0; i < (int)fPos_.size(); i++) {
 		Vector2 v = fPos_[i] - multiplePos[i];
 		Vector2 n = Vector2(-v.y, v.x).Normalize();
 		if (i == 0) {
-			p.p0 = fPos_[i] + n * resWidth * correctionWidth * 1.2f;
-			p.p1 = fPos_[i] - n * resWidth * correctionWidth * 1.2f;
+			p.p0 = fPos_[i] + n * (float)resWidth * correctionWidth * 1.2f;
+			p.p1 = fPos_[i] - n * (float)resWidth * correctionWidth * 1.2f;
 			if (v.Length() > 0) {
-				p.p2 = multiplePos[i] - n * resWidth * correctionWidth * 1.2f;
-				p.p3 = multiplePos[i] + n * resWidth * correctionWidth * 1.2f;
-				p.p2 -= v.Normalize() * correctionHeight * correctionWidth;
-				p.p3 -= v.Normalize() * correctionHeight * correctionWidth;
-				p.p0 += v.Normalize() * correctionHeight * correctionWidth;
-				p.p1 += v.Normalize() * correctionHeight * correctionWidth;
+				p.p2 = multiplePos[i] - n * (float)resWidth * correctionWidth * 1.2f;
+				p.p3 = multiplePos[i] + n * (float)resWidth * correctionWidth * 1.2f;
+				p.p2 -= v.Normalize() * (float)correctionHeight * correctionWidth;
+				p.p3 -= v.Normalize() * (float)correctionHeight * correctionWidth;
+				p.p0 += v.Normalize() * (float)correctionHeight * correctionWidth;
+				p.p1 += v.Normalize() * (float)correctionHeight * correctionWidth;
 				drawPoints.push_back(p);
 			}
 		}
 		else {
-			p.p0 = fPos_[i] + n * resWidth;
-			p.p1 = fPos_[i] - n * resWidth;
+			p.p0 = fPos_[i] + n * (float)resWidth;
+			p.p1 = fPos_[i] - n * (float)resWidth;
 			if (v.Length() > 0) {
 				p.p2 = p.p1 - v.Normalize() * 15.f * correctionLens[i];
 				p.p3 = p.p0 - v.Normalize() * 15.f * correctionLens[i];
-				p.p0 += v.Normalize() * correctionHeight;
-				p.p1 += v.Normalize() * correctionHeight;
-				p.p2 -= v.Normalize() * correctionHeight;
-				p.p3 -= v.Normalize() * correctionHeight;
+				p.p0 += v.Normalize() * (float)correctionHeight;
+				p.p1 += v.Normalize() * (float)correctionHeight;
+				p.p2 -= v.Normalize() * (float)correctionHeight;
+				p.p3 -= v.Normalize() * (float)correctionHeight;
 				drawPoints.push_back(p);
 			}
 		}
@@ -885,8 +885,8 @@ void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 	
 	DrawPos p;
 	for (int i = 0; i < s; i++) {
-		fPos_.push_back(headPoint+(vel*i));
-		multiplePos.push_back(headPoint + (vel*(i+1)));
+		fPos_.push_back(headPoint+(vel*(float)i));
+		multiplePos.push_back(headPoint + (vel*((float)i+1.f)));
 		mRot.push_back(0);
 		mRot_spd.push_back(0);
 	}
@@ -904,16 +904,16 @@ void Player::SetDrawNeckParts(const Vector2 & bodyPoint, const Vector2 & headPoi
 
 	////頭から体へのベクトル(正規化)
 	//Vector3 pHtoBVec = dir.Normalize();
-	for (int i = 0; i < fPos_.size(); i++) {
+	for (int i = 0; i < (float)fPos_.size(); i++) {
 		if ((fPos_[i] - position_).Length() <= parameter_.radius) {
 			if (drawPoints.empty()) {
-				p = MathDrawPoint(fPos_[i], Vector2::Zero, resWidth, oneLength);
+				p = MathDrawPoint(fPos_[i], Vector2::Zero, resWidth, (int)oneLength);
 			}
 			else p = drawPoints.back();
 			drawPoints.push_back(p);
 			continue;
 		}
-		p = MathDrawPoint(fPos_[i], dir, resWidth, oneLength);
+		p = MathDrawPoint(fPos_[i], dir, resWidth, (int)oneLength);
 		drawPoints.push_back(p);
 	}
 
@@ -982,10 +982,10 @@ void Player::CurHeadBite(const Vector2 & target) {
 	StartPendulum();
 }
 
-void Player::ResurrectHead() {
-	for (int i = currentHead_; i < pHeads_.size() + currentHead_; i++) {
+bool Player::ResurrectHead() {
+	for (int i = currentHead_; i < (int)pHeads_.size() + currentHead_; i++) {
 		int trgNum = i;
-		if (trgNum >= pHeads_.size()) {
+		if (trgNum >= (int)pHeads_.size()) {
 			trgNum = trgNum - pHeads_.size();
 		}
 		if (!pHeadDead_[trgNum])continue;
@@ -993,8 +993,9 @@ void Player::ResurrectHead() {
 		Sound::GetInstance().PlaySE(SE_ID::RESURRECT_SE);
 
 		pHeadDead_[trgNum] = false;
-		break;
+		return true;
 	}
+	return false;
 }
 
 
@@ -1019,7 +1020,12 @@ void Player::SetMode(int pMode) {
 		case MODE_SHOOT: {
 
 			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().PlaySE(SE_ID::HEAD_SHOOT_SE, DX_PLAYTYPE_LOOP);
+			if (pHeadDead_[currentHead_]) {
+				Sound::GetInstance().PlaySE(SE_ID::BAD_SE);
+			}
+			else {
+				Sound::GetInstance().PlaySE(SE_ID::HEAD_SHOOT_SE, DX_PLAYTYPE_LOOP);
+			}
 			break;
 		}
 		case MODE_SHOOT_END: {
@@ -1190,6 +1196,8 @@ void Player::PlayerInputControl()
 }
 
 void Player::CurPHeadLengPlus(float addPow) {
+
+	if (pHeadDead_[currentHead_])return;
 
 	//floatの誤差と、addPowによるLengthのズレを補正するための値、首の長さの値に補正が発生した場合は、この補正値をそこに加算する事で、長さの違和感を解決する
 	float fSaveAddNum = 0.2f;

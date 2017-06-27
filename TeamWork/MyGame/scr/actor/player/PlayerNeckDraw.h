@@ -19,16 +19,16 @@ public:
 		Vector2 addvec=Vector2::Zero;
 		Vector2 drawpos=basePos;
 		float angle = MathAngle(toV);
-		Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE).x;
+		Vector2 origin = (float)Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE).x;
 		origin.x /= 2.f;
 		for (int i = 0; i < fulldrawCount; i++) {
-			addvec = toV.Normalize()*Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE).y;
-			addvec *= i;
+			addvec = toV.Normalize()*(float)Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE).y;
+			addvec *= (float)i;
 			drawpos = basePos + addvec;
 			int drawSpr = i % 2;
 			Sprite::GetInstance().Draw(ids_.at(drawSpr), drawpos, origin, Vector2::One, angle);
 		}
-		addvec = toV.Normalize()*Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE).y*surp;
+		addvec = toV.Normalize()*(float)Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE).y*surp;
 		if (surp >= 0.05f) {
 			//DrawCircle((drawpos + addvec).x, (drawpos + addvec).y, 3, GetColor(255, 0, 0));
 			Sprite::GetInstance().Draw(ids_.at(1), drawpos + addvec, origin, Vector2::One*surp, angle, TRUE, FALSE);

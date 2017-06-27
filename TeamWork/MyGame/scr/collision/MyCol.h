@@ -55,7 +55,7 @@ public:
 		dS = ((pointB.y - pointA.y) * vectorAC.x
 			- (pointB.x - pointA.x) * vectorAC.y) / dBunbo;
 
-		pointIntersection = pointA + dR * (pointB - pointA);
+		pointIntersection = pointA + (float)dR * (pointB - pointA);
 
 		return true;
 	}

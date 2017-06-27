@@ -54,13 +54,13 @@ inline DrawPos MathDrawPoint(const Vector2& basePos,const Vector2& dir, int widt
 
 	Vector2 drawBasePos = basePos;
 
-	p.p0 = drawBasePos - (pHtBNVerticalVec*width);
-	p.p1 = drawBasePos + (pHtBNVerticalVec*width);
+	p.p0 = drawBasePos - (pHtBNVerticalVec*(float)width);
+	p.p1 = drawBasePos + (pHtBNVerticalVec*(float)width);
 
-	drawBasePos += pHtoBVec2*height;
+	drawBasePos += pHtoBVec2*(float)height;
 
-	p.p2 = drawBasePos + (pHtBNVerticalVec*width);
-	p.p3 = drawBasePos - (pHtBNVerticalVec*width);
+	p.p2 = drawBasePos + (pHtBNVerticalVec*(float)width);
+	p.p3 = drawBasePos - (pHtBNVerticalVec*(float)width);
 
 	return p;
 }

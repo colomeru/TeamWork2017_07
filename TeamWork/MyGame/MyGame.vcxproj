@@ -430,6 +430,13 @@
     <ClInclude Include="scr\scene\TitleScene.h" />
     <ClInclude Include="scr\scene\TutorialScene.h" />
     <ClInclude Include="scr\sound\sound.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage2.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage3.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage4.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage5.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage6.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage7.h" />
+    <ClInclude Include="scr\stageGenerator\Stage1\Stage8.h" />
     <ClInclude Include="scr\stageGenerator\StageGenerator.h" />
     <ClInclude Include="scr\stageGenerator\StageGeneratorPtr.h" />
     <ClInclude Include="scr\stageGenerator\Stage.h" />

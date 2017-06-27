@@ -171,10 +171,16 @@ public:
 	void PHeadLengthReset();
 	//死亡した頭を全て回復
 	void AllResurrectHead();
-
-private:
+	//
+	void SetBiteSprite();
 	//
 	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius);
+	//
+	void DeformationDraw();
+	//
+	void SetPosition(Vector2 position);
+
+private:
 	//
 	void Multiple();
 	//多重振り子に移動量を加算
@@ -184,8 +190,6 @@ private:
 	void AddMultiplePos(const Vector2& addPos);
 	//
 	void SetNeckNonMult();
-	//
-	void DeformationDraw();
 	//首の描画に必要な一連の動作を行う
 	void SetDrawNeck(const Vector2& bodyPoint, const Vector2& headPoint);
 	//首の描画位置を設定

@@ -37,8 +37,7 @@ CreditText::~CreditText()
 
 void CreditText::Update()
 {
-	f1 = position_.x;
-	velocity_ = Vector2(f1 - f2, 0.0f);
+	velocity_ = Vector2(position_.x - f2, 0.0f);
 	f2 = position_.x;
 
 	//velocity_ = Vector2(-10.0f, 0.0f);
@@ -91,9 +90,13 @@ void CreditText::Draw() const
 
 void CreditText::OnCollide(Actor & other, CollisionParameter colpara)
 {
+	if (other.GetParameter().ID != ACTOR_ID::PLAYER_HEAD_ACTOR) return;
+	auto temp = static_cast<CreditPlayer*>(other.GetParent());
+	if (temp->GetIsBiteMode()) return;
+	
 	parent_ = &other;
 	static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-	player_ = static_cast<CreditPlayer*>(parent_->GetParent());
+	player_ = temp;
 	player_->CurHeadBite(other.GetPosition());
 	player_->SetIsBiteMode(true);
 }

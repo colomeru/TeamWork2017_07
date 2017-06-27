@@ -207,6 +207,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("yokotaoru.png", SPRITE_ID::CREDIT_TOWEL_SPRITE, 1, Point(1, 1), Point(600, 150));
 	sprite.Load("credit_futon.png", SPRITE_ID::CREDIT_FUTON_SPRITE, 1, Point(1, 1), Point(200, 135));
 	sprite.Load("credit_chain.png", SPRITE_ID::CREDIT_CHAIN_SPRITE);
+	sprite.Load("pg.png", SPRITE_ID::CREDIT_PG_SPRITE, 1, Point(1, 1), Point(899, 150));
 
 
 }

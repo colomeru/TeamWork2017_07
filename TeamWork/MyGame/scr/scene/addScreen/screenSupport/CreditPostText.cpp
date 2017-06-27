@@ -17,9 +17,9 @@ CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, i
 	fulcrum_ = Vector2(position_.x, position_.y - parameter_.size.y / 2.0f);
 	auto nameCount = Sprite::GetInstance().GetSliptFrameSize(sprite);
 	//auto toX = -parameter_.size.x * 2.0f - 320 * (nameCount - frame);
-	auto toX = -400 - 370 * (nameCount - frame);
-	TweenManager::GetInstance().Add(Linear, &position_, Vector2(toX, position_.y), 8.45f, [=]() {Dead(); });
-	TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(toX, fulcrum_.y), 8.45f);
+	auto toX = -400 - 1070 * (nameCount - frame);
+	TweenManager::GetInstance().Add(Linear, &position_, Vector2(toX, position_.y), 10.3f, [=]() {Dead(); });
+	TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(toX, fulcrum_.y), 10.3f);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	localPoints.push_back(Vector3(-parameter_.size.x / 2.0f, 0.0f, 0.0f));
@@ -92,7 +92,7 @@ void CreditPostText::Draw() const
 	Vector2 middle = Vector2(drawPos.x + 55, drawPos.y - 233);
 	Vector2 right = Vector2(middle.x + parameter_.size.x / 2.5f - 20, middle.y);
 	Vector2 left = Vector2(middle.x - parameter_.size.x / 2.5f - 20, middle.y);
-	Vector2 corr = Vector2(-65.0f, -19.0f);
+	Vector2 corr = Vector2(-63.0f, -19.0f);
 	ins.Draw(SPRITE_ID::CREDIT_CHAIN_SPRITE, middle + corr);
 	ins.Draw(SPRITE_ID::CREDIT_CHAIN_SPRITE, right + corr);
 	ins.Draw(SPRITE_ID::CREDIT_CHAIN_SPRITE, left + corr);

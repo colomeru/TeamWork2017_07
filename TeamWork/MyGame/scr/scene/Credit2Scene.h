@@ -84,6 +84,11 @@ private:
 	bool operate_;
 	int playerStatte_;
 	Vector2 correction;
+	const float SceneTime = 52.0f;
+	float sceneTimer_;
+	int sinCount_;
+	float alpha_;
 
 	bool test;
+	bool test2;
 };

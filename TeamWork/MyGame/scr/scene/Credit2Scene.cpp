@@ -18,9 +18,10 @@
 #include"../actor/Field/ClothesLine.h"
 #include"../tween/TweenManager.h"
 #include "addScreen\screenSupport\CreditTextGenerator.h"
+#include "../time/Time.h"
 
 Credit2Scene::Credit2Scene() :
-	nextScene_(Scene::Menu)
+	nextScene_(Scene::Title)
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -75,7 +76,7 @@ void Credit2Scene::Initialize()
 	//
 	correction = Vector2(300.0f, 500.0f);
 
-	startPos_ = Vector2(WINDOW_WIDTH / 2.0f - correction.x, 0.0f);
+	startPos_ = Vector2(WINDOW_WIDTH / 2.0f - correction.x, -110.0f);
 
 	pHeadPos_ = startPos_;
 	//player_->setCurPHeadSPos(playerPos_);
@@ -86,6 +87,10 @@ void Credit2Scene::Initialize()
 	}
 	spriteSize_ = Vector2(800.0f, 200.0f);
 	operate_ = true;
+	sceneTimer_ = 0.0f;
+	test2 = false;
+	alpha_ = 0.0f;
+	sinCount_ = 0;
 
 	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditText>(world_.get(), Vector2(500, 500)));
 	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditTextGenerator>(world_.get(), Vector2(500, 100)));
@@ -118,11 +123,11 @@ void Credit2Scene::Update()
 
 
 	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
-	{
-		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
-		FadePanel::GetInstance().FadeOut();
-	}
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
+	//{
+	//	FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+	//	FadePanel::GetInstance().FadeOut();
+	//}
 
 	//if (isRetry_) {
 	//	End();
@@ -152,7 +157,6 @@ void Credit2Scene::Update()
 		pHeadPos_.y += 5.0f;
 		player_->setCurPHeadSPos(pHeadPos_);
 		player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
-
 	}
 
 	if (!player_->GetIsBiteMode()) playerStatte_ = FALL;
@@ -171,6 +175,17 @@ void Credit2Scene::Update()
 	if (IsCollision()) test = true;
 	else test = false;
 
+	sceneTimer_ += Time::DeltaTime;
+	if (sceneTimer_ >= SceneTime) {
+		sinCount_ += 5; sinCount_ %= 360;
+		alpha_ = MathHelper::Sin(sinCount_);
+		test2 = true;
+		//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
+		//{
+		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+		FadePanel::GetInstance().FadeOut();
+		//}
+	}
 }
 
 void Credit2Scene::Draw() const
@@ -190,6 +205,10 @@ void Credit2Scene::Draw() const
 
 	//textScreen_.Draw();
 
+	if (sceneTimer_ >= SceneTime) {
+		Vector2 ssorigin = Sprite::GetInstance().GetSize(SPRITE_ID::BACKTITLE_TEXT_SPRITE) / 2;
+		Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE, Vector2(WINDOW_WIDTH / 2, 750.0f), ssorigin, alpha_, Vector2::One);
+	}
 	if (BuildMode != 1) return;
 	DrawFormatString(0, 00, GetColor(255, 255, 255), "CreditScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
@@ -203,6 +222,12 @@ void Credit2Scene::Draw() const
 	if (operate_) DrawFormatString(0, 120, GetColor(255, 255, 255), "操作できます！");
 	else DrawFormatString(0, 120, GetColor(255, 255, 255), "操作できません！");
 
+	DrawFormatString(0, 140, GetColor(255, 255, 255), "sceneTimer_:[%f]", sceneTimer_);
+
+	if (test2) DrawFormatString(0, 160, GetColor(255, 255, 255), "遷移できます！");
+	else DrawFormatString(0, 160, GetColor(255, 255, 255), "遷移できません！");
+
+
 
 	DrawLine(0, 500, WINDOW_WIDTH, 500, GetColor(255, 0, 0), 1);
 	DrawLine(300, 0, 300, WINDOW_HEIGHT, GetColor(255, 0, 0), 1);
@@ -213,7 +238,7 @@ void Credit2Scene::Draw() const
 	DrawLine(0, player_->GetCurrentPHeadPosition().y + correction.y, WINDOW_WIDTH, player_->GetCurrentPHeadPosition().y + correction.y, GetColor(0, 0, 0), 1);
 	DrawLine(player_->GetCurrentPHeadPosition().x + correction.x, 0, player_->GetCurrentPHeadPosition().x + correction.x, WINDOW_HEIGHT, GetColor(0, 0, 0), 1);
 
-	
+
 }
 
 bool Credit2Scene::IsEnd() const
@@ -280,7 +305,9 @@ bool Credit2Scene::ScreenOut() const
 	//if (player_->GetCurrentPHeadPosition().x - correction.x < -300.0f || player_->GetCurrentPHeadPosition().x - correction.x > WINDOW_WIDTH + 300.0f ||
 	//	player_->GetCurrentPHeadPosition().y - correction.y < -300.0f || player_->GetCurrentPHeadPosition().y - correction.y > WINDOW_HEIGHT + 300.0f)
 	if (player_->GetCurrentPHeadPosition().x < -300.0f - correction.x || player_->GetCurrentPHeadPosition().x > WINDOW_WIDTH + 300.0f - correction.x ||
-		player_->GetCurrentPHeadPosition().y < -300.0f - correction.y || player_->GetCurrentPHeadPosition().y > WINDOW_HEIGHT + 300.0f - correction.y - 300.0f)
+		player_->GetCurrentPHeadPosition().y < -300.0f - correction.y || player_->GetPosition().y > WINDOW_HEIGHT + 300.0f - correction.y - 300.0f)
+		//if (player_->GetCurrentPHeadPosition().x < -250.0f - correction.x || player_->GetCurrentPHeadPosition().x > WINDOW_WIDTH + 250.0f - correction.x ||
+		//	player_->GetCurrentPHeadPosition().y < -250.0f - correction.y || player_->GetCurrentPHeadPosition().y > WINDOW_HEIGHT + 250.0f - correction.y - 300.0f)
 		return true;
 	else
 		return false;
@@ -293,28 +320,36 @@ void Credit2Scene::PlayerRestart()
 	if ((ScreenOut() || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) &&
 		operate_) {
 		operate_ = false;
-
-		player_->PHeadLengthReset();
+		//player_->PHeadLengthReset();
+		//player_->MultipleInit(50.0f,pHeadPos_,0.0f,60.0f);
 		player_->AllResurrectHead();
 		player_->SetIsBiteMode(true);
+		player_->CurHeadBite(pHeadPos_);
 		player_->PHeadLengthReset();
 		playerStatte_ = RESTART;
 		pHeadPos_ = player_->GetCurrentPHeadPosition(); //プレイヤー座標
 		player_->GravityReset();
 		player_->CurHeadBite(pHeadPos_);
-		//player_->SetIsBiteMode(true);
+
+		player_->SetIsBiteMode(true);
 		player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);
 		TweenManager::GetInstance().Add(EaseOutExpo, &pHeadPos_, startPos_, 2.0f);
+
 	}
 
 	//スタート位置に戻ったら
-	if (((pHeadPos_.x >= startPos_.x - 2.0f && pHeadPos_.x <= startPos_.x + 2.0f) &&
-		(pHeadPos_.y >= startPos_.y - 2.0f && pHeadPos_.y <= startPos_.y + 2.0f)) &&
-		!operate_) {
+	Vector2 dis = pHeadPos_ - startPos_;
+	if (dis.Length() <= 2.0f && !operate_ /*&& Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)*/) {
 		operate_ = true;
 	}
+	//if (((pHeadPos_.x >= startPos_.x - 2.0f && pHeadPos_.x <= startPos_.x + 2.0f) &&
+	//	(pHeadPos_.y >= startPos_.y - 2.0f && pHeadPos_.y <= startPos_.y + 2.0f)) &&
+	//	!operate_) {
+	//	operate_ = true;
+	//}
 
 	if (!operate_) {
+
 		player_->setCurPHeadSPos(pHeadPos_);
 		player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
 	}
@@ -344,5 +379,5 @@ bool Credit2Scene::IsCollision()
 	}
 
 
-	
+
 }

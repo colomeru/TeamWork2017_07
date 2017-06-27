@@ -9,7 +9,7 @@ NotSlashClothes::NotSlashClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 	parameter_.size = Vector2(100.0f, 200.0f);
 	laneNum_ = laneNum;
 
-	position_ = pos;
+	position_ = pos - Vector2(0, 45);
 	fulcrum_ = position_ - Vector2(0, length_);
 	spriteId_ = spriteId;
 
@@ -109,16 +109,16 @@ void NotSlashClothes::SetLocalPoints()
 
 void NotSlashClothes::SetPoints01()
 {
-	localPoints.push_back(Vector3(-65, 0 + length_, 0));
-	localPoints.push_back(Vector3(-65, 90 + length_, 0));
-	localPoints.push_back(Vector3(65, 90 + length_, 0));
-	localPoints.push_back(Vector3(65, 0 + length_, 0));
+	localPoints.push_back(Vector3(-65, 70 + length_, 0));
+	localPoints.push_back(Vector3(-65, 20 + length_, 0));
+	localPoints.push_back(Vector3(65, 20 + length_, 0));
+	localPoints.push_back(Vector3(65, 70 + length_, 0));
 }
 
 void NotSlashClothes::SetPoints02()
 {
-	localPoints.push_back(Vector3(-65, 0 + length_, 0));
-	localPoints.push_back(Vector3(-65, 90 + length_, 0));
-	localPoints.push_back(Vector3(65, 90 + length_, 0));
-	localPoints.push_back(Vector3(65, 0 + length_, 0));
+	localPoints.push_back(Vector3(-70, 10 + length_, 0));
+	localPoints.push_back(Vector3(-70, 55 + length_, 0));
+	localPoints.push_back(Vector3(70, 55 + length_, 0));
+	localPoints.push_back(Vector3(70, 10 + length_, 0));
 }

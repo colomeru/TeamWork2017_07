@@ -72,6 +72,8 @@ public:
 	void Crow();
 	//SE
 	void SE();
+	//
+	void End();
 
 
 	Stage GetGamePlayStage()const;

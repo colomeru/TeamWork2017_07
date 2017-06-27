@@ -44,6 +44,7 @@ void NotSlashClothes::Draw() const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
 	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	DrawClothesFeces();
+	DrawRange();
 
 	if (BuildMode != 1) return;
 	if (!collisionPoints.empty()) {

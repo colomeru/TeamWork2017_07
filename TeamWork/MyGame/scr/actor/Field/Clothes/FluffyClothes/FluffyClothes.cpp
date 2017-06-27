@@ -18,7 +18,7 @@ FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Ve
 	spriteId_ = SPRITE_ID::FLUFFY_SPRITE;
 	laneNum_ = laneNum;
 
-	position_ = pos;
+	position_ = pos + Vector2(0, -10);
 	fulcrum_ = position_ - Vector2(0, length_);
 	spriteId_ = spriteId;
 
@@ -59,6 +59,7 @@ void FluffyClothes::Draw() const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
 	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	DrawClothesFeces();
+	DrawRange();
 
 	if (BuildMode != 1) return;
 	if (!collisionPoints.empty()) {

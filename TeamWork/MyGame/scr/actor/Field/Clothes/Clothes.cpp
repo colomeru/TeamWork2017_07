@@ -22,15 +22,6 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
 	dNumber_ = 0.0f;
 
-	frequencyWind_[Stage::Stage1] = frequencyWind[0];
-	frequencyWind_[Stage::Stage2] = frequencyWind[1];
-	frequencyWind_[Stage::Stage3] = frequencyWind[2];
-	frequencyWind_[Stage::Stage4] = frequencyWind[3];
-	frequencyWind_[Stage::Stage5] = frequencyWind[4];
-	frequencyWind_[Stage::Stage6] = frequencyWind[5];
-	frequencyWind_[Stage::Stage7] = frequencyWind[6];
-	frequencyWind_[Stage::Stage8] = frequencyWind[7];
-
 	localPoints.clear();
 	collisionPoints.clear();
 	localPoints.reserve(4);
@@ -125,7 +116,7 @@ void Clothes::OnMessage(EventMessage message, void * param)
 	{
 		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > frequencyWind_[world_->GetKeepDatas().currentStage_]) break;
+		if (rand > frequencyWind_) break;
 		float dRand = Random::GetInstance().Range(0.0f, 1.5f);
 		TweenManager::GetInstance().Delay(
 			dRand,
@@ -416,6 +407,16 @@ void Clothes::Synchronize()
 	player_->setCurPHeadSPos(pos);
 }
 
+void Clothes::SetFrequencyWind(int wind)
+{
+	frequencyWind_ = wind;
+}
+
+void Clothes::SetCurrentStage(Stage currentStage)
+{
+	currentStage_ = currentStage;
+}
+
 void Clothes::SetNormal()
 {
 	switch (clothes_ID)
@@ -543,5 +544,37 @@ void Clothes::PenStateDecision()
 	else if (rot_ < 90.0f && rot_spd_ > 0.0f)
 		penState_ = PendulumState::RIGHT_CENTER;
 
+}
+
+void Clothes::DrawRange() const
+{
+	if (currentStage_ != Stage::Stage1 || collisionPoints.empty()) return;
+	auto topSize = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_TOP_SPRITE);
+	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_SPRITE) / 2;
+	auto topOrigin = topSize / 2;
+	Vector2 drawP[4];
+	for (int i = 0; i < 4; i++) {
+		drawP[i] = GetDrawPosVect(collisionPoints[i]);
+	}
+	Vector2 modiPos[4][4];
+	for (int i = 0; i < 4; i++) {
+		//collisionPointから見て、左、右、上、下
+		modiPos[i][0] = drawP[i] + Vector2(-topSize.x / 2, 0);
+		modiPos[i][1] = drawP[i] + Vector2(topSize.x / 2, 0);
+		modiPos[i][2] = drawP[i] + Vector2(0, -topSize.x / 2);
+		modiPos[i][3] = drawP[i] + Vector2(0, topSize.x / 2);
+	}
+	auto handle = Sprite::GetInstance().GetHandle(SPRITE_ID::BITE_RANGE_SPRITE);
+	DrawModiGraph(modiPos[0][0].x, modiPos[0][0].y, modiPos[0][1].x, modiPos[0][1].y,
+		modiPos[1][1].x, modiPos[1][1].y, modiPos[1][0].x, modiPos[1][0].y, handle, true);
+	DrawModiGraph(modiPos[1][2].x, modiPos[1][2].y, modiPos[2][2].x, modiPos[2][2].y,
+		modiPos[2][3].x, modiPos[2][3].y, modiPos[1][3].x, modiPos[1][3].y, handle, true);
+	DrawModiGraph(modiPos[3][0].x, modiPos[3][0].y, modiPos[3][1].x, modiPos[3][1].y,
+		modiPos[2][1].x, modiPos[2][1].y, modiPos[2][0].x, modiPos[2][0].y, handle, true);
+
+	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[0], topOrigin, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[1], topOrigin, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[2], topOrigin, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[3], topOrigin, Vector2::One, angle_);
 }
 

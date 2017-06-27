@@ -70,6 +70,7 @@ void ThinClothes::Draw() const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::TOWEL_CLOTHES_SPRITE) / 2;
 	Sprite::GetInstance().SplitDraw(SPRITE_ID::TOWEL_CLOTHES_SPRITE, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	DrawClothesFeces();
+	DrawRange();
 
 	if (BuildMode != 1) return;
 	if (!collisionPoints.empty()) {

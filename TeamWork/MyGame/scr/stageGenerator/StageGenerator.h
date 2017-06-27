@@ -2,6 +2,7 @@
 #include "../world/IWorld.h"
 #include "../input/CsvReader.h"
 #include "../math/Vector2.h"
+#include "Stage.h"
 
 class StageGenerator
 {
@@ -11,7 +12,7 @@ public:
 	//仮想デストラクタ
 	virtual ~StageGenerator() = default;
 	//ステージ読み込み
-	virtual void LoadStage() = 0;
+	virtual void LoadStage(Stage name = Stage::Stage1) = 0;
 	//ステージ追加
 	virtual void AddStage() = 0;
 	//ステージサイズ取得

@@ -82,11 +82,11 @@ void TutorialClothes::DrawRange() const
 	}
 	auto handle = Sprite::GetInstance().GetHandle(SPRITE_ID::BITE_RANGE_SPRITE);
 	DrawModiGraph(modiPos[0][0].x, modiPos[0][0].y, modiPos[0][1].x, modiPos[0][1].y, 
-		modiPos[1][1].x, modiPos[1][1].y, modiPos[1][0].x, modiPos[1][0].y, handle, false);
+		modiPos[1][1].x, modiPos[1][1].y, modiPos[1][0].x, modiPos[1][0].y, handle, true);
 	DrawModiGraph(modiPos[1][2].x, modiPos[1][2].y, modiPos[2][2].x, modiPos[2][2].y, 
-		modiPos[2][3].x, modiPos[2][3].y, modiPos[1][3].x, modiPos[1][3].y, handle, false);
+		modiPos[2][3].x, modiPos[2][3].y, modiPos[1][3].x, modiPos[1][3].y, handle, true);
 	DrawModiGraph(modiPos[3][0].x, modiPos[3][0].y, modiPos[3][1].x, modiPos[3][1].y, 
-		modiPos[2][1].x, modiPos[2][1].y, modiPos[2][0].x, modiPos[2][0].y, handle, false);
+		modiPos[2][1].x, modiPos[2][1].y, modiPos[2][0].x, modiPos[2][0].y, handle, true);
 
 	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[0], topOrigin, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[1], topOrigin, Vector2::One, angle_);
@@ -94,10 +94,10 @@ void TutorialClothes::DrawRange() const
 	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[3], topOrigin, Vector2::One, angle_);
 
 	if (BuildMode != 1) return;
-	DrawCircle(drawP[0].x, drawP[0].y, parameter_.radius, GetColor(255, 255, 255), FALSE);
-	DrawCircle(drawP[1].x, drawP[1].y, parameter_.radius, GetColor(255, 255, 255), FALSE);
-	DrawCircle(drawP[2].x, drawP[2].y, parameter_.radius, GetColor(255, 255, 255), FALSE);
-	DrawCircle(drawP[3].x, drawP[3].y, parameter_.radius, GetColor(255, 255, 255), FALSE);
+	DrawCircle(drawP[0].x, drawP[0].y, parameter_.radius, GetColor(255, 255, 255));
+	DrawCircle(drawP[1].x, drawP[1].y, parameter_.radius, GetColor(255, 255, 255));
+	DrawCircle(drawP[2].x, drawP[2].y, parameter_.radius, GetColor(255, 255, 255));
+	DrawCircle(drawP[3].x, drawP[3].y, parameter_.radius, GetColor(255, 255, 255));
 	DrawLine(drawP[0].x, drawP[0].y, drawP[1].x, drawP[1].y, GetColor(255, 255, 255));
 	DrawLine(drawP[1].x, drawP[1].y, drawP[2].x, drawP[2].y, GetColor(255, 255, 255));
 	DrawLine(drawP[2].x, drawP[2].y, drawP[3].x, drawP[3].y, GetColor(255, 255, 255));

@@ -14,7 +14,7 @@ void StageGenerateManager::Add(Stage name, const StageGeneratorPtr & stage)
 void StageGenerateManager::SetStage(Stage name)
 {
 	auto currentStage = stages[name];
-	currentStage->LoadStage();
+	currentStage->LoadStage(name);
 }
 
 //ステージの消去

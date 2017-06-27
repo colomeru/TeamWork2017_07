@@ -24,6 +24,7 @@ Stage1::Stage1(IWorld * world, std::string & fileName, int frequencyWind, int fr
 	frequencyWind_ = frequencyWind;
 	frequencyHairball_ = frequencyHairball;
 	hairballCnt_ = hairballCnt;
+	currentStage_ = Stage::Stage1;
 
 	spriteIdMap_.clear();
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_SPRITE);
@@ -49,8 +50,9 @@ Stage1::~Stage1()
 }
 
 //ステージ読み込み
-void Stage1::LoadStage()
+void Stage1::LoadStage(Stage name)
 {
+	currentStage_ = name;
 	csvReader_.load("res/csv/" + fileName_ + ".csv");
 	AddStage();
 }
@@ -93,10 +95,10 @@ void Stage1::AddStage()
 			}
 			case 2: {
 				Clothes_Add(i, j, data, laneNum);
-				//world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other){
-				//	//static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
-				//	//static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
-				//});
+				world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other){
+					static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
+					static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
+				});
 				break;
 			}
 			case 3: {

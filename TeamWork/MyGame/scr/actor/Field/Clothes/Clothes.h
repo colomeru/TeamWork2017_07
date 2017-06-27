@@ -92,9 +92,15 @@ public:
 	void UpdateClothesFeces();
 	//服に付着した鳥の糞の描画
 	void DrawClothesFeces() const;
-
+	//補助線描画
+	void DrawRange() const;
 	//プレイヤーを服に同期させる振り子
 	void Synchronize();
+
+	//服の揺れる確率の設定
+	void SetFrequencyWind(int wind);
+	//現在のステージ番号の設定
+	void SetCurrentStage(Stage currentStage);
 
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
@@ -127,7 +133,7 @@ protected:
 	ClothesState clothesState_;
 	//服の切断状態
 	CuttingState cuttingState_;
-	//
+	//Delay用の値
 	float dNumber_;
 	//服に付着した糞
 	ActorPtr clothesFeces_;
@@ -139,8 +145,10 @@ protected:
 	Vector2 pendulumVec_;
 	//振り子の移動前の位置
 	Vector2 beforePos_;
-	//
-	std::map<Stage, int> frequencyWind_;
+	//服が揺れる確率
+	int frequencyWind_;
+	//現在のステージ番号
+	Stage currentStage_;
 
 	//振り子関連(服用)
 	//振り子フラグ

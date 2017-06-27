@@ -14,7 +14,7 @@ public:
 	//デストラクタ
 	virtual ~Stage1() override;
 	//ステージ読み込み
-	virtual void LoadStage() override;
+	virtual void LoadStage(Stage name = Stage::Stage1) override;
 	//ステージ追加
 	virtual void AddStage() override;
 
@@ -42,5 +42,5 @@ protected:
 	int frequencyHairball_;
 	//毛玉の飛ぶ頻度
 	int hairballCnt_;
-	//Stage currentStage_;
+	Stage currentStage_;
 };

@@ -575,6 +575,10 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radiu
 }
 void Player::Multiple()
 {
+	for (auto& i : mRot_spd) {
+		i = MathHelper::Clamp(i, -80.f, 80.f);
+	}
+
 	Vector2 curdefPos = position_;
 
 	//Œ»Ý‚Ìd‚è‚ÌˆÊ’u
@@ -1384,7 +1388,8 @@ void Player::BiteUpdate()
 	Multiple();
 	if (isUseKey_) {
 
-		if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		//if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 			if (!pSword_->GetUseSword()) {
 				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_, pSword_->GetPosition(), pSword_.get()));
 				world_->sendMessage(EventMessage::USE_SWORD);
@@ -1518,9 +1523,10 @@ void Player::ClearUpdate()
 		i*=1.02f;
 		i = MathHelper::Clamp(i, -60.f, 60.f);
 	}
-	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT)||isClearShoot_) {
+	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT+99.f)||isClearShoot_) {
 		if (!isClearShoot_) {
 			PHeadChanger();
+			SetMode(MODE_FALL);
 			isClearShoot_ = true;
 		}
 		//SetMode(MODE_FALL);

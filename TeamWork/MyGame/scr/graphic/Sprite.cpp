@@ -313,6 +313,11 @@ int Sprite::GetHandle(const SPRITE_ID & id) const
 	return m_sprites.at(id);
 }
 
+int Sprite::GetHandle(const SPRITE_ID & id, int frame) const
+{
+	return m_splitsprites.at(id).at(frame);
+}
+
 // ƒtƒ@ƒCƒ‹–¼‚Ì'.'‚©‚çŒã‚ğæ‚èœ‚­
 std::string Sprite::Split(std::string filename)
 {

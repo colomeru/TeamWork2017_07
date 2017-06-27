@@ -135,6 +135,7 @@ void SceneManager::Final(Scene name)
 
 void SceneManager::SceneReset()
 {
+	return;
 	// ３分間放置されたらリセット
 	TweenManager::GetInstance().DelayCancel(&timer_);
 	TweenManager::GetInstance().Delay(freeTime_, [=]() {

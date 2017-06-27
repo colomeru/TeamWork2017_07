@@ -43,13 +43,18 @@ void PauseScreen::Init()
 	textSizeList_[inputCount_] = mxmSize;
 	cursorDrawPos_ = cursorPos_[inputCount_];
 
+	isAlreadyPush_ = false;
 }
 
 bool PauseScreen::Update(Scene& nextScene, returnGameType& type)
 {
 	if (!FadePanel::GetInstance().IsClearScreen()) return false;
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
+	if (abs(GamePad::GetInstance().Stick().y)<=0.1f) {
+		isAlreadyPush_ = false;
+	}
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || (GamePad::GetInstance().Stick().y > 0.3f&&!isAlreadyPush_)) {
+		isAlreadyPush_ = true;
 		inputCount_++;
 		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 		TweenManager::GetInstance().Cancel(&cursorDrawPos_);
@@ -58,7 +63,8 @@ bool PauseScreen::Update(Scene& nextScene, returnGameType& type)
 		sinCount_ = defSinC;
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || (GamePad::GetInstance().Stick().y < -0.3f&&!isAlreadyPush_)) {
+		isAlreadyPush_ = true;
 		inputCount_--;
 		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 		TweenManager::GetInstance().Cancel(&cursorDrawPos_);
@@ -88,6 +94,10 @@ void PauseScreen::Draw() const
 	DrawBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(128, 128, 128), TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (200));
+	DrawFillBox(200, 180, WINDOW_WIDTH-200, WINDOW_HEIGHT-80, GetColor(200, 200, 200));
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 	Vector2 GOposit = Vector2(WINDOW_WIDTH / 2.f, 300.f);
 	Vector2 GOorig = Sprite::GetInstance().GetSize(SPRITE_ID::PAUSE_TEXT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::PAUSE_TEXT_SPRITE, GOposit, GOorig, 1.f, Vector2::One);
@@ -97,8 +107,8 @@ void PauseScreen::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::BACK_GAMEPLAY_TEXT_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One/**textSizeList_[0]*/);
 
 	Vector2 RYposit = Vector2(WINDOW_WIDTH / 2, 700.f);
-	Vector2 RYorig = Sprite::GetInstance().GetSize(SPRITE_ID::RETRY_TEXT_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::RETRY_TEXT_SPRITE, RYposit, RYorig, textAlphaList_[1], Vector2::One/**textSizeList_[0]*/);
+	Vector2 RYorig = Sprite::GetInstance().GetSize(SPRITE_ID::RETRY_PAUSE_TEXT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::RETRY_PAUSE_TEXT_SPRITE, RYposit, RYorig, textAlphaList_[1], Vector2::One/**textSizeList_[0]*/);
 
 	Vector2 BTposit = Vector2(WINDOW_WIDTH / 2, 900.f);
 	Vector2 BTorig = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE) / 2;

@@ -76,6 +76,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("retry.png", SPRITE_ID::RETRY_TEXT_SPRITE);
 	sprite.Load("backtitle.png", SPRITE_ID::BACKTITLE_TEXT_SPRITE);
 	sprite.Load("pole.png", SPRITE_ID::LANE_SPRITE);
+	sprite.Load("gppole.png", SPRITE_ID::GAMEPLAY_LANE_SPRITE);
 	sprite.Load("pole_side.png", SPRITE_ID::LANE_SIDE_SPRITE);
 	sprite.Load("pole_side2.png", SPRITE_ID::LANE_SIDE2_SPRITE);
 	sprite.Load("gameclearText.png", SPRITE_ID::GAMECLEAR_TEXT_SPRITE);
@@ -121,6 +122,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("goalUI.png", SPRITE_ID::TITLE_EXIT_SPRITE);
 	sprite.Load("pressBkey.png", SPRITE_ID::PRESS_B_SPRITE);
 	sprite.Load("titlepole.png", SPRITE_ID::TITLE_POLE_SPRITE);
+	sprite.Load("pauseretry.png", SPRITE_ID::RETRY_PAUSE_TEXT_SPRITE);
 
 	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(128, 120));
 	sprite.Load("scorestar.png", SPRITE_ID::SCORE_STAR_SPRITE, 7, Point(7, 1), Point(240, 240));
@@ -150,7 +152,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("effect/playereffect/Splash.png", SPRITE_ID::FATIGUE_EFFECT_SPRITE, 5, Point(5, 1), Point(184, 180));
 	sprite.Load("effect/playereffect/swordeffect.png", SPRITE_ID::SWORD_ATTACK_EFFECT_SPRITE, 10, Point(5, 2), Point(120, 120));
 	sprite.Load("effect/playereffect/resurrect.png", SPRITE_ID::RESURRECT_EFFECT_SPRITE, 48, Point(6, 8), Point(128, 128));
-
+	sprite.Load("effect/playereffect/arrowleft.png", SPRITE_ID::ARROW_EFFECT_SPRITE, 4, Point(4, 1), Point(120, 180));
 	//非結合腕アニメーションリソース
 	sprite.Load("tataki/tatakianime_00001.png", SPRITE_ID::CLOTHES_TAP_01_SPRITE);
 	sprite.Load("tataki/tatakianime_00002.png", SPRITE_ID::CLOTHES_TAP_02_SPRITE);

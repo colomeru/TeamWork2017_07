@@ -19,10 +19,14 @@
 #include"../actor/Field/ClothesLine.h"
 #include"../tween/TweenManager.h"
 #include"../actor/Field/Enemys/TutorialManager.h"
+#include"../actor/Effects/PlayerEffect/CursorEffect.h"
 
 static int maxTextCount[maxTutorialNum]{
-	4,
-	2
+	2,
+	1,
+	1,
+	1,
+	3
 };
 
 TutorialScene::TutorialScene() :
@@ -41,6 +45,9 @@ TutorialScene::TutorialScene() :
 
 	StageNameList_[0] = "Tutorial1";
 	StageNameList_[1] = "Tutorial2";
+	StageNameList_[2] = "Tutorial3";
+	StageNameList_[3] = "Tutorial4";
+	StageNameList_[4] = "Tutorial5";
 
 	TextAddList_[0] = ("_1");
 	TextAddList_[1] = ("_2");
@@ -49,6 +56,9 @@ TutorialScene::TutorialScene() :
 
 	setLockFuncList_.push_back([this](int i) {SetLock1(i); });
 	setLockFuncList_.push_back([this](int i) {SetLock2(i); });
+	setLockFuncList_.push_back([this](int i) {SetLock3(i); });
+	setLockFuncList_.push_back([this](int i) {SetLock4(i); });
+	setLockFuncList_.push_back([this](int i) {SetLock5(i); });
 }
 
 TutorialScene::~TutorialScene()
@@ -64,7 +74,7 @@ void TutorialScene::Initialize()
 
 void TutorialScene::SceneInit()
 {
-
+	isAlreadyPutButton_ = false;
 	isEnd_ = false;
 	world_->Initialize();
 
@@ -73,7 +83,8 @@ void TutorialScene::SceneInit()
 	world_->PushStackActor(player_);
 
 	Stage1 stage(world_.get(), StageNameList_[currentTutorialNum_], 0);
-	stage.CreateClothes();
+	if (currentTutorialNum_ == maxTutorialNum - 1) stage.LoadStage();
+	else stage.CreateClothes();
 
 	world_->InitializeInv(Vector2(player_->GetPosition().x, player_->GetPosition().y));
 	world_->SetTarget(player_.get());
@@ -96,18 +107,32 @@ void TutorialScene::SceneInit()
 	//player_->SetIsTutorialTextWriting(true);
 
 	SetLockList(currentTutorialNum_, tutorialLockNum_);
+
+	arrowEffectGenerator_.Initialize(world_.get(), player_.get(), 0.3f);
+	timeCount_ = 0.f;
 }
 
 void TutorialScene::Update()
 {
+	if (Keyboard::GetInstance().AnyTriggerDown() || GamePad::GetInstance().AnyTriggerDown()) {
+		if (Keyboard::GetInstance().KeyStateUp(KEYCODE::M) && GamePad::GetInstance().ButtonStateUp(PADBUTTON::NUM2)) {
+			arrowEffectGenerator_.EndEffect();
+
+		}
+	}
 	// XV
 	world_->Update();
 	player_->deadLine();
-
+	arrowEffectGenerator_.Update();
 	bgScreen_.Update();
-	if (textScreen_.TutorialUpdate()) {
-		player_->SetUseKey(true);
-		//player_->SetIsTutorialTextWriting(false);
+	if (textScreen_.TutorialUpdate() && !isAlreadyPutButton_) {
+		if (tutorialLockNum_ < maxTextCount[currentTutorialNum_]) {
+			isAlreadyPutButton_ = true;
+			player_->SetUseKey(true);
+
+			arrowEffectGenerator_.StartEffect();
+			//player_->SetIsTutorialTextWriting(false);
+		}
 	}
 	if (IsCanSceneLock()) {
 		SceneLock();
@@ -128,7 +153,7 @@ void TutorialScene::Update()
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
 	{
 		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
-		FadePanel::GetInstance().FadeOut();
+		if (!FadePanel::GetInstance().IsAction())FadePanel::GetInstance().FadeOut();
 	}
 
 }
@@ -185,12 +210,17 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 		break;
 	case EventMessage::START_LANE_CHANGE:
 		break;
-	case EventMessage::GOAL_FLAG:
+	case EventMessage::GOAL_FLAG: {
+		UnLock(UnLockType::ClearStage);
 		break;
-	case EventMessage::GAME_CLEAR_FLAG:
+	}
+	case EventMessage::GAME_CLEAR_FLAG: {
+		UnLock(UnLockType::EndStage);
 		break;
+	}
 	case EventMessage::CHANGE_HEAD: {
 		UnLock(UnLockType::ChangeHead);
+		break;
 	}
 	case EventMessage::LANE_CHANGE_FALL: {
 		UnLock(UnLockType::ChangeLaneFall);
@@ -224,7 +254,7 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 	case EventMessage::PLAYER_DEAD:
 	{
 		FadePanel::GetInstance().AddCollBack([=]() { End(); SceneInit(); });
-		FadePanel::GetInstance().FadeOut();
+		if (!FadePanel::GetInstance().IsAction())FadePanel::GetInstance().FadeOut();
 		break;
 	}
 	default:
@@ -234,6 +264,7 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 
 void TutorialScene::SceneLock()
 {
+	isAlreadyPutButton_ = false;
 	for (auto& i : lockList_) {
 		i.second = false;
 	}
@@ -255,7 +286,9 @@ void TutorialScene::SceneLock()
 	if (textScreen_.TutorialUpdate()) {
 		player_->SetUseKey(true);
 		//player_->SetIsTutorialTextWriting(false);
+
 	}
+
 }
 
 void TutorialScene::UnLock(UnLockType type)
@@ -272,7 +305,14 @@ void TutorialScene::UnLock(UnLockType type)
 
 bool TutorialScene::IsCanSceneLock() const
 {
-	if (!player_->GetUseKey())return false;
+	if (!player_->GetIsClearMode()) {
+		if (!player_->GetUseKey())return false;
+	}
+	else {
+		if(timeCount_ >= 1.f)return false;
+		else return true;
+	}
+
 	for (auto i : lockList_) {
 		if (!i.second)return false;
 	}
@@ -301,16 +341,6 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
 		break;
 	}
-	case 2: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneFall, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		break;
-	}
-	case 3: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneUp, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
-		break;
-	}
 	default:
 		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
 		break;
@@ -322,12 +352,8 @@ void TutorialScene::SetLock2(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::UseSword, false));
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::KillTapper, false));
-		break;
-	}
-	case 1: {
-		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneFall, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
 		break;
 	}
 	default:
@@ -336,12 +362,70 @@ void TutorialScene::SetLock2(int tutorialLockNum)
 	}
 }
 
+void TutorialScene::SetLock3(int tutorialLockNum)
+{
+	switch (tutorialLockNum)
+	{
+	case 0: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ChangeLaneUp, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::BiteClothes, false));
+		break;
+	}
+
+	default:
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
+		break;
+	}
+
+}
+
+void TutorialScene::SetLock4(int tutorialLockNum)
+{
+	switch (tutorialLockNum)
+	{
+	case 0: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::UseSword, false));
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::KillTapper, false));
+		break;
+	}
+	default:
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
+		break;
+	}
+
+}
+
+void TutorialScene::SetLock5(int tutorialLockNum)
+{
+	switch (tutorialLockNum)
+	{
+	case 0: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::ClearStage, false));
+		break;
+	}
+	case 1: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::EndStage, false));
+		timeCount_ = 10.f;
+		TweenManager::GetInstance().Add(Linear, &timeCount_, 0.f, 5.f);
+		break;
+	}
+	case 2: {
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
+		break;
+	}
+	default:
+		lockList_.push_back(std::pair<UnLockType, bool>(UnLockType::Dummy, true));
+		break;
+	}
+
+}
+
 
 void TutorialScene::ChangeNextTutorial()
 {
 	if (currentTutorialNum_ >= maxTutorialNum -1) {
 		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
-		FadePanel::GetInstance().FadeOut();
+		if (!FadePanel::GetInstance().IsAction()) FadePanel::GetInstance().FadeOut();
 	}
 	else {
 		FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); ResetLockNum(); SceneInit(); });

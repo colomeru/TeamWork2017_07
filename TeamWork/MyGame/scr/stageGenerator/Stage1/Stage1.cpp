@@ -17,10 +17,10 @@
 #include "../MyGame/scr/game/Random.h"
 
 //コンストラクタ
-Stage1::Stage1(IWorld * world, std::string & fileName, int hairballCnt)
+Stage1::Stage1(IWorld * world, std::string & fileName)
 	:StageGenerator(world, fileName)
-	, hairballCnt_(hairballCnt)
 {
+	spriteIdMap_.clear();
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_SPRITE);
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_02_SPRITE);
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_03_SPRITE);
@@ -103,7 +103,7 @@ void Stage1::AddStage()
 
 	//毛玉生成クラスの生成
 	for (int i = 0; i < 3; i++) {
-		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, i, Vector2::Zero, hairballCnt_));
+		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, i, Vector2::Zero));
 	}
 }
 void Stage1::CreateClothes() {

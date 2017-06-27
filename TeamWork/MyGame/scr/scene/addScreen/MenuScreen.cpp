@@ -500,8 +500,8 @@ bool MenuScreen::IsInputLeft() const
 bool MenuScreen::IsInputAny() const
 {
 	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) ||
-		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::DOWN) ||
-		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::RIGHT) ||
+		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) ||
+		Keyboard::GetInstance().KeyTriggerDown(KEYCODE::D) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::UP) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::DOWN) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::RIGHT);

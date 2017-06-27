@@ -30,7 +30,7 @@ void BackgroundPill::Draw() const
 	//Vector2 drawPos = GetDrawPosVect(position
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::WIND_SPRITE)/2;
 	auto pos = GetDrawPosVect(position_);
-	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, pos, origin, 1.f, Vector2::One, 0.f,true, false);
+	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, pos, origin, 0.7f, Vector2::One, 0.f,true, false);
 
 }
 

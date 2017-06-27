@@ -9,7 +9,7 @@ class Stage1 : public StageGenerator
 {
 public:
 	//コンストラクタ
-	Stage1(IWorld* world, std::string& fileName, int hairballCnt);
+	Stage1(IWorld* world, std::string& fileName);
 	//デストラクタ
 	virtual ~Stage1() override;
 	//ステージ読み込み
@@ -32,6 +32,5 @@ protected:
 
 protected:
 	std::queue<bool> pin_list;
-	int hairballCnt_;
 	std::map<CLOTHES_ID, std::vector<SPRITE_ID>> spriteIdMap_;
 };

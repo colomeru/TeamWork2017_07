@@ -128,7 +128,6 @@ void Hanger::OnMessage(EventMessage message, void * param)
 		if (!isUpdate_ || isPendulum_) break;
 		int rand = Random::GetInstance().Range(0, 100);
 		if (rand > 30) return;
-		basePosition_ = position_;
 		isPendulum_ = true;
 		break;
 	}

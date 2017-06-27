@@ -183,6 +183,7 @@ public:
 		return m_splitsprites.at(id).size();
 	}
 	int GetHandle(const SPRITE_ID& id) const;
+	int GetHandle(const SPRITE_ID& id,int frame) const;
 
 private:
 	///<summary>

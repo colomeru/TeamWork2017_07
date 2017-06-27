@@ -55,7 +55,7 @@ void Credit2Scene::Initialize()
 	//stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Tutorial"), 0));
 	//stageGeneratorManager.SetStage(Stage::Stage1);
 	std::string filename = "Tutorial1";
-	Stage1 stage(world_.get(), filename, 0);
+	Stage1 stage(world_.get(), filename);
 	//stage.CreateClothes();
 	//setWindTime(Stage::Stage1);
 

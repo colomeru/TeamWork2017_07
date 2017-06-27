@@ -17,6 +17,8 @@ public:
 	virtual void Update() override;
 	virtual void LateUpdate()override {
 		isDraw_ = true;
+		isUpdate_ = true;
+		laneNum_ = world_->GetKeepDatas().playerLane_;
 
 	}
 	//•`‰æ

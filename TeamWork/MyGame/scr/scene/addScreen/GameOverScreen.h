@@ -19,6 +19,8 @@ private:
 private:
 	int inputCount_;
 	int sinCount_;
+	bool isTrigger_;
+
 	std::vector<Scene> changeSceneList_;
 	std::vector<float> textAlphaList_;
 	std::vector<float> textSizeList_;

@@ -163,6 +163,8 @@
     <ClCompile Include="scr\actor\ActorManager.cpp" />
     <ClCompile Include="scr\actor\Effects\Effect.cpp" />
     <ClCompile Include="scr\actor\Effects\EnemyEffect\TapperTapEffect.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\ArrowEffectGenerator.cpp" />
+    <ClCompile Include="scr\actor\Effects\PlayerEffect\CursorEffect.cpp" />
     <ClCompile Include="scr\actor\Effects\PlayerEffect\GetSwordEffect.cpp" />
     <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerBiteEffect.cpp" />
     <ClCompile Include="scr\actor\Effects\PlayerEffect\PlayerFatigueEffect.cpp" />
@@ -243,6 +245,7 @@
     <ClCompile Include="scr\math\Quaternion.cpp" />
     <ClCompile Include="scr\math\Vector2.cpp" />
     <ClCompile Include="scr\math\Vector3.cpp" />
+    <ClCompile Include="scr\scene\addScreen\AllClearScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\BackgroundScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\GameClearScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\GameOverScreen.cpp" />
@@ -291,6 +294,8 @@
     <ClInclude Include="scr\actor\CameraAct\TPSCamera.h" />
     <ClInclude Include="scr\actor\Effects\Effect.h" />
     <ClInclude Include="scr\actor\Effects\EnemyEffect\TapperTapEffect.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\ArrowEffectGenerator.h" />
+    <ClInclude Include="scr\actor\Effects\PlayerEffect\CursorEffect.h" />
     <ClInclude Include="scr\actor\Effects\PlayerEffect\GetSwordEffect.h" />
     <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerBiteEffect.h" />
     <ClInclude Include="scr\actor\Effects\PlayerEffect\PlayerFatigueEffect.h" />
@@ -385,6 +390,7 @@
     <ClInclude Include="scr\myData\MyTestCamera.h" />
     <ClInclude Include="scr\myData\MyTestCol.h" />
     <ClInclude Include="scr\number\DrawNumber.h" />
+    <ClInclude Include="scr\scene\addScreen\AllClearScreen.h" />
     <ClInclude Include="scr\scene\addScreen\BackgroundScreen.h" />
     <ClInclude Include="scr\scene\addScreen\GameClearScreen.h" />
     <ClInclude Include="scr\scene\addScreen\GameOverScreen.h" />

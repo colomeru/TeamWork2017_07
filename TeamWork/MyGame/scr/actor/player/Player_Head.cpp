@@ -16,7 +16,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 	spriteId_ = SPRITE_ID::OROCHI_HEAD_SPRITE;
 
 	parameter_.ID = ACTOR_ID::PLAYER_HEAD_ACTOR;
-	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 2.f;
+	parameter_.radius = Sprite::GetInstance().GetSize(spriteId_).x / 3.f;
 	parameter_.size = Sprite::GetInstance().GetSize(spriteId_);
 	parameter_.HP = 10;
 

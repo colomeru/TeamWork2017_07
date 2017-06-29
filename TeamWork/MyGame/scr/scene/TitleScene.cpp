@@ -43,8 +43,10 @@ void TitleScene::Initialize()
 	sinCount_ = 0;
 
 
-	Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM,DX_PLAYTYPE_LOOP);
-	Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
+	if (!Sound::GetInstance().IsPlayBGM()) {
+		Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM, DX_PLAYTYPE_LOOP);
+		Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
+	}
 	//FadePanel::GetInstance().Initialize();
 	FadePanel::GetInstance().SetInTime(0.5f);
 	FadePanel::GetInstance().FadeIn();

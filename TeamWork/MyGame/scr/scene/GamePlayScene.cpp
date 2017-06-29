@@ -179,6 +179,7 @@ void GamePlayScene::Initialize()
 
 	stageEffectScreen_.Init(currentStage_);
 	
+	Sound::GetInstance().StopBGM();
 	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_],DX_PLAYTYPE_LOOP);
 	//Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.8f);
 

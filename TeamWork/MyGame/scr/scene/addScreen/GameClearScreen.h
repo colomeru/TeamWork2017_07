@@ -46,4 +46,5 @@ private:
 	bool isShowScore_;
 	bool isKeyOnceScore_;
 	Stage stage_;
+	bool isTrigger_;
 };

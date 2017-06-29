@@ -20,6 +20,7 @@
 #include"../tween/TweenManager.h"
 #include"../actor/Field/Enemys/TutorialManager.h"
 #include"../actor/Effects/PlayerEffect/CursorEffect.h"
+#include"../sound/sound.h"
 
 static int maxTextCount[maxTutorialNum]{
 	2,
@@ -67,6 +68,9 @@ TutorialScene::~TutorialScene()
 
 void TutorialScene::Initialize()
 {
+	Sound::GetInstance().StopBGM();
+	Sound::GetInstance().PlayBGM(BGM_ID::STAGE_01_BGM, DX_PLAYTYPE_LOOP);
+	
 	currentTutorialNum_ = 0;
 	ResetLockNum();
 	SceneInit();
@@ -110,6 +114,8 @@ void TutorialScene::SceneInit()
 
 	arrowEffectGenerator_.Initialize(world_.get(), player_.get(), 0.3f);
 	timeCount_ = 0.f;
+
+
 }
 
 void TutorialScene::Update()
@@ -152,7 +158,7 @@ void TutorialScene::Update()
 	// I—¹
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
 	{
-		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+		FadePanel::GetInstance().AddCollBack([=]() {Sound::GetInstance().StopBGM(); isEnd_ = true; });
 		if (!FadePanel::GetInstance().IsAction())FadePanel::GetInstance().FadeOut();
 	}
 
@@ -191,6 +197,7 @@ void TutorialScene::End()
 
 	TweenManager::GetInstance().Clear();
 	
+
 	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
 	//FadePanel::GetInstance().FadeOut();
 }
@@ -424,7 +431,7 @@ void TutorialScene::SetLock5(int tutorialLockNum)
 void TutorialScene::ChangeNextTutorial()
 {
 	if (currentTutorialNum_ >= maxTutorialNum -1) {
-		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+		FadePanel::GetInstance().AddCollBack([=]() { Sound::GetInstance().StopBGM(); isEnd_ = true; });
 		if (!FadePanel::GetInstance().IsAction()) FadePanel::GetInstance().FadeOut();
 	}
 	else {

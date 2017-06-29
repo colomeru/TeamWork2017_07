@@ -1501,6 +1501,10 @@ void Player::SlipUpdate()
 			PHeadChanger(1);
 			isCanNextHeadRot = false;
 		}
+		if ((MathHelper::Abs(GamePad::GetInstance().Stick().x) < 0.3f && (Keyboard::GetInstance().KeyStateUp(KEYCODE::D) && Keyboard::GetInstance().KeyStateUp(KEYCODE::A)))) {
+			isCanNextHeadRot = true;
+		}
+
 	}
 
 		position_ += velocity_ + pendulumVect_;

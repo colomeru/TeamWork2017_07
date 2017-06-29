@@ -92,6 +92,8 @@ public:
 	void UpdateClothesFeces();
 	//服に付着した鳥の糞の描画
 	void DrawClothesFeces() const;
+	//
+	void DrawRangeUpdate();
 	//補助線描画
 	void DrawRange() const;
 	//プレイヤーを服に同期させる振り子
@@ -149,6 +151,8 @@ protected:
 	int frequencyWind_;
 	//現在のステージ番号
 	Stage currentStage_;
+	//補助線描画条件
+	bool isDrawRange_;
 
 	//振り子関連(服用)
 	//振り子フラグ

@@ -15,7 +15,4 @@ public:
 	virtual void Draw() const override;
 	//ó“®XV
 	virtual void OnUpdate() override;
-
-private:
-
 };

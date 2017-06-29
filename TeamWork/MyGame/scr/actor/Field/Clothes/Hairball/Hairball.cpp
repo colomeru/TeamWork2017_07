@@ -21,7 +21,7 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	world_->EachActor(ACTOR_ID::PLAYER_HEAD_ACTOR, [&, this](const Actor& other) {
 		player_Head_ = static_cast<Player_Head*>(const_cast<Actor*>(&other));
 	});
-	player_ = static_cast<Player*>(player_Head_->GetParent());
+	//player_ = static_cast<Player*>(player_Head_->GetParent());
 
 	localPoints.push_back(Vector3());
 	localPoints.push_back(Vector3());

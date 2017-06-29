@@ -16,7 +16,7 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	, isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
 	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f), count_(0)
 	, clothesState_(ClothesState::WINDLESS), cuttingState_(CuttingState::Normal), weight_(weight), drawFrame_(0)
-	, is_Droping_(false), clothesFeces_(nullptr), penState_(NONE), player_(nullptr)
+	, is_Droping_(false), clothesFeces_(nullptr), penState_(NONE), player_(nullptr), isDrawRange_(false), currentStage_(Stage::Stage1)
 {
 	clothes_ID = clothes;
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
@@ -26,6 +26,11 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	collisionPoints.clear();
 	localPoints.reserve(4);
 	collisionPoints.reserve(4);
+
+	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [=](Actor& other)
+	{
+		player_ = static_cast<Player*>(&other);
+	});
 }
 
 Clothes::~Clothes()
@@ -99,7 +104,6 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 		other.Dead();
 		if (player_ == nullptr || parent_ == nullptr) return;
 		player_->SetMode(MODE_SLIP);
-		player_ = nullptr;
 		parent_ = nullptr;
 		break;
 	}
@@ -199,7 +203,7 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 void Clothes::Pendulum(std::vector<Vector2> & deformPos, float rot_spd, float length)
 {
-	for (int i = 2; i < deformPos.size() - 2; i++) {
+	for (int i = 2; i < deformPos.size(); i++) {
 		PenStateDecision();
 		auto dRot = MathHelper::Abs(rot_spd);
 		auto fulcrum = deformPos[i - 2];
@@ -397,6 +401,15 @@ void Clothes::DrawClothesFeces() const
 		clothesFeces_->Draw();
 }
 
+void Clothes::DrawRangeUpdate()
+{
+	if (player_->GetIsShootMode())
+		isDrawRange_ = true;
+
+	if (player_->GetIsBiteMode())
+		isDrawRange_ = false;
+}
+
 void Clothes::Synchronize()
 {
 	if (parent_ == nullptr || player_== nullptr || !player_->GetIsBiteMode()) return;
@@ -548,7 +561,9 @@ void Clothes::PenStateDecision()
 
 void Clothes::DrawRange() const
 {
-	if (currentStage_ != Stage::Stage1 || collisionPoints.empty()) return;
+	if (currentStage_ != Stage::Stage1 || 
+		collisionPoints.empty() ||
+		!isDrawRange_) return;
 	auto topSize = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_TOP_SPRITE);
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_SPRITE) / 2;
 	auto topOrigin = topSize / 2;

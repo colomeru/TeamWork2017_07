@@ -33,6 +33,7 @@ void NotShakeClothes::Update()
 
 	SetPointsUpdate();
 	UpdateClothesFeces();
+	DrawRangeUpdate();
 }
 
 void NotShakeClothes::Draw() const

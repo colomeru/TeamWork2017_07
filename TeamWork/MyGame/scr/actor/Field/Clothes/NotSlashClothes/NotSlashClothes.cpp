@@ -36,6 +36,7 @@ void NotSlashClothes::Update()
 	Synchronize();
 	SetPointsUpdate();
 	UpdateClothesFeces();
+	DrawRangeUpdate();
 }
 
 void NotSlashClothes::Draw() const

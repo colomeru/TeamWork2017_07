@@ -46,6 +46,7 @@ void FluffyClothes::Update()
 	SetPointsUpdate();
 	Synchronize();
 	UpdateClothesFeces();
+	DrawRangeUpdate();
 }
 
 void FluffyClothes::Draw() const

@@ -28,14 +28,10 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	//localPoints.push_back(Vector3(-60, 90 + length_, 0));
 	//localPoints.push_back(Vector3(60, 90 + length_, 0));
 	//localPoints.push_back(Vector3(60, -100 + length_, 0));
+
 	SetLocalPoints();
 
 	SetPointsUpdate();
-
-	//if (is_Pin)
-	//	world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
-
-	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 ThinClothes::~ThinClothes()
@@ -57,11 +53,7 @@ void ThinClothes::Update()
 	Synchronize();
 	UpdateClothesFeces();
 
-	//if (isCheckCol_ && isUpdate_) {
-	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	//}
-
-	isHit_ = false;
+	DrawRangeUpdate();
 }
 
 void ThinClothes::Draw() const

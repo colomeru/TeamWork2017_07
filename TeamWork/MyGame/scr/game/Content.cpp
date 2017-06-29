@@ -195,6 +195,15 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("crow/crow_00007.png", SPRITE_ID::CROW_ANM_07_SPRITE);
 	sprite.Load("crow/crow_00008.png", SPRITE_ID::CROW_ANM_08_SPRITE);
 
+	sprite.Load("white/crow_00001.png", SPRITE_ID::WHITE_ANM_01_SPRITE);
+	sprite.Load("white/crow_00002.png", SPRITE_ID::WHITE_ANM_02_SPRITE);
+	sprite.Load("white/crow_00003.png", SPRITE_ID::WHITE_ANM_03_SPRITE);
+	sprite.Load("white/crow_00004.png", SPRITE_ID::WHITE_ANM_04_SPRITE);
+	sprite.Load("white/crow_00005.png", SPRITE_ID::WHITE_ANM_05_SPRITE);
+	sprite.Load("white/crow_00006.png", SPRITE_ID::WHITE_ANM_06_SPRITE);
+	sprite.Load("white/crow_00007.png", SPRITE_ID::WHITE_ANM_07_SPRITE);
+	sprite.Load("white/crow_00008.png", SPRITE_ID::WHITE_ANM_08_SPRITE);
+
 	sprite.Load("negishi.png", SPRITE_ID::CREDIT_NEGISHI_SPRITE, 4, Point(4, 1), Point(300, 300));
 	sprite.Load("miyauchi.png", SPRITE_ID::CREDIT_MIYAUCHI_SPRITE, 4, Point(4, 1), Point(300, 300));
 	sprite.Load("saito.png", SPRITE_ID::CREDIT_SAITO_SPRITE, 4, Point(4, 1), Point(300, 300));

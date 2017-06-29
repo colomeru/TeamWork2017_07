@@ -179,6 +179,8 @@ public:
 	void DeformationDraw();
 	//
 	void SetPosition(Vector2 position);
+	//
+	Vector2 GetPlayerPosition();
 
 private:
 	//

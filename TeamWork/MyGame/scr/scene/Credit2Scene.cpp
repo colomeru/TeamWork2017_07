@@ -19,6 +19,7 @@
 #include"../tween/TweenManager.h"
 #include "addScreen\screenSupport\CreditTextGenerator.h"
 #include "../time/Time.h"
+#include "../Def.h"
 
 Credit2Scene::Credit2Scene() :
 	nextScene_(Scene::Title)
@@ -75,6 +76,7 @@ void Credit2Scene::Initialize()
 
 	//
 	correction = Vector2(300.0f, 500.0f);
+	wCorr = Vector2(-40, -15);
 
 	startPos_ = Vector2(WINDOW_WIDTH / 2.0f - correction.x, -110.0f);
 
@@ -88,9 +90,25 @@ void Credit2Scene::Initialize()
 	spriteSize_ = Vector2(800.0f, 200.0f);
 	operate_ = true;
 	sceneTimer_ = 0.0f;
+	test = false;
 	test2 = false;
 	alpha_ = 0.0f;
 	sinCount_ = 0;
+
+	//カラス
+	whitePos_ = { player_->GetCurrentPHeadPosition() + correction + wCorr,
+				Vector2(WINDOW_WIDTH / 2.0f, -300.0f) + wCorr };
+	dWhitePos_ = whitePos_[0];
+	waiting_ = true;
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_01_SPRITE);
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_02_SPRITE);
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_03_SPRITE);
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_04_SPRITE);
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_05_SPRITE);
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_06_SPRITE);
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_07_SPRITE);
+	anmManager_.Add(SPRITE_ID::WHITE_ANM_08_SPRITE);
+	anmManager_.SetIsRepeat(true);
 
 	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditText>(world_.get(), Vector2(500, 500)));
 	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditTextGenerator>(world_.get(), Vector2(500, 100)));
@@ -134,6 +152,7 @@ void Credit2Scene::Update()
 	//	Initialize();
 	//}
 
+	whitePos_[0] = player_->GetCurrentPHeadPosition() + correction + wCorr;
 
 	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT)) {
 		pHeadPos_.x += 5.0f;
@@ -159,11 +178,17 @@ void Credit2Scene::Update()
 		player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
 	}
 
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
+		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
+	}
+
 	if (!player_->GetIsBiteMode()) playerStatte_ = FALL;
 
 	PlayerRestart();
 
 	Scroll();
+
+	anmManager_.Update();
 
 	//if ((Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M) ||
 	//	GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2)) &&
@@ -172,8 +197,6 @@ void Credit2Scene::Update()
 	//	player_->SetIsBiteMode(true);
 	//}
 
-	if (IsCollision()) test = true;
-	else test = false;
 
 	sceneTimer_ += Time::DeltaTime;
 	if (sceneTimer_ >= SceneTime) {
@@ -205,10 +228,16 @@ void Credit2Scene::Draw() const
 
 	//textScreen_.Draw();
 
-	if (sceneTimer_ >= SceneTime) {
-		Vector2 ssorigin = Sprite::GetInstance().GetSize(SPRITE_ID::BACKTITLE_TEXT_SPRITE) / 2;
-		Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE, Vector2(WINDOW_WIDTH / 2, 750.0f), ssorigin, alpha_, Vector2::One);
-	}
+	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
+	//Vector2 wPos;
+	//if (operate_) wPos = whitePos_[1];
+	//else wPos = whitePos_[0];
+	anmManager_.Draw(dWhitePos_, origin, Vector2::One, 1.0f);
+
+	//if (sceneTimer_ >= SceneTime) {
+	//	Vector2 ssorigin = Sprite::GetInstance().GetSize(SPRITE_ID::BACKTITLE_TEXT_SPRITE) / 2;
+	//	Sprite::GetInstance().Draw(SPRITE_ID::BACKTITLE_TEXT_SPRITE, Vector2(WINDOW_WIDTH / 2, 750.0f), ssorigin, alpha_, Vector2::One);
+	//}
 	if (BuildMode != 1) return;
 	DrawFormatString(0, 00, GetColor(255, 255, 255), "CreditScene");
 	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
@@ -226,6 +255,8 @@ void Credit2Scene::Draw() const
 
 	if (test2) DrawFormatString(0, 160, GetColor(255, 255, 255), "遷移できます！");
 	else DrawFormatString(0, 160, GetColor(255, 255, 255), "遷移できません！");
+
+	DrawFormatString(0, 180, GetColor(255, 255, 255), "PlayerPos_:%f %f", player_->GetPosition().x, player_->GetPosition().y);
 
 
 
@@ -305,7 +336,7 @@ bool Credit2Scene::ScreenOut() const
 	//if (player_->GetCurrentPHeadPosition().x - correction.x < -300.0f || player_->GetCurrentPHeadPosition().x - correction.x > WINDOW_WIDTH + 300.0f ||
 	//	player_->GetCurrentPHeadPosition().y - correction.y < -300.0f || player_->GetCurrentPHeadPosition().y - correction.y > WINDOW_HEIGHT + 300.0f)
 	if (player_->GetCurrentPHeadPosition().x < -300.0f - correction.x || player_->GetCurrentPHeadPosition().x > WINDOW_WIDTH + 300.0f - correction.x ||
-		player_->GetCurrentPHeadPosition().y < -300.0f - correction.y || player_->GetPosition().y > WINDOW_HEIGHT + 300.0f - correction.y - 300.0f)
+		player_->GetCurrentPHeadPosition().y < -300.0f - correction.y || player_->GetCurrentPHeadPosition().y > WINDOW_HEIGHT + 300.0f - correction.y)
 		//if (player_->GetCurrentPHeadPosition().x < -250.0f - correction.x || player_->GetCurrentPHeadPosition().x > WINDOW_WIDTH + 250.0f - correction.x ||
 		//	player_->GetCurrentPHeadPosition().y < -250.0f - correction.y || player_->GetCurrentPHeadPosition().y > WINDOW_HEIGHT + 250.0f - correction.y - 300.0f)
 		return true;
@@ -316,44 +347,51 @@ bool Credit2Scene::ScreenOut() const
 //プレイヤーリスタート
 void Credit2Scene::PlayerRestart()
 {
+	if (!operate_) {
+		player_->SetIsBiteMode(true);
+
+		player_->setCurPHeadSPos(pHeadPos_);
+		player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
+
+		dWhitePos_ = whitePos_[0];
+		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), 90.0f, 60.0f);
+	}
+
 	//画面外に出たら
 	if ((ScreenOut() || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) &&
 		operate_) {
 		operate_ = false;
-		//player_->PHeadLengthReset();
-		//player_->MultipleInit(50.0f,pHeadPos_,0.0f,60.0f);
 		player_->AllResurrectHead();
-		player_->SetIsBiteMode(true);
+		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
+		player_->SetIsBiteMode(false);
 		player_->CurHeadBite(pHeadPos_);
 		player_->PHeadLengthReset();
 		playerStatte_ = RESTART;
 		pHeadPos_ = player_->GetCurrentPHeadPosition(); //プレイヤー座標
-		player_->GravityReset();
-		player_->CurHeadBite(pHeadPos_);
+		//player_->GravityReset();
+		//player_->CurHeadBite(pHeadPos_);
 
-		player_->SetIsBiteMode(true);
 		player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);
-		TweenManager::GetInstance().Add(EaseOutExpo, &pHeadPos_, startPos_, 2.0f);
+		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadPos_, startPos_, 2.0f);
 
 	}
 
 	//スタート位置に戻ったら
-	Vector2 dis = pHeadPos_ - startPos_;
-	if (dis.Length() <= 2.0f && !operate_ /*&& Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)*/) {
+	Vector2 dis = player_->GetCurrentPHeadPosition() - startPos_;
+	if (dis.Length() <= 2.0f && !operate_) {
+
+		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
+		player_->SetIsBiteMode(true);
+		player_->GravityReset();
 		operate_ = true;
-	}
-	//if (((pHeadPos_.x >= startPos_.x - 2.0f && pHeadPos_.x <= startPos_.x + 2.0f) &&
-	//	(pHeadPos_.y >= startPos_.y - 2.0f && pHeadPos_.y <= startPos_.y + 2.0f)) &&
-	//	!operate_) {
-	//	operate_ = true;
-	//}
 
-	if (!operate_) {
-
-		player_->setCurPHeadSPos(pHeadPos_);
-		player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
+		waiting_ = true;
 	}
 
+	if (waiting_ && Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		TweenManager::GetInstance().Add(EaseInQuart, &dWhitePos_, whitePos_[1], 2.0f);
+		waiting_ = false;
+	}
 
 }
 
@@ -380,4 +418,9 @@ bool Credit2Scene::IsCollision()
 
 
 
+}
+
+bool Credit2Scene::GetOperate()
+{
+	return operate_;
 }

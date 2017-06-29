@@ -730,6 +730,11 @@ void CreditPlayer::SetPosition(Vector2 position)
 	position_ = position;
 }
 
+Vector2 CreditPlayer::GetPlayerPosition()
+{
+	return position_;
+}
+
 //
 void CreditPlayer::SetDrawNeck(const Vector2 & bodyPoint, const Vector2 & headPoint)
 {

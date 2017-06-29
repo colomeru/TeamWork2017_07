@@ -13,6 +13,7 @@
 #include "../actor/player/CreditPlayer.h"
 #include <array>
 #include "addScreen\screenSupport\CreditText.h"
+#include "../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
 
 class Credit2Scene : public IScene
 {
@@ -50,7 +51,8 @@ public:
 	void Scroll();
 	//画像に触れているか？
 	bool IsCollision();
-	//
+	//操作可能か？
+	bool GetOperate();
 
 
 private:
@@ -69,6 +71,8 @@ private:
 	//ステージ作成マネージャー
 	StageGenerateManager stageGeneratorManager;
 
+	CharacterAnmManager anmManager_;
+
 	// 次のシーン
 	Scene			nextScene_;
 
@@ -84,11 +88,16 @@ private:
 	bool operate_;
 	int playerStatte_;
 	Vector2 correction;
-	const float SceneTime = 52.0f;
+	const float SceneTime = 54.0f;
 	float sceneTimer_;
 	int sinCount_;
 	float alpha_;
+	std::array<Vector2, 2> whitePos_;
+	Vector2 dWhitePos_;
+	Vector2 wCorr;
+	bool waiting_;
 
 	bool test;
 	bool test2;
+
 };

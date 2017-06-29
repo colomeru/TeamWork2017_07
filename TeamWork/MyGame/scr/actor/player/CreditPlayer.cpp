@@ -16,6 +16,7 @@
 #include"PlayerDeadHead.h"
 #include"../../sound/sound.h"
 #include"../../cheat/CheatData.h"
+#include "../../actor/player/PlayerFallPin.h"
 #include "../../scene/Credit2Scene.h"
 
 static const float headShotPower = 0.3f;
@@ -165,10 +166,6 @@ void CreditPlayer::Update()
 	worldSetMyDatas();
 
 	laneNum_ = 1;
-
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::F)) {
-		position_ = Vector2(0, 0);
-	}
 
 }
 
@@ -1350,16 +1347,26 @@ void CreditPlayer::FallUpdate()
 			isCanNextHeadRot = true;
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
+		}
+		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+			if (Credit2Scene::GetInstance().GetOperate() == false) return;
+			pHeads_[currentHead_]->SetBiteSprite();
+			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
+
+
 		}
 	}
 	position_ += velocity_ + pendulumVect_;
 
 	slipCount_ = defSlipCount;
 
+	//SetNeckNonMult();
 	SetDrawNeck(position_, pHeads_[currentHead_]->GetPosition());
+	//UpdateMultiplePos();
+
 }
 
 //
@@ -1367,19 +1374,20 @@ void CreditPlayer::ShootUpdate()
 {
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
-		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
-			CurPHeadLengPlus(headShotPower);
-		}
-		else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
+		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
+			//else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
+			if (Credit2Scene::GetInstance().GetOperate() == false) return;
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 		}
+		else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+			CurPHeadLengPlus(headShotPower);
+		}
 		else {
-			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
@@ -1403,6 +1411,7 @@ void CreditPlayer::ShootEndUpdate()
 			isCanNextHeadRot = false;
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
+			//playerMode_ = MODE_FALL;
 			//キーを押し直したかの判断
 			PHeadChanger(1);
 			isCanNextHeadRot = false;
@@ -1411,12 +1420,8 @@ void CreditPlayer::ShootEndUpdate()
 			isCanNextHeadRot = true;
 		}
 
-		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
-		}
-		else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
-		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			SetMode(MODE_SHOOT);// playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
@@ -1431,31 +1436,42 @@ void CreditPlayer::ShootEndUpdate()
 //
 void CreditPlayer::BiteUpdate()
 {
+	//Pendulum(pHeads_[currentHead_]->GetPosition(), length_);
 	Multiple();
 	if (isUseKey_) {
 
-		if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		//if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 			if (!pSword_->GetUseSword()) {
 				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_, pSword_->GetPosition(), pSword_.get()));
+				world_->sendMessage(EventMessage::USE_SWORD);
 				pSword_->SetUseSword(true);
 				Sound::GetInstance().PlaySE(SE_ID::CREATE_SWORD_SE);
 			}
 		}
-		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
+		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM5) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-				//SetNextLane(1);
+				//pSword_->SetUseSword(true);
+				SetNextLane(1);
+				//UpdateLaneNum(1);
 			}
+			// if (rot_<0.f || rot_>180.f) {
 			else if (mRot.front() < 0.f || mRot.front() > 180.f) {
-				//SetNextLane(-1);
+				SetNextLane(-1);
+				//UpdateLaneNum(-1);
 			}
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		//		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+			//if (Credit2Scene::GetInstance().GetOperate() == false) return;
+			//if (GetIsBiteMode()) {
 			SetMode(MODE_FALL);
 			//Headを交代する
 			PHeadChanger();
 			isNextPushKey_ = false;
 			isCanNextHeadRot = false;
+			//	}
 		}
 	}
 	//下へのベクトルと現在のプレイヤーの位置ベクトルのなす角を取る
@@ -1473,25 +1489,28 @@ void CreditPlayer::BiteUpdate()
 			pHeads_[currentHead_]->GetPosition().y < position_.y) {
 			rot_spd_ += (spdLimit);
 			for (auto& spd : mRot_spd) {
-				spd += (spdLimit);
+				spd += (spdLimit)* 2;
 			}
 		}
-	}
-	slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
-	if (slipCount_ <= 0.f) {
-		SetMode(MODE_SLIP);
-		//首を殺して
-		pHeadDead_[currentHead_] = true;
-		//スティックをロックする
-		isCanNextHeadRot = false;
-		isSlipped_ = true;
-		//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
-		pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
-		//ここやばいかも？
-		PHeadChanger();
-	}
-	slipCount_ = max(slipCount_, 0.f);
 
+		slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
+		if (slipCount_ <= 0.f) {
+			SetMode(MODE_SLIP);
+			//首を殺して
+			Vector2 toPos = pHeadPoses_[currentHead_] - position_;
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_, pHeads_[currentHead_]->GetPosition(), toPos));
+			pHeadDead_[currentHead_] = true;
+			//スティックをロックする
+			isCanNextHeadRot = false;
+			isSlipped_ = true;
+			//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
+			pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
+			//changeHead();
+			//ここやばいかも？
+			PHeadChanger();
+		}
+		slipCount_ = max(slipCount_, 0.f);
+	}
 	DeformationDraw();
 
 }
@@ -1501,8 +1520,15 @@ void CreditPlayer::SlipUpdate()
 {
 	pGrav_ += defPGravPow;
 
+	//if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+	//}
+	//else{
+	//	playerMode_ = MODE_FALL;
+	//}
 	if (isUseKey_) {
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+			//if (GetIsSlipped()) {
+			//MODE_SLIP;
 			//Headを交代する
 			PHeadChanger();
 			//}
@@ -1529,6 +1555,7 @@ void CreditPlayer::SlipUpdate()
 
 	UpdateMultiplePos();
 	DeformationDraw();
+
 
 }
 

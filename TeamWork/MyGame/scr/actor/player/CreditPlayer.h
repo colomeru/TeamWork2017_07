@@ -332,5 +332,6 @@ private:
 	std::map<CLOTHES_ID, float> slipCountMult_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
+
 };
 

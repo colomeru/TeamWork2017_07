@@ -190,12 +190,6 @@ void Credit2Scene::Update()
 
 	anmManager_.Update();
 
-	//if ((Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M) ||
-	//	GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2)) &&
-	//	IsCollision()) {
-	//	playerStatte_ = BITE;
-	//	player_->SetIsBiteMode(true);
-	//}
 
 
 	sceneTimer_ += Time::DeltaTime;
@@ -203,11 +197,8 @@ void Credit2Scene::Update()
 		sinCount_ += 5; sinCount_ %= 360;
 		alpha_ = MathHelper::Sin(sinCount_);
 		test2 = true;
-		//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
-		//{
 		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
 		FadePanel::GetInstance().FadeOut();
-		//}
 	}
 }
 
@@ -388,7 +379,7 @@ void Credit2Scene::PlayerRestart()
 		waiting_ = true;
 	}
 
-	if (waiting_ && Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+	if (waiting_ && (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2))) {
 		TweenManager::GetInstance().Add(EaseInQuart, &dWhitePos_, whitePos_[1], 2.0f);
 		waiting_ = false;
 	}

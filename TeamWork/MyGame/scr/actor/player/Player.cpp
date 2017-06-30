@@ -1545,8 +1545,9 @@ void Player::ClearUpdate()
 	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT+99.f)||isClearShoot_) {
 		if (!isClearShoot_) {
 			PHeadChanger();
-			SetMode(MODE_FALL);
+			//SetMode(MODE_FALL);
 			isClearShoot_ = true;
+			pGrav_ = 0.0f;
 		}
 		//SetMode(MODE_FALL);
 		//pendulumVect_.x *= 0.98f;

@@ -252,6 +252,7 @@ void Content::LoadSound(Sound& sound)
 	sound.LoadBGM("bgm/stageclear.mp3", BGM_ID::STAGE_CLEAR_BGM);
 	sound.LoadBGM("bgm/gameover.mp3", BGM_ID::GAME_OVER_BGM);
 	sound.LoadBGM("bgm/stageselect.mp3", BGM_ID::STAGE_SELECT_BGM);
+	sound.LoadBGM("bgm/ED.wav", BGM_ID::CREDIT_BGM);
 
 	//SEì«Ç›çûÇ›
 	sound.LoadSE("se/movecursor.mp3", SE_ID::MOVE_CURSOR_SE);

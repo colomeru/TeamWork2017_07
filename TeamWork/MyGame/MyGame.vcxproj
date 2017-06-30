@@ -161,6 +161,7 @@
   <ItemGroup>
     <ClCompile Include="scr\actor\Actor.cpp" />
     <ClCompile Include="scr\actor\ActorManager.cpp" />
+    <ClCompile Include="scr\actor\DummyActor.cpp" />
     <ClCompile Include="scr\actor\Effects\Effect.cpp" />
     <ClCompile Include="scr\actor\Effects\EnemyEffect\TapperTapEffect.cpp" />
     <ClCompile Include="scr\actor\Effects\PlayerEffect\ArrowEffectGenerator.cpp" />
@@ -199,6 +200,7 @@
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.cpp" />
+    <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\TutorialTapper.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\EnemyGenerator.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\Enemys.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\TutorialManager.cpp" />
@@ -297,6 +299,7 @@
     <ClInclude Include="scr\actor\ActorParameter.h" />
     <ClInclude Include="scr\actor\ActorPtr.h" />
     <ClInclude Include="scr\actor\CameraAct\TPSCamera.h" />
+    <ClInclude Include="scr\actor\DummyActor.h" />
     <ClInclude Include="scr\actor\Effects\Effect.h" />
     <ClInclude Include="scr\actor\Effects\EnemyEffect\TapperTapEffect.h" />
     <ClInclude Include="scr\actor\Effects\PlayerEffect\ArrowEffectGenerator.h" />
@@ -335,6 +338,7 @@
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\BirdsDropping.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\CharacterAnmManager.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.h" />
+    <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\TutorialTapper.h" />
     <ClInclude Include="scr\actor\Field\Enemys\EnemyGenerator.h" />
     <ClInclude Include="scr\actor\Field\Enemys\Enemys.h" />
     <ClInclude Include="scr\actor\Field\Enemys\TutorialList.h" />

@@ -8,12 +8,13 @@
 #include "../stageGenerator/StageGeneratorManager.h"
 #include "../actor/player/Player.h"
 #include "GamePlayDefine.h"
-#include "addScreen\BackgroundScreen.h"
+#include "addScreen/BackgroundScreen.h"
 #include "addScreen/TutorialTextScreen.h"
-#include "../actor/player/CreditPlayer.h"
 #include <array>
-#include "addScreen\screenSupport\CreditText.h"
 #include "../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
+
+class CreditPlayer;
+class CreditText;
 
 class Credit2Scene : public IScene
 {

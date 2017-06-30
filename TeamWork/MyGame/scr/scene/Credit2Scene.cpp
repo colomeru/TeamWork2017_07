@@ -20,6 +20,10 @@
 #include "addScreen\screenSupport\CreditTextGenerator.h"
 #include "../time/Time.h"
 #include "../Def.h"
+#include "../actor/player/CreditPlayer.h"
+#include "../scene/addScreen/screenSupport/CreditText.h"
+#include "../actor/DummyActor.h"
+#include "../sound/sound.h"
 
 Credit2Scene::Credit2Scene() :
 	nextScene_(Scene::Title)
@@ -38,6 +42,7 @@ Credit2Scene::Credit2Scene() :
 
 Credit2Scene::~Credit2Scene()
 {
+	
 }
 
 void Credit2Scene::Initialize()
@@ -76,7 +81,7 @@ void Credit2Scene::Initialize()
 
 	//
 	correction = Vector2(300.0f, 500.0f);
-	wCorr = Vector2(-40, -15);
+	wCorr = Vector2(-40, -20);
 
 	startPos_ = Vector2(WINDOW_WIDTH / 2.0f - correction.x, -110.0f);
 
@@ -110,6 +115,8 @@ void Credit2Scene::Initialize()
 	anmManager_.Add(SPRITE_ID::WHITE_ANM_07_SPRITE);
 	anmManager_.Add(SPRITE_ID::WHITE_ANM_08_SPRITE);
 	anmManager_.SetIsRepeat(true);
+
+	Sound::GetInstance().PlayBGM(BGM_ID::CREDIT_BGM, DX_PLAYTYPE_LOOP);
 
 	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditText>(world_.get(), Vector2(500, 500)));
 	world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<CreditTextGenerator>(world_.get(), Vector2(500, 100)));
@@ -281,7 +288,7 @@ void Credit2Scene::End()
 	world_->Clear();
 	bgScreen_.End();
 
-	TweenManager::GetInstance().Clear();
+	Sound::GetInstance().StopBGM();
 
 	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
 	//FadePanel::GetInstance().FadeOut();
@@ -370,7 +377,13 @@ void Credit2Scene::PlayerRestart()
 
 		player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);
 		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadPos_, startPos_, 2.0f);
+		//auto dummy = std::make_shared<DummyActor>(world_.get());
+		//world_->Add(ACTOR_ID::DUMMY_ACTOR, dummy);
+		//world_->PushStackActor(dummy);
+		int flag = 0;
+		world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
 
+		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
 	}
 
 	//スタート位置に戻ったら
@@ -381,9 +394,14 @@ void Credit2Scene::PlayerRestart()
 		player_->SetIsBiteMode(true);
 		player_->GravityReset();
 		operate_ = true;
-
 		waiting_ = true;
 		test3 = true;
+
+		//world_->PopStackActor();
+		//world_->EachActor(ACTOR_ID::DUMMY_ACTOR, [](Actor& other) {other.Dead(); });
+		int flag = 1;
+		world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
+
 	}
 
 	if (waiting_ && (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2))) {

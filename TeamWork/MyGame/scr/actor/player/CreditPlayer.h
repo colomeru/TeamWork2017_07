@@ -5,6 +5,7 @@
 #include"../../math/MyFuncionList.h"
 #include"../../Def.h"
 #include"../../graphic/DrawPos.h"
+#include "../../scene/Credit2Scene.h"
 
 class Player_Head;
 class Player_Sword;
@@ -182,6 +183,7 @@ public:
 	//
 	Vector2 GetPlayerPosition();
 
+
 private:
 	//
 	void Multiple();
@@ -332,6 +334,8 @@ private:
 	std::map<CLOTHES_ID, float> slipCountMult_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
+
+	bool operatre_;
 
 };
 

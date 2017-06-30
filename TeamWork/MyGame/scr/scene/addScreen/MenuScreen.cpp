@@ -12,7 +12,7 @@
 #include"../GamePlayDefine.h"
 #include"../../cheat/CheatData.h"
 
-const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 390.0f, WINDOW_HEIGHT / 2.0f),
+const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 410.0f, WINDOW_HEIGHT / 2.0f),
 							Vector2(380.0f, WINDOW_HEIGHT - 54.25f) };
 
 //コンストラクタ
@@ -81,7 +81,7 @@ MenuScreen::MenuScreen() :
 	anmManager_.Add(SPRITE_ID::CROW_ANM_08_SPRITE);
 	anmManager_.SetIsRepeat(true);
 
-	interval_ = { 5.0f,9.0f,7.0f };
+	interval_ = { 5.0f,12.0f,8.0f };
 	cTimer_ = { 3.0f,0.0f,0.0f };
 	crowPos_ = { Vector2(WINDOW_WIDTH + 300.0f, 300.0f),Vector2(-300.0f, 500.0f), Vector2(WINDOW_WIDTH + 300.0f, 700.0f) };
 	cVelocity_ = { Vector2(-5.0f, 0.0f),Vector2(-5.0f, 0.0f),Vector2(-5.0f, 0.0f) };
@@ -139,13 +139,17 @@ void MenuScreen::Init()
 		Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM, DX_PLAYTYPE_LOOP);
 		Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
 	}
+
 }
 
 //更新
 void MenuScreen::Update()
 {
 	//Pattern1Update();
-	Pattern2Update();
+	//Pattern2Update();
+	anmManager_.Update();
+	Crow();
+
 }
 
 //描画
@@ -369,10 +373,6 @@ void MenuScreen::Pattern2Update()
 	//	//OpenNextStage(stageNum);
 	//}
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::V))
-	{
-		gPos.y += 150.0f;
-	}
 	timer_ += Time::DeltaTime;
 	timer_ = MathHelper::Min(timer_, MoveTime);
 
@@ -384,10 +384,6 @@ void MenuScreen::Pattern2Update()
 	Star();
 
 	ShootingStar();
-
-	Crow();
-
-	anmManager_.Update();
 
 	SE();
 
@@ -424,7 +420,7 @@ void MenuScreen::Pattern2Draw() const
 
 	//カラス
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
-	anmManager_.Draw(crowPos_[2] + cFrom_[2] * 0.7f, origin, Vector2::One, 1.0f);
+	anmManager_.Draw(crowPos_[2] + cFrom_[2], origin, Vector2::One, 1.0f);
 
 	//ビルと草
 	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_M_SPRITE, builPos_ + from, Vector2(builSize.x / 2.0f - 24.0f, builSize.y), Vector2(3.0f, 3.0f), 1.0f, false);
@@ -441,15 +437,10 @@ void MenuScreen::Pattern2Draw() const
 	static auto panelSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_1_SPRITE);
 	static auto trainingSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE);
 	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE, panel[0].position + from, Vector2(trainingSize.x / 2.0f, trainingSize.y / 2.0f), panel[0].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_1_SPRITE, panel[1].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[1].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_2_SPRITE, panel[2].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[2].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_3_SPRITE, panel[3].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[3].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_4_SPRITE, panel[4].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[4].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_5_SPRITE, panel[5].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[5].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_6_SPRITE, panel[6].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[6].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_7_SPRITE, panel[7].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[7].alpha, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_8_SPRITE, panel[8].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[8].alpha, Vector2::One);
-
+	static int spriteNum = SPRITE_ID::STAGE_SELECT_1_SPRITE - 1;
+	for (int i = 1; i <= 8; i++) {
+		Sprite::GetInstance().Draw((SPRITE_ID)(spriteNum + i), panel[i].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[i].alpha, Vector2::One);
+	}
 
 	//戻るパネルを描画
 	//DrawBox(CursorPos[1].x, CursorPos[1].y, CursorPos[1].x + 354.5f, CursorPos[1].y + 108.5f, GetColor(255, 0, 0), 1);
@@ -612,6 +603,8 @@ void MenuScreen::Crow()
 			cTimer_[i] += Time::DeltaTime;
 			//座標リセット
 			cDis_[i] = 0.0f;
+			cFrom_[i] = 0.0f;
+
 			crowPos_[i].x = WINDOW_WIDTH + 302.0f;
 		}
 		if (cTimer_[i] >= interval_[i] - 1.0f) {

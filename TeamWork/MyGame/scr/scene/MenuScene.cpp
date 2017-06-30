@@ -35,6 +35,9 @@ void MenuScene::Update()
 	
 	// çXêV
 	world_->Update();
+
+	menu.Update();
+
 	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
 	// èIóπ
@@ -52,7 +55,8 @@ void MenuScene::Update()
 		FadePanel::GetInstance().FadeOut();
 		menu.InputSelectStage();
 	}
-	menu.Update();
+
+	menu.Pattern2Update();
 }
 
 void MenuScene::Draw() const

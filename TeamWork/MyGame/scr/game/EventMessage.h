@@ -23,4 +23,5 @@ enum class EventMessage
 	NECK_SHOOT,
 	NECK_SHOOT_END,
 	CHANGE_HEAD_KEY,
+	OPERATE_FLAG,
 };

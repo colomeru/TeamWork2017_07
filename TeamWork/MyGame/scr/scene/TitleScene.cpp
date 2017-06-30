@@ -22,8 +22,8 @@ TitleScene::TitleScene() :
 		handleMessage(msg, param);
 	});
 
-	posList_.push_back(Vector2(200.f, 750.f));
-	posList_.push_back(Vector2(200.f, 930.f));
+	posList_.push_back(Vector2(430.f, 750.f));
+	posList_.push_back(Vector2(430.f, 930.f));
 }
 TitleScene::~TitleScene()
 {
@@ -35,7 +35,7 @@ void TitleScene::Initialize()
 	isEnd_ = false;
 	isPushKey_ = false;
 	isStartSetPanel_ = false;
-	selectPos_ = Vector2(200.f,750.f);
+	selectPos_ = Vector2(430.f,750.f);
 	selectNum_ = 0;
 	timer = 0;
 	alpha_.resize(2, 0.f);

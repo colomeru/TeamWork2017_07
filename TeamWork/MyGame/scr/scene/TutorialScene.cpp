@@ -68,7 +68,7 @@ TutorialScene::TutorialScene() :
 	stageTexts_[3] = "‰º‚É—Ž‚¿‚Ä‚Ý‚æ‚¤";
 	stageTexts_[4] = "ã‚É“o‚Á‚Ä‚Ý‚æ‚¤";
 	stageTexts_[5] = "•z’c’@‚«‚ðØ‚Á‚Ä‚Ý‚æ‚¤";
-	stageTexts_[6] = "ƒS[ƒ‹‚ð’Í‚ñ‚Å‚Ý‚æ‚¤";
+	stageTexts_[6] = "ƒS[ƒ‹‚ð–ÚŽw‚»‚¤";
 	stageTexts_[7] = "";
 	stageTexts_[8] = "";
 
@@ -251,25 +251,26 @@ void TutorialScene::Draw() const
 
 
 	if (isDrawCtrl_) {
-		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
-		DrawBox(1200, 500, WINDOW_WIDTH - 50, 900, GetColor(128, 128, 128), TRUE);
-		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 		int gamepadX = 1300;
 
 		if (currentTutorialNum_ >= maxTutorialNum - 1) {
-			if (tutorialLockNum_<1) {
-				Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero,1.f,Vector2::One*1.5f);
-				for (auto i : lockList_) {
-					if (!i.isLock) {
-						Sprite::GetInstance().Draw(i.ctrl, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero, abs(MathHelper::Sin((float)sinCount_)), Vector2::One*1.5f);
-						return;
-					}
-				}
-			}
+			//if (tutorialLockNum_<1) {
+			//	Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero,1.f,Vector2::One*1.5f);
+			//	for (auto i : lockList_) {
+			//		if (!i.isLock) {
+			//			Sprite::GetInstance().Draw(i.ctrl, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero, abs(MathHelper::Sin((float)sinCount_)), Vector2::One*1.5f);
+			//			return;
+			//		}
+			//	}
+			//}
 
 		}
 		else {
+			SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
+			DrawBox(1200, 500, WINDOW_WIDTH - 50, 900, GetColor(128, 128, 128), TRUE);
+			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
 			Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(gamepadX, WINDOW_HEIGHT / 2), Vector2::Zero, 1.f, Vector2::One*1.5f);
 			for (auto i : lockList_) {
 				if (!i.isLock) {

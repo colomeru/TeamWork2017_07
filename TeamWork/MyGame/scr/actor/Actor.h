@@ -65,6 +65,9 @@ public:
 	}
 	virtual void FastUpdate() {
 	}
+	Vector2 GetDrawAddPos()const {
+		return drawAddPos_;
+	}
 	void FastComUpdate() {
 		drawAddPos_ = Vector2::Zero;
 		if (world_->isChangeFrame()) { 

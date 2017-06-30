@@ -36,6 +36,13 @@ GameClearScreen::GameClearScreen():inputCount_(0), sinCount_(defSinC)
 	cursorDrawPos_ = cursorPos_[inputCount_];
 }
 
+GameClearScreen::~GameClearScreen()
+{
+	TweenManager::GetInstance().Cancel(&cursorDrawPos_);
+	TweenManager::GetInstance().Cancel(&fscore_);
+	TweenManager::GetInstance().Cancel(&fheadCount_);
+}
+
 
 void GameClearScreen::Init()
 {

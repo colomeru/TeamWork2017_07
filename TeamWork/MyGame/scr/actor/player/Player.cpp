@@ -950,7 +950,7 @@ void Player::SwordPosUpdate() {
 }
 
 void Player::StartPlayerSet() {
-	SetMode(MODE_BITE);// playerMode_ = MODE_BITE;
+	SetMode(MODE_BITE,false);// playerMode_ = MODE_BITE;
 	pHeadLength_[currentHead_]=5.f;
 	pHeads_[currentHead_]->StartPlayerHeadBite();
 
@@ -1001,7 +1001,7 @@ bool Player::ResurrectHead() {
 
 //Head‚ÌƒŒ[ƒ“‚ð–{‘Ì‚ÌƒŒ[ƒ“‚É‡‚í‚¹‚é
 
-void Player::SetMode(int pMode) {
+void Player::SetMode(int pMode,bool isPlaySE) {
 	if (!isUseKey_)return;
 	if (pMode == playerMode_)return;
 
@@ -1038,7 +1038,7 @@ void Player::SetMode(int pMode) {
 			world_->FreeCameraPosY(false);
 			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
 			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
-			Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
+			if(isPlaySE)Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
 			break;
 		}
 		case MODE_SLIP: {
@@ -1158,7 +1158,7 @@ void Player::curPHeadSlip(bool isSlip) {
 }
 
 void Player::PHeadChanger(int rot) {
-	if(!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
+	if(!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_]));
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
 	
@@ -1166,7 +1166,7 @@ void Player::PHeadChanger(int rot) {
 
 	Vector2 addVec = position_- pHeadPoses_[currentHead_];
 	addVec=addVec.Normalize()*32.f;
-	if (!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(),0.3f, addVec));
+	if (!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_],0.3f, addVec));
 
 	Sound::GetInstance().PlaySE(SE_ID::CHANGE_HEAD_SE);
 	//StartPendulum();

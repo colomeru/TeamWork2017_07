@@ -8,7 +8,7 @@ class GameOverScreen
 public:
 	// コンストラクタ
 	GameOverScreen();
-	
+	~GameOverScreen();
 	void Init();
 	bool Update(Scene& nextScene);
 	// 描画

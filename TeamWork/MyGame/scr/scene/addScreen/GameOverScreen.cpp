@@ -26,6 +26,12 @@ GameOverScreen::GameOverScreen() :inputCount_(0), sinCount_(defSinC)
 	cursorDrawPos_ = cursorPos_[inputCount_];
 }
 
+GameOverScreen::~GameOverScreen()
+{
+	TweenManager::GetInstance().Cancel(&cursorDrawPos_);
+
+}
+
 void GameOverScreen::Init()
 {
 	inputCount_ = 0;

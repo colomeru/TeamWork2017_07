@@ -13,7 +13,7 @@ public:
 public:
 	// コンストラクタ
 	PauseScreen();
-
+	~PauseScreen();
 	void Init();
 	bool Update(Scene& nextScene,returnGameType& type);
 	// 描画

@@ -10,7 +10,7 @@
 #include"../../sound/sound.h"
 #include"../../fade/FadePanel.h"
 
-AllClearScreen::AllClearScreen() :inputCount_(0), sinCount_(defSinC)
+AllClearScreen::AllClearScreen() :inputCount_(0), sinCount_(defSinC), fscore_(0.f), fheadCount_(0.f)
 {
 	changeSceneList_.push_back(Scene::Credit2);
 
@@ -30,6 +30,14 @@ AllClearScreen::AllClearScreen() :inputCount_(0), sinCount_(defSinC)
 	stageNumList_[Stage::Stage8] = 7;
 
 	cursorDrawPos_ = cursorPos_[inputCount_];
+}
+
+AllClearScreen::~AllClearScreen()
+{
+	TweenManager::GetInstance().Cancel(&cursorDrawPos_);
+	TweenManager::GetInstance().Cancel(&fscore_);
+	TweenManager::GetInstance().Cancel(&fheadCount_);
+
 }
 
 

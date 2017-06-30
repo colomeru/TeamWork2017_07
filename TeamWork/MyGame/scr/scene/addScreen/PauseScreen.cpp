@@ -31,6 +31,11 @@ PauseScreen::PauseScreen() :inputCount_(0), sinCount_(defSinC)
 
 }
 
+PauseScreen::~PauseScreen()
+{
+	TweenManager::GetInstance().Cancel(&cursorDrawPos_);
+}
+
 void PauseScreen::Init()
 {
 	inputCount_ = 0;

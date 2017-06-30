@@ -183,7 +183,7 @@ public:
 		int setMode = (ismode) ? MODE_BITE : MODE_SHOOT;
 		playerMode_ = setMode;
 	}
-	void SetMode(int pMode);
+	void SetMode(int pMode, bool isPlaySE=true);
 	//シュート終了の瞬間かどうかを取る
 	bool GetIsShootModeEnd()const {
 		return playerMode_==MODE_SHOOT_END;

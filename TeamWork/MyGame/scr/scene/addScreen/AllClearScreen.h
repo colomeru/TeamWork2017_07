@@ -11,6 +11,7 @@ class AllClearScreen
 public:
 	// コンストラクタ
 	AllClearScreen();
+	~AllClearScreen();
 
 	void Init();
 	bool Update(Scene& nextScene);

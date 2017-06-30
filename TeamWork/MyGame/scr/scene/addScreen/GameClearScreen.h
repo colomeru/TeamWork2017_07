@@ -11,6 +11,7 @@ class GameClearScreen
 public:
 	// コンストラクタ
 	GameClearScreen();
+	~GameClearScreen();
 
 	void Init();
 	bool Update(Scene& nextScene);

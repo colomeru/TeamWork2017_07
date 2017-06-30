@@ -92,6 +92,7 @@ void Credit2Scene::Initialize()
 	sceneTimer_ = 0.0f;
 	test = false;
 	test2 = false;
+	test3 = true;
 	alpha_ = 0.0f;
 	sinCount_ = 0;
 
@@ -127,6 +128,8 @@ void Credit2Scene::Update()
 
 	bgScreen_.Update();
 	//textScreen_.Update();
+
+	anmManager_.Update();
 
 	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
@@ -188,7 +191,6 @@ void Credit2Scene::Update()
 
 	Scroll();
 
-	anmManager_.Update();
 
 
 
@@ -345,7 +347,11 @@ void Credit2Scene::PlayerRestart()
 		player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
 
 		dWhitePos_ = whitePos_[0];
-		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), 90.0f, 60.0f);
+
+		if (test3) {
+			player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
+			test3 = false;
+		}
 	}
 
 	//‰æ–ÊŠO‚Éo‚½‚ç
@@ -353,7 +359,7 @@ void Credit2Scene::PlayerRestart()
 		operate_) {
 		operate_ = false;
 		player_->AllResurrectHead();
-		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
+		//player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
 		player_->SetIsBiteMode(false);
 		player_->CurHeadBite(pHeadPos_);
 		player_->PHeadLengthReset();
@@ -371,12 +377,13 @@ void Credit2Scene::PlayerRestart()
 	Vector2 dis = player_->GetCurrentPHeadPosition() - startPos_;
 	if (dis.Length() <= 2.0f && !operate_) {
 
-		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
+		//player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
 		player_->SetIsBiteMode(true);
 		player_->GravityReset();
 		operate_ = true;
 
 		waiting_ = true;
+		test3 = true;
 	}
 
 	if (waiting_ && (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2))) {
@@ -413,5 +420,5 @@ bool Credit2Scene::IsCollision()
 
 bool Credit2Scene::GetOperate()
 {
-	return operate_;
+	return  operate_;
 }

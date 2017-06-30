@@ -24,11 +24,6 @@ class Credit2Scene : public IScene
 	};
 
 public:
-	static Credit2Scene &GetInstance() {
-		static Credit2Scene c;
-		return c;
-	}
-
 	// コンストラクタ
 	Credit2Scene();
 	// デストラクタ
@@ -101,8 +96,9 @@ private:
 	Vector2 dWhitePos_;
 	Vector2 wCorr;
 	bool waiting_;
+	
 
 	bool test;
 	bool test2;
-
+	bool test3;
 };

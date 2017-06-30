@@ -16,7 +16,8 @@ const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 390.0f, WINDOW_HEIGHT 
 							Vector2(380.0f, WINDOW_HEIGHT - 54.25f) };
 
 //コンストラクタ
-MenuScreen::MenuScreen() :stageNum(0)
+MenuScreen::MenuScreen() : 
+	stageNum(0)
 {
 	betDis_ = 339.0f;
 	for (int i = 0; i < 9; i++)
@@ -314,7 +315,7 @@ void MenuScreen::Pattern2Update()
 				cDis_[i] += betDis_;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
-			Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 
 		}
 		if (IsInputDown())
@@ -333,7 +334,7 @@ void MenuScreen::Pattern2Update()
 				cDis_[i] -= betDis_;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
-			Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 
 		}
 	}
@@ -346,14 +347,14 @@ void MenuScreen::Pattern2Update()
 	if (IsInputLeft() && !backSelect)
 	{
 		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[1], MoveTime);
-		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 		backSelect = true;
 
 	}
 	else if (IsInputAny() && backSelect)
 	{
 		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[0], MoveTime);
-		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 		backSelect = false;
 
 	}
@@ -388,8 +389,7 @@ void MenuScreen::Pattern2Update()
 
 	anmManager_.Update();
 
-	//SE();
-
+	SE();
 
 }
 

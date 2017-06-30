@@ -231,6 +231,10 @@ void CreditPlayer::Draw() const
 
 	DrawFormatString(600, 750, GetColor(255, 0, 0), "%f", mRot.front());
 
+	if (Credit2Scene().GetOperate())
+		DrawFormatString(300, 300, GetColor(0, 0, 255), "‘€ì‚Å‚«‚Ü‚·I");
+	else
+		DrawFormatString(300, 300, GetColor(255, 0, 0), "‘€ì‚Å‚«‚Ü‚¹‚ñI");
 
 }
 
@@ -1116,13 +1120,13 @@ bool CreditPlayer::isPlayerDead() const {
 
 //
 void CreditPlayer::PHeadChanger(int rot) {
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get()));
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_]));
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
 
 	Vector2 addVec = position_ - pHeadPoses_[currentHead_];
 	addVec = addVec.Normalize()*32.f;
-	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_].get(), 0.3f, addVec));
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_], 0.3f, addVec));
 
 	Sound::GetInstance().PlaySE(SE_ID::CHANGE_HEAD_SE);
 }
@@ -1352,7 +1356,7 @@ void CreditPlayer::FallUpdate()
 			isNextPushKey_ = false;
 		}
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
-			if (Credit2Scene::GetInstance().GetOperate() == false) return;
+			//if (Credit2Scene::GetInstance().GetOperate() == false) return;
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 
@@ -1376,7 +1380,7 @@ void CreditPlayer::ShootUpdate()
 	if (isUseKey_) {
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
 			//else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
-			if (Credit2Scene::GetInstance().GetOperate() == false) return;
+			//if (Credit2Scene::GetInstance().GetOperate() == false) return;
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
 		}

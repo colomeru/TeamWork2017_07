@@ -130,7 +130,7 @@ protected:
 	//‰æ‘œ‚ÌƒRƒ}”Ô†
 	int drawFrame_;
 	//•³‚ª‚Â‚¢‚Ä‚¢‚é‚©
-	bool is_Droping_;
+	bool isDroping_;
 	//•‚Ìó‘Ô
 	ClothesState clothesState_;
 	//•‚ÌØ’fó‘Ô

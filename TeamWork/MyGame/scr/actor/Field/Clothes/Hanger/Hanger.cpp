@@ -104,7 +104,6 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::STAGE_ACTOR:
 	{
-		//if (isStop_) return;
 		if (position_.x >= other.GetPosition().x) return;
 		isStop_ = true;
 		if (player_->GetRot() > 80) return;

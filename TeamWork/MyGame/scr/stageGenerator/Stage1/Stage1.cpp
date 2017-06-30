@@ -20,12 +20,8 @@
 //コンストラクタ
 Stage1::Stage1(IWorld * world, std::string & fileName, int frequencyWind, int frequencyHairball, int hairballCnt)
 	:StageGenerator(world, fileName)
+	,frequencyWind_(frequencyWind), frequencyHairball_(frequencyHairball), hairballCnt_(hairballCnt), currentStage_(Stage::Stage1)
 {
-	frequencyWind_ = frequencyWind;
-	frequencyHairball_ = frequencyHairball;
-	hairballCnt_ = hairballCnt;
-	currentStage_ = Stage::Stage1;
-
 	spriteIdMap_.clear();
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_SPRITE);
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_02_SPRITE);

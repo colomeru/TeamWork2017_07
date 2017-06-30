@@ -43,6 +43,7 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 
 Hairball::~Hairball()
 {
+	TweenManager::GetInstance().Cancel(&position_);
 }
 
 void Hairball::Update()

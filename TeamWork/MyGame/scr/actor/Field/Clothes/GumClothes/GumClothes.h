@@ -25,6 +25,4 @@ private:
 	std::vector<Vector2> deformPos_;
 	std::vector<float> rot_spds_;
 	Vector2 spriteSize_;
-	Vector2 pos_v;
-	Vector2 pos_v2;
 };

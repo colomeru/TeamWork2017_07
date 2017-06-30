@@ -2,14 +2,16 @@
 #include "../MyGame/scr/graphic/Sprite.h"
 #include "../MyGame/scr/actor/UI/GoalUI.h"
 #include "../../../player/Player_Head.h"
+#include "TutorialFlash.h"
 
 GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
+	,is_Flash(false)
 {
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::GOAL_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(200.0f, 1500.0f);
+	parameter_.size = Vector2(220.0f, 1500.0f);
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
@@ -19,6 +21,8 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
+
+	tutorialFlash_ = std::make_shared<TutorialFlash>(world, laneNum_, position_, this->GetActor());
 
 	isHit_ = false;
 }
@@ -40,24 +44,14 @@ void GoalClothes::Update()
 void GoalClothes::Draw() const
 {
 	auto drawPos = GetDrawPosVect(position_);
-	//DrawBox(pos1.x, pos1.y, pos4.x, pos4.y, GetColor(255, 0, 255), TRUE);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos - Vector2(0, 200), crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
+	if (is_Flash) {
+		tutorialFlash_->Draw();
+	}
+
 	if (BuildMode != 1) return;
-	//if (!collisionPoints.empty()) {
-	//	auto drawP1 = GetDrawPosVect(collisionPoints[0]);
-	//	auto drawP2 = GetDrawPosVect(collisionPoints[1]);
-	//	auto drawP3 = GetDrawPosVect(collisionPoints[2]);
-	//	auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-	//	DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
-	//	DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
-	//	DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
-	//}
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
@@ -86,6 +80,7 @@ void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)
 {
 	if (other.GetParameter().ID != ACTOR_ID::PLAYER_HEAD_ACTOR) return;
 	if (!isWind_) {
+		is_Flash = false;
 		parent_ = &other;
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 		player_ = static_cast<Player*>(const_cast<Actor*>(parent_->GetParent()));
@@ -101,6 +96,9 @@ void GoalClothes::OnMessage(EventMessage message, void * param)
 	{
 	case EventMessage::GOAL_FLAG:
 		world_->Add(ACTOR_ID::UI_ACTOR, std::make_shared<GoalUI>(world_, position_));
+		break;
+	case EventMessage::TUTORIAL_GOAL_FLASH:
+		is_Flash = true;
 		break;
 	default:
 		break;

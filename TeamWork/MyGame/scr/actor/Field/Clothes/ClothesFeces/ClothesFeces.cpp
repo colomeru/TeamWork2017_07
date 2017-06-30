@@ -48,9 +48,9 @@ void ClothesFeces::Update()
 
 void ClothesFeces::Draw() const
 {
-	auto pos = GetDrawPosVect(position_);
+	auto pos = GetDrawPosVect(position_) + parent_->GetDrawAddPos();
 	Vector2 size = Sprite::GetInstance().GetSize(SPRITE_ID::BIRDS_DROPPING_SPRITE);
 	Vector2 origin = Vector2(size.x / 3, size.y);
 	Sprite::GetInstance().Draw(
-		SPRITE_ID::BIRDS_DROPPING_SPRITE, parent_->GetDrawPos(), origin, parent_->GetParameter().spriteAlpha_, Vector2(3.0f, 1.0f), angle_);
+		SPRITE_ID::BIRDS_DROPPING_SPRITE, pos, origin, parent_->GetParameter().spriteAlpha_, Vector2(3.0f, 1.0f), angle_);
 }

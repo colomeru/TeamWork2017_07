@@ -21,4 +21,6 @@ public:
 	virtual void OnMessage(EventMessage message, void* param) override;
 
 private:
+	bool is_Flash;
+	ActorPtr tutorialFlash_;
 };

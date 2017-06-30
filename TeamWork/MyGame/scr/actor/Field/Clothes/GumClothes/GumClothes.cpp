@@ -125,7 +125,7 @@ void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 	case ACTOR_ID::PLAYER_HEAD_ACTOR:
 	{
-		if (!isWind_ && !is_Droping_) {
+		if (!isWind_ && !isDroping_) {
 			parent_ = &other;
 			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 			player_ = static_cast<Player*>(parent_->GetParent());
@@ -173,11 +173,11 @@ void GumClothes::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::ENEMY_ACTOR:
 	{
-		if (is_Droping_ || isPendulum_) return;
+		if (isDroping_ || isPendulum_) return;
 		Vector2 pos = other.GetPosition() - fulcrum_;
 		clothesFeces_ = std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor());
 		//world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
-		is_Droping_ = true;
+		isDroping_ = true;
 		other.Dead();
 		if (player_ == nullptr) return;
 		player_->SetMode(MODE_SLIP);

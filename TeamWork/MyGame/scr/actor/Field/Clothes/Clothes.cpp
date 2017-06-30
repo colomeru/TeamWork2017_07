@@ -16,7 +16,7 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	, isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
 	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f), count_(0)
 	, clothesState_(ClothesState::WINDLESS), cuttingState_(CuttingState::Normal), weight_(weight), drawFrame_(0)
-	, is_Droping_(false), clothesFeces_(nullptr), penState_(NONE), player_(nullptr), isDrawRange_(false), currentStage_(Stage::Stage1)
+	, isDroping_(false), clothesFeces_(nullptr), penState_(NONE), player_(nullptr), isDrawRange_(false), currentStage_(Stage::Stage1)
 {
 	clothes_ID = clothes;
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
@@ -48,7 +48,7 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 	case ACTOR_ID::PLAYER_HEAD_ACTOR:
 	{
-		if (!isWind_ && !is_Droping_) {
+		if (!isWind_ && !isDroping_) {
 			parent_ = &other;
 			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 			player_ = static_cast<Player*>(parent_->GetParent());
@@ -62,6 +62,8 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	case ACTOR_ID::PLAYER_SWORD_ACTOR:
 	{
 		if (cuttingState_ != CuttingState::Normal || clothes_ID == CLOTHES_ID::NOT_SLASH_CLOTHES) break;
+		isDroping_ = false;
+		Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
 		int rand = Random::GetInstance().Range(0, 2);
 		switch (rand)
 		{
@@ -73,7 +75,6 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 				ACTOR_ID::CLOTHES_DROPING_ACTOR,
 				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
 				);
-			Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
 			SetLocalPoints();
 			break;
 		}
@@ -85,7 +86,6 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 				ACTOR_ID::CLOTHES_DROPING_ACTOR,
 				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
 				);
-			Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
 			SetLocalPoints();
 			break;
 		}
@@ -96,11 +96,10 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::ENEMY_ACTOR: 
 	{
-		if (is_Droping_ || isPendulum_ || cuttingState_ != CuttingState::Normal) return;
+		if (isDroping_ || isPendulum_ || cuttingState_ != CuttingState::Normal) return;
 		Vector2 pos = other.GetPosition() - fulcrum_;
 		clothesFeces_ = std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor());
-		//world_->Add(ACTOR_ID::CLOTHES_DROPING_ACTOR, std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor()));
-		is_Droping_ = true;
+		isDroping_ = true;
 		other.Dead();
 		if (player_ == nullptr || parent_ == nullptr) return;
 		player_->SetMode(MODE_SLIP);
@@ -376,13 +375,13 @@ void Clothes::SetLocalPoints()
 	}
 	case CuttingState::RightUpSlant: {
 		clothesFeces_ = nullptr;
-		is_Droping_ = false;
+		isDroping_ = false;
 		SetRightUpSlant();
 		break;
 	}
 	case CuttingState::LeftUpSlant: {
 		clothesFeces_ = nullptr;
-		is_Droping_ = false;
+		isDroping_ = false;
 		SetLeftUpSlant();
 		break;
 	}
@@ -391,13 +390,13 @@ void Clothes::SetLocalPoints()
 
 void Clothes::UpdateClothesFeces()
 {
-	if (clothesFeces_ != nullptr && is_Droping_ && cuttingState_ == Normal)
+	if (clothesFeces_ != nullptr && isDroping_ && cuttingState_ == Normal)
 		clothesFeces_->Update();
 }
 
 void Clothes::DrawClothesFeces() const
 {
-	if (clothesFeces_ != nullptr && is_Droping_ && cuttingState_ == Normal)
+	if (clothesFeces_ != nullptr && isDroping_ && cuttingState_ == Normal)
 		clothesFeces_->Draw();
 }
 
@@ -563,7 +562,9 @@ void Clothes::DrawRange() const
 {
 	if (currentStage_ != Stage::Stage1 || 
 		collisionPoints.empty() ||
-		!isDrawRange_) return;
+		!isDrawRange_ ||
+		isWind_ ||
+		isDroping_) return;
 	auto topSize = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_TOP_SPRITE);
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_SPRITE) / 2;
 	auto topOrigin = topSize / 2;

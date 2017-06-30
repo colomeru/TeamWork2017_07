@@ -21,6 +21,7 @@
 #include"../actor/Field/Enemys/TutorialManager.h"
 #include"../actor/Effects/PlayerEffect/CursorEffect.h"
 #include"../sound/sound.h"
+#include"../graphic/FontManager.h"
 
 static int maxTextCount[maxTutorialNum]{
 	3,
@@ -31,7 +32,7 @@ static int maxTextCount[maxTutorialNum]{
 };
 
 TutorialScene::TutorialScene() :
-	nextScene_(Scene::Menu), dummy_(0), sinCount_(0), isDrawCtrl_(false)
+	nextScene_(Scene::Menu), dummy_(0), sinCount_(0), isDrawCtrl_(false), isNext_(false),stageTextNum_(0)
 {
 	// ÉèÅ[ÉãÉhê∂ê¨
 	world_ = std::make_shared<World>();
@@ -60,6 +61,17 @@ TutorialScene::TutorialScene() :
 	setLockFuncList_.push_back([this](int i) {SetLock3(i); });
 	setLockFuncList_.push_back([this](int i) {SetLock4(i); });
 	setLockFuncList_.push_back([this](int i) {SetLock5(i); });
+
+	stageTexts_[0] = "ïûÇíÕÇÒÇ≈Ç›ÇÊÇ§";
+	stageTexts_[1] = "éÒÇêLÇŒÇµÇƒÇ›ÇÊÇ§";
+	stageTexts_[2] = "ì™ÇêÿÇËë÷Ç¶ÇƒÇ›ÇÊÇ§";
+	stageTexts_[3] = "â∫Ç…óéÇøÇƒÇ›ÇÊÇ§";
+	stageTexts_[4] = "è„Ç…ìoÇ¡ÇƒÇ›ÇÊÇ§";
+	stageTexts_[5] = "ïzící@Ç´ÇêÿÇ¡ÇƒÇ›ÇÊÇ§";
+	stageTexts_[6] = "ÉSÅ[ÉãÇíÕÇÒÇ≈Ç›ÇÊÇ§";
+	stageTexts_[7] = "";
+	stageTexts_[8] = "";
+
 }
 
 TutorialScene::~TutorialScene()
@@ -71,6 +83,8 @@ void TutorialScene::Initialize()
 	Sound::GetInstance().StopBGM();
 	Sound::GetInstance().PlayBGM(BGM_ID::STAGE_01_BGM, DX_PLAYTYPE_LOOP);
 	
+	stageTextNum_ = 0;
+
 	currentTutorialNum_ = 0;
 	ResetLockNum();
 	SceneInit();
@@ -79,6 +93,7 @@ void TutorialScene::Initialize()
 
 void TutorialScene::SceneInit()
 {
+	isNext_ = false;
 	sinCount_ = 0;
 	isDrawCtrl_ = false;
 	isAlreadyPutButton_ = false;
@@ -118,7 +133,36 @@ void TutorialScene::SceneInit()
 	arrowEffectGenerator_.Initialize(world_.get(), player_.get(), 0.3f);
 	timeCount_ = 0.f;
 
+	switch (currentTutorialNum_)
+	{
+	case 0: {
+		stageTextNum_ = tutorialLockNum_;
+		
+		break;
+	}
+	case 1: {
+		stageTextNum_ = maxTextCount[0];
+		
+		break;
+	}
+	case 2: {
+		stageTextNum_ = maxTextCount[0]+ maxTextCount[1];
 
+		break;
+	}
+	case 3: {
+		stageTextNum_ = maxTextCount[0] + maxTextCount[1]+ maxTextCount[2];
+
+		break;
+	}
+	case 4: {
+		stageTextNum_ = maxTextCount[0] + maxTextCount[1] + maxTextCount[2]+ maxTextCount[3]+ tutorialLockNum_;
+
+		break;
+	}
+	default:
+		break;
+	} 
 }
 
 void TutorialScene::Update()
@@ -135,6 +179,7 @@ void TutorialScene::Update()
 	world_->Update();
 	player_->deadLine();
 
+	//ÉçÉbÉNä÷åW
 	if (player_->GetRot() >= 180.f || player_->GetRot() <= 0.f) {
 		UnLock(UnLockType::FullStick);
 	}
@@ -144,7 +189,12 @@ void TutorialScene::Update()
 	else {
 		ReLockPendulum();
 	}
-	
+	if (!player_->GetIsBiteMode()) {
+		ReLockBite();
+	}
+	if (!player_->GetIsSwordActive()) {
+		ReLockUseSword();
+	}
 
 	arrowEffectGenerator_.Update();
 	bgScreen_.Update();
@@ -174,8 +224,10 @@ void TutorialScene::Update()
 	// èIóπ
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
 	{
-		FadePanel::GetInstance().AddCollBack([=]() {Sound::GetInstance().StopBGM(); isEnd_ = true; });
-		if (!FadePanel::GetInstance().IsAction())FadePanel::GetInstance().FadeOut();
+		if (!isNext_) {
+			FadePanel::GetInstance().AddCollBack([=]() {Sound::GetInstance().StopBGM(); isEnd_ = true; });
+			if (!FadePanel::GetInstance().IsAction())FadePanel::GetInstance().FadeOut();
+		}
 	}
 
 }
@@ -187,6 +239,12 @@ void TutorialScene::Draw() const
 	world_->Draw(3, world_->GetKeepDatas().playerLane_);
 
 	textScreen_.Draw();
+
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
+	DrawBox(0, 0, stageTexts_[stageTextNum_].size() * 50, 100, GetColor(128, 128, 128), TRUE);
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+	FontManager::GetInstance().DrawTextApplyFont(200, 20, GetColor(0, 0, 0), FONT_ID::TUTORIAL_FONT, stageTexts_[stageTextNum_]);
 
 	if (isDrawCtrl_) {
 		if (currentTutorialNum_ >= maxTutorialNum - 1) {
@@ -302,6 +360,7 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 		break;
 	case EventMessage::ADD_SCORE: {
 		UnLock(UnLockType::BiteClothes);
+		ReLockChangeHead();
 		break;
 	}
 	case EventMessage::NECK_SHOOT: {
@@ -349,6 +408,38 @@ void TutorialScene::SceneLock()
 		player_->SetUseKey(true);
 		//player_->SetIsTutorialTextWriting(false);
 
+	}
+
+	//Ç±Ç±ä÷êîâªÇµÇÊÇ§
+	switch (currentTutorialNum_)
+	{
+	case 0: {
+		stageTextNum_ = tutorialLockNum_;
+
+		break;
+	}
+	case 1: {
+		stageTextNum_ = maxTextCount[0];
+
+		break;
+	}
+	case 2: {
+		stageTextNum_ = maxTextCount[0] + maxTextCount[1];
+
+		break;
+	}
+	case 3: {
+		stageTextNum_ = maxTextCount[0] + maxTextCount[1] + maxTextCount[2];
+
+		break;
+	}
+	case 4: {
+		stageTextNum_ = maxTextCount[0] + maxTextCount[1] + maxTextCount[2] + maxTextCount[3] + tutorialLockNum_;
+
+		break;
+	}
+	default:
+		break;
 	}
 
 }
@@ -535,14 +626,14 @@ void TutorialScene::SetLock5(int tutorialLockNum)
 void TutorialScene::ReLockUpLane()
 {
 	for (int i = lockList_.size() - 1; i > -1; i--) {
-		if (!lockList_[i].isLock) {
-			break;
-		}
+		//if (!lockList_[i].isLock) {
+		//	break;
+		//}
 		if (lockList_[i].type == UnLockType::ChangeLaneUp) {
 			if (lockList_[i].isLock) {
 				lockList_[i].isLock = false;
-				return;
 			}
+			return;
 		}
 	}
 
@@ -564,14 +655,14 @@ void TutorialScene::ReLockUpLane()
 void TutorialScene::ReLockNeckShoot()
 {
 	for (int i = lockList_.size()-1; i > -1; i--) {
-		if (!lockList_[i].isLock) {
-			break;
-		}
+		//if (!lockList_[i].isLock) {
+		//	break;
+		//}
 		if (lockList_[i].type == UnLockType::PlayerShoot) {
 			if (lockList_[i].isLock) {
 				lockList_[i].isLock = false;
-				return;
 			}
+			return;
 		}
 	}
 	//for (auto& i : lockList_) {
@@ -608,17 +699,60 @@ void TutorialScene::ReLockPendulum()
 
 }
 
+void TutorialScene::ReLockBite()
+{
+	for (int i = lockList_.size() - 1; i > -1; i--) {
+		if (lockList_[i].isLock) {
+			if (lockList_[i].type == UnLockType::BiteClothes) {
+				lockList_[i].isLock = false;
+			}
+			return;
+		}
+	}
+
+}
+
+void TutorialScene::ReLockChangeHead()
+{
+	for (int i = lockList_.size() - 1; i > -1; i--) {
+		if (lockList_[i].isLock) {
+			if (lockList_[i].type == UnLockType::ChangeHead) {
+				lockList_[i].isLock = false;
+			}
+			return;
+		}
+	}
+}
+
+void TutorialScene::ReLockUseSword()
+{
+	for (int i = lockList_.size() - 1; i > -1; i--) {
+		if (lockList_[i].isLock) {
+			if (lockList_[i].type == UnLockType::UseSword) {
+				lockList_[i].isLock = false;
+			}
+			return;
+		}
+	}
+}
+
 
 void TutorialScene::ChangeNextTutorial()
 {
-	if (currentTutorialNum_ >= maxTutorialNum -1) {
-		FadePanel::GetInstance().AddCollBack([=]() { Sound::GetInstance().StopBGM(); isEnd_ = true; });
-		if (!FadePanel::GetInstance().IsAction()) FadePanel::GetInstance().FadeOut();
+	if (currentTutorialNum_ >= maxTutorialNum - 1) {
+		if (!isNext_) {
+			isNext_ = true;
+			FadePanel::GetInstance().AddCollBack([=]() { Sound::GetInstance().StopBGM(); isEnd_ = true; });
+			if (!FadePanel::GetInstance().IsAction()) FadePanel::GetInstance().FadeOut();
+		}
 	}
 	else {
-		FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); ResetLockNum(); SceneInit(); });
-		FadePanel::GetInstance().SetOutTime(0.5f, 1.0f);
-		FadePanel::GetInstance().FadeOut();
+		if (!isNext_) {
+			isNext_ = true;
+			FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); ResetLockNum(); SceneInit(); });
+			FadePanel::GetInstance().SetOutTime(0.5f, 1.0f);
+			FadePanel::GetInstance().FadeOut();
+		}
 	}
 }
 

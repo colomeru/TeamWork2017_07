@@ -112,7 +112,7 @@ bool TutorialTextScreen::TutorialUpdate()
 void TutorialTextScreen::Draw() const
 {
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
-	DrawBox(100, 50, WINDOW_WIDTH-100, 300, GetColor(128, 128, 128), TRUE);
+	DrawBox(100, 100, WINDOW_WIDTH-100, 350, GetColor(128, 128, 128), TRUE);
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
 	std::string drawString_;
@@ -133,7 +133,7 @@ void TutorialTextScreen::Draw() const
 		}
 	}
 
-	FontManager::GetInstance().DrawTextApplyFont(200, 100, GetColor(255, 255, 255), FONT_ID::TUTORIAL_FONT, drawString_.c_str());
+	FontManager::GetInstance().DrawTextApplyFont(200, 150, GetColor(255, 255, 255), FONT_ID::TUTORIAL_FONT, drawString_.c_str());
 
 	//Sprite::GetInstance().Draw(SPRITE_ID::TO_STAGESELECT_SPRITE, Vector2(1500.f, 200.f), MathHelper::Sin((float)sinCount_));
 	

@@ -94,6 +94,9 @@ private:
 	void ReLockUpLane();
 	void ReLockNeckShoot();
 	void ReLockPendulum();
+	void ReLockBite();
+	void ReLockChangeHead();
+	void ReLockUseSword();
 private:
 	void ChangeNextTutorial();
 
@@ -135,10 +138,14 @@ private:
 
 	bool isDrawCtrl_;
 
+	bool isNext_;
+
 	std::vector<LockList> lockList_;
 	std::vector<SPRITE_ID> KeySpriteList_;
 	std::vector<SPRITE_ID> LastKeySpriteList_;
 
+	std::array<std::string, 9> stageTexts_;
+	int stageTextNum_;
 
 	std::vector<std::function<void(int)>> setLockFuncList_;
 

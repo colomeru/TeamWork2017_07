@@ -15,6 +15,13 @@
 #include"../myData/MyTestCamera.h"
 #include"../collision/MyCol.h"
 #include"../stageGenerator/Stage1/Stage1.h"
+#include"../stageGenerator/Stage1/Stage2.h"
+#include"../stageGenerator/Stage1/Stage3.h"
+#include"../stageGenerator/Stage1/Stage4.h"
+#include"../stageGenerator/Stage1/Stage5.h"
+#include"../stageGenerator/Stage1/Stage6.h"
+#include"../stageGenerator/Stage1/Stage7.h"
+#include"../stageGenerator/Stage1/Stage8.h"
 #include"../game/Random.h"
 #include"GamePlayDefine.h"
 #include"../actor/Field/Enemys/EnemyGenerator.h"
@@ -87,13 +94,13 @@ GamePlayScene::GamePlayScene() :
 	uiScreen_ = UIScreen(world_.get());
 
 	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test")));
-	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage1>(world_.get(), std::string("Stage1")));
-	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage1>(world_.get(), std::string("Stage2")));
-	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage1>(world_.get(), std::string("Stage3")));
-	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage1>(world_.get(), std::string("Stage4")));
-	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage1>(world_.get(), std::string("Stage5")));
-	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage1>(world_.get(), std::string("Stage6")));
-	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage1>(world_.get(), std::string("Stage7")));
+	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage2>(world_.get(), std::string("Stage1")));
+	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage3>(world_.get(), std::string("Stage2")));
+	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage4>(world_.get(), std::string("Stage3")));
+	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage5>(world_.get(), std::string("Stage4")));
+	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage6>(world_.get(), std::string("Stage5")));
+	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage7>(world_.get(), std::string("Stage6")));
+	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage8>(world_.get(), std::string("Stage7")));
 
 }
 
@@ -531,6 +538,7 @@ void GamePlayScene::setNextMode(int mode) {
 	switch (gamePlayMode_)
 	{
 	case 2: {
+		TweenManager::GetInstance().StopAll();
 		gameOverScreen_.Init();
 		Sound::GetInstance().PlayBGM(BGM_ID::GAME_OVER_BGM);
 
@@ -556,6 +564,7 @@ void GamePlayScene::setNextMode(int mode) {
 		break;
 	}
 	case 4: {
+		TweenManager::GetInstance().StopAll();
 		pauseScreen_.Init();
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}

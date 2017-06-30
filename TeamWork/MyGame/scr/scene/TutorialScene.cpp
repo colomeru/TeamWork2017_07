@@ -612,6 +612,7 @@ void TutorialScene::SetLock5(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
+		world_->sendMessage(EventMessage::TUTORIAL_GOAL_FLASH);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_STICK_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_LB_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
@@ -622,7 +623,9 @@ void TutorialScene::SetLock5(int tutorialLockNum)
 		LastKeySpriteList_.push_back(SPRITE_ID::GAMEPAD_RB_SPRITE);
 		LastKeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
 
-
+		lockList_.push_back(LockList(UnLockType::ChangeHead, false, SPRITE_ID::GAMEPAD_B_SPRITE));
+		lockList_.push_back(LockList(UnLockType::PlayerShoot, false, SPRITE_ID::GAMEPAD_RB_SPRITE));
+		lockList_.push_back(LockList(UnLockType::BiteClothes, false, SPRITE_ID::GAMEPAD_B_SPRITE));
 		lockList_.push_back(LockList(UnLockType::FullStick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		lockList_.push_back(LockList(UnLockType::ChangeLaneUp, false, SPRITE_ID::GAMEPAD_LB_SPRITE));
 		lockList_.push_back(LockList(UnLockType::BiteClothes, false, SPRITE_ID::GAMEPAD_B_SPRITE));

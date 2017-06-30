@@ -378,6 +378,13 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 	case EventMessage::LANE_CHANGE_UP_END: {
 		UnLock(UnLockType::ChangeLaneUp);
 
+		if (currentTutorialNum_ >= maxTutorialNum - 1 && tutorialLockNum_ == 0) {
+			if (player_->GetLaneNum() == 0) {
+				for (int i = 0; i < 5; i++) {
+						lockList_[i].isLock = true;
+				}
+			}
+		}
 		break;
 	}
 	case EventMessage::PLAY_NEXT_STAGE:

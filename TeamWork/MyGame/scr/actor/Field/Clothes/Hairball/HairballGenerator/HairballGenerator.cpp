@@ -82,7 +82,7 @@ void HairballGenerator::GenerateHairball()
 {
 	if (generate_Count_ > defGenerate_Count_) {
 		int rand = Random::GetInstance().Range(0, 100);
-		if (rand > frequencyHairball_) {
+		if (rand >= frequencyHairball_) {
 			generate_Count_ = 0;
 			return;
 		}

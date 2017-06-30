@@ -84,23 +84,27 @@ bool GameClearScreen::Update(Scene & nextScene)
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || (GamePad::GetInstance().Stick().y > 0.3f&&isTrigger_)) {
 		isTrigger_ = false;
 		inputCount_++;
+		if (inputCount_ <= (int)changeSceneList_.size() - 1) {
+			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
+		}
 		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 		TweenManager::GetInstance().Cancel(&cursorDrawPos_);
 		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
-		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || (GamePad::GetInstance().Stick().y < -0.3f&&isTrigger_)) {
 		isTrigger_ = false;
 		inputCount_--;
+		if (inputCount_ >= 0) {
+			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
+		}
 		inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 		TweenManager::GetInstance().Cancel(&cursorDrawPos_);
 		TweenManager::GetInstance().Add(EaseOutQuad, &cursorDrawPos_, cursorPos_[inputCount_], 0.2f);
 
 		sinCount_ = defSinC;
-		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
 	if (abs(GamePad::GetInstance().Stick().y) <= 0.3f) {
 		isTrigger_ = true;

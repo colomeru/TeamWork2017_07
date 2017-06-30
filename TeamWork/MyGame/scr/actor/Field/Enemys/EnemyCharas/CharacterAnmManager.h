@@ -17,6 +17,7 @@ public:
 	float GetAnmEndTime()const;
 	bool IsEndAnimation()const;
 	void SetIsRepeat(bool isrp);
+	void SetTimeCount(float time);
 	void SetAnmSpeed(int anmChangeFrame);
 private:
 	std::vector<SPRITE_ID> anmID_;

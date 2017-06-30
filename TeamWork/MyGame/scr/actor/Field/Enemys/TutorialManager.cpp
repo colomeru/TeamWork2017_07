@@ -1,6 +1,6 @@
 #include "TutorialManager.h"
 #include"EnemyCharas\Bird.h"
-#include"EnemyCharas\ClothesTapper.h"
+#include"EnemyCharas\TutorialTapper.h"
 #include"../../../Def.h"
 #include"../../../time/Time.h"
 #include"TutorialList.h"
@@ -22,7 +22,7 @@ void TutorialManager::Update()
 	resurTimer_ -= Time::DeltaTime;
 	if (isResur_&&resurTimer_ <= 0.0f) {
 		isResur_ = false;
-		world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_, world_->GetKeepDatas().playerLane_, world_->GetKeepDatas().playerPos_ + Vector2((float)WINDOW_WIDTH, 0.f)));
+		world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<TutorialTapper>(world_, world_->GetKeepDatas().playerLane_,Vector2((float)600, 0.f)));
 	}
 	if (isSpawnWind[stage_]) {
 		windCount_--;

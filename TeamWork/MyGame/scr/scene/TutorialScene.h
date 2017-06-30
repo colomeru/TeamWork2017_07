@@ -29,10 +29,26 @@ public:
 		UseSword,
 		StartWind,
 		ChangeHead,
+		ChangeHeadKey,
 		ClearStage,
+		PlayerShoot,
 		EndStage,
 		Dummy,
+		Stick,
+		FullStick,
 	};
+
+	struct LockList
+	{
+		UnLockType type;
+		bool isLock;
+		SPRITE_ID ctrl;
+
+		LockList(UnLockType type,bool isLock,SPRITE_ID ctrl=SPRITE_ID::GAMEPAD_SPRITE) :type(type), isLock(isLock), ctrl(ctrl) {
+
+		}
+	};
+
 public:
 	// コンストラクタ
 	TutorialScene();
@@ -75,6 +91,9 @@ private:
 	void SetLock4(int tutorialLockNum);
 	void SetLock5(int tutorialLockNum);
 
+	void ReLockUpLane();
+	void ReLockNeckShoot();
+	void ReLockPendulum();
 private:
 	void ChangeNextTutorial();
 
@@ -110,9 +129,16 @@ private:
 
 	float timeCount_;
 
+	int sinCount_;
+
 	bool isAlreadyPutButton_;
 
-	std::vector<std::pair<UnLockType, bool>> lockList_;
+	bool isDrawCtrl_;
+
+	std::vector<LockList> lockList_;
+	std::vector<SPRITE_ID> KeySpriteList_;
+	std::vector<SPRITE_ID> LastKeySpriteList_;
+
 
 	std::vector<std::function<void(int)>> setLockFuncList_;
 

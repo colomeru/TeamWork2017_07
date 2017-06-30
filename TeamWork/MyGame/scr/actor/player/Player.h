@@ -291,6 +291,7 @@ private:
 	//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
 
 	void PHeadLengthReset() {
+		world_->sendMessage(EventMessage::NECK_SHOOT_END);
 		//長さの補間をリセットする
 		chainAddLength_ = 0.f;
 		chainAddLengthMath_ =0.f;
@@ -326,6 +327,8 @@ private:
 
 				world_->sendMessage(EventMessage::LANE_CHANGE_FALL);
 			}
+			world_->sendMessage(EventMessage::LANE_CHANGE_DOWN_END);
+
 		}
 	
 		laneNum_ += updateNum;

@@ -123,7 +123,13 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("pressBkey.png", SPRITE_ID::PRESS_B_SPRITE);
 	sprite.Load("titlepole.png", SPRITE_ID::TITLE_POLE_SPRITE);
 	sprite.Load("pauseretry.png", SPRITE_ID::RETRY_PAUSE_TEXT_SPRITE);
-
+	sprite.Load("gamepad/gamepad.png", SPRITE_ID::GAMEPAD_SPRITE);
+	sprite.Load("gamepad/gamepad_A.png", SPRITE_ID::GAMEPAD_A_SPRITE);
+	sprite.Load("gamepad/gamepad_B.png", SPRITE_ID::GAMEPAD_B_SPRITE);
+	sprite.Load("gamepad/gamepad_RB.png", SPRITE_ID::GAMEPAD_RB_SPRITE);
+	sprite.Load("gamepad/gamepad_LB.png", SPRITE_ID::GAMEPAD_LB_SPRITE);
+	sprite.Load("gamepad/gamepad_Stick.png", SPRITE_ID::GAMEPAD_STICK_SPRITE);
+	
 	sprite.Load("number.png", SPRITE_ID::NUMBER_SPRITE, 10, Point(10, 1), Point(128, 120));
 	sprite.Load("scorestar.png", SPRITE_ID::SCORE_STAR_SPRITE, 7, Point(7, 1), Point(240, 240));
 	sprite.Load("stage_select_night_1.png", SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE);
@@ -219,7 +225,6 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("credit_futon.png", SPRITE_ID::CREDIT_FUTON_SPRITE, 1, Point(1, 1), Point(200, 135));
 	sprite.Load("credit_chain.png", SPRITE_ID::CREDIT_CHAIN_SPRITE);
 	sprite.Load("pg.png", SPRITE_ID::CREDIT_PG_SPRITE, 1, Point(1, 1), Point(899, 150));
-
 
 }
 

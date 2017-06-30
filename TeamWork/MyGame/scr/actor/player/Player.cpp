@@ -1293,6 +1293,7 @@ void Player::FallUpdate()
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
 			PHeadChanger();
+			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) &&
@@ -1300,6 +1301,7 @@ void Player::FallUpdate()
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
 			PHeadChanger(1);
+			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
 		if ((MathHelper::Abs(GamePad::GetInstance().Stick().x) < 0.3f &&
@@ -1309,6 +1311,7 @@ void Player::FallUpdate()
 		}
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+			world_->sendMessage(EventMessage::NECK_SHOOT);
 			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
 			isNextPushKey_ = false;
 		}
@@ -1365,12 +1368,14 @@ void Player::ShootEndUpdate()
 	if (isUseKey_) {
 		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
 			PHeadChanger();
+			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
 			//playerMode_ = MODE_FALL;
 			//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
 			PHeadChanger(1);
+			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
 		if ((MathHelper::Abs(GamePad::GetInstance().Stick().x) < 0.3f && (Keyboard::GetInstance().KeyStateUp(KEYCODE::D) && Keyboard::GetInstance().KeyStateUp(KEYCODE::A)))) {
@@ -1493,12 +1498,14 @@ void Player::SlipUpdate()
 		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			PHeadChanger();
+			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			//ƒL[‚ð‰Ÿ‚µ’¼‚µ‚½‚©‚Ì”»’f
 			PHeadChanger(1);
+			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
 		if ((MathHelper::Abs(GamePad::GetInstance().Stick().x) < 0.3f && (Keyboard::GetInstance().KeyStateUp(KEYCODE::D) && Keyboard::GetInstance().KeyStateUp(KEYCODE::A)))) {

@@ -282,6 +282,7 @@ void Content::LoadFont(FontManager& font)
 
 	//font.AddFont(FONT_ID::TUTORIAL_FONT,"nicomoji-plus_1.11.ttf","ニコモジ＋", 50);
 	font.AddFont(FONT_ID::TUTORIAL_FONT, "HGRGY.TTC", "HG行書体", 50);
+	font.AddFont(FONT_ID::NAME_FONT, "HGRGY.TTC", "HG行書体", 80);
 }
 
 void Content::EnableASync()

@@ -241,18 +241,28 @@ void TutorialScene::Draw() const
 	textScreen_.Draw();
 
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
-	DrawBox(0, 0, stageTexts_[stageTextNum_].size() * 50, 100, GetColor(128, 128, 128), TRUE);
+	if (stageTexts_[stageTextNum_].size()>=3) {
+		DrawBox(100, 0, stageTexts_[stageTextNum_].size() * 60, 100, GetColor(128, 128, 128), TRUE);
+	}
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-	FontManager::GetInstance().DrawTextApplyFont(200, 20, GetColor(0, 0, 0), FONT_ID::TUTORIAL_FONT, stageTexts_[stageTextNum_]);
+	FontManager::GetInstance().DrawTextApplyFont(200, 20, GetColor(0, 0, 0), FONT_ID::NAME_FONT, stageTexts_[stageTextNum_]);
+
+
 
 	if (isDrawCtrl_) {
+		SetDrawBlendMode(DX_BLENDMODE_ALPHA, (128));
+		DrawBox(1200, 500, WINDOW_WIDTH - 50, 900, GetColor(128, 128, 128), TRUE);
+		SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+		int gamepadX = 1300;
+
 		if (currentTutorialNum_ >= maxTutorialNum - 1) {
 			if (tutorialLockNum_<1) {
-				Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(1300, WINDOW_HEIGHT / 2));
+				Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero,1.f,Vector2::One*1.5f);
 				for (auto i : lockList_) {
 					if (!i.isLock) {
-						Sprite::GetInstance().Draw(i.ctrl, Vector2(1300, WINDOW_HEIGHT / 2), abs(MathHelper::Sin((float)sinCount_)));
+						Sprite::GetInstance().Draw(i.ctrl, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero, abs(MathHelper::Sin((float)sinCount_)), Vector2::One*1.5f);
 						return;
 					}
 				}
@@ -260,15 +270,20 @@ void TutorialScene::Draw() const
 
 		}
 		else {
-			Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(1300, WINDOW_HEIGHT / 2));
+			Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(gamepadX, WINDOW_HEIGHT / 2), Vector2::Zero, 1.f, Vector2::One*1.5f);
 			for (auto i : lockList_) {
 				if (!i.isLock) {
-					Sprite::GetInstance().Draw(i.ctrl, Vector2(1300, WINDOW_HEIGHT / 2), abs(MathHelper::Sin((float)sinCount_)));
+					Sprite::GetInstance().Draw(i.ctrl, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero, abs(MathHelper::Sin((float)sinCount_)), Vector2::One*1.5f);
 					return;
 				}
 			}
 		}
 	}
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (abs(MathHelper::Sin(sinCount_)) * 255));
+	if(!player_->GetUseKey()&& !player_->GetIsClearMode())FontManager::GetInstance().DrawTextApplyFont(1550, 250, GetColor(0, 0, 0), FONT_ID::TUTORIAL_FONT, "B‚Åi‚Þ‚æ");
+	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
+
+
 	//DrawFormatString(0, 00, GetColor(255, 255, 255), "CreditScene");
 	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
@@ -341,6 +356,15 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 	}
 	case EventMessage::LANE_CHANGE_END: {
 		UnLock(UnLockType::ChangeLane);
+
+		if (currentTutorialNum_ >= maxTutorialNum - 1 && tutorialLockNum_ == 0) {
+			if (player_->GetLaneNum() != 0) {
+				for (auto& i : lockList_) {
+					i.isLock = false;
+				}
+			}
+		}
+
 		break;
 	}
 	case EventMessage::LANE_CHANGE_DOWN_END: {

@@ -328,6 +328,7 @@ enum BGM_ID
 
 enum FONT_ID {
 	TUTORIAL_FONT,
+	NAME_FONT
 };
 
 // •žID

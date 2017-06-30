@@ -135,7 +135,9 @@ void TutorialTextScreen::Draw() const
 
 	FontManager::GetInstance().DrawTextApplyFont(200, 150, GetColor(255, 255, 255), FONT_ID::TUTORIAL_FONT, drawString_.c_str());
 
-	//Sprite::GetInstance().Draw(SPRITE_ID::TO_STAGESELECT_SPRITE, Vector2(1500.f, 200.f), MathHelper::Sin((float)sinCount_));
+	 
+	 
+	 //Sprite::GetInstance().Draw(SPRITE_ID::TO_STAGESELECT_SPRITE, Vector2(1500.f, 200.f), MathHelper::Sin((float)sinCount_));
 	
 }
 

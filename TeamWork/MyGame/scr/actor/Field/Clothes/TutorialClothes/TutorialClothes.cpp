@@ -7,7 +7,7 @@
 TutorialClothes::TutorialClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
 {
-	clothes_ID = CLOTHES_ID::BASE_CLOTHES;
+	clothes_ID = CLOTHES_ID::FLUFFY_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100.0f, 200.0f);

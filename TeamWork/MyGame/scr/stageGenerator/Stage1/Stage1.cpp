@@ -236,7 +236,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		int sRand = Random::GetInstance().Range(0, spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].size());
 		float weight = Random::GetInstance().Range(0.0f, 1.5f);
 		auto base = std::make_shared<TutorialClothes>(
-			world_, CLOTHES_ID::BASE_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, spriteIdMap_[CLOTHES_ID::BASE_CLOTHES][sRand], pin_list.front());
+			world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, spriteIdMap_[CLOTHES_ID::BASE_CLOTHES][sRand], pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, base);
 		if (pin_list.front())
 			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), base.get(), base->GetFulcrum()));

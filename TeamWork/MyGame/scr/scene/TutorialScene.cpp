@@ -183,7 +183,7 @@ void TutorialScene::Update()
 	if (player_->GetRot() >= 180.f || player_->GetRot() <= 0.f) {
 		UnLock(UnLockType::FullStick);
 	}
-	else if (player_->GetRot() >= 135.f || player_->GetRot() <= 45.f) {
+	else if (player_->GetRot() >= 120.f || player_->GetRot() <= 60.f) {
 		UnLock(UnLockType::Stick);
 	}
 	else {
@@ -351,6 +351,7 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 	case EventMessage::TAPPER_DEAD:{
 		enemGenerator_->StartTapperResurrectTimer();
 		
+		UnLock(UnLockType::UseSword);
 		UnLock(UnLockType::KillTapper);
 		break;
 	}

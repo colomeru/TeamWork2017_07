@@ -93,14 +93,14 @@ GamePlayScene::GamePlayScene() :
 	changeScreen_=LaneChangeScreen(world_.get());
 	uiScreen_ = UIScreen(world_.get());
 
-	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test")));
-	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage2>(world_.get(), std::string("Stage1")));
-	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage3>(world_.get(), std::string("Stage2")));
-	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage4>(world_.get(), std::string("Stage3")));
-	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage5>(world_.get(), std::string("Stage4")));
-	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage6>(world_.get(), std::string("Stage5")));
-	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage7>(world_.get(), std::string("Stage6")));
-	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage8>(world_.get(), std::string("Stage7")));
+	stageGeneratorManager.Add(Stage::Stage1, std::make_shared<Stage1>(world_.get(), std::string("Test"),frequencyWind[0],frequencyHairBall[0],hairballCnt[0]));
+	stageGeneratorManager.Add(Stage::Stage2, std::make_shared<Stage2>(world_.get(), std::string("Stage1"), frequencyWind[1], frequencyHairBall[1], hairballCnt[1]));
+	stageGeneratorManager.Add(Stage::Stage3, std::make_shared<Stage3>(world_.get(), std::string("Stage2"), frequencyWind[2], frequencyHairBall[2], hairballCnt[2]));
+	stageGeneratorManager.Add(Stage::Stage4, std::make_shared<Stage4>(world_.get(), std::string("Stage3"), frequencyWind[3], frequencyHairBall[3], hairballCnt[3]));
+	stageGeneratorManager.Add(Stage::Stage5, std::make_shared<Stage5>(world_.get(), std::string("Stage4"), frequencyWind[4], frequencyHairBall[4], hairballCnt[4]));
+	stageGeneratorManager.Add(Stage::Stage6, std::make_shared<Stage6>(world_.get(), std::string("Stage5"), frequencyWind[5], frequencyHairBall[5], hairballCnt[5]));
+	stageGeneratorManager.Add(Stage::Stage7, std::make_shared<Stage7>(world_.get(), std::string("Stage6"), frequencyWind[6], frequencyHairBall[6], hairballCnt[6]));
+	stageGeneratorManager.Add(Stage::Stage8, std::make_shared<Stage8>(world_.get(), std::string("Stage7"), frequencyWind[7], frequencyHairBall[7], hairballCnt[7]));
 
 }
 

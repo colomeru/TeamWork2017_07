@@ -19,9 +19,7 @@ public:
 private:
 	CreditPlayer* player_;
 	int frame_;
-	Vector2 modify_;
-	float f1, f2;
-	Vector2 pos_;
+	float f2;
 
 	CharacterAnmManager anmManager_;
 };

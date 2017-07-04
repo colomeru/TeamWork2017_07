@@ -8,17 +8,12 @@ CreditTextGenerator::CreditTextGenerator(IWorld * world, Vector2 position) :
 	Actor(world)
 {
 	position_ = position;
-	timer_ = 0.0f;
 	frame_ = 0;
 	idCount_ = 0;
-	interval_ = 3.0f;
-	id_.push_back(SPRITE_ID::CREDIT_SAITO_SPRITE);
-	id_.push_back(SPRITE_ID::CREDIT_MIYAUCHI_SPRITE);
-	id_.push_back(SPRITE_ID::CREDIT_SIM_SPRITE);
-	id_.push_back(SPRITE_ID::CREDIT_SUGIURA_SPRITE);
-	id_.push_back(SPRITE_ID::CREDIT_KUWABARA_SPRITE);
-	id_.push_back(SPRITE_ID::CREDIT_NEGISHI_SPRITE);
-	id_.push_back(SPRITE_ID::CREDIT_NAGAO_SPRITE);
+	int nameIdNum = CREDIT_SAITO_SPRITE;
+	for (int i = 0; i < 7; i++) {
+		id_.push_back((SPRITE_ID)(nameIdNum + i));
+	}
 
 	postId_.push_back(SPRITE_ID::CREDIT_MPL_SPRITE);
 	postId_.push_back(SPRITE_ID::CREDIT_MPG_SPRITE);
@@ -28,13 +23,16 @@ CreditTextGenerator::CreditTextGenerator(IWorld * world, Vector2 position) :
 	postId_.push_back(SPRITE_ID::CREDIT_SPG_SPRITE);
 	postId_.push_back(SPRITE_ID::CREDIT_DESIGNER_SPRITE);
 
-	postSize_.push_back(Vector2(786, 150));
-	postSize_.push_back(Vector2(1302, 150));
-	postSize_.push_back(Vector2(899, 150));
-	postSize_.push_back(Vector2(899, 150));
-	postSize_.push_back(Vector2(899, 150));
-	postSize_.push_back(Vector2(1291, 150));
-	postSize_.push_back(Vector2(775, 150));
+	for (int i = 0; i < 7; i++) {
+		postSize_.push_back(Sprite::GetInstance().GetSize(postId_.at(i)));
+	}
+	//postSize_.push_back(Vector2(786, 150));
+	//postSize_.push_back(Vector2(1302, 150));
+	//postSize_.push_back(Vector2(899, 150));
+	//postSize_.push_back(Vector2(899, 150));
+	//postSize_.push_back(Vector2(899, 150));
+	//postSize_.push_back(Vector2(1291, 150));
+	//postSize_.push_back(Vector2(775, 150));
 
 	auto count = id_.size();
 	TweenManager::GetInstance().LoopCount(Linear, count, &loopHandle_, 1.0f, 6.0f, [=]() {ClothAdd(); });

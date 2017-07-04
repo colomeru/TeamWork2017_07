@@ -43,13 +43,6 @@ private:
 	int prevLane_; //1フレーム前のレーン番号
 	int dis_; //メーター間距離
 
-	//画像のハンドル
-	int pinHandle_; //ピン
-	int pIconHandle_; //プレイヤーアイコン
-	int laneHandle_; //レーン
-	int startHandle_; //スタート
-	int goalHandle_; //ゴール
-
 	//画像のサイズ
 	Vector2 pinSize_; //ピン
 	Vector2 pIconSize_; //プレイヤーアイコン

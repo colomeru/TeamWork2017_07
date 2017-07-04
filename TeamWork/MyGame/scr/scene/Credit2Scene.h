@@ -48,10 +48,6 @@ public:
 	bool ScreenOut() const;
 	//プレイヤーリスタート
 	void PlayerRestart();
-	//スクロール
-	void Scroll();
-	//画像に触れているか？
-	bool IsCollision();
 	//操作可能か？
 	bool GetOperate();
 
@@ -84,15 +80,11 @@ private:
 	//
 	Vector2 pHeadPos_;
 	Vector2 startPos_;
-	std::array<Vector2, 6> spritePos_;
-	Vector2 spriteSize_;
 	bool operate_;
 	int playerStatte_;
 	Vector2 correction;
 	const float SceneTime = 54.0f;
 	float sceneTimer_;
-	int sinCount_;
-	float alpha_;
 	std::array<Vector2, 2> whitePos_;
 	Vector2 dWhitePos_;
 	Vector2 wCorr;

@@ -11,12 +11,6 @@ ProgressMeter::ProgressMeter(World * world, int stageLength, Vector2 position) :
 	world_(world), stageLen_(stageLength), meterNum_(3), prevLane_(1), dis_(30),
 	meterLen_(700), meterPos_(position), nowLane_(1), pIconPos_(0, 0), pPosY_(30)
 {
-	pinHandle_ = Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE);
-	pIconHandle_ = Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_HEAD_SPRITE);
-	laneHandle_ = Sprite::GetInstance().GetHandle(SPRITE_ID::METER_SPRITE);
-	startHandle_ = Sprite::GetInstance().GetHandle(SPRITE_ID::HITO_SPRITE);
-	goalHandle_ = Sprite::GetInstance().GetHandle(SPRITE_ID::HITO_SPRITE);
-
 	pinSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE);
 	pIconSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::SNAKE_SPRITE);
 	laneSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::METER_SPRITE);
@@ -69,7 +63,6 @@ void ProgressMeter::Draw() const
 
 	//メーターを描画
 	for (int i = 0; i < meterNum_; i++) {
-		//DrawBox(meterPos_.x, meterPos_.y + i * dis_, meterPos_.x + meterLen_, meterPos_.y + i * dis_ + 20, GetColor(0, 255, 0), 1);
 		Sprite::GetInstance().Draw(SPRITE_ID::METER_SPRITE, Vector2(meterPos_.x, meterPos_.y + i * dis_), Vector2(0,laneSize_.y / 4), Vector2(meterLen_ / laneSize_.x, 0.5f), 1.0f, false);
 		if (i == nowLane_) {
 			//現在プレイヤーがいるレーンのメーターに表示

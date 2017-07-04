@@ -61,11 +61,7 @@ void MenuScene::Update()
 
 void MenuScene::Draw() const
 {
-	//DrawFormatString(0, 00, GetColor(255, 255, 255), "MenuScene");
-	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-
 	menu.Draw();
-
 	// •`‰æ
 	world_->Draw();
 }
@@ -85,9 +81,6 @@ void MenuScene::End()
 	// ‰Šú‰»
 	menu.End();
 	world_->Clear();
-	
-	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	//FadePanel::GetInstance().FadeOut();
 }
 
 void MenuScene::handleMessage(EventMessage message, void * param)

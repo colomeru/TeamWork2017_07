@@ -18,6 +18,5 @@ public:
 private:
 	CreditPlayer* player_;
 	int frame_;
-	Vector2 modify_;
-	float f1, f2;
+	float f2;
 };

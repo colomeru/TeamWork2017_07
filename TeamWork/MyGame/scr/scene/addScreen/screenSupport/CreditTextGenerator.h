@@ -19,12 +19,10 @@ private:
 	void PostAdd();
 
 private:
-	float timer_;
 	const float DefTime = 0.5f;
 	int frame_;
 	std::vector<SPRITE_ID> id_;
 	int idCount_;
-	float interval_;
 	float loopHandle_;
 
 	std::vector<SPRITE_ID> postId_;

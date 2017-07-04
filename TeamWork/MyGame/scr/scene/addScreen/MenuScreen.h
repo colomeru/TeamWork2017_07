@@ -29,6 +29,7 @@ public:
 		float isAlpha_;
 		float timer_;
 		float scale_;
+
 	};
 
 
@@ -50,9 +51,6 @@ public:
 	void OpenNextStage(int sNum);
 	//次のステージが解放されているか？
 	bool CheckNextStage(int sNum);
-	//パターン１
-	void Pattern1Update();
-	void Pattern1Draw() const;
 	//パターン２
 	void Pattern2Update();
 	void Pattern2Draw() const;
@@ -78,7 +76,7 @@ public:
 
 	Stage GetGamePlayStage()const;
 
-//外部クラス用
+	//外部クラス用
 public:
 	bool GetIsBackSelect()const {
 		return backSelect;
@@ -95,28 +93,14 @@ private:
 	Vector2 backPos; //戻るパネルの座標
 	bool backSelect; //戻るを選択しているか？
 	Vector2 cursorPos; //カーソルの座標
-	int panelNum, cursorNum; //パネル番号、カーソル番号
 	std::array<PanelStruct, 9> panel; //PanelStructをステージ数分生成
 
 	//
-	Vector2 pos;
-	Vector2 gPos;
-	Vector2 dir; //移動方向
 	float dis;
 	Vector2 from;
-	float ease;
-	bool test;
 	const float MoveTime = 0.5f;
 
-	float timer_;
-	Vector2 drawPos;
-	Vector2 modify; //総移動距離
-	Vector2 moveDis; //移動距離
-	Vector2 velocity; //速度
-	float mag; //速度倍率
-	int bgHandle; //背景のハンドル
-	int builHandle; //ビルのハンドル
-	int wwwHandle; //草のハンドル
+	//float mag; //速度倍率
 	Vector2 bgPos_; //背景座標
 	Vector2 builPos_; //ビル座標
 	Vector2 wwwPos_; //草座標
@@ -143,7 +127,6 @@ private:
 	std::array<Vector2, 3> crowPos_;
 	std::array<float, 3> interval_;
 	std::array<float, 3> cTimer_;
-	std::array<bool, 3> spriteTurn_;
 	std::array<Vector2, 3> cVelocity_;
 	std::array<Vector2, 3> cFrom_;
 	std::array<float, 3> cDis_;

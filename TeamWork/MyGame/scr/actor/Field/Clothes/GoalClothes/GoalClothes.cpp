@@ -5,6 +5,7 @@
 
 GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
+	,isHit_(false)
 	,is_Flash(false)
 {
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
@@ -18,8 +19,6 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	fulcrum_ = position_ - Vector2(0, length_);
 
 	tutorialFlash_ = std::make_shared<TutorialFlash>(world, laneNum_, position_, this->GetActor());
-
-	isHit_ = false;
 }
 
 GoalClothes::~GoalClothes()

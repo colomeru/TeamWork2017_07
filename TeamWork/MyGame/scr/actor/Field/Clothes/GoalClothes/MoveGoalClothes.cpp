@@ -4,6 +4,7 @@
 
 MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
+	,isHit_(false)
 {
 	clothes_ID = CLOTHES_ID::GOAL_CLOTHES;
 	parameter_.ID = ACTOR_ID::GOAL_ACTOR;
@@ -14,8 +15,6 @@ MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-
-	isHit_ = false;
 }
 
 MoveGoalClothes::~MoveGoalClothes()

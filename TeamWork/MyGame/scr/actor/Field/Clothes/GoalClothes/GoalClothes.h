@@ -19,6 +19,8 @@ public:
 	virtual void OnMessage(EventMessage message, void* param) override;
 
 private:
+	//衝突したか
+	bool isHit_;
 	//チュートリアルで点滅する条件
 	bool is_Flash;
 	//チュートリアルで光るアクター

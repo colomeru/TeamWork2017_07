@@ -39,6 +39,8 @@ public:
 	virtual void OnMessage(EventMessage message, void* param) override;
 	//切断状態による当たり判定のポイントの設定
 	virtual void SetLocalPoints();
+	//服の当たり判定の設定
+	virtual void SetPointsUpdate();
 
 	//IDの取得
 	CLOTHES_ID GetClothesID() const {
@@ -62,8 +64,6 @@ public:
 	void ShakesClothes();
 	//強い風によるプレイヤーへの作用
 	void WindSwing();
-	//服の当たり判定の設定
-	virtual void SetPointsUpdate();
 	//服に付着した鳥の糞の更新
 	void UpdateClothesFeces();
 	//服に付着した鳥の糞の描画
@@ -84,8 +84,6 @@ public:
 	Clothes& operator = (const Clothes& other) = delete;
 
 protected:
-	//衝突しているか
-	bool isHit_;
 	//服ID
 	CLOTHES_ID clothes_ID;
 	//当たり判定のポイント

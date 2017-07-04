@@ -20,9 +20,6 @@ NotSlashClothes::NotSlashClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 
 NotSlashClothes::~NotSlashClothes()
 {
-	localPoints_[CuttingState::Normal].clear();
-	localPoints_[CuttingState::RightUpSlant].clear();
-	localPoints_[CuttingState::LeftUpSlant].clear();
 }
 
 void NotSlashClothes::Update()
@@ -63,31 +60,6 @@ void NotSlashClothes::Draw() const
 		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
 		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
-}
-
-void NotSlashClothes::SetPointsUpdate()
-{
-	collisionPoints.clear();
-
-	if (laneNum_ != world_->GetKeepDatas().playerLane_ || !isDraw_) return;
-
-	//ワールドマトリクス
-	Matrix mat = Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
-
-	auto p1
-		= Matrix::CreateTranslation(localPoints[0]) * mat;
-	auto p2
-		= Matrix::CreateTranslation(localPoints[1]) * mat;
-	auto p3
-		= Matrix::CreateTranslation(localPoints[2]) * mat;
-	auto p4
-		= Matrix::CreateTranslation(localPoints[3]) * mat;
-
-	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
-	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
-	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
-	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
 }
 
 void NotSlashClothes::SetLocalPoints()

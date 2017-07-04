@@ -20,7 +20,6 @@ TutorialClothes::TutorialClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 
 TutorialClothes::~TutorialClothes()
 {
-	baseLocalPoints_.clear();
 }
 
 void TutorialClothes::Update()
@@ -56,7 +55,7 @@ void TutorialClothes::OnUpdate()
 
 void TutorialClothes::SetLocalPoints()
 {
-	pointManager_.SetLocalPoints(spriteId_, baseLocalPoints_, length_);
+	pointManager_.SetLocalPoints(spriteId_, localPoints_, length_);
 }
 
 void TutorialClothes::DrawRange() const
@@ -97,29 +96,4 @@ void TutorialClothes::DrawRange() const
 	DrawLine(drawP[0].x, drawP[0].y, drawP[1].x, drawP[1].y, GetColor(255, 255, 255));
 	DrawLine(drawP[1].x, drawP[1].y, drawP[2].x, drawP[2].y, GetColor(255, 255, 255));
 	DrawLine(drawP[2].x, drawP[2].y, drawP[3].x, drawP[3].y, GetColor(255, 255, 255));
-}
-
-void TutorialClothes::SetPointsUpdate()
-{
-	collisionPoints.clear();
-
-	if (laneNum_ != world_->GetKeepDatas().playerLane_ || !isDraw_) return;
-
-	//ワールドマトリクス
-	Matrix mat = Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
-
-	auto p1
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][0]) * mat;
-	auto p2
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][1]) * mat;
-	auto p3
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][2]) * mat;
-	auto p4
-		= Matrix::CreateTranslation(baseLocalPoints_[cuttingState_][3]) * mat;
-
-	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
-	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
-	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
-	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
 }

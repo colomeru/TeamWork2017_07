@@ -23,12 +23,6 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	SetLocalPoints();
 	SetPointsUpdate();
-
-
-	//if (is_Pin)
-	//	world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum_, Vector2(100, 100), this, fulcrum_));
-
-	//colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 }
 
 TestClothes::~TestClothes()
@@ -49,12 +43,6 @@ void TestClothes::Update()
 	SetPointsUpdate();
 	Synchronize();
 	UpdateClothesFeces();
-
-	//if (isCheckCol_ && isUpdate_) {
-	//	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::BOX_BOX_COL);
-	//}
-
-	isHit_ = false;
 }
 
 void TestClothes::Draw() const
@@ -68,13 +56,11 @@ void TestClothes::Draw() const
 	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
 	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
 	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
-	//auto seg = Vector3(+sizeVec.x, 0)*is;
 	//ç∂è„,âEè„,ç∂â∫,âEâ∫
 	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
 	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
 	DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
 	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
@@ -96,9 +82,4 @@ void TestClothes::Draw() const
 		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
 		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
-
-}
-
-void TestClothes::OnUpdate()
-{
 }

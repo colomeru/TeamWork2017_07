@@ -14,13 +14,11 @@ NotShakeClothes::NotShakeClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 	spriteId_ = spriteId;
 
 	SetLocalPoints();
-
 	SetPointsUpdate();
 }
 
 NotShakeClothes::~NotShakeClothes()
 {
-	spriteLocalPoints_.clear();
 }
 
 void NotShakeClothes::Update()
@@ -61,32 +59,6 @@ void NotShakeClothes::Draw() const
 
 }
 
-void NotShakeClothes::SetPointsUpdate()
-{
-	collisionPoints.clear();
-
-	if (laneNum_ != world_->GetKeepDatas().playerLane_ || !isDraw_) return;
-
-	//ワールドマトリクス
-	Matrix mat = Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
-
-	auto p1
-		= Matrix::CreateTranslation(spriteLocalPoints_[cuttingState_][0]) * mat;
-	auto p2
-		= Matrix::CreateTranslation(spriteLocalPoints_[cuttingState_][1]) * mat;
-	auto p3
-		= Matrix::CreateTranslation(spriteLocalPoints_[cuttingState_][2]) * mat;
-	auto p4
-		= Matrix::CreateTranslation(spriteLocalPoints_[cuttingState_][3]) * mat;
-
-	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
-	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
-	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
-	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
-
-}
-
 void NotShakeClothes::SetLocalPoints()
 {
 	switch (spriteId_)
@@ -106,32 +78,32 @@ void NotShakeClothes::SetLocalPoints()
 
 void NotShakeClothes::SetPoints01()
 {
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(-65, 90 + length_, 0));
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(-65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(65, 90 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, 10 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, 0 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, 0 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, 15 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-65, 90 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-65, -70 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(65, -70 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(65, 90 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, 10 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, -70 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, -70 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, 0 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, 0 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, -70 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, -70 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, 15 + length_, 0));
 }
 
 void NotShakeClothes::SetPoints02()
 {
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(-65, 90 + length_, 0));
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(-65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::Normal].push_back(Vector3(65, 90 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, 15 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, 0 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, 0 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, -70 + length_, 0));
-	spriteLocalPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, 20 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-65, 90 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-65, -70 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(65, -70 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(65, 90 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, 15 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-65, -70 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, -70 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(65, 0 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, 0 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-65, -70 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, -70 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(65, 20 + length_, 0));
 }

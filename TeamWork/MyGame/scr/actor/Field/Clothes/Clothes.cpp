@@ -14,20 +14,17 @@ const float GRAVITY = 0.3f;
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	:Actor(world)
-	, isHit_(false), isFriction_(false), isWind_(false)
+	, clothes_ID(clothes), isFriction_(false), isWind_(false)
 	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), friction_(1.0f), count_(0)
-	, clothesState_(ClothesState::WINDLESS), cuttingState_(CuttingState::Normal), weight_(weight), drawFrame_(0)
-	, isDroping_(false), clothesFeces_(nullptr), player_(nullptr), isDrawRange_(false), currentStage_(Stage::Stage1)
+	, clothesState_(ClothesState::WINDLESS), cuttingState_(CuttingState::Normal), dNumber_(0.0f), weight_(weight), drawFrame_(0)
+	, isDroping_(false), clothesFeces_(nullptr), player_(nullptr), frequencyWind_(0), isDrawRange_(false), currentStage_(Stage::Stage1)
 {
-	clothes_ID = clothes;
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
-	dNumber_ = 0.0f;
 
 	localPoints_[CuttingState::Normal].clear();
 	localPoints_[CuttingState::RightUpSlant].clear();
 	localPoints_[CuttingState::LeftUpSlant].clear();
 	collisionPoints.clear();
-	collisionPoints.reserve(4);
 
 	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [=](Actor& other)
 	{
@@ -93,8 +90,6 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 			break;
 		}
 		}
-
-		isHit_ = true;
 		break;
 	}
 	case ACTOR_ID::ENEMY_ACTOR: 
@@ -123,12 +118,11 @@ void Clothes::OnMessage(EventMessage message, void * param)
 		if (!isUpdate_) break;
 		int rand = Random::GetInstance().Range(0, 100);
 		if (rand > frequencyWind_) break;
-		float dRand = Random::GetInstance().Range(0.0f, 1.5f);
+		float dRand = Random::GetInstance().Range(0.0f, 1.0f);
 		TweenManager::GetInstance().Delay(
 			dRand,
 			[&]() {
-			rot_spd_ = 1.7f;
-			rot_spd_ -= weight_;
+			rot_spd_ = 1.7f - weight_;
 			clothesState_ = ClothesState::BEGIN_WIND; },
 			&dNumber_
 			);
@@ -145,6 +139,31 @@ void Clothes::SetLocalPoints()
 	localPoints_[CuttingState::Normal].push_back(Vector3());
 }
 
+void Clothes::SetPointsUpdate()
+{
+	collisionPoints.clear();
+
+	if (laneNum_ != world_->GetKeepDatas().playerLane_ || !isDraw_) return;
+
+	//ワールドマトリクス
+	Matrix mat = Matrix::CreateRotationZ(angle_)
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+
+	auto p1
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][0]) * mat;
+	auto p2
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][1]) * mat;
+	auto p3
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][2]) * mat;
+	auto p4
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][3]) * mat;
+
+	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
+	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
+	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
+	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
+}
+
 void Clothes::Pendulum(Vector2 fulcrum, float length)
 {
 	beforePos_ = position_;
@@ -156,11 +175,11 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	//重力移動量を反映した重りの位置
 	auto length_vec = position_ - fulcrum;
 	auto t = -(length_vec.y * GRAVITY) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
-	auto move_weightX = position_.x + t * length_vec.x;
-	auto move_weightY = position_.y + GRAVITY + t * length_vec.y;
+	auto gx = position_.x + t * length_vec.x;
+	auto gy = position_.y + GRAVITY + t * length_vec.y;
 
 	//2つの重りの位置の角度差
-	auto r = MathHelper::ATan(move_weightY - fulcrum.y, move_weightX - fulcrum.x);
+	auto r = MathHelper::ATan(gy - fulcrum.y, gx - fulcrum.x);
 
 	//角度差を角速度に加算
 	auto sub = r - rot_;
@@ -218,8 +237,7 @@ void Clothes::ShakesClothes()
 		switch (clothesState_)
 		{
 		case ClothesState::BEGIN_STRONG_WIND: {
-			rot_spd_ = 4.0f;
-			rot_spd_ -= weight_;
+			rot_spd_ = 4.0f - weight_;
 			isWind_ = true;
 			TweenManager::GetInstance().Delay(15.0f, [=]() {isWind_ = false; });
 			clothesState_ = ClothesState::STRONG_WIND;
@@ -236,9 +254,7 @@ void Clothes::ShakesClothes()
 		}
 		case ClothesState::END_WIND: {
 			rot_spd_ = 0.08f;
-			rot_ = 90.0f;
 			friction_ = 1.0f;
-			angle_ = 0;
 			isFriction_ = false;
 			count_ = 0;
 			clothesState_ = ClothesState::WINDLESS;
@@ -260,31 +276,6 @@ void Clothes::WindSwing()
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
 		parent_ = nullptr;
 	}
-}
-
-void Clothes::SetPointsUpdate()
-{
-	collisionPoints.clear();
-
-	if (laneNum_ != world_->GetKeepDatas().playerLane_ || !isDraw_) return;
-
-	//ワールドマトリクス
-	Matrix mat = Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
-
-	auto p1
-		= Matrix::CreateTranslation(localPoints_[cuttingState_][0]) * mat;
-	auto p2
-		= Matrix::CreateTranslation(localPoints_[cuttingState_][1]) * mat;
-	auto p3
-		= Matrix::CreateTranslation(localPoints_[cuttingState_][2]) * mat;
-	auto p4
-		= Matrix::CreateTranslation(localPoints_[cuttingState_][3]) * mat;
-
-	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
-	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
-	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
-	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
 }
 
 void Clothes::UpdateClothesFeces()

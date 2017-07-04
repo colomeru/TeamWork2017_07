@@ -12,8 +12,6 @@ public:
 	virtual void Update() override;
 	//•`‰æ
 	virtual void Draw() const override;
-	//ó“®XV
-	virtual void OnUpdate() override;
 
 private:
 };

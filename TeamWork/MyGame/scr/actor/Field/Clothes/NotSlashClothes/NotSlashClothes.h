@@ -12,8 +12,6 @@ public:
 	virtual void Update() override;
 	//•`‰æ
 	virtual void Draw() const override;
-	//•‚Ì“–‚½‚è”»’è‚Ìİ’è
-	virtual void SetPointsUpdate() override;
 	//Ø’fó‘Ô‚É‚æ‚é“–‚½‚è”»’è‚Ìƒ|ƒCƒ“ƒg‚Ìİ’è
 	virtual void SetLocalPoints() override;
 private:

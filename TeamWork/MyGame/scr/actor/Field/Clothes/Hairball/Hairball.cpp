@@ -3,6 +3,7 @@
 
 Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
+	, player_Head_(nullptr)
 {
 	clothes_ID = CLOTHES_ID::HAIRBALL;
 	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;

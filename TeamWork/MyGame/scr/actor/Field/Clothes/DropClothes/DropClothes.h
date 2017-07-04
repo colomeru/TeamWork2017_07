@@ -15,6 +15,9 @@ public:
 	virtual void Draw() const override;
 
 private:
+	//•`‰æ‚ÌƒRƒ}”Ô†
 	int drawFrame_;
+	//—‚¿‚éÛ‚Ì‰ñ“]•ûŒü
+	float turn_;
 };
 

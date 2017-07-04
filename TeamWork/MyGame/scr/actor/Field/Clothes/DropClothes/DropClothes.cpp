@@ -10,8 +10,13 @@ DropClothes::DropClothes(IWorld * world, Vector2 pos, int laneNum, SPRITE_ID spr
 	spriteId_ = spriteID;
 
 	drawFrame_ = drawFrame + 3;
+	if (drawFrame_ == 4)
+		turn_ = 180.0f;
+	else if (drawFrame_ == 5)
+		turn_ = -180.0f;
 
 	TweenManager::GetInstance().Add(EaseInQuart, &position_.y, WINDOW_HEIGHT, 3.0f, [=]() { Dead(); });
+	TweenManager::GetInstance().Add(EaseInQuart, &angle_, turn_, 3.0f);
 }
 
 DropClothes::~DropClothes()

@@ -17,4 +17,8 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param) override;
+
+private:
+	//衝突したか
+	bool isHit_;
 };

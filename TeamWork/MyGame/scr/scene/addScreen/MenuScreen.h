@@ -4,7 +4,6 @@
 #include <array>
 #include "../../stageGenerator/Stage.h"
 #include "../../math/Vector3.h"
-#include <vector>
 #include "../../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
 
 class MenuScreen
@@ -79,46 +78,41 @@ public:
 	//外部クラス用
 public:
 	bool GetIsBackSelect()const {
-		return backSelect;
+		return backSelect_;
 	}
 	bool GetIsTutorialSelect()const {
-		return stageNum == 0;
+		return stageNum_ == 0;
 	}
 	void InputSelectStage();
 	void ResetBG();
 
 private:
-	int stageNum = 0; //ステージ番号
-	const float height = WINDOW_HEIGHT / 4.0f * 2.0f; //パネル１のy座標
-	Vector2 backPos; //戻るパネルの座標
-	bool backSelect; //戻るを選択しているか？
-	Vector2 cursorPos; //カーソルの座標
+	const float Height = WINDOW_HEIGHT / 4.0f * 2.0f; //パネル１のy座標
+	const float MoveTime = 0.5f;
+	const float BetDis = 339.0f; //間距離
+	const int StarNum = 10;
+	const Vector2 BgPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f); //背景座標
+	const Vector2 BuilPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f); //ビル座標
+	const Vector2 WwwPos = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT); //草座標
+
+	int stageNum_; //ステージ番号
+	bool backSelect_; //戻るを選択しているか？
+	Vector2 cursorPos_; //カーソルの座標
 	std::array<PanelStruct, 9> panel; //PanelStructをステージ数分生成
 
 	//
-	float dis;
-	Vector2 from;
-	const float MoveTime = 0.5f;
-
-	//float mag; //速度倍率
-	Vector2 bgPos_; //背景座標
-	Vector2 builPos_; //ビル座標
-	Vector2 wwwPos_; //草座標
-	float betDis_; //間距離
+	float dis_;
+	Vector2 from_;
 
 	//背景色
-	std::array<Vector3, 9> bgColor_;
 	Vector3 color_;
 
 	//星
-	std::array<StarStruct, 50> star_;
-	int starNum_;
 	float alphaValue_;
 	std::array<float, 3> starAlpha_;
 
 	//流れ星
 	std::array<StarStruct, 10> sStar_;
-	int sStarNum_;
 	std::array<float, 10> waitTime_;
 	std::array<Vector2, 10> prevPos_;
 	std::array<float, 10> ssAlpha_;

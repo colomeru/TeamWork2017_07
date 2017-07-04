@@ -12,57 +12,35 @@
 #include"../GamePlayDefine.h"
 #include"../../cheat/CheatData.h"
 
+//カーソル
 const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 410.0f, WINDOW_HEIGHT / 2.0f),
 							Vector2(380.0f, WINDOW_HEIGHT - 54.25f) };
+//背景色
+const Vector3 BgColor[9]{ Vector3(155, 204, 255) ,Vector3(51, 204, 255) ,Vector3(0, 153, 255) ,
+						  Vector3(0, 153, 204) ,Vector3(204, 153, 102) ,Vector3(204, 153, 0) ,
+						  Vector3(153, 102, 51) ,Vector3(0, 51, 102) ,Vector3(0, 0, 102) };
 
 //コンストラクタ
 MenuScreen::MenuScreen() :
-	stageNum(0)
+	stageNum_(0), backSelect_(false), cursorPos_(CursorPos[0]), dis_(stageNum_ * BetDis), from_(Vector2(0.0f, stageNum_ * BetDis)),
+	color_(BgColor[0]), alphaValue_(0.01f)
 {
-	betDis_ = 339.0f;
 	for (int i = 0; i < 9; i++)
 	{
-		if (i == 0 || i == 1) panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * betDis_),true,1.0f };
-		else panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, height - i * betDis_),false,0.5f };
+		if (i == 0 || i == 1) panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, Height - i * BetDis),true,1.0f };
+		else panel[i] = { Vector2(WINDOW_WIDTH / 2.0f, Height - i * BetDis),false,0.5f };
 	}
+
 	//本来は0番号はチュートリアル
 	stageList_[0] = Stage::Stage1;
-	stageList_[1] = Stage::Stage1;
-	stageList_[2] = Stage::Stage2;
-	stageList_[3] = Stage::Stage3;
-	stageList_[4] = Stage::Stage4;
-	stageList_[5] = Stage::Stage5;
-	stageList_[6] = Stage::Stage6;
-	stageList_[7] = Stage::Stage7;
-	stageList_[8] = Stage::Stage8;
-
-	//背景色
-	bgColor_[0] = Vector3(155, 204, 255);
-	bgColor_[1] = Vector3(51, 204, 255);
-	bgColor_[2] = Vector3(0, 153, 255);
-	bgColor_[3] = Vector3(0, 153, 204);
-	bgColor_[4] = Vector3(204, 153, 102);
-	bgColor_[5] = Vector3(204, 153, 0);
-	bgColor_[6] = Vector3(153, 102, 51);
-	bgColor_[7] = Vector3(0, 51, 102);
-	bgColor_[8] = Vector3(0, 0, 102);
-	color_ = bgColor_[0];
+	for (int i = 1; i < 9; i++) {
+		stageList_[i] = (Stage)(i - 1);
+	}
 
 	//星
-	starNum_ = 50;
-	alphaValue_ = 0.01f;
 	for (int i = 0; i < 3; i++) {
 		starAlpha_[i] = 0.0f;
 	}
-	for (int i = 0; i < starNum_; i++) {
-		int randX = Random::GetInstance().Range(0, WINDOW_WIDTH);
-		int randY = Random::GetInstance().Range(0, WINDOW_HEIGHT);
-		star_[i].position_ = Vector2(randX, randY);
-		star_[i].isAlpha_ = 0.0f;
-		star_[i].timer_ = 0.0f;
-		star_[i].scale_ = 1.0f;
-	}
-
 
 	//カラス
 	int crowIdNum = CROW_ANM_01_SPRITE;
@@ -91,18 +69,14 @@ void MenuScreen::Init()
 	}
 
 
-	stageNum = CheatData::getInstance().GetStartStage();
-	dis = stageNum * betDis_;
-	cursorPos = CursorPos[0];
-	backSelect = false;
-	from = Vector2(0.0f, stageNum * betDis_);
-	builPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f);
-	bgPos_ = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f);
-	wwwPos_ = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT);
+	stageNum_ = CheatData::getInstance().GetStartStage();
+	dis_ = stageNum_ * BetDis;
+	cursorPos_ = CursorPos[0];
+	backSelect_ = false;
+	from_ = Vector2(0.0f, stageNum_ * BetDis);
 
 	//流れ星
-	sStarNum_ = 10;
-	for (int i = 0; i < sStarNum_; i++) {
+	for (int i = 0; i < StarNum; i++) {
 		int randX = Random::GetInstance().Range(0, WINDOW_WIDTH);
 		int randY = Random::GetInstance().Range(0, WINDOW_HEIGHT);
 		sStar_[i].position_ = Vector2(randX, randY);
@@ -169,18 +143,18 @@ bool MenuScreen::CheckNextStage(int sNum)
 //パターン２更新
 void MenuScreen::Pattern2Update()
 {
-	if (!backSelect) {
+	if (!backSelect_) {
 		if (IsInputUp())
 		{
-			if (stageNum == 8 || CheckNextStage(stageNum) == false) return;
-			dis += betDis_;
-			stageNum++;
+			if (stageNum_ == 8 || CheckNextStage(stageNum_) == false) return;
+			dis_ += BetDis;
+			stageNum_++;
 
-			TweenManager::GetInstance().Add(EaseOutExpo, &from, Vector2(0.0f, dis), MoveTime);
-			TweenManager::GetInstance().Add(Linear, &color_, bgColor_[stageNum], MoveTime);
+			TweenManager::GetInstance().Add(EaseOutExpo, &from_, Vector2(0.0f, dis_), MoveTime);
+			TweenManager::GetInstance().Add(Linear, &color_, BgColor[stageNum_], MoveTime);
 			for (int i = 0; i < 3; i++)
 			{
-				cDis_[i] += betDis_;
+				cDis_[i] += BetDis;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
 			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
@@ -188,36 +162,36 @@ void MenuScreen::Pattern2Update()
 		}
 		if (IsInputDown())
 		{
-			if (stageNum == 0.0f) return;
-			dis -= betDis_;
-			stageNum--;
+			if (stageNum_ == 0.0f) return;
+			dis_ -= BetDis;
+			stageNum_--;
 
-			TweenManager::GetInstance().Add(EaseOutExpo, &from, Vector2(0.0f, dis), MoveTime);
-			TweenManager::GetInstance().Add(Linear, &color_, bgColor_[stageNum], MoveTime);
+			TweenManager::GetInstance().Add(EaseOutExpo, &from_, Vector2(0.0f, dis_), MoveTime);
+			TweenManager::GetInstance().Add(Linear, &color_, BgColor[stageNum_], MoveTime);
 			for (int i = 0; i < 3; i++)
 			{
-				cDis_[i] -= betDis_;
+				cDis_[i] -= BetDis;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
 			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 
 		}
 	}
-	stageNum = MathHelper::Clamp(stageNum, 0, 8);
+	stageNum_ = MathHelper::Clamp(stageNum_, 0, 8);
 
 	//左を押すと「戻る」にカーソルを移動
-	if (IsInputLeft() && !backSelect)
+	if (IsInputLeft() && !backSelect_)
 	{
-		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[1], MoveTime);
+		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos_, CursorPos[1], MoveTime);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
-		backSelect = true;
+		backSelect_ = true;
 
 	}
-	else if (IsInputAny() && backSelect)
+	else if (IsInputAny() && backSelect_)
 	{
-		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos, CursorPos[0], MoveTime);
+		TweenManager::GetInstance().Add(EaseOutExpo, &cursorPos_, CursorPos[0], MoveTime);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
-		backSelect = false;
+		backSelect_ = false;
 
 	}
 
@@ -238,7 +212,7 @@ void MenuScreen::Pattern2Draw() const
 
 	////流れ星
 	//for (int i = 0; i < sStarNum_; i++) {
-	//	Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, ssAlpha_[i], Vector2(sStar_[i].scale_, sStar_[i].scale_));
+	//	Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_ Vector2(sStar_[i].scale_, sStar_[i].scale_));
 	//}
 
 	//背景
@@ -247,7 +221,7 @@ void MenuScreen::Pattern2Draw() const
 	static auto wwwSize = Sprite::GetInstance().GetSize(SPRITE_ID::WWW_SPRITE);
 	static auto nightSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE);
 
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_BACK_SPRITE, bgPos_ + from * 0.7f, Vector2(bgSize.x / 2.0f - 100.0f, bgSize.y), Vector2(1.5f, 1.5f), 1.0f, false);
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_BACK_SPRITE, BgPos + from_ * 0.7f, Vector2(bgSize.x / 2.0f - 100.0f, bgSize.y), Vector2(1.5f, 1.5f), 1.0f, false);
 
 	//星
 	Vector2 drawNightSize = Vector2(WINDOW_WIDTH / nightSize.x, WINDOW_HEIGHT / nightSize.y);
@@ -262,23 +236,23 @@ void MenuScreen::Pattern2Draw() const
 	anmManager_.Draw(crowPos_[2] + cFrom_[2], origin, Vector2::One, 1.0f);
 
 	//ビルと草
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_M_SPRITE, builPos_ + from, Vector2(builSize.x / 2.0f - 24.0f, builSize.y), Vector2(3.0f, 3.0f), 1.0f, false);
-	Sprite::GetInstance().Draw(SPRITE_ID::WWW_SPRITE, wwwPos_ + from, Vector2(wwwSize.x / 2.0f, wwwSize.y), Vector2(2.0f, 2.2f), 1.0f, false);
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_M_SPRITE, BuilPos + from_, Vector2(builSize.x / 2.0f - 24.0f, builSize.y), Vector2(3.0f, 3.0f), 1.0f, false);
+	Sprite::GetInstance().Draw(SPRITE_ID::WWW_SPRITE, WwwPos + from_, Vector2(wwwSize.x / 2.0f, wwwSize.y), Vector2(2.0f, 2.2f), 1.0f, false);
 
 	//ステージパネルを描画
 	static auto panelSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_1_SPRITE);
 	static auto trainingSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE, panel[0].position + from, Vector2(trainingSize.x / 2.0f, trainingSize.y / 2.0f), panel[0].alpha, Vector2::One);
+	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE, panel[0].position + from_, Vector2(trainingSize.x / 2.0f, trainingSize.y / 2.0f), panel[0].alpha, Vector2::One);
 	static int spriteNum = SPRITE_ID::STAGE_SELECT_1_SPRITE - 1;
 	for (int i = 1; i <= 8; i++) {
-		Sprite::GetInstance().Draw((SPRITE_ID)(spriteNum + i), panel[i].position + from, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[i].alpha, Vector2::One);
+		Sprite::GetInstance().Draw((SPRITE_ID)(spriteNum + i), panel[i].position + from_, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[i].alpha, Vector2::One);
 	}
 
 	//戻るパネルを描画
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SELECT_SPRITE, Vector2(0.0f, WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f, 0.5f));
 
 	//カーソルを描画
-	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect);
+	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos_, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect_);
 
 	//カラス
 	anmManager_.Draw(crowPos_[0] + cFrom_[0], origin, Vector2::One, 1.0f);
@@ -286,11 +260,8 @@ void MenuScreen::Pattern2Draw() const
 
 
 	if (BuildMode == 1) {
-		DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum);
-		DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis);
-		for (int i = 0; i < 30; i++) {
-			DrawFormatString(0, 200 + i * 20, GetColor(255, 255, 255), "isAlpha %f", star_[i].isAlpha_);
-		}
+		DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum_);
+		DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis_);
 		for (int i = 0; i < 3; i++) {
 			DrawFormatString(1600, 0 + i * 20, GetColor(255, 255, 255), "cTimer_ %f", cTimer_[i]);
 			DrawFormatString(1600, 60 + i * 20, GetColor(255, 255, 255), "crowPos_X %f", crowPos_[i].x);
@@ -300,8 +271,8 @@ void MenuScreen::Pattern2Draw() const
 	}
 
 	//流れ星
-	for (int i = 0; i < sStarNum_; i++) {
-		Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, ssAlpha_[i], Vector2(sStar_[i].scale_, sStar_[i].scale_));
+	for (int i = 0; i < StarNum; i++) {
+		Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_, Vector2(sStar_[i].scale_, sStar_[i].scale_));
 	}
 
 }
@@ -344,20 +315,20 @@ bool MenuScreen::IsInputAny() const
 //星
 void MenuScreen::Star()
 {
-	alphaValue_ = 0.007 * (9 - stageNum);
+	alphaValue_ = 0.007 * (9 - stageNum_);
 
 	/*パターン２(フルサイズ画像版)*/
-	if (stageNum == 8) {
+	if (stageNum_ == 8) {
 		starAlpha_[0] += alphaValue_;
 		starAlpha_[1] += alphaValue_;
 		starAlpha_[2] += alphaValue_;
 	}
-	else if (stageNum == 7) {
+	else if (stageNum_ == 7) {
 		starAlpha_[0] += alphaValue_;
 		starAlpha_[1] += alphaValue_;
 		starAlpha_[2] -= alphaValue_;
 	}
-	else if (stageNum == 6) {
+	else if (stageNum_ == 6) {
 		starAlpha_[0] += alphaValue_;
 		starAlpha_[1] -= alphaValue_;
 		starAlpha_[2] -= alphaValue_;
@@ -376,18 +347,18 @@ void MenuScreen::Star()
 //流れ星
 void MenuScreen::ShootingStar()
 {
-	if (stageNum >= 0) {
-		for (int i = 0; i < sStarNum_; i++) {
+	if (stageNum_ >= 0) {
+		for (int i = 0; i < StarNum; i++) {
 			sStar_[i].timer_ += Time::DeltaTime;
-			ssAlpha_[i] = MathHelper::Clamp(ssAlpha_[i], 0.0f, 1.0f);
+			sStar_[i].isAlpha_ = MathHelper::Clamp(sStar_[i].isAlpha_, 0.0f, 1.0f);
 			if (sStar_[i].timer_ >= waitTime_[i]) {
 				sStar_[i].position_ += Vector2(-20.0f, 10.0f);
-				ssAlpha_[i] += 0.25f;
-				if (ssAlpha_[i] >= 1.0f) ssAlpha_[i] -= 0.25f;
+				sStar_[i].isAlpha_ += 0.25f;
+				if (sStar_[i].isAlpha_ >= 1.0f) sStar_[i].isAlpha_ -= 0.25f;
 				if (sStar_[i].timer_ >= waitTime_[i] + 0.5f) {
 					sStar_[i].timer_ = 0.0f;
 					sStar_[i].position_ = prevPos_[i];
-					ssAlpha_[i] = 0.0f;
+					sStar_[i].isAlpha_ = 0.0f;
 					sStar_[i].scale_ = Random::GetInstance().Range(0.5f, 2.5f);
 				}
 			}
@@ -411,7 +382,7 @@ void MenuScreen::Crow()
 			cTimer_[i] = 0.0f;
 		}
 		if (cTimer_[i] == 0.0f) {
-			if (stageNum >= 7 && crowPos_[i].x == WINDOW_WIDTH + 302.0f) return;
+			if (stageNum_ >= 7 && crowPos_[i].x == WINDOW_WIDTH + 302.0f) return;
 			crowPos_[i] += cVelocity_[i];
 		}
 
@@ -423,12 +394,12 @@ void MenuScreen::Crow()
 //SE
 void MenuScreen::SE()
 {
-	if (backSelect == false &&
+	if (backSelect_ == false &&
 		(Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
 			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
-	if (backSelect == true &&
+	if (backSelect_ == true &&
 		(Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
 			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
 		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
@@ -442,20 +413,20 @@ void MenuScreen::End()
 
 Stage MenuScreen::GetGamePlayStage() const
 {
-	return stageList_[stageNum];
+	return stageList_[stageNum_];
 }
 
 void MenuScreen::InputSelectStage()
 {
-	CheatData::getInstance().SetStartStage(stageNum);
-	CheatData::getInstance().SetSelectStage(stageList_[stageNum]);
+	CheatData::getInstance().SetStartStage(stageNum_);
+	CheatData::getInstance().SetSelectStage(stageList_[stageNum_]);
 }
 
 //背景リセット
 void MenuScreen::ResetBG()
 {
-	color_ = bgColor_[stageNum];
-	if (stageNum <= 5) {
+	color_ = BgColor[stageNum_];
+	if (stageNum_ <= 5) {
 		for (int i = 0; i < 3; i++) {
 			starAlpha_[i] = 0.0f;
 		}

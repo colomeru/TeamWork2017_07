@@ -230,10 +230,6 @@ void CreditPlayer::Draw() const
 
 	DrawFormatString(600, 750, GetColor(255, 0, 0), "%f", mRot.front());
 
-	if (Credit2Scene().GetOperate())
-		DrawFormatString(300, 300, GetColor(0, 0, 255), "‘€ì‚Å‚«‚Ü‚·I");
-	else
-		DrawFormatString(300, 300, GetColor(255, 0, 0), "‘€ì‚Å‚«‚Ü‚¹‚ñI");
 
 }
 

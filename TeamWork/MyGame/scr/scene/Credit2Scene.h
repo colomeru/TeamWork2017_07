@@ -48,8 +48,6 @@ public:
 	bool ScreenOut() const;
 	//プレイヤーリスタート
 	void PlayerRestart();
-	//操作可能か？
-	bool GetOperate();
 
 
 private:

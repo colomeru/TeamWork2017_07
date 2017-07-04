@@ -287,9 +287,3 @@ void Credit2Scene::PlayerRestart()
 		waiting_ = false;
 	}
 }
-
-
-bool Credit2Scene::GetOperate()
-{
-	return  operate_;
-}

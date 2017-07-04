@@ -78,12 +78,9 @@ private:
 	StageEffectScreen stageEffectScreen_;
 	AllClearScreen allClearScreen_;
 	UIScreen uiScreen_;
-	//Vector3 posit;
 
 	Stage currentStage_;
 
-	//Vector3 camera_pos_;
-	//Vector3 target_;
 	int windTime_;
 
 	//そのステージのレーンの最大数

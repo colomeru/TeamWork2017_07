@@ -75,13 +75,11 @@ void ClothesPin::Draw() const
 	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
 	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
 	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
-	//auto seg = Vector3(+sizeVec.x, 0)*is;
 	//ç∂è„,âEè„,ç∂â∫,âEâ∫
 	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
 	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
 	DrawLine((int)pos1.x, (int)pos1.y, (int)pos2.x, (int)pos2.y, GetColor(255, 255, 255));
 	DrawLine((int)pos1.x, (int)pos1.y, (int)pos3.x, (int)pos3.y, GetColor(255, 255, 255));
 	DrawLine((int)pos2.x, (int)pos2.y, (int)pos4.x, (int)pos4.y, GetColor(255, 255, 255));

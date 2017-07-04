@@ -70,7 +70,6 @@ void TitleBGScreen::Update()
 		origin.x = 0.f;
 		clothes_.push_back(TitleLaneClothes(clothestype, laneNum, WINDOW_WIDTH+100,20.f,Random::GetInstance().Range(1.f,90.f),Random::GetInstance().Range(2.f,4.f), origin));
 
-		//TweenManager::GetInstance().Add(EaseType::Linear, &clothes_.back().sinCount_, 360.f, 10.f);
 	}
 
 	
@@ -88,11 +87,6 @@ void TitleBGScreen::Update()
 		timeCount_ = 0;
 	}
 
-	//whiteScreenAlpha_ += whiteScreenAlphaAdd_;
-	//if (whiteScreenAlpha_ <= 0.f) {
-	//	whiteScreenAlphaAdd_ = 0.f;
-	//	whiteScreenAlpha_ = 0.f;
-	//}
 	scrollPos_+=5;scrollPos_ %= WINDOW_WIDTH;
 }
 void TitleBGScreen::Draw() const
@@ -104,8 +98,6 @@ void TitleBGScreen::Draw() const
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_POLE_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_POLE_SPRITE, Vector2(WINDOW_WIDTH / 2, lanePos_[1]), origin, Vector2::One);
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_POLE_SPRITE, Vector2(WINDOW_WIDTH / 2, lanePos_[2]), origin, Vector2::One);
-
-	//DrawClothes(1, 300,SPRITE_ID::BASE_CLOTHES_02_SPRITE);
 
 	for (auto i : clothes_) {
 		DrawClothes(i);
@@ -120,10 +112,8 @@ void TitleBGScreen::End()
 
 void TitleBGScreen::WhiteScreenMinus(){
 
-	//TweenManager::GetInstance().Cancel(&whiteScreenAlpha_);
 	TweenManager::GetInstance().Add(Linear, &whiteScreenAlpha_, 0.f, 0.2f);
 
-	//whiteScreenAlphaAdd_ = -0.05f;
 	currentStage_++; currentStage_ %= BGList_.size();
 }
 
@@ -131,7 +121,6 @@ void TitleBGScreen::DrawClothes(const TitleLaneClothes& clothes)const
 {
 	Vector2 hangOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE) / 2;
 	hangOrigin.y = 0;
-	//Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, Vector2(clothes.lanePos, lanePos_[clothes.laneNum]+25), hangOrigin, 1, Vector2::One,clothes.rotate);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(clothes.drawID) / 2;
 	crcOrigin.y = 0;
 

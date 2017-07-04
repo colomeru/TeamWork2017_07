@@ -30,4 +30,7 @@ private:
 	Vector2 basePos_;
 
 	CharacterAnmManager anmManager_;
+
+private:
+	const int defDropTime;
 };

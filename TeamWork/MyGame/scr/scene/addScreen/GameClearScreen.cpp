@@ -110,8 +110,6 @@ bool GameClearScreen::Update(Scene & nextScene)
 		isTrigger_ = true;
 	}
 
-	//inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
-
 	drawUpdate();
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
@@ -225,7 +223,6 @@ void GameClearScreen::ScoreDraw() const
 
 	if (!isHeadDraw_)return;
 
-	//DrawScore::getInstance().Draw(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x * 0.5f, 900.f),
 	int hcposx=DrawScore::getInstance().Draw(Vector2(1500, 960.f),
 		(int)roundf(fheadCount_), 1, Vector2::One);
 	Vector2 horigin = Sprite::GetInstance().GetSize(SPRITE_ID::HEADCOUNT_SPRITE) / 2;

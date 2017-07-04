@@ -15,19 +15,10 @@ BackgroundPill::BackgroundPill(IWorld* world, const Vector2& position):
 
 void BackgroundPill::Update()
 {
-	//position_.x -= 30.f;
-	//position_.y += 3.f;
-
-	//Vector2 pPos = world_->GetKeepDatas().playerPos_;
-	//if (position_.x <= pPos.x-400.f) {
-	//	parameter_.isDead = true;
-	//}
 }
 
 void BackgroundPill::Draw() const
 {
-
-	//Vector2 drawPos = GetDrawPosVect(position
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::WIND_SPRITE)/2;
 	auto pos = GetDrawPosVect(position_);
 	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, pos, origin, 0.7f, Vector2::One, 0.f,true, false);

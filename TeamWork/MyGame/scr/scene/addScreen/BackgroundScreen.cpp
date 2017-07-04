@@ -38,9 +38,6 @@ void BackgroundScreen::Init(Stage currentStage)
 
 	timeCount_ = 0;
 	Vector2 pPos = world_->GetKeepDatas().playerPos_;
-	//characters_.push_back(new BackgroundPill(world_ , Vector2(pPos.x+2000, 500)));
-	//characters_.push_back(new BackgroundPill(world_,Vector2(pPos.x+2000, 200)));
-	//characters_.push_back(new BackgroundPill(world_,Vector2(pPos.x+2000,700)));
 	currentStage_ = currentStage;
 	
 	 ceilPos = Vector2(0, -200.f);
@@ -56,30 +53,10 @@ void BackgroundScreen::Update()
 
 		createWindTimeAndPos_.pop_front();
 	}
-	//std::vector<BackgroundCharacters*>::iterator itr = characters_.begin();
-	//while (itr != characters_.end())
-	//{
-	//	//size_t index = std::distance(characters_.begin(), itr);
-	//	//characters_[index]->Update();
-	//	(*itr)->Update();
-	//	if ((*itr)->isDead()) {
-	//		itr = characters_.erase(itr);
-	//	}
-	//	else {
-	//		++itr;
-	//	}
-	//}
-	
-	//for (auto& bgC : characters_) {
-	//	bgC->Update();
-	//	if (bgC->isDead());
-	//}
 }
 
 void BackgroundScreen::Draw() const
 {
-	//SetDrawBright(100.0f, 100.f, 100.f);
-
 	Vector2 camPos(world_->GetInv().Translation().x/2,0);
 	camPos.x = (int)camPos.x % (int)Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x;
 	float myds=world_->GetKeepDatas().changeLaneLerpPos_;
@@ -100,11 +77,6 @@ void BackgroundScreen::Draw() const
 	
 	Sprite::GetInstance().Draw(SPRITE_ID::CEILING_SPRITE, ceilPos);
 
-	//SetDrawBright(255, 255, 255);
-
-	//for (auto& bgC : characters_) {
-	//	bgC->Draw();
-	//}
 	if (BuildMode != 1)return;
 
 	DrawFormatString(700, 700, GetColor(255, 255, 255), "%f", myds);
@@ -117,10 +89,6 @@ void BackgroundScreen::End()
 
 void BackgroundScreen::addBGCharacters()
 {
-	//timeCount_--;
-	//if (timeCount_ <= 0) {
-	//	timeCount_ = defTimeCount_;
-		
 	createWindTimeAndPos_.clear();
 	timeCount_ = 0;
 	for (auto& isC : isCharactersPositionUsed_) {
@@ -135,25 +103,10 @@ void BackgroundScreen::addBGCharacters()
 
 			int yPos = Random::GetInstance().Range(0, 9);
 
-
-			//charactersPosition_[i];
-			//isCharactersPositionUsed_[i]=true;
-
-			//characters_.push_back(new BackgroundPill(world_, Vector2(2000+(i*100),charactersPosition_[yPos].y)+pPos));
-			//world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, Vector2(2000 + (i * 100), charactersPosition_[yPos].y) + pPos));
-
 			int createTime = Random::GetInstance().Range(0, 400);
 			createWindTimeAndPos_.push_back(WindTimeAndPos(createTime,Vector2(2000, charactersPosition_[yPos].y)));
-			//createWindTimeAndPos_[createTime] = Vector2(2000, charactersPosition_[yPos].y);
 		}
 		createWindTimeAndPos_.sort();
-		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2000, -200)));
-		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2300, 0)));
-		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2500, 200)));
-		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2600, -400)));
-		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 2900, 300)));
-		//characters_.push_back(new BackgroundPill(world_, Vector2(pPos.x + 3200, 0)));
-		//}
 }
 
 void BackgroundScreen::DownCeil()

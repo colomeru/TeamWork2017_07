@@ -35,7 +35,6 @@ GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
 	gameOverScreen_(), gameClearScreen_(), pauseScreen_(), stageLen_(0.f),
 	gamePlayMode_(0), currentStage_(Stage::Stage2), stageEffectScreen_()
-	//, posit(0,0,0), camera_pos_(0, 100, -100),target_(0, 0, 0)
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -126,19 +125,6 @@ void GamePlayScene::Initialize()
 		bgScreen_.Init(currentStage_);
 	}
 	world_->Initialize();
-	// アクター生成
-	//world_->Add(ACTOR_ID::SAMPLE_ACTOR, std::make_shared<SampleActor>(world_.get()));
-
-	//Vector3 position_ = posit;
-	//Vector3 target_ = posit;
-	//RangeF range = RangeF(0.f, 1000.f);
-	//float angle = 60.f;
-
-	//camera_ = std::make_shared<TPSCamera>(world_.get(), position_, target_, range, angle, Vector3::Up, 0);
-	//world_->Add(ACTOR_ID::CAMERA_ACTOR,camera_);
-
-	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<Stage>(world_.get()));
-
 
 	//ステージの最大レーン数(後々MapGeneratorからレーン数を受け取れるようにする)
 	int stageLaneSize = 3;
@@ -148,36 +134,14 @@ void GamePlayScene::Initialize()
 
 	stageGeneratorManager.SetStage(currentStage_);
 	stageLen_ = stageGeneratorManager.GetStageSize(currentStage_).x;
-	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<ClothesPin>(world_.get(), 2, Vector2(600.f, 0.f)));
 	enemGenerator_ = std::make_shared<EnemyGenerator>(world_.get(),currentStage_);
 	world_->Add(ACTOR_ID::ENEMY_ACTOR, enemGenerator_);
-	//world_->Add(ACTOR_ID::ENEMY_ACTOR, std::make_shared<ClothesTapper>(world_.get(),1,Vector2(-800.f,2000.f)));
-	
-	//world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<HairballGenerator>(world_.get(), 1, Vector2(0, 0)));
-
-	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 3, Vector2(200, 100)));
-	//world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<TestClothes>(world_.get(), CLOTHES_ID::BASE_CLOTHES, 4, Vector2(200, 100)));
-
 	maxLaneCount = stageLaneSize;
-	//本番用
-	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<TPSCamera>(world_.get()));
-	//テスト用
-	//world_->Add(ACTOR_ID::CAMERA_ACTOR, std::make_shared<MyTestCamera>(world_.get()));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 0, stageGeneratorManager.GetStageSize(currentStage_)+Vector2(200,0), Vector2(0, 0)));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 1, stageGeneratorManager.GetStageSize(currentStage_) + Vector2(200, 0), Vector2(0, 0)));
 	world_->Add(ACTOR_ID::LANE_ACTOR, std::make_shared<ClothesLine>(world_.get(), 2, stageGeneratorManager.GetStageSize(currentStage_) + Vector2(200, 0), Vector2(0, 0)));
 
 	world_->SetMaxSize((int)stageLen_-WINDOW_WIDTH/2);
-
-	//Camera::GetInstance().SetRange(0.f, 1000.f);
-	//Camera::GetInstance().SetViewAngle(60.f);
-	//Camera::GetInstance().Up.Set(Vector3::Up);
-	//Camera::GetInstance().Position.Set(camera_pos_);
-	//Camera::GetInstance().Target.Set(target_);
-	//Camera::GetInstance().Update();
-
-	//world_->InitializeInv(Vector2(ply1->GetPosition().x, ply1->GetPosition().y));
-	//world_->SetTarget(ply1.get());
 	
 	startScreen_ = StartScreen(world_.get(), maxLaneCount);
 	
@@ -188,10 +152,6 @@ void GamePlayScene::Initialize()
 	
 	Sound::GetInstance().StopBGM();
 	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_],DX_PLAYTYPE_LOOP);
-	//Sound::GetInstance().SetBGMVolume(stageBGMList_[currentStage_], 0.8f);
-
-	// フェードパネル初期化
-	//FadePanel::GetInstance().Initialize();
 	FadePanel::GetInstance().SetInTime(1.0f, 0.5f);
 	FadePanel::GetInstance().FadeIn();
 
@@ -208,78 +168,17 @@ void GamePlayScene::Update()
 	}
 	uiScreen_.Update(ply1->GetPosition());
 		
-	//if (isPlayerDead_) {
-	//	if (gameOverScreen_.Update(nextScene_)) {
-	//		isEnd_ = true;
-	//		if (nextScene_ == Scene::GamePlay) {
-	//			Initialize();
-	//		}
-	//	}
-	//	return;
-	//}
-	//// 更新
-	//world_->Update();
-	//// 終了
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE))
-	//	isEnd_ = true;
-
-	//int randT = Random::GetInstance().Range(0, 3);
-	//windTime_ -= randT;
-	//if (windTime_ <= 0) {
-	//	world_->sendMessage(EventMessage::BEGIN_WIND);
-	//	windTime_ = defWindTime_;
-	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
-	//	//Vector2 pss = Vector2(200, 200);
-	//	//ply1->setCurPHeadSPos(pss);
-	//	ply1->curPHeadSlip(true);
-	//}
-	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
-	////	world_->sendMessage(EventMessage::BEGIN_WIND);
-	////}
-	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::J)) {
-	////	world_->sendMessage(EventMessage::STRONG_WIND);
-	////}
-	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) {
-	////	world_->sendMessage(EventMessage::ATTENUATE_WIND);
-	////}
-	////if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
-	////	world_->sendMessage(EventMessage::END_WIND);
-	////}
-
-	////Camera::GetInstance().Position.Set(camera_pos_);
-	////Camera::GetInstance().Target.Set(target_);
-	////Camera::GetInstance().Update();
-	//if (ply1->isPlayerDead())isPlayerDead_ = true;
 }
 
 void GamePlayScene::Draw() const
 {
-	//if (gamePlayMode_ == 1)
 	bgScreen_.Draw();
-	//DrawFormatString(0, 00, GetColor(255, 255, 255), "GamePlayScene");
-
-	//DrawFormatString(700, 600, GetColor(255, 255, 255), "%f", ply1->GetAngle());
-
-	//CollisionParameter param = MyCol::IsHit_OBB_Segment(*ply1->GetActor(), *ply2->GetActor());
-	//if (param.colFrag) {
-	//	DrawFormatString(0, 500, GetColor(255, 255, 255), "%f:%f", param.colPos.x,param.colPos.y);
-	//	DrawCircle(param.colPos.x, param.colPos.y, 32, GetColor(255, 0, 0));
-	//}
-	//else
-	//{
-	//	DrawFormatString(0, 500, GetColor(255, 255, 255), "dame");
-
-	//}
 	// 描画
 	world_->Draw(maxLaneCount, world_->GetKeepDatas().playerLane_);
 
 	stageEffectScreen_.Draw();
-	//VECTOR pos1 = DXConverter::GetInstance().ToVECTOR(posit);
-	//VECTOR pos2 = DXConverter::GetInstance().ToVECTOR(posit);
 
 	uiScreen_.Draw();
-	//DrawCapsule3D(pos1, pos2, 1, 16, GetColor(255, 255, 255), GetColor(255, 255, 255), FALSE);
 
 	if (gamePlayMode_ == 2) {
 		gameOverScreen_.Draw();
@@ -313,7 +212,6 @@ Scene GamePlayScene::Next() const
 
 void GamePlayScene::End()
 {
-	//FadePanel::GetInstance().FadeOut();
 	// 初期化
 	ply1 = nullptr;
 	world_->Clear();
@@ -323,8 +221,6 @@ void GamePlayScene::End()
 
 	TweenManager::GetInstance().Clear();
 
-	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	//FadePanel::GetInstance().FadeOut();
 }
 
 void GamePlayScene::handleMessage(EventMessage message, void * param)
@@ -374,7 +270,6 @@ void GamePlayScene::handleMessage(EventMessage message, void * param)
 		break;
 	}
 	case EventMessage::ADD_SCORE: {
-		//スコア加算、後で修正あり
 		uiScreen_.AddScore((int)param);
 		break;
 	}
@@ -391,11 +286,6 @@ void GamePlayScene::baseUpdate()
 	// 更新
 	world_->Update();
 	ply1->deadLine();
-	// 終了
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::SPACE)) {
-	//	FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
-	//	FadePanel::GetInstance().FadeOut();
-	//}
 
 	int randT = Random::GetInstance().Range(0, 3);
 	windTime_ -= randT;
@@ -405,20 +295,13 @@ void GamePlayScene::baseUpdate()
 		windTime_ = defWindTime_[currentStage_];
 	}
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8)) {
-		//Vector2 pss = Vector2(200, 200);
-		//ply1->setCurPHeadSPos(pss);
-		//ply1->curPHeadSlip(true);
 		setNextMode(4);
 		TweenManager::GetInstance().StopAll();
 
 	}
 	if (BuildMode==1&&Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
-		//Vector2 pss = Vector2(200, 200);
-		//ply1->setCurPHeadSPos(pss);
-		//ply1->curPHeadSlip(true);
 		setNextMode(3);
 	}
-	//if (world_->GetIsGameClear())setNextMode(3);
 
 	bgScreen_.Update();
 	changeScreen_.Update();
@@ -441,7 +324,6 @@ void GamePlayScene::pauseUpdate()
 			}
 		}
 		else {
-			//isEnd_ = true;
 			FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
 			FadePanel::GetInstance().FadeOut();
 		}
@@ -459,11 +341,6 @@ void GamePlayScene::overUpdate()
 			FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
 		}
 		FadePanel::GetInstance().FadeOut();
-		//isEnd_ = true;
-		//if (nextScene_ == Scene::GamePlay) {
-		//	End();
-		//	Initialize();
-		//}
 	}
 
 }
@@ -491,13 +368,6 @@ void GamePlayScene::clearUpdate()
 			}
 			FadePanel::GetInstance().FadeOut();
 
-			//isEnd_ = true;
-			//if (nextScene_ == Scene::GamePlay) {
-			//	End();
-			//	currentStage_ = nextStageList_[currentStage_];
-			//	Initialize();
-				//setNextMode(6);
-
 		}
 	}
 	else {
@@ -519,18 +389,10 @@ void GamePlayScene::nextUpdate()
 	if (changeCount_ <= 0) setNextMode(3);
 	bgScreen_.DownCeil();
 
-	//if (ply1->) {
-	//	End();
-	//	currentStage_ = nextStageList_[currentStage_];
-	//	Initialize();
-	//}
 }
 
 void GamePlayScene::nextSwitchUpdate()
 {
-	//End();
-	//currentStage_ = nextStageList_[currentStage_];
-	//Initialize();
 }
 
 void GamePlayScene::setNextMode(int mode) {
@@ -560,7 +422,6 @@ void GamePlayScene::setNextMode(int mode) {
 		}
 		Sound::GetInstance().SetBGMVolume(BGM_ID::STAGE_CLEAR_BGM, 0.7f);
 		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);
-		//gameClearScreen_.SetStarCount();
 		break;
 	}
 	case 4: {

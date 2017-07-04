@@ -48,32 +48,6 @@ void TutorialTextScreen::Init(const std::string& filename)
 	textChangeTimeCount_ = defTextChangeTime;
 }
 
-//void TutorialTextScreen::Update()
-//{
-//	sinCount_+=5; sinCount_ %= 360;
-//
-//	textCount_++;
-//	if (textCount_/textSpeed >= GetMaxTextSize()){
-//		textChangeTimeCount_ -= Time::DeltaTime;
-//
-//	}
-//	if (textChangeTimeCount_ <= 0.0f) {
-//		textChangeTimeCount_ = defTextChangeTime;
-//		currentTextLine_++;
-//		
-//		//currentTextLine_ = min(currentTextLine_, drawText_.size() - 1);
-//	
-//		if (currentTextLine_>=drawText_.size()/3) {
-//			currentTextLine_ = 0;
-//		}
-//
-//		textCount_ = 0;
-//	}
-//
-//	textCount_ = min(textCount_, GetMaxTextSize()*textSpeed);
-//
-//}
-
 bool TutorialTextScreen::TutorialUpdate()
 {
 	sinCount_ += 5; sinCount_ %= 360;
@@ -83,7 +57,6 @@ bool TutorialTextScreen::TutorialUpdate()
 		textChangeTimeCount_ -= Time::DeltaTime;
 
 	}
-	//if (textChangeTimeCount_ <= 0.0f) {
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)||GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		if (textCount_ < GetMaxTextSize()*textSpeed) {
 			textCount_ = GetMaxTextSize()*textSpeed;
@@ -96,8 +69,6 @@ bool TutorialTextScreen::TutorialUpdate()
 
 		if (currentTextLine_ >= (int)drawText_.size() / 3) {
 			currentTextLine_ = drawText_.size() / 3 - 1;
-			//currentTextLine_ = 0;
-			//textCount_ = 0;
 			return true;
 		}
 
@@ -135,10 +106,6 @@ void TutorialTextScreen::Draw() const
 
 	FontManager::GetInstance().DrawTextApplyFont(200, 150, GetColor(255, 255, 255), FONT_ID::TUTORIAL_FONT, drawString_.c_str());
 
-	 
-	 
-	 //Sprite::GetInstance().Draw(SPRITE_ID::TO_STAGESELECT_SPRITE, Vector2(1500.f, 200.f), MathHelper::Sin((float)sinCount_));
-	
 }
 
 void TutorialTextScreen::End()

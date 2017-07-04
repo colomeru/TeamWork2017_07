@@ -83,7 +83,6 @@ public:
 		if (changeType_ == LaneChangeType::LaneChange_Normal) {
 			return;
 		}
-		//drawPos_ = GetDrawPosVect(position_);
 		LaneChangeFall();
 	}
 	virtual void LaneChangeFall() override {
@@ -94,15 +93,12 @@ public:
 		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 
 		if (changeType_ == LaneChangeType::LaneChange_Fall) {
-			//drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
 		}
 	}
 	bool isLaneChangeFall() const{
 		return changeType_ == LaneChangeType::LaneChange_Fall;
 	}
-	//振り子運動
-	void Pendulum(Vector2 fulcrum, float length);
 	void StartPendulum();
 
 	Vector2 GetHeadPos(int headNum)const {
@@ -135,14 +131,12 @@ public:
 	void changeHead() {
 		//回転した時点でSlip状態を直す
 		isSlipped_ = false;
-		//pHeadLength_[currentHead_] = defHeadLength*HeadShootMult;
 		currentHead_++;
 		if (currentHead_ >= (int)pHeads_.size())currentHead_ = 0;
 		headChangeTime_ = defHeadChangeTime;
 	}
 	//使用する頭を左隣の物に変更
 	void backChangeHead() {
-		//pHeadLength_[currentHead_] = defHeadLength*HeadShootMult;
 		currentHead_--;
 		if (currentHead_ < 0)currentHead_ = pHeads_.size() - 1;
 		headChangeTime_ = -defHeadChangeTime;
@@ -201,20 +195,12 @@ public:
 	//worldの共有データに自分の情報を代入する
 	void worldSetMyDatas();
 
-	//void SetIsCanChangeLane(bool isCanChange) {
-	//	if (laneChangeCoolTime_ > 0)return;
-	//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
-	//	isCanChangeLane_ = isCanChange;
-	//}
 	void SetNextLane(int addNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal);
 	void setCurPHeadSPos(const Vector2& sPos) {
 		if (isTutorialText_) return;
 
-		//pHeads_[currentHead_]->setPHeadStopPos(sPos);
 		SetMultiplePos(sPos - stopPos_);
 		stopPos_ = sPos;
-		//Vector2 lngPs = pHeads_[currentHead_]->GetPosition() - position_;
-		//MultipleInit(lngPs.Length(), stopPos_, MathAngle(position_ - pHeadPoses_[currentHead_], Vector2::Down));
 
 	}
 	void setMaxLaneSize(int size) {
@@ -225,7 +211,6 @@ public:
 	//プレイヤーが死んでるか
 	bool isPlayerDead()const {
 		if(laneNum_==(maxLaneSize_-1)&&position_.y >= WINDOW_HEIGHT-200)return true;
-		//if (position_.y >= WINDOW_HEIGHT)return true;
 
 		for (auto pHD : pHeadDead_) {
 			if (!pHD)return false;
@@ -286,8 +271,6 @@ private:
 	void SetDrawPoint(const Vector2& bodyPoint, const Vector2& headPoint);
 	//首の各描画位置を設定する
 	void SetDrawNeckParts(const Vector2& bodyPoint, const Vector2& headPoint);
-	//入力による動作をまとめる
-	void PlayerInputControl();
 	//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
 
 	void PHeadLengthReset() {
@@ -314,7 +297,6 @@ private:
 		if (updateNum < 0) {
 			nextVel_ = Vector2(0, -15.f);
 			pGrav_ = 0.f;
-			//position_.y += defDrawLinePosY[2]- defDrawLinePosY[1];
 			PHeadChanger();
 			SetMode(MODE_FALL);
 			world_->sendMessage(EventMessage::LANE_CHANGE_UP_END);
@@ -336,13 +318,9 @@ private:
 
 		laneNum_ = MathHelper::Clamp(laneNum_, 0, (maxLaneSize_ - 1));
 
-		//velocity_ = nextVel_;
 		pendulumVect_ = nextVel_;
 
 		if(GetIsBiteMode())playerMode_ = MODE_SLIP;
-		//頭の長さをリセット
-		//PHeadChanger();
-		//PHeadLengthReset();
 
 		world_->sendMessage(EventMessage::LANE_CHANGE_END);
 
@@ -369,22 +347,6 @@ private:
 
 	int addscorelist_[3];
 
-	float spdLimit;
-
-	//衝突しているか
-	bool isHit_;
-
-	//振り子関連
-	//支点座標
-	Vector2 fulcrum_;
-	//角度
-	float rot_;
-	//角速度
-	float rot_spd_;
-	//紐の長さ
-	float length_;
-	//重力加速度
-	float gravity_;
 	//振り子移動の摩擦
 	float friction;
 	//振り子移動によるベクトルを作り出す
@@ -397,8 +359,6 @@ private:
 	std::vector<float> mRot_spd;
 	std::vector<float> correctionLens;
 	std::vector<DrawPos> drawPoints;
-
-
 
 	//Headが静止する位置を格納する
 	Vector2 stopPos_;
@@ -448,7 +408,6 @@ private:
 	bool isNextLaneBite_;
 
 	int laneAddNum_;
-	//bool isCanChangeLane_;
 
 	int chainLockCoolTime_;
 	
@@ -465,5 +424,10 @@ private:
 	std::map<CLOTHES_ID, float> slipCountMult_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
+
+private:
+	const float gravity_{0.5f};
+	const float spdLimit{ 2.75f };
+
 };
 

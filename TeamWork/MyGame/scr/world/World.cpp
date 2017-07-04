@@ -46,13 +46,10 @@ void World::Update()
 			targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, unlockYPos_, 0));
 		}
 
-		//*Matrix::CreateRotationZ(targetAct_->GetAngle());
 	}
 
 	isChangeFrame_ = false;
 	if (isChangeCam_) {
-		//keepDatas_.SetPlayerNextLane(addNum_);
-		//camShootSpd_ += 0.1f;
 		if (addNum_ > 0) camShootSpd_ -= 0.1f;
 		else camShootSpd_ += 0.1f;
 		camShootSpd_ = max(camShootSpd_, 0.1f);
@@ -70,24 +67,16 @@ void World::Update()
 			keepDatas_.isFallCamMode_=false;
 		}
 	}
-	//actors_.Update();
 	updateFunctionMap_[isChangeCam_]();
 	// 受動更新
 	if (!manualStackActor_.empty()&&!isChangeCam_)
 		manualStackActor_.top()->OnUpdate();
 
-
-
-	// カメラ更新
-	//if (!stackCamera_.empty())
-	//	stackCamera_.top()->OnUpdate();
 }
 
 // 描画
 void World::Draw(const int laneCount, const int playerLane) const
 {
-	//DrawFormatString(0,600,GetColor(255,255,255),"%f:%f", inv_.Translation().x, inv_.Translation().y);
-	//actors_.Draw(laneCount, playerLane);
 	if(!isChangeFrame_)actors_.Draw(laneCount, playerLane);
 
 	if (BuildMode != 1)return;
@@ -185,10 +174,6 @@ void World::inv(const Matrix & mat)
 	float clampPosX = MathHelper::Clamp((int)playerMat.Translation().x, -100, maxSize_);
 	float clampPosY = MathHelper::Clamp((int)playerMat.Translation().y, -10000, 999999);
 
-	//if (scrool.scroolJudge.x == 0)
-	//	clampPosX = playerScreenPos_.x;
-	//if (scrool.scroolJudge.y == 0)
-	//	clampPosY = playerScreenPos_.y;
 	playerMat.Translation(Vector3(clampPosX, clampPosY, 0.0f));
 
 	//行くべき位置を設定(matrix版)
@@ -201,15 +186,15 @@ void World::inv(const Matrix & mat)
 	Spring(pos, resPos, velo, 0.2f);
 	//補正された移動マトリックス代入
 	inv_ = Matrix::CreateTranslation(Vector3(
-		pos.x,//*scrool.scroolJudge.x,
-		pos.y,//*scrool.scroolJudge.y,
+		pos.x,
+		pos.y,
 		0.0f));
 
 	//1フレーム後の座標
 	mCurPos = Vector2(inv_.Translation().x, inv_.Translation().y);
 	//移動量を計算
 	mVelo = mPrePos - mCurPos;
-	mVelo = Vector2(mVelo.x/**scrool.scroolJudge.x*/, mVelo.y /** scrool.scroolJudge.y*/);
+	mVelo = Vector2(mVelo.x, mVelo.y);
 
 }
 Matrix World::InitializeInv(Vector2 position)
@@ -227,7 +212,6 @@ Matrix World::InitializeInv(Vector2 position)
 	//1フレーム後の座標
 	mCurPos = Vector2(inv_.Translation().x, inv_.Translation().y);
 	//移動量を計算
-	//mVelo = mPrePos - mCurPos;
 	OutputDebugString(std::to_string(position.x).c_str());
 	OutputDebugString(":");
 	OutputDebugString(std::to_string(position.y).c_str());

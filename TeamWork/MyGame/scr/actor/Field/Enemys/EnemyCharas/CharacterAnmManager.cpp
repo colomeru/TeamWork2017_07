@@ -56,7 +56,6 @@ void CharacterAnmManager::Draw(const Vector2& position,const Vector2& origin,con
 	}
 	int targetFrame = ((int)roundf((timeCount_*60.f) / anmChangeFrame_));// % anmID_.size();
 	targetFrame = MathHelper::Clamp(targetFrame, 0, anmID_.size() - 1);
-	//int targetFrame = ((int)roundf((timeCount_*60.f) / anmChangeFrame_));
 	Sprite::GetInstance().Draw(anmID_.at(targetFrame),position,origin,alpha,size);
 
 

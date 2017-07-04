@@ -30,15 +30,12 @@ public:
 	virtual void Update() = 0;
 	// 描画
 	void BaseDraw()const {
-		//if (!isDraw_ || !isUpdate_)return;
 		if (!isDraw_)return;
 		else
 		{
 			int drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
 			drawLane = MathHelper::Abs(drawLane);
-			//SetDrawBlendMode(DX_BLENDMODE_ALPHA, alphaSetter[drawLane]);
 			Draw();
-			//SetDrawBlendMode(DX_BLENDMODE_NOBLEND,0);
 
 		}
 	}
@@ -74,7 +71,6 @@ public:
 			isUpdate_ = true;
 		}
 		else {
-			//isUpdate_ = (world_->GetKeepDatas().playerPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().playerPos_.x < cutSize[1]);
 			isUpdate_ = drawPos_.x >= -WINDOW_WIDTH / 2.f&&drawPos_.x <= WINDOW_WIDTH*1.5f;
 		}
 	}
@@ -107,7 +103,6 @@ public:
 	}
 	bool StartModeUpdate() {
 		StartOnlyUpdate();
-		//isDraw_ = (world_->GetKeepDatas().startPointPos_.x - position_.x < cutSize[0] && position_.x - world_->GetKeepDatas().startPointPos_.x < cutSize[1]);
 		isDraw_ = drawPos_.x >= -WINDOW_WIDTH / 2.f&&drawPos_.x <= WINDOW_WIDTH*1.5f;
 		isUpdate_ = true;
 
@@ -133,12 +128,6 @@ public:
 		drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
 		
 		if (world_->GetIsFreeCamY_()&&drawLane < 0) {
-			//float endPos=retPos.y + defDrawLinePosY[drawLane + 1];
-			//
-			//retPos.y += world_->GetKeepDatas().fallAddPos_;
-			//retPos += drawAddPos_;
-
-			//retPos.y = max(endPos, retPos.y);
 
 			retPos.y += defDrawLinePosY[drawLane + 1]*1.2f;
 
@@ -146,15 +135,11 @@ public:
 		}
 
 		if (MathHelper::Abs (drawLane) >= 2) {
-			//isDraw_ = false;
 			retPos.y = -500;
 		}
 		else {
-			//isDraw_ = true;
 			retPos.y += defDrawLinePosY[drawLane + 1];
 
-			//drawLane = MathHelper::Abs(drawLane);
-			//spriteAlpha_ = alphaSetter[drawLane];
 		}
 		retPos += drawAddPos_;
 		return retPos;
@@ -170,12 +155,6 @@ public:
 		drawLane = laneNum - world_->GetKeepDatas().playerLane_;
 
 		if (world_->GetIsFreeCamY_() && drawLane < 0) {
-			//float endPos=retPos.y + defDrawLinePosY[drawLane + 1];
-			//
-			//retPos.y += world_->GetKeepDatas().fallAddPos_;
-			//retPos += drawAddPos_;
-
-			//retPos.y = max(endPos, retPos.y);
 
 			retPos.y += defDrawLinePosY[drawLane + 1] * 1.2f;
 
@@ -183,15 +162,11 @@ public:
 		}
 
 		if (MathHelper::Abs(drawLane) >= 2) {
-			//isDraw_ = false;
 			retPos.y = -500;
 		}
 		else {
-			//isDraw_ = true;
 			retPos.y += defDrawLinePosY[drawLane + 1];
 
-			//drawLane = MathHelper::Abs(drawLane);
-			//spriteAlpha_ = alphaSetter[drawLane];
 		}
 		retPos += drawAddPos_;
 		return retPos;
@@ -245,18 +220,6 @@ protected:
 		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 	}
 private:
-	//CollisionParameter Test_Col(const Actor& other) const;
-
-	//// スプライトの当たり判定（２次元のOBB vs OBB）
-	//CollisionParameter IsHit_OBB_OBB(const Actor& sprite2);
-	//CollisionParameter IsHit_OBB_Segment(const Actor& sprite2);
-	//CollisionParameter IsHit_Segment_Segment(const Actor& sprite2);
-	//CollisionParameter IsHit_Circle_Circle(const Actor& sprite2);
-	//CollisionParameter IsHit_Circle_Segment(const Actor& sprite2);
-	//CollisionParameter IsHit_OBB_Circle(const Actor& sprite2);
-	//CollisionParameter IsHit_OBB_Clothes(const Actor & sprite2);
-	//CollisionParameter IsHit_Clothes_OBB(const Actor & sprite2);
-
 	/* コピー禁止 */
 	Actor(const Actor& other) = delete;
 	Actor& operator = (const Actor& other) = delete;
@@ -295,6 +258,4 @@ protected:
 	
 	// ファンクションマップ
 	std::map<COL_ID, std::function<CollisionParameter(const Actor&, const Actor&)>> colFuncMap_;
-	//std::map<int, std::function<void()>> laneChangeFunctionMap_;
-	//std::map<COL_ID, std::function<CollisionParameter(const Actor& sprite2)>> colFuncMap_;
 };

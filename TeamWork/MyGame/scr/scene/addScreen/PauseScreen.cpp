@@ -84,8 +84,6 @@ bool PauseScreen::Update(Scene& nextScene, returnGameType& type)
 			sinCount_ = defSinC;
 		
 	}
-	//inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
-
 	drawUpdate();
 
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {

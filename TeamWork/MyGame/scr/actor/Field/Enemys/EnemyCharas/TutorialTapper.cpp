@@ -7,14 +7,12 @@
 #include"../../../../sound/sound.h"
 
 static const float moveTime = 2.0f;
-//static const float TapTime = 2.0f;
 static const float IdleTime = 3.0f;
 static const Vector2 shiftPos = Vector2(-200.f, 200.f);
 
 TutorialTapper::TutorialTapper(IWorld * world, int laneNum, Vector2 pos) :
 	Enemys(world, laneNum, pos), timeCount_(0.f), targetPos_(pos), basePos_(pos), updateMode_(MODE_IDLE), spriteID_(SPRITE_ID::CLOTHES_TAP_01_SPRITE), anmManager_(), shiftPos_(shiftPos)
 {
-	//parameter_.radius = Sprite::GetInstance().GetSize(spriteID_).x/2;
 	parameter_.radius = 100.f;
 
 	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_01_SPRITE);
@@ -25,8 +23,6 @@ TutorialTapper::TutorialTapper(IWorld * world, int laneNum, Vector2 pos) :
 	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_06_SPRITE);
 	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_07_SPRITE);
 	anmManager_.Add(SPRITE_ID::CLOTHES_TAP_08_SPRITE);
-
-	//anmManager_.ReverseAnm();
 
 	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_01_SPRITE);
 	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_02_SPRITE);
@@ -48,10 +44,6 @@ TutorialTapper::TutorialTapper(IWorld * world, int laneNum, Vector2 pos) :
 	anmManager2_.Add(SPRITE_ID::CLOTHES_TAP_DEAD_18_SPRITE);
 
 	anmManager2_.SetAnmSpeed(8);
-	//auto ePx = std::make_shared<EaseNode>(&position_.x, EaseType::Linear, 0.f, -200.f, 5.f, [this]() {SetNextTapPos(); });
-	////auto ePy = std::make_shared<EaseNode>(&position_.y, EaseType::Linear, position_.y, 5.f, 5.f, [this]() {SetNextTapPos(); });
-	//EasingManager::GetInstance().Add(ePx);
-	////EasingManager::GetInstance().Add(ePy);
 	updateFunctionMap_[MODE_MOVE] = std::bind(&TutorialTapper::MoveUpdate, this);
 	updateFunctionMap_[MODE_TAP] = std::bind(&TutorialTapper::TapUpdate, this);
 	updateFunctionMap_[MODE_IDLE] = std::bind(&TutorialTapper::IdleUpdate, this);
@@ -77,7 +69,6 @@ void TutorialTapper::Draw() const
 	auto origin = Sprite::GetInstance().GetSize(spriteID_) / 2;
 	if (updateMode_ == MODE_DEAD)anmManager2_.Draw(drawPos_ + Vector2(0, 300.f), origin, Vector2(2.0f, 2.0f));
 	else anmManager_.Draw(drawPos_ + Vector2(0, 300.f), origin, Vector2(2.0f, 2.0f));
-	//Sprite::GetInstance().Draw(spriteID_, drawPos_+Vector2(0,400), origin,Vector2(2.f,2.f));
 
 	if (BuildMode != 1)return;
 
@@ -150,7 +141,6 @@ void TutorialTapper::ToMoveMode()
 	//d=かかる秒数
 	TweenManager::GetInstance().Add(&position_, EaseInOutQuad, basePos_, moveVec, moveTime);
 
-	//anmManager_.ResetAnm();
 	anmManager_.ReverseAnm();
 
 	shiftPos_ -= shiftPos;
@@ -167,7 +157,6 @@ void TutorialTapper::ToIdleMode()
 void TutorialTapper::ToDeadMode()
 {
 	updateMode_ = MODE_DEAD;
-	//anmManager_.ReverseAnm();
 	shiftPos_ -= shiftPos;
 }
 
@@ -176,13 +165,8 @@ void TutorialTapper::MoveUpdate()
 	timeCount_ += 0.016f;
 
 	anmManager_.Update();
-	//ここの更新はMoveModeになるときに1度だけ移動量指定をする(現在移動先を指定するFT系は、ループしないもののみ利用可能
-	//Vector2 movePos = targetPos_ - basePos_;
-	//Vector3 d3pos = Easing::EaseInOutQuad(timeCount_, Vector3(basePos_), Vector3(movePos), moveTime);
-	//position_ = Vector2(d3pos.x, d3pos.y);
 
 	if (timeCount_ > moveTime) {
-		//ToTapMode();
 	}
 }
 
@@ -190,9 +174,7 @@ void TutorialTapper::TapUpdate()
 {
 	timeCount_ += 0.016f;
 	anmManager_.Update();
-	//if (timeCount_ > TapTime) {
 	if (anmManager_.IsEndAnimation()) {
-		//PlayTap();
 		ToIdleMode();
 	}
 
@@ -207,7 +189,6 @@ void TutorialTapper::IdleUpdate()
 	if (BuildMode == 1 && Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z))ToDeadMode();
 
 	if (timeCount_ > IdleTime) {
-		//ToMoveMode();
 	}
 
 }

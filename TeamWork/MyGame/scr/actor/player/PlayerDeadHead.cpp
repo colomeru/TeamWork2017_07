@@ -4,7 +4,6 @@
 PlayerDeadHead::PlayerDeadHead(IWorld * world, const Vector2& position) :
 	Actor(world), sinCount_(0)
 {
-	//position_ = position;
 	position_ = Vector2(WINDOW_WIDTH/2,WINDOW_HEIGHT);
 	laneNum_ = world_->GetKeepDatas().playerLane_;
 }

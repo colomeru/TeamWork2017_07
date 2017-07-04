@@ -22,7 +22,6 @@ public:
 	void SetSwordVel(const Vector2& vel) {
 		position_ = player_->GetPosition();
 		swordEndPos_ = position_+(vel*(float)Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).y);
-		//swordStartPos_ = (position_ + swordEndPos_) / 2;
 		
 		swordStartPos_= position_ + (swordEndPos_ - position_).Normalize()*128.f;
 		
@@ -54,7 +53,6 @@ public:
 		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 
 		if (player_->isLaneChangeFall()) {
-			//drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
 		}
 	}

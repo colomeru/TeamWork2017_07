@@ -44,11 +44,8 @@ private:
 	int timeCount_;
 	Vector2 ceilPos;
 
-	//std::vector<BackgroundCharacters*> characters_;
-
 	std::vector<Vector2> charactersPosition_;
 	std::vector<bool> isCharactersPositionUsed_;
-	//std::map<int, Vector2> createWindTimeAndPos_;
 	std::list<WindTimeAndPos> createWindTimeAndPos_;
 	
 	std::map<Stage,SPRITE_ID> BGList_;

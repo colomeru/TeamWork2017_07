@@ -47,7 +47,6 @@ void TitleScene::Initialize()
 		Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM, DX_PLAYTYPE_LOOP);
 		Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
 	}
-	//FadePanel::GetInstance().Initialize();
 	FadePanel::GetInstance().SetInTime(0.5f);
 	FadePanel::GetInstance().FadeIn();
 	isTrigger_ = true;
@@ -71,12 +70,6 @@ void TitleScene::Update()
 	}
 	
 	timer += Time::DeltaTime;
-	// XV
-	// I—¹
-	/*Camera::GetInstance().Position.Set(Vector3 (0,0,-50));
-	Camera::GetInstance().Target.Set(Vector3(0,0 ,0));
-	Camera::GetInstance().Update();
-	*/
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 		if (selectNum_ == 0) {
 			FadePanel::GetInstance().AddCollBack([=]() {
@@ -125,7 +118,6 @@ void TitleScene::Draw() const
 	bgScreen_.Draw();
 
 
-	//DrawFormatString(100, 100, GetColor(255, 255, 255), "TitleScene");
 	auto drawpos = Vector2(WINDOW_WIDTH / 2, 450) ;
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, drawpos, origin, Vector2::One);
@@ -159,12 +151,8 @@ Scene TitleScene::Next() const
 
 void TitleScene::End()
 {
-	//Sound::GetInstance().StopBGM();
 	world_->Clear();
 	CheatData::getInstance().SetStartStage(0);
-
-	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	//FadePanel::GetInstance().FadeOut();
 }
 
 void TitleScene::handleMessage(EventMessage message, void * param)

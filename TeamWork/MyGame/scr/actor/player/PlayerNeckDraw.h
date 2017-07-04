@@ -30,7 +30,6 @@ public:
 		}
 		addvec = toV.Normalize()*(float)Sprite::GetInstance().GetSize(SPRITE_ID::NECK_CHAIN1_SPRITE).y*surp;
 		if (surp >= 0.05f) {
-			//DrawCircle((drawpos + addvec).x, (drawpos + addvec).y, 3, GetColor(255, 0, 0));
 			Sprite::GetInstance().Draw(ids_.at(1), drawpos + addvec, origin, Vector2::One*surp, angle, TRUE, FALSE);
 		}
 	}

@@ -15,7 +15,6 @@ public:
 	TutorialTextScreen(World* world);
 
 	void Init(const std::string& filename);
-	//void Update();
 	bool TutorialUpdate();
 	// •`‰æ
 	void Draw() const;

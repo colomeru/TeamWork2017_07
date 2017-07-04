@@ -20,7 +20,6 @@ LaneChangeWind::LaneChangeWind(IWorld* world, const Vector2& position, WindDir d
 void LaneChangeWind::Update()
 {
 	position_ += deadLines_[dir_] * 30.f;
-	//position_.y += 3.f;
 
 	alphaTime_ += 0.016f * (200 + 50 * speed_);
 	alpha_ = MathHelper::Sin(alphaTime_);
@@ -38,7 +37,6 @@ void LaneChangeWind::CamMoveOnlyUpdate()
 
 void LaneChangeWind::Draw() const
 {
-	//Vector2 drawPos = GetDrawPosVect(position
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::WIND_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::WIND_SPRITE, position_, origin, alpha_, Vector2::One, windAngles_.at(dir_), true, false);
 

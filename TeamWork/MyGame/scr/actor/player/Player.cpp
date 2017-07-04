@@ -31,10 +31,10 @@ const float oneLength = 30.f;
 
 Player::Player(IWorld * world,int maxLaneSize, int startLane)
 	:Actor(world), isUseKey_(true), clearAddRot_(0.0f), isTutorialText_(false),
-	isHit_(false), fulcrum_(500.0f, 200.0f), rot_(135.f), rot_spd_(-3.0f), length_(300.0f), gravity_(0.5f), currentHead_(0),
+	currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL), isNextPushKey_(true),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower), isSlipped_(false), chainLock_(false),/* isCanChangeLane_(false),*/
-	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), spdLimit(2.75f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
+	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), isCanNextHeadRot(true), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
 	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), isPlayerFallLane_(false), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero)
 
 {
@@ -129,30 +129,19 @@ void Player::Update()
 	//レーン変更のクールタイムを設定
 
 	if(!GetIsClearShoot())pendulumVect_ -= pendulumVect_*0.05f;
-
-	length_ = Vector2::Distance(pHeads_[currentHead_]->GetPosition(), position_);
-	//if(!pHeads_[currentHead_]->getIsHit())pGrav_+= defPGravPow;
-	
-	//if (!GetIsBiteMode())pGrav_ += defPGravPow;
 	
 	velocity_ = Vector2::Zero;
-	isHit_ = false;
 
 	//重力
 	velocity_.y += pGrav_*pGrav_*defGravAddPow;
 
 	//移動したかをリセットしてから入力関数に入る
 	isNextLaneBite_ = false;
-	//入力による動作をまとめた関数
-	PlayerInputControl();
 	//自分の状態に応じた更新
 	updateFunctionMap_[playerMode_]();
 
 	//Headの表示レーンを本体に合わせる
 	SetAllHeadLaneNum();
-
-	//自分,相手のID,Colの種類
-	//world_->SetCollideSelect(shared_from_this(), ACTOR_ID::STAGE_ACTOR, COL_ID::BOX_CLOTHES_COL);
 
 	//行列にangleをかける
 	parameter_.mat += Matrix::CreateRotationZ(angle_);
@@ -167,14 +156,7 @@ void Player::Update()
 
 void Player::Draw() const
 {
-	//auto pos_1 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation());
-	//auto pos_2 = DXConverter::GetInstance().ToVECTOR(parameter_.mat.Translation() + Vector3(0, 10, 0));
-	//DrawCapsule3D(pos_1, pos_2, 5.0f, 4, GetColor(255, 0, 0), GetColor(255, 0, 0), true);
-
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
-
 	auto is = Matrix::CreateRotationZ(angle_);
-	//auto pos = drawPos_;
 	auto pos = GetDrawPosVect(position_);
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
 
@@ -182,19 +164,12 @@ void Player::Draw() const
 	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
 	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
 	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
-	//auto seg = Vector3(+sizeVec.x, 0)*is;
 
 	//左上,右上,左下,右下
 	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
 	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	//Model::GetInstance().Draw(MODEL_ID::PLAYER_MODEL, parameter_.mat);
-	//DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-	//DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-	//DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	//DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	//DrawCircle(drawPos_.x, drawPos_.y, pHDist.Length(), GetColor(255, 255, 255));
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;
 	float aHeadAngle = (360.f / (float)pHeads_.size());
 	float angle = currentHead_*aHeadAngle + aHeadAngle*(headChangeTime_ / defHeadChangeTime);
@@ -217,55 +192,10 @@ void Player::Draw() const
 
 		PlayerNeckDraw().Draw(GetDrawPosVect(pHeadPoses_[i]), pHeads_[i]->GetDrawPos());
 	}
-	//auto p = drawPoints[0];
-	//DrawRectModiGraph(p.p0.x, p.p0.y, p.p1.x, p.p1.y, p.p2.x, p.p2.y, p.p3.x, p.p3.y, 0, 0, 63, 91 * correctionLens[0], hHead, 1);
-
-	//if (!pHeadDead_[currentHead_]) {
-	//	for (int i = drawPoints.size() - 1; i > 0; i--) {
-	//		auto p = drawPoints[i];
-	//		Vector2 p0 = GetDrawPosVect(p.p0);
-	//		Vector2 p1 = GetDrawPosVect(p.p1);
-	//		Vector2 p2 = GetDrawPosVect(p.p2);
-	//		Vector2 p3 = GetDrawPosVect(p.p3);
-	//		DrawRectModiGraph(
-	//			p0.x, p0.y,
-	//			p1.x, p1.y,
-	//			p2.x, p2.y,
-	//			p3.x, p3.y,
-	//			0, 0, 41, 76 * correctionLens[i],
-	//			Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
-	//	}
-	//}
 
 	if (BuildMode != 1)return;
 	
-	//DrawLine(pos.x - seg.x, pos.y-seg.y, pos.x + seg.x, pos.y+seg.y, GetColor(255, 255, 255));
-	//DrawFormatString(0, 60, GetColor(255, 255, 255), "position x:%f y:%f z:%f", pos.x, pos.y);
-	//DrawFormatString(0, 80, GetColor(255, 255, 255), "angle %f", velocity_.y);
-	//DrawFormatString(0, 100, GetColor(255, 255, 255), "%d", laneNum_);
 	DrawFormatString(50, 100, GetColor(255, 255, 255), "%d", playerMode_);
-	//DrawFormatString(400, 100, GetColor(255, 255, 255), "%f",angle_);
-	//if (isShootMode_>=1)DrawFormatString(0, 700, GetColor(255, 255, 255), "true");
-	//else DrawFormatString(0, 700, GetColor(255, 255, 255), "false");
-	//DrawFormatString(0, 700, GetColor(255, 255, 255), "%f:%f", pHeadPoses_[currentHead_].x, pHeadPoses_[currentHead_].y);
-	//DrawFormatString(400, 100, GetColor(255, 255, 255), "%f:%f",GamePad::GetInstance().Stick().x, GamePad::GetInstance().Stick().y);
-	//int count = 0;
-	//for (auto sgT : pHeadLength_) {
-	//DrawFormatString(300, 300 + (30 * count),GetColor(255,255,255),"%f",sgT );
-	////if (pHeadDead_[count])DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "true");
-	////else DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "false");
-	//count++;
-	//}
-	//for (int i = 0; i < fPos_.size(); i++)
-	//{
-	//	Sprite::GetInstance().Draw(SPRITE_ID::HITO_SPRITE, multiplePos[i], Vector2(16, 32), Vector2::One, mRot[i] - 90.0f);
-	//	//Sprite::GetInstance().Draw(SPRITE_ID::LANE_SPRITE, multiplePos[i], Vector2(64, 25), Vector2::One, mRot[i]);
-	//	//DrawModiGraph(pos[i][0].x, pos[i][0].y, pos[i][1].x, pos[i][1].y, pos[i][2].x, pos[i][2].y, pos[i][3].x, pos[i][3].y, gHandle, true);
-
-	//	DrawCircle(multiplePos[i].x, multiplePos[i].y, (int)parameter_.radius, GetColor(255, 255, 255), 0, 1);
-	//	DrawLine(fPos_[i].x, fPos_[i].y, multiplePos[i].x, multiplePos[i].y, GetColor(239, 117, 188), 1); //ピンク
-	//																									  //DrawBox(fPos[i].x - 20.0f, fPos[i].y, multiplePos[i].x + 20.0f, multiplePos[i].y, GetColor(239, 117, 188), 1); //ピンク
-	//}
 	int count = 0;
 	for (auto srmt : pHeadDead_)
 	{
@@ -284,7 +214,6 @@ void Player::OnUpdate()
 
 void Player::OnCollide(Actor& other, CollisionParameter colpara)
 {
-	isHit_ = true;
 }
 
 void Player::OnMessage(EventMessage message, void * param)
@@ -300,150 +229,6 @@ void Player::OnMessage(EventMessage message, void * param)
 	default:
 		break;
 	}
-
-}
-void Player::Pendulum(Vector2 fulcrum, float length)
-{
-	//振り子
-	//支点Posを設定
-	float fx = fulcrum.x;
-	float fy = fulcrum.y;
-	//Gravityを設定
-	float g = gravity_;
-	//変更前のpositionを保存
-	Vector2 curdefPos = position_;
-	//摩擦を設定
-	//float friction = 1.f;
-	//それぞれの首の移動先座標を格納可能に
-	std::array<Vector2, 8> outPos;
-	//自身の半径を設定
-	float r = parameter_.radius;
-	float r1 = rot_;
-	float r2 = 0.0f;
-	bool rotDirection = true;
-
-	//それぞれの首の長さを設定
-	std::vector<float> neckLen = pHeadLength_;
-	////支点を格納可能に
-	//std::array<Vector2, 8> fulcrums;
-	//現在の重りの位置
-	auto px = fx + MathHelper::Cos(rot_) * length;
-	auto py = fy + MathHelper::Sin(rot_) * length;
-	//auto px = fx + MathHelper::Cos(rot) * length;
-	//auto py = fy + MathHelper::Sin(rot) * length;
-
-	//重力移動量を反映した重りの位置
-	auto vx = px - fx;
-	auto vy = py - fy;
-	auto t = -(vy * g) / (vx * vx + vy * vy);
-	auto gx = px + t * vx;
-	auto gy = py + g + t * vy;
-
-	//２つの重りの位置の確度差
-	auto rDiff = MathHelper::ATan(gy - fy, gx - fx);
-
-	//角度差を角速度に加算
-	auto sub = rDiff - rot_;
-	sub -= std::floor(sub / 360.0f) * 360.0f;
-	if (sub < -180.0f) sub += 360.0f;
-	if (sub > 180.0f) sub -= 360.0f;
-	rot_spd_ += sub;
-
-	//if (rot_spd_ < 1.5f)friction = 1.f;
-	//摩擦
-	rot_spd_ *= friction;
-	//角度に角速度を加算
-	rot_ += rot_spd_;
-	//rot_ = MathHelper::Clamp(rot_, -45.f, 225.f);
-	//新しい重りの位置
-	px = fx + MathHelper::Cos(rot_) * length;
-	py = fy + MathHelper::Sin(rot_) * length;
-
-	//重りの座標
-	position_.x = px;
-	position_.y = py;
-
-	//角度調整
-	float rot2 = rot_ - 90.0f;
-
-
-	//inPos外周
-	//outPosLength分のばしたposition
-	//各Headの角度を代入
-
-	pHeadPoses_[currentHead_].x = position_.x + MathHelper::Cos(angle_ + rot2) * r;
-	pHeadPoses_[currentHead_].y = position_.y + MathHelper::Sin(angle_ + rot2) * r;
-	outPos[currentHead_].x = pHeadPoses_[currentHead_].x + MathHelper::Cos(angle_ + rot2) * (neckLen[currentHead_] - r);
-	outPos[currentHead_].y = pHeadPoses_[currentHead_].y + MathHelper::Sin(angle_ + rot2) * (neckLen[currentHead_] - r);
-	//fulcrums[currentHead_] = outPos[currentHead_];
-	//lineRot[i] = pHeads_[i]->GetAngle();
-	//inPos[i].x = spherePos.x + MathHelper::Cos(lineRot[i] + rot2) * r;
-	//inPos[i].y = spherePos.y + MathHelper::Sin(lineRot[i] + rot2) * r;
-	//outPos[i].x = inPos[i].x + MathHelper::Cos(lineRot[i] + rot2) * (neckLen[i] - r);
-	//outPos[i].y = inPos[i].y + MathHelper::Sin(lineRot[i] + rot2) * (neckLen[i] - r);
-	//fulcrum[i] = outPos[i];
-
-	Vector2 pendulumAngleVec = fulcrum - position_;
-	float angleDtData = Vector2::Dot(Vector2::Right, pendulumAngleVec.Normalize());
-
-	angle_ = (angleDtData * 180) / 2;
-
-
-	//1フレーム前のrotと比較
-	r2 = rot_;
-	if (r1 < r2) //右に回っていれば
-	{
-		rotDirection = true;
-		r1 = rot_;
-	}
-	else if (r1 > r2) //左に回っていれば
-	{
-		rotDirection = false;
-		r1 = rot_;
-	}
-
-	//circleの当たり判定
-	if (
-		(rot_spd_ < 0 && !rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::D) || GamePad::GetInstance().Stick().x>0.01f)) ||
-		(rot_spd_ > 0 && rotDirection && (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) || GamePad::GetInstance().Stick().x<-0.01f)))
-	{
-		friction = 1.015f; //摩擦を減らす
-		
-	}
-	else
-	{
-		friction = 0.985f; //摩擦を戻す
-	}
-	//Vector2::Up;
-
-	//if (rot_ < 0.f) {
-
-	//	friction = (1.f - ((0 - rot_) / 90.f))*1.4f;
-	//	friction = MathHelper::Clamp(friction, 0.f, 1.f);
-	//}
-	//else if (rot_>180.f)
-	//{
-	//	friction = (1.f - ((rot_ - 180) / 90.f))*1.4f;
-	//	friction = MathHelper::Clamp(friction, 0.f, 1.f);
-	//}
-
-	if (pHeads_[currentHead_]->GetPosition().y > position_.y) {
-		friction = 0.945f; //摩擦を戻す
-	}
-	//スピード制限
-	//
-	spdLimit = sqrt(2 * g * (MathHelper::Sin(90.0f) * pHDist.Length())) / ((pHDist.Length()) * 0.02f);
-	//spdLimit = sqrt(3.f) / ((pHDist.Length()) * 0.05f);
-	rot_spd_ = MathHelper::Clamp(rot_spd_, -spdLimit, spdLimit);
-
-	//頂点で正規化
-	if (rot_ > 270.0f) rot_ = -90.0f;
-	if (rot_ < -90) rot_ = 270.0f;
-
-
-	pendulumVect_ = (position_ - curdefPos);
-	pendulumVect_.x = pendulumVect_.x*jumpShotPower_;
-	pendulumVect_.y = pendulumVect_.y*jumpShotPower_;
 
 }
 void Player::StartPendulum() {
@@ -484,13 +269,10 @@ void Player::deadLine()
 		world_->FreeCameraPosY(false);
 
 		if (position_.y >= WINDOW_HEIGHT) {
-
-			//SetNextLane(1,LaneChangeType::LaneChange_Fall);
 		}
 
 	}
 	else if (position_.y >= 500 && playerMode_ != MODE_BITE) {
-		//world_->FreeCameraPosY(true);
 		SetNextLane(1, LaneChangeType::LaneChange_Fall);
 		world_->FreeCameraPosY(false);
 
@@ -540,38 +322,6 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radiu
 		fPos_.push_back(Vector2(px, py));
 		multiplePos.push_back(Vector2(0.0f, 0.0f));
 	}
-
-	//mRot.clear();
-	//mRot_spd.clear();
-	//fPos_.clear();
-	//multiplePos.clear();
-	//correctionLens.clear();
-	//drawPoints.clear();
-
-	//int s = len / oneLength;
-
-	//for (int i = 0; i < s + 1; i++) {
-	//	correctionLens.push_back(1.0f);
-	//}
-	//if (len - oneLength > 0) {
-	//	float h = MathHelper::Mod(len - oneLength, oneLength) / oneLength;
-	//	correctionLens.push_back(h);
-	//}
-	////xとyでどちらが優位かによって振り子の動きが違う、角度によって初速の決定方法を変更する必要がありそう
-	//float spd = (position_ - prevPosition_).Length();
-	//fPos_.push_back(fPos);
-	//mRot.push_back(rot);
-	//mRot_spd.push_back(spd);
-	//multiplePos.push_back(Vector2(0.0f, 0.0f));
-	//for (int i = 0; i < s; i++) {
-	//	auto px = fPos_[i].x + MathHelper::Cos(mRot[i]) * (oneLength);
-	//	auto py = fPos_[i].y + MathHelper::Sin(mRot[i]) * (oneLength);
-
-	//	mRot.push_back(rot);
-	//	mRot_spd.push_back(spd);
-	//	fPos_.push_back(Vector2(px, py));
-	//	multiplePos.push_back(Vector2(0.0f, 0.0f));
-	//}
 }
 void Player::Multiple()
 {
@@ -606,11 +356,6 @@ void Player::Multiple()
 		if (i == 0)mRot_spd[i] = mRot_spd[i] + sub;
 		else mRot_spd[i] = (mRot_spd[i - 1] + sub) * 0.8f;
 
-
-		//anyPos2[i] = fPos[i];
-
-
-		//mRot_spd[i] = MathHelper::Clamp(mRot_spd[i],-3.f,3.f);
 		//角度に角速度を加算
 		if (i == 0) mRot[i] += mRot_spd[i] * 0.1f;
 		else mRot[i] = mRot[0] + mRot_spd[i] * 0.1f;
@@ -623,12 +368,6 @@ void Player::Multiple()
 		multiplePos[i].x = px;
 		multiplePos[i].y = py;
 
-		//if (fPos.size() - 1 > i) {
-		//	fPos[i + 1].x = px;
-		//	fPos[i + 1].y = py;
-		//}
-		//else {
-		//}
 		if (i > 0) fPos_[i] = multiplePos[i - 1];
 
 		//頂点で正規化
@@ -638,8 +377,8 @@ void Player::Multiple()
 
 
 		if (isUseKey_) {
-			if ((mRot_spd[0] < 0 /*&& !rotDirection*/ && (Keyboard::GetInstance().KeyStateDown(KEYCODE::D) || GamePad::GetInstance().Stick().x>0.01f)) ||
-				(mRot_spd[0] > 0 /*&& rotDirection*/ && (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) || GamePad::GetInstance().Stick().x < -0.01f)))
+			if ((mRot_spd[0] < 0&& (Keyboard::GetInstance().KeyStateDown(KEYCODE::D) || GamePad::GetInstance().Stick().x>0.01f)) ||
+				(mRot_spd[0] > 0&& (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) || GamePad::GetInstance().Stick().x < -0.01f)))
 			{
 				friction = 1.015f; //摩擦を減らす
 			}
@@ -658,24 +397,8 @@ void Player::Multiple()
 				friction = 0.985f; //摩擦を戻す
 			}
 		}
-		//else if (i > 0 && (multiplePos[i].y < multiplePos[i - 1].y)) friction = friction;
-		////if (mRot <45.0f || mRot > 135.0f) mFriction = 0.985; //上の振り子より45度以上大きく振れたら摩擦を増やす
-		//else friction = friction; //上記以外は上の振り子の摩擦を代入
-								  //mFriction = friction;
 
 		mRot_spd[i] *= friction;
-
-		////支点を移動
-		//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::RSHIFT) ||
-		//	GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6))
-		//{
-		//	neckLengh += 1.0f;
-		//}
-		//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::LSHIFT) ||
-		//	GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM5))
-		//{
-		//	neckLengh -= 1.0f;
-		//}
 	}
 
 	pHeadPoses_[currentHead_] = multiplePos[0];
@@ -687,14 +410,8 @@ void Player::Multiple()
 }
 
 //多重振り子に移動量を加算
-
 void Player::UpdateMultiplePos() {
 	SetMultiplePos((position_ - prevPosition_));
-	
-	//for (int i = 0; i < multiplePos.size(); i++) {
-	//	multiplePos[i] += (position_ - prevPosition_);
-	//	if (i > 0) fPos_[i] = multiplePos[i - 1];
-	//}
 }
 void Player::SetMultiplePos(const Vector2 & addpos) {
 	for (int i = 0; i < (int)multiplePos.size(); i++) {
@@ -711,16 +428,9 @@ void Player::SetNeckNonMult() {
 	correctionLens.clear();
 	drawPoints.clear();
 
-	//int s = GetCurrentHeadLength().Length() / oneLength;
-
 	for (int i = 0; i < defHeadLength; i++) {
 		correctionLens.push_back(1.0f);
 	}
-	//if (len - oneLength > 0) {
-	//	float h = MathHelper::Mod(len - oneLength, oneLength) / oneLength;
-	//	correctionLens.push_back(h);
-	//}
-
 
 	fPos_.push_back(pHeads_[currentHead_]->GetPosition());
 	mRot.push_back(135.f);
@@ -739,43 +449,6 @@ void Player::SetNeckNonMult() {
 }
 void Player::DeformationDraw()
 {
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM1)) {
-	//	posNum = 0;
-	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM2)) {
-	//	posNum = 1;
-	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM3)) {
-	//	posNum = 2;
-	//}
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::NUM4)) {
-	//	posNum = 3;
-	//}
-
-	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) {
-	//	gPos1[posNum].x -= 5;
-	//}
-	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::D)) {
-	//	gPos1[posNum].x += 5;
-	//}
-	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-	//	gPos1[posNum].y -= 5;
-	//}
-	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::S)) {
-	//	gPos1[posNum].y += 5;
-	//}
-	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::Z)) {
-	//	gPos1[2].x -= 5;
-	//	gPos1[3].x -= 5;
-	//}
-	//if (Keyboard::GetInstance().KeyStateDown(KEYCODE::X)) {
-	//	gPos1[2].x += 5;
-	//	gPos1[3].x += 5;
-	//}
-
-	//gPos2[0] = Vector2(gPos1[3].x, gPos1[3].y);
-	//gPos2[1] = Vector2(gPos1[2].x, gPos1[2].y);
-
 	drawPoints.clear();
 
 	DrawPos p;
@@ -809,48 +482,6 @@ void Player::DeformationDraw()
 			}
 		}
 	}
-
-	//drawPoints.clear();
-
-
-	//DrawPos p;
-	//for (int i = 0; i < fPos_.size(); i++) {
-	//	Vector2 v = fPos_[i] - multiplePos[i];
-	//	Vector2 n = Vector2(-v.y, v.x).Normalize();
-	//	if (i == 0) {
-	//		p.p0 = fPos_[i] + n * resWidth * correctionWidth * 1.2f;
-	//		p.p1 = fPos_[i] - n * resWidth * correctionWidth * 1.2f;
-	//		if (v.Length() > 0) {
-	//			p.p2 = multiplePos[i] - n * resWidth * correctionWidth * 1.2f;
-	//			p.p3 = multiplePos[i] + n * resWidth * correctionWidth * 1.2f;
-	//			p.p2 -= v.Normalize() * correctionHeight * correctionWidth;
-	//			p.p3 -= v.Normalize() * correctionHeight * correctionWidth;
-	//			p.p0 += v.Normalize() * correctionHeight * correctionWidth;
-	//			p.p1 += v.Normalize() * correctionHeight * correctionWidth;
-	//			drawPoints.push_back(p);
-	//		}
-	//	}
-	//	else if (fPos_.size() - 1 == i) {
-	//		p.p0 = fPos_[i] + n * resWidth;
-	//		p.p1 = fPos_[i] - n * resWidth;
-	//		if (v.Length() > 0) {
-	//			p.p2 = p.p1 - v.Normalize() * 76.0f * correctionLens.back();
-	//			p.p3 = p.p0 - v.Normalize() * 76.0f * correctionLens.back();
-	//			drawPoints.push_back(p);
-	//		}
-	//	}
-	//	else {
-	//		p.p0 = fPos_[i] + n * resWidth;
-	//		p.p1 = fPos_[i] - n * resWidth;
-	//		if (v.Length() > 0) {
-	//			p.p2 = multiplePos[i] - n * resWidth;
-	//			p.p3 = multiplePos[i] + n * resWidth;
-	//			p.p2 -= v.Normalize() * correctionHeight;
-	//			p.p3 -= v.Normalize() * correctionHeight;
-	//			drawPoints.push_back(p);
-	//		}
-	//	}
-	//}
 }
 
 void Player::SetDrawNeck(const Vector2 & bodyPoint, const Vector2 & headPoint)
@@ -863,7 +494,6 @@ void Player::SetDrawNeck(const Vector2 & bodyPoint, const Vector2 & headPoint)
 
 void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 {
-	//MultとfPosの数がここで合わなくなる
 	fPos_.clear();
 	multiplePos.clear();
 	correctionLens.clear();
@@ -900,10 +530,6 @@ void Player::SetDrawNeckParts(const Vector2 & bodyPoint, const Vector2 & headPoi
 	DrawPos p;
 
 	Vector2 dir(bodyPoint - headPoint);
-	//dir = dir.Normalize()*oneLength;
-
-	////頭から体へのベクトル(正規化)
-	//Vector3 pHtoBVec = dir.Normalize();
 	for (int i = 0; i < (float)fPos_.size(); i++) {
 		if ((fPos_[i] - position_).Length() <= parameter_.radius) {
 			if (drawPoints.empty()) {
@@ -934,13 +560,6 @@ void Player::SwordPosUpdate() {
 		return;
 	}
 	Vector2 velUnPos = pHeads_[currentHead_]->GetPosition();
-	//if (pHeadDead_[currentHead_]) {
-	//	Vector3 pHRt= Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ((360.f/(float)pHeads_.size())*6);
-
-	//	velUnPos.x = pHRt.x;
-	//	velUnPos.y = pHRt.y;
-	//	velUnPos += position_;
-	//}
 	Vector2 vel = position_ - velUnPos;
 	vel = Vector2::Normalize(vel);
 
@@ -950,7 +569,7 @@ void Player::SwordPosUpdate() {
 }
 
 void Player::StartPlayerSet() {
-	SetMode(MODE_BITE,false);// playerMode_ = MODE_BITE;
+	SetMode(MODE_BITE,false);
 	pHeadLength_[currentHead_]=5.f;
 	pHeads_[currentHead_]->StartPlayerHeadBite();
 
@@ -971,13 +590,8 @@ void Player::CurHeadBite(const Vector2 & target) {
 	//スコア加算
 	world_->sendMessage(EventMessage::ADD_SCORE, (int*)addscorelist_[laneNum_]);
 
-	SetMode(MODE_BITE);//playerMode_ = MODE_BITE;
+	SetMode(MODE_BITE);
 	pGrav_ = defPGravPow;
-	//stopPos_ = target;
-	//角度を求める
-	//rot_ = MathHelper::ACos(Vector2::Dot(Vector2::Right, tpos)) *180 / MathHelper::Pi;
-	rot_ = 135;
-	rot_spd_ = -3.0f;
 
 	StartPendulum();
 }
@@ -1006,7 +620,6 @@ void Player::SetMode(int pMode,bool isPlaySE) {
 	if (pMode == playerMode_)return;
 
 	playerMode_ = pMode;
-	//if (pMode == MODE_SLIP)
 		headPosAddVect_= Vector2::Normalize(pHeads_[currentHead_]->GetPosition() - position_)*Vector2(32.f,32.f).Length();
 
 		switch (playerMode_)
@@ -1089,68 +702,32 @@ void Player::SetAllHeadLaneNum() {
 
 void Player::worldSetMyDatas() {
 	//共有データに、自身の現レーン位置を保存
-	//world_->SetKeepDatas(KeepDatas(laneNum_));
 	world_->GetCanChangedKeepDatas().SetPlayerLane(laneNum_);
 	world_->GetCanChangedKeepDatas().SetPlayerPos(position_);
 }
-
-
-//void SetIsCanChangeLane(bool isCanChange) {
-//	if (laneChangeCoolTime_ > 0)return;
-//	laneChangeCoolTime_ = defLaneChangeCoolTime_;
-//	isCanChangeLane_ = isCanChange;
-//}
 
 void Player::SetNextLane(int addNum, LaneChangeType changeType) {
 	if (laneNum_ + addNum > (maxLaneSize_ - 1) || laneNum_ + addNum<0)return;
 
 	changeType_ = changeType;
-	//if (!isLaneChangeFall()&&addNum>0) {
-	//	//world_->UnlockCameraPosY();
-	//	position_.y -= defDrawLinePosY[1];
-	//	world_->InitializeInv(position_);
-	//	UpdateLaneNum(addNum, changeType_);
-	//	return;
-	//}
 	if (changeType_ == LaneChangeType::LaneChange_Fall) {
 		world_->GetChangeInv().Translation(world_->GetChangeInv().Translation() + Vector3(0.f, 500.f, 0.f));
 		position_.y -= 500.f;
 		pHeadPoses_[currentHead_] = multiplePos[0];
-		//for (auto& i : fPos_) { i.y -= 500.f; }
-		//for (auto& i : multiplePos) { i.y -= 500.f; }
-		
-		//DeformationDraw();
-		//position_ += velocity_ + pendulumVect_;
 		UpdateLaneNum(addNum, LaneChangeType::LaneChange_Fall);
-		//world_->InitializeInv(position_ -Vector2(0,-10));
-		//world_->InitializeInv(position_+Vector2(0,-80));
-		//world_->InitializeInv(Vector2(position_.x,-50.f));
-		//for (auto& ph : pHeads_) {
-		//	ph->addPos(Vector2(0, -500.f));
-		//}
-		//world_->inv(world_->GetInv());
 		pHeads_[currentHead_]->addPos(Vector2(0, -500.f));
 		HeadPosUpdate();
 		world_->UpdateDrawPos();
 		UpdateMultiplePos();
 		DeformationDraw();
 
-		//world_->inv(Matrix::CreateTranslation(Vector3(position_,0)));
-		//world_->SetIsChangeFrame(true);
-		//CheatData::getInstance().SetCamStop(true);
-		//world_->GetCanChangedKeepDatas().isFallCamMode_ = true;
-		//world_->GetCanChangedKeepDatas().fallAddPos_ = 100.f;
 		return;
-		//drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
-		//drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
 	}
 
 
 	world_->ChangeCamMoveMode(addNum);
 
 	world_->sendMessage(EventMessage::START_LANE_CHANGE);
-	//PHeadChanger();
-	//SetMode(MODE_FALL);
 }
 
 void Player::curPHeadSlip(bool isSlip) {
@@ -1169,31 +746,12 @@ void Player::PHeadChanger(int rot) {
 	if (!pHeadDead_[currentHead_]) world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[currentHead_],0.3f, addVec));
 
 	Sound::GetInstance().PlaySE(SE_ID::CHANGE_HEAD_SE);
-	//StartPendulum();
 }
 
 void Player::SetStopPos(Vector2 target) {
 	stopPos_ = target;
 }
 
-void Player::PlayerInputControl()
-{
-	if (BuildMode != 1)return;
-
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::UP)) {
-		velocity_.y -= 20.0f;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::DOWN)) {
-		velocity_.y += 20.0f;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::RIGHT)) {
-		velocity_.x += 20.0f;
-	}
-	if (Keyboard::GetInstance().KeyStateDown(KEYCODE::LEFT)) {
-		velocity_.x -= 20.0f;
-	}
-
-}
 
 void Player::CurPHeadLengPlus(float addPow) {
 
@@ -1221,7 +779,6 @@ void Player::CurPHeadLengPlus(float addPow) {
 					break;
 				}
 				chainLockCoolTime_ = defChainLockCoolTime_;
-				//chainLock_ = false;
 				chainAddLength_ += 2.f;
 				chainAddLengthMath_ += 2.f;
 				Vector2 toPos = pHeadPoses_[trgNum] - position_;
@@ -1229,7 +786,6 @@ void Player::CurPHeadLengPlus(float addPow) {
 				pHeadDead_[trgNum] = true;
 			}
 			else {
-				//pHeadDead_[i] = false;
 			}
 		}
 
@@ -1290,7 +846,7 @@ void Player::FallUpdate()
 	if (isUseKey_) {
 		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) &&
 			isCanNextHeadRot) {
-			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);
 			//キーを押し直したかの判断
 			PHeadChanger();
 			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
@@ -1298,7 +854,7 @@ void Player::FallUpdate()
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) &&
 			isCanNextHeadRot) {
-			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);
 			//キーを押し直したかの判断
 			PHeadChanger(1);
 			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
@@ -1312,23 +868,19 @@ void Player::FallUpdate()
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 			world_->sendMessage(EventMessage::NECK_SHOOT);
-			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
+			SetMode(MODE_SHOOT);
 			isNextPushKey_ = false;
 		}
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 			pHeads_[currentHead_]->SetBiteSprite();
-			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
-		
-
+			SetMode(MODE_SHOOT_END);
 		}
 	}
 		position_ += velocity_ + pendulumVect_;
 
 		slipCount_ = defSlipCount;
 
-		//SetNeckNonMult();
 		SetDrawNeck(position_,pHeads_[currentHead_]->GetPosition());
-		//UpdateMultiplePos();
 
 }
 
@@ -1337,19 +889,18 @@ void Player::ShootUpdate()
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
 		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)|| GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
-			//else if ((GamePad::GetInstance().ButtonTriggerUp(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerUp(KEYCODE::M))) {
 			pHeads_[currentHead_]->SetBiteSprite();
-			SetMode(MODE_SHOOT_END);//playerMode_ = MODE_SHOOT_END;
+			SetMode(MODE_SHOOT_END);
 		}
 		else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
 			CurPHeadLengPlus(headShotPower);
 		}
 		else {
-			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
+			SetMode(MODE_FALL);
 		}
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-			SetMode(MODE_SHOOT);//playerMode_ = MODE_SHOOT;
+			SetMode(MODE_SHOOT);
 			isNextPushKey_ = false;
 		}
 	}
@@ -1363,7 +914,7 @@ void Player::ShootUpdate()
 void Player::ShootEndUpdate()
 {
 	CreateBiteEffect();
-	SetMode(MODE_FALL);// playerMode_ = MODE_FALL;
+	SetMode(MODE_FALL);
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
 		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
@@ -1372,7 +923,6 @@ void Player::ShootEndUpdate()
 			isCanNextHeadRot = false;
 		}
 		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
-			//playerMode_ = MODE_FALL;
 			//キーを押し直したかの判断
 			PHeadChanger(1);
 			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
@@ -1384,7 +934,7 @@ void Player::ShootEndUpdate()
 
 
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-			SetMode(MODE_SHOOT);// playerMode_ = MODE_SHOOT;
+			SetMode(MODE_SHOOT);
 			isNextPushKey_ = false;
 		}
 	}
@@ -1397,11 +947,9 @@ void Player::ShootEndUpdate()
 
 void Player::BiteUpdate()
 {
-	//Pendulum(pHeads_[currentHead_]->GetPosition(), length_);
 	Multiple();
 	if (isUseKey_) {
 
-		//if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
 			if (!pSword_->GetUseSword()) {
 				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_, pSword_->GetPosition(), pSword_.get()));
@@ -1412,26 +960,19 @@ void Player::BiteUpdate()
 		}
 		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM5) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
 			if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
-				//pSword_->SetUseSword(true);
 				SetNextLane(1);
-				//UpdateLaneNum(1);
 			}
-			// if (rot_<0.f || rot_>180.f) {
 			else if (mRot.front() < 0.f || mRot.front() > 180.f) {
 				SetNextLane(-1);
-				//UpdateLaneNum(-1);
 			}
 		}
 
-//		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
-			//if (GetIsBiteMode()) {
 			SetMode(MODE_FALL);
 			//Headを交代する
 			PHeadChanger();
 			isNextPushKey_ = false;
 			isCanNextHeadRot = false;
-			//	}
 		}
 	}
 		//下へのベクトルと現在のプレイヤーの位置ベクトルのなす角を取る
@@ -1447,7 +988,6 @@ void Player::BiteUpdate()
 				MathHelper::Abs(mRot_spd[0]) <= 0.01f&&
 				ptoDownAngle <= 10.f&&
 				pHeads_[currentHead_]->GetPosition().y < position_.y) {
-				rot_spd_ += (spdLimit);
 				for (auto& spd : mRot_spd) {
 					spd += (spdLimit)*2;
 				}
@@ -1465,8 +1005,6 @@ void Player::BiteUpdate()
 				isSlipped_ = true;
 				//スリップモードに移行すると同時に、その時点のベクトルをHeadに格納する
 				pHeads_[currentHead_]->SetPosAddVect(pHeads_[currentHead_]->GetPosition() - position_);
-				//changeHead();
-				//ここやばいかも？
 				PHeadChanger();
 			}
 			slipCount_ = max(slipCount_, 0.f);
@@ -1529,7 +1067,7 @@ void Player::ResistUpdate()
 
 	if (slipResistTime_ <= 0.f) {
 		slipResistTime_ = defResistTime;
-		SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
+		SetMode(MODE_FALL);
 		return;
 	}
 
@@ -1545,12 +1083,10 @@ void Player::ClearUpdate()
 	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT+99.f)||isClearShoot_) {
 		if (!isClearShoot_) {
 			PHeadChanger();
-			//SetMode(MODE_FALL);
 			isClearShoot_ = true;
 			pGrav_ = 0.0f;
+			pendulumVect_ = Vector2(0.f, 100.f);
 		}
-		//SetMode(MODE_FALL);
-		//pendulumVect_.x *= 0.98f;
 		pendulumVect_.y *= 0.98f;
 		pendulumVect_.y = max(50.f,pendulumVect_.y);
 
@@ -1561,14 +1097,6 @@ void Player::ClearUpdate()
 	else {
 		Multiple();
 		DeformationDraw();
-		pendulumVect_ *= 3.f;
-		Vector2 shiftPos_;
-		//shiftPos_.x = max(abs(pendulumVect_.x), 30.f)*sign(pendulumVect_.x);
-		shiftPos_.x = 0.f;
-		shiftPos_.y = 100.f;
-		//shiftPos_.y = max(abs(pendulumVect_.y), 40.f)*sign(pendulumVect_.y);
-
-		pendulumVect_ = shiftPos_;
 	}
 	if (drawPos_.y <= -300) {
 		world_->sendMessage(EventMessage::PLAY_NEXT_STAGE);

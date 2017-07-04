@@ -54,8 +54,6 @@ void ActorManager::Draw(const int laneCount, const int playerLane) const
 			if (thisLane == i && (actor->GetIsUpdate() && actor->GetIsDraw()))
 				actor->Draw();
 
-			// •`‰æ‚ÍActor‘¤‚Å’l‚ðŒˆ‚ß‚é‚æ‚¤‚É‚·‚é
-			//actor->BaseDraw();
 		}
 	}
 }

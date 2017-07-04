@@ -35,7 +35,6 @@ public:
 			return;
 		}
 		LaneChangeFall();
-		//drawPos_ = GetDrawPosVect(position_);
 
 	}
 
@@ -46,7 +45,6 @@ public:
 		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 
 		if (player_->isLaneChangeFall()) {
-			//drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
 			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
 		}
 	}
@@ -54,12 +52,6 @@ public:
 		position_ += addpos;
 	}
 	void UpdatePos();
-	//virtual void SetOtherClothesType(CLOTHES_ID type) override{
-	//	//現在使用している頭の時のみ当たった服の種類をセット
-	//	if (!getIsCurrentHead())return;
-	//
-	//	player_->SetOtherClothesID_(type);
-	//}
 	bool ResurrectHead() {
 		return player_->ResurrectHead();
 		
@@ -76,7 +68,6 @@ public:
 
 		position_ = basePos + bPlusLngPos;
 
-		//stopPos_ = position_;
 		player_->SetStopPos(position_);
 		player_->SetMode(MODE_BITE);
 
@@ -94,9 +85,6 @@ public:
 	void SetPosAddVect(const Vector2& posAV) {
 		posAddVect_ = posAV;
 	}
-	//void setPHeadStopPos(const Vector2& sPos){
-	//	stopPos_=sPos;
-	//}
 	//頭が滑り落ちるかどうかをセットする
 	void setIsBiteSlipWind(bool isSlip) {
 		isBiteSlipWind_ = isSlip;

@@ -28,6 +28,5 @@ private:
 
 	std::map<WindDir, float> windDefPoses_;
 
-	//std::vector<BackgroundCharacters*> characters_;
 
 };

@@ -100,7 +100,6 @@ bool AllClearScreen::Update(Scene & nextScene)
 
 		sinCount_ = defSinC;
 	}
-	//inputCount_ = MathHelper::Clamp(inputCount_, 0, (int)changeSceneList_.size() - 1);
 
 	drawUpdate();
 
@@ -131,11 +130,6 @@ void AllClearScreen::Draw() const
 	Vector2 RTposit = Vector2(WINDOW_WIDTH / 2, 800.f);
 	Vector2 RTorig = Sprite::GetInstance().GetSize(SPRITE_ID::PRESS_B_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::PRESS_B_SPRITE, RTposit, RTorig, textAlphaList_[0], Vector2::One/**textSizeList_[0]*/);
-
-
-	//Vector2 CSorig = Sprite::GetInstance().GetSize(SPRITE_ID::OROCHI_CURSOR_SPRITE) / 2;
-	//Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorDrawPos_, CSorig, Vector2::One);
-
 }
 
 void AllClearScreen::SetScore(int score, int count, Stage stage) {
@@ -212,7 +206,6 @@ void AllClearScreen::ScoreDraw() const
 
 	if (!isHeadDraw_)return;
 
-	//DrawScore::getInstance().Draw(Vector2(WINDOW_WIDTH / 2 - Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::NUMBER_SPRITE).x * 0.5f, 900.f),
 	int hcposx = DrawScore::getInstance().Draw(Vector2(1500, 960.f),
 		(int)roundf(fheadCount_), 1, Vector2::One);
 	Vector2 horigin = Sprite::GetInstance().GetSize(SPRITE_ID::HEADCOUNT_SPRITE) / 2;

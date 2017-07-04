@@ -6,8 +6,6 @@
 PlayerEffectManager::PlayerEffectManager(SPRITE_ID id,int anmSpeed):anmSpeed_(anmSpeed),frameCount_(0),id_(id),isEnd_(false)
 {
 	maxFrame_ = Sprite::GetInstance().GetSliptFrameSize(id);
-	//Sprite::GetInstance().GetCount
-	//maxFrame_ = (int)roundf(splitCount.x*splitCount.y);
 }
 
 PlayerEffectManager::~PlayerEffectManager()
@@ -29,8 +27,6 @@ void PlayerEffectManager::DrawEffect(const Vector2& position,float angle,const V
 {
 	int drawFrame = (frameCount_ / anmSpeed_);
 	Vector2 origin = Sprite::GetInstance().GetSplitPieceSize(id_)/2;
-	//origin.x *= size.x;
-	//origin.y *= size.y;
 	Sprite::GetInstance().SplitDraw(id_, position,drawFrame,origin, size,angle,true,isturn);
 }
 

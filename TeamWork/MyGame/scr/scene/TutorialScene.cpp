@@ -126,7 +126,6 @@ void TutorialScene::SceneInit()
 
 	player_->Update();
 	player_->SetUseKey(false);
-	//player_->SetIsTutorialTextWriting(true);
 
 	SetLockList(currentTutorialNum_, tutorialLockNum_);
 
@@ -208,7 +207,6 @@ void TutorialScene::Update()
 				isDrawCtrl_ = true;
 				arrowEffectGenerator_.StartEffect();
 			}
-			//player_->SetIsTutorialTextWriting(false);
 		}
 	}
 	if (IsCanSceneLock()) {
@@ -255,15 +253,6 @@ void TutorialScene::Draw() const
 		int gamepadX = 1300;
 
 		if (currentTutorialNum_ >= maxTutorialNum - 1) {
-			//if (tutorialLockNum_<1) {
-			//	Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero,1.f,Vector2::One*1.5f);
-			//	for (auto i : lockList_) {
-			//		if (!i.isLock) {
-			//			Sprite::GetInstance().Draw(i.ctrl, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero, abs(MathHelper::Sin((float)sinCount_)), Vector2::One*1.5f);
-			//			return;
-			//		}
-			//	}
-			//}
 
 		}
 		else {
@@ -283,10 +272,6 @@ void TutorialScene::Draw() const
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (abs(MathHelper::Sin(sinCount_)) * 255));
 	if(!player_->GetUseKey()&& !player_->GetIsClearMode())FontManager::GetInstance().DrawTextApplyFont(1550, 250, GetColor(0, 0, 0), FONT_ID::TUTORIAL_FONT, "B‚Åi‚Þ‚æ");
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
-
-
-	//DrawFormatString(0, 00, GetColor(255, 255, 255), "CreditScene");
-	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 
 }
 
@@ -310,8 +295,6 @@ void TutorialScene::End()
 	
 	FadePanel::GetInstance().SetOutTime(0.5f);
 
-	//FadePanel::GetInstance().AddCollBack([=] {FadePanel::GetInstance().FadeIn(); });
-	//FadePanel::GetInstance().FadeOut();
 }
 
 void TutorialScene::handleMessage(EventMessage message, void * param)
@@ -434,12 +417,10 @@ void TutorialScene::SceneLock()
 	SetLockList(currentTutorialNum_, tutorialLockNum_);
 
 	player_->SetUseKey(false);
-	//player_->SetIsTutorialTextWriting(true);
 	textScreen_.Init(StageNameList_[currentTutorialNum_] + TextAddList_[tutorialLockNum_] + ".txt");
 
 	if (textScreen_.TutorialUpdate()) {
 		player_->SetUseKey(true);
-		//player_->SetIsTutorialTextWriting(false);
 
 	}
 
@@ -533,6 +514,7 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_RB_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
 
+		lockList_.push_back(LockList(UnLockType::Stick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		lockList_.push_back(LockList(UnLockType::ChangeHead, false, SPRITE_ID::GAMEPAD_B_SPRITE));
 		lockList_.push_back(LockList(UnLockType::PlayerShoot, false,SPRITE_ID::GAMEPAD_RB_SPRITE));
 		lockList_.push_back(LockList(UnLockType::BiteClothes, false,SPRITE_ID::GAMEPAD_B_SPRITE));
@@ -544,6 +526,7 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_RB_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
 		
+		lockList_.push_back(LockList(UnLockType::Stick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		lockList_.push_back(LockList(UnLockType::ChangeHead, false, SPRITE_ID::GAMEPAD_B_SPRITE));
 		lockList_.push_back(LockList(UnLockType::ChangeHeadKey, false,SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		lockList_.push_back(LockList(UnLockType::BiteClothes, false,SPRITE_ID::GAMEPAD_B_SPRITE));
@@ -662,9 +645,6 @@ void TutorialScene::SetLock5(int tutorialLockNum)
 void TutorialScene::ReLockUpLane()
 {
 	for (int i = lockList_.size() - 1; i > -1; i--) {
-		//if (!lockList_[i].isLock) {
-		//	break;
-		//}
 		if (lockList_[i].type == UnLockType::ChangeLaneUp) {
 			if (lockList_[i].isLock) {
 				lockList_[i].isLock = false;
@@ -673,27 +653,11 @@ void TutorialScene::ReLockUpLane()
 		}
 	}
 
-	//for (auto& i : lockList_) {
-	//	if (i.type == UnLockType::ChangeLaneUp) {
-	//		if (i.isLock) {
-	//			i.isLock = false;
-	//			return;
-	//		}
-	//
-	//	}
-	//}
-
-	//if (lockList_.front().type == UnLockType::ChangeLaneUp) {
-		//lockList_.front().isLock = false;
-	//}
 }
 
 void TutorialScene::ReLockNeckShoot()
 {
 	for (int i = lockList_.size()-1; i > -1; i--) {
-		//if (!lockList_[i].isLock) {
-		//	break;
-		//}
 		if (lockList_[i].type == UnLockType::PlayerShoot) {
 			if (lockList_[i].isLock) {
 				lockList_[i].isLock = false;
@@ -701,29 +665,12 @@ void TutorialScene::ReLockNeckShoot()
 			return;
 		}
 	}
-	//for (auto& i : lockList_) {
-	//	if (i.type == UnLockType::PlayerShoot) {
-	//		if (i.isLock) {
-	//			i.isLock = false;
-	//			return;
-	//		}
-	//
-	//	}
-	//}
-
-
-	//if (lockList_.front().type == UnLockType::PlayerShoot) {
-		//lockList_.front().isLock = false;
-	//}
 
 }
 
 void TutorialScene::ReLockPendulum()
 {
 	for (int i = lockList_.size() - 1; i > -1; i--) {
-		//if (!lockList_[i].isLock) {
-			//break;
-		//}
 		if (lockList_[i].isLock) {
 
 			if (lockList_[i].type == UnLockType::Stick || lockList_[i].type == UnLockType::FullStick) {

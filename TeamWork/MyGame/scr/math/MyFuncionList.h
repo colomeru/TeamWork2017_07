@@ -12,8 +12,6 @@ template<typename _Tp> inline int sign(_Tp val) {
 
 //rollVect=‰ñ“]•ûŒü(1‚Å‰E‰ñ‚è)
 inline float MathAngle(const Vector2& targetVect,const Vector2& baseVect=Vector2::Up,int rollVect=1) {
-	//Vector2 nTVect = Vector2::Normalize(targetVect);
-	//Vector2 nBVect = Vector2::Normalize(baseVect);
 	Vector2 nTVect = targetVect;
 	Vector2 nBVect = baseVect;
 
@@ -27,8 +25,6 @@ inline float MathAngle(const Vector2& targetVect,const Vector2& baseVect=Vector2
 }
 //Žw’èŽ²‚Æ‚Ì‚È‚·Šp‚ÌŠp“x‚ð•Ô‚·
 inline float MathFormedAngle(const Vector2& targetVect, const Vector2& baseVect = Vector2::Up) {
-	//Vector2 nTVect = Vector2::Normalize(targetVect);
-	//Vector2 nBVect = Vector2::Normalize(baseVect);
 	Vector2 nTVect = targetVect;
 	Vector2 nBVect = baseVect;
 	

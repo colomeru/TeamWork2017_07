@@ -29,7 +29,6 @@ class StageEffectScreen
 		int GetAlpha255I() const{
 			return (int)roundf(a * 255.0f);
 		}
-		//static const RGBAColorF Zero;
 
 	};
 public:

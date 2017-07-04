@@ -1,6 +1,5 @@
 #include "Player_Sword.h"
 #include"../../math/MyFuncionList.h"
-//#include"../Effects/PlayerEffect/SwordAttackEffect.h"
 
 Player_Sword::Player_Sword(IWorld * world, Player * targetP, Vector2 pos)
 	:Actor(world,targetP),swordStartPos_(pos),swordEndPos_(pos),player_(targetP),useSword_(false)
@@ -44,7 +43,6 @@ void Player_Sword::OnUpdate()
 
 void Player_Sword::OnCollide(Actor & other, CollisionParameter colpara)
 {
-	//world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_,swordEndPos_));
 	
 }
 

@@ -38,7 +38,7 @@ public:
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param) override;
 	//切断状態による当たり判定のポイントの設定
-	virtual void SetLocalPoints() {};
+	virtual void SetLocalPoints();
 
 	//IDの取得
 	CLOTHES_ID GetClothesID() const {
@@ -92,6 +92,7 @@ protected:
 	std::vector<Vector2> collisionPoints;
 	//当たり判定のポイントのローカル座標
 	std::vector<Vector3> localPoints;
+	std::map<CuttingState, std::vector<Vector3>> localPoints_;
 	//重さ
 	float weight_;
 	//画像のコマ番号
@@ -119,11 +120,7 @@ protected:
 	//補助線描画条件
 	bool isDrawRange_;
 
-	std::map<CuttingState, std::vector<Vector3>> localPoints_;
-
 	//振り子関連(服用)
-	//重力加速度
-	const float GRAVITY{ 0.3f };
 	//摩擦が増加か減衰か
 	bool isFriction_;
 	//風を受けているか

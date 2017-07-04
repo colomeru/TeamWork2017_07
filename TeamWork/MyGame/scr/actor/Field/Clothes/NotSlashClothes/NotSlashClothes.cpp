@@ -20,7 +20,9 @@ NotSlashClothes::NotSlashClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 
 NotSlashClothes::~NotSlashClothes()
 {
-	localPoints.clear();
+	localPoints_[CuttingState::Normal].clear();
+	localPoints_[CuttingState::RightUpSlant].clear();
+	localPoints_[CuttingState::LeftUpSlant].clear();
 }
 
 void NotSlashClothes::Update()
@@ -107,16 +109,16 @@ void NotSlashClothes::SetLocalPoints()
 
 void NotSlashClothes::SetPoints01()
 {
-	localPoints.push_back(Vector3(-65, 70 + length_, 0));
-	localPoints.push_back(Vector3(-65, 20 + length_, 0));
-	localPoints.push_back(Vector3(65, 20 + length_, 0));
-	localPoints.push_back(Vector3(65, 70 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-65, 70 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-65, 20 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(65, 20 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(65, 70 + length_, 0));
 }
 
 void NotSlashClothes::SetPoints02()
 {
-	localPoints.push_back(Vector3(-70, 10 + length_, 0));
-	localPoints.push_back(Vector3(-70, 55 + length_, 0));
-	localPoints.push_back(Vector3(70, 55 + length_, 0));
-	localPoints.push_back(Vector3(70, 10 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-70, 10 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-70, 55 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(70, 55 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(70, 10 + length_, 0));
 }

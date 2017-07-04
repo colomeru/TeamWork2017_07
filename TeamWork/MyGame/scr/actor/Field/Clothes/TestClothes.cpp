@@ -21,11 +21,7 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
 
-	localPoints.push_back(Vector3(-60, 0 + length_, 0));
-	localPoints.push_back(Vector3(-60, 90 + length_, 0));
-	localPoints.push_back(Vector3(60, 90 + length_, 0));
-	localPoints.push_back(Vector3(60, 0 + length_, 0));
-
+	SetLocalPoints();
 	SetPointsUpdate();
 
 

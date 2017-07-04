@@ -8,6 +8,9 @@
 #include "../../../sound/sound.h"
 #include "../../player/Player_Head.h"
 
+//重力加速度
+const float GRAVITY = 0.3f;
+
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	:Actor(world)
@@ -20,9 +23,10 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
 	dNumber_ = 0.0f;
 
-	localPoints.clear();
+	localPoints_[CuttingState::Normal].clear();
+	localPoints_[CuttingState::RightUpSlant].clear();
+	localPoints_[CuttingState::LeftUpSlant].clear();
 	collisionPoints.clear();
-	localPoints.reserve(4);
 	collisionPoints.reserve(4);
 
 	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [=](Actor& other)
@@ -34,7 +38,9 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 Clothes::~Clothes()
 {
 	Sound::GetInstance().StopSE(SE_ID::SLASH_SE);
-	localPoints.clear();
+	localPoints_[CuttingState::Normal].clear();
+	localPoints_[CuttingState::RightUpSlant].clear();
+	localPoints_[CuttingState::LeftUpSlant].clear();
 	collisionPoints.clear();
 	player_ = nullptr;
 }
@@ -131,6 +137,14 @@ void Clothes::OnMessage(EventMessage message, void * param)
 	}
 }
 
+void Clothes::SetLocalPoints()
+{
+	localPoints_[CuttingState::Normal].push_back(Vector3());
+	localPoints_[CuttingState::Normal].push_back(Vector3());
+	localPoints_[CuttingState::Normal].push_back(Vector3());
+	localPoints_[CuttingState::Normal].push_back(Vector3());
+}
+
 void Clothes::Pendulum(Vector2 fulcrum, float length)
 {
 	beforePos_ = position_;
@@ -159,7 +173,6 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 		friction_ *= 0.992f;
 	}
 	rot_spd_ = temp;
-	//rot_spd_ += sub;
 
 	//摩擦
 	rot_ *= friction_;

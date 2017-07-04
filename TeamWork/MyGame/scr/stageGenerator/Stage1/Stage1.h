@@ -42,5 +42,6 @@ protected:
 	int frequencyHairball_;
 	//毛玉の飛ぶ頻度
 	int hairballCnt_;
+	//現在のステージ
 	Stage currentStage_;
 };

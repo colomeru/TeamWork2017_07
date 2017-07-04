@@ -1,5 +1,4 @@
 #include "GoalClothes.h"
-#include "../MyGame/scr/graphic/Sprite.h"
 #include "../MyGame/scr/actor/UI/GoalUI.h"
 #include "../../../player/Player_Head.h"
 #include "TutorialFlash.h"
@@ -12,10 +11,6 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	parameter_.ID = ACTOR_ID::GOAL_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(220.0f, 1500.0f);
-	parameter_.mat
-		= Matrix::CreateScale(Vector3::One)
-		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	laneNum_ = laneNum;
 
@@ -69,11 +64,6 @@ void GoalClothes::Draw() const
 	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-}
-
-void GoalClothes::OnUpdate()
-{
-	
 }
 
 void GoalClothes::OnCollide(Actor & other, CollisionParameter colpara)

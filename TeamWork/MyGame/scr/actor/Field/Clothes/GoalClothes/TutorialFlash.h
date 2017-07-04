@@ -13,6 +13,4 @@ public:
 	virtual void Update() override;
 	//•`‰æ
 	virtual void Draw() const override;
-
-private:
 };

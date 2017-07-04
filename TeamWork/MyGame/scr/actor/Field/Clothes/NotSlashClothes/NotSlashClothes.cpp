@@ -63,10 +63,6 @@ void NotSlashClothes::Draw() const
 	}
 }
 
-void NotSlashClothes::OnUpdate()
-{
-}
-
 void NotSlashClothes::SetPointsUpdate()
 {
 	collisionPoints.clear();

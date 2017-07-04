@@ -19,8 +19,8 @@ public:
 
 private:
 	//コピー禁止
-	StageGenerateManager(const StageGenerateManager& other) = default;
-	StageGenerateManager& operator = (const StageGenerateManager& other) = default;
+	StageGenerateManager(const StageGenerateManager& other) = delete;
+	StageGenerateManager& operator = (const StageGenerateManager& other) = delete;
 
 private:
 	//ステージ

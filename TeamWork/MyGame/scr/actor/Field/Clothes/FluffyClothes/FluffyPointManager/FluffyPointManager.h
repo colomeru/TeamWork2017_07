@@ -9,7 +9,7 @@ public:
 	//コンストラクタ
 	FluffyPointManager();
 
-	//
+	//ローカルポイントの設定
 	void SetLocalPoints(SPRITE_ID spriteId, std::map<CuttingState, std::vector<Vector3>>& localPoints, float length);
 
 	//当たり判定ポイントの設定

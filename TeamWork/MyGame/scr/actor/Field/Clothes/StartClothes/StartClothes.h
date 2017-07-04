@@ -12,6 +12,8 @@ public:
 	virtual void Update() override;
 	//•`‰æ
 	virtual void Draw() const override;
+	//“–‚½‚è”»’è‚Ìƒ[ƒJƒ‹À•W‚Ìİ’è
+	virtual void SetLocalPoints() override;
 
 private:
 	Actor* pActor;

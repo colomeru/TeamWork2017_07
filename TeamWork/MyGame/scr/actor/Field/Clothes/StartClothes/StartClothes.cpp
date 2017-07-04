@@ -1,7 +1,4 @@
 #include "StartClothes.h"
-#include "../../../player/Player_Head.h"
-#include "../../../player//Player.h"
-#include "../../../../Def.h"
 
 StartClothes::StartClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
@@ -54,17 +51,16 @@ void StartClothes::Update()
 		player->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
 		player->setCurPHeadSPos(pos);
 	}
-	else Synchronize();
+	else 
+		Synchronize();
 }
 
 void StartClothes::Draw() const
 {
 	auto drawPos = GetDrawPosVect(position_);
-	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 20);
-	Vector2 hangPos = GetDrawPosVect(fulcrum_);
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2(0.8f, 1.0f), angle_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::BASE_CLOTHES_SPRITE) / 2;
 	Sprite::GetInstance().SplitDraw(SPRITE_ID::BASE_CLOTHES_SPRITE, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
+
 	DrawClothesFeces();
 
 	if (BuildMode != 1) return;
@@ -81,4 +77,20 @@ void StartClothes::Draw() const
 		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
 		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
+}
+
+void StartClothes::SetLocalPoints()
+{
+	localPoints_[CuttingState::Normal].push_back(Vector3(-60, 0 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-60, 90 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(60, 90 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(60, 0 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-60, 0 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-60, 50 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(60, 30 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(60, 0 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-60, 0 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-60, 30 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(60, 50 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(60, 0 + length_, 0));
 }

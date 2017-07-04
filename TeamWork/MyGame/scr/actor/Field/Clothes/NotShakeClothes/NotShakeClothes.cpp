@@ -61,10 +61,6 @@ void NotShakeClothes::Draw() const
 
 }
 
-void NotShakeClothes::OnUpdate()
-{
-}
-
 void NotShakeClothes::SetPointsUpdate()
 {
 	collisionPoints.clear();

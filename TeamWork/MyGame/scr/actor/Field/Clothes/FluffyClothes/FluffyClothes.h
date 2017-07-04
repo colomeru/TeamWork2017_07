@@ -22,6 +22,8 @@ public:
 	virtual void SetPointsUpdate() override;
 
 private:
+	//ふわふわ服のローカルな当たり判定の位置
 	std::map<CuttingState, std::vector<Vector3>> fluffyLocalPoints_;
+	//当たり判定マネージャー
 	FluffyPointManager pointManager_;
 };

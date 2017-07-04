@@ -13,6 +13,6 @@ public:
 	virtual void Update() override;
 	//描画
 	virtual void Draw() const override;
-	//受動更新
-	virtual void OnUpdate() override;
+	//当たり判定のローカル座標の設定
+	virtual void SetLocalPoints() override;
 };

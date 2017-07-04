@@ -13,16 +13,8 @@ public:
 	virtual void Update() override;
 	//描画
 	virtual void Draw() const override;
-	//受動更新
-	virtual void OnUpdate() override;
 	//衝突時のアクション
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
-
-private:
-	void Deform();
-
-private:
-	std::vector<Vector2> deformPos_;
-	std::vector<float> rot_spds_;
-	Vector2 spriteSize_;
+	//当たり判定のローカル座標の設定
+	virtual void SetLocalPoints() override;
 };

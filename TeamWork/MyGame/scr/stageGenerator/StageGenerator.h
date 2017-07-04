@@ -20,8 +20,8 @@ public:
 
 private:
 	//コピー禁止
-	StageGenerator(const StageGenerator& other) = default;
-	StageGenerator& operator = (const StageGenerator& other) = default;
+	StageGenerator(const StageGenerator& other) = delete;
+	StageGenerator& operator = (const StageGenerator& other) = delete;
 
 protected:
 	//ワールド

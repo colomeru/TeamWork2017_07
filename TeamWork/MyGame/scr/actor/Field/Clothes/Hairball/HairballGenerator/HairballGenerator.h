@@ -13,8 +13,6 @@ public:
 	virtual void Update() override;
 	//描画
 	virtual void Draw() const override;
-	// 受動更新
-	virtual void OnUpdate() override;
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	// メッセージ処理
@@ -33,6 +31,7 @@ private:
 	int frequencyHairball_;
 	//毛玉の生成頻度
 	int defGenerate_Count_;
+	//生成条件
 	bool is_Generate_;
 
 };

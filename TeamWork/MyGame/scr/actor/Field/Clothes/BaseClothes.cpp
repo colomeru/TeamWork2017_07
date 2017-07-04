@@ -1,8 +1,4 @@
 #include "BaseClothes.h"
-#include "../../player/Player.h"
-#include "../../player/Player_Head.h"
-#include "../MyGame/scr/game/Random.h"
-#include "../../../graphic/Sprite.h"
 
 BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
@@ -11,6 +7,7 @@ BaseClothes::BaseClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100.0f, 200.0f);
+
 	laneNum_ = laneNum;
 
 	position_ = pos + Vector2(0, -10);

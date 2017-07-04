@@ -1,7 +1,6 @@
 #include "Stage1.h"
 #include "../../game/ID.h"
 #include "../../actor/Field/Clothes/BaseClothes.h"
-#include "../../actor/Field/Clothes/TestClothes.h"
 #include "../../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../../actor/Field/Clothes/UpHanger/UpHanger.h"
 #include "../../actor/Field/Clothes/GumClothes/GumClothes.h"
@@ -60,14 +59,6 @@ void Stage1::AddStage()
 	auto col = csvReader_.columns();		//全体の列数
 	int laneNum = 0;
 	stageSize_ = Vector2(col, row) * STAGE_TIP_SIZE;
-
-	//スタートの服の生成
-	//world_->Add(ACTOR_ID::STAGE_ACTOR,std::make_shared<StartClothes>(
-	//	world_, 
-	//	CLOTHES_ID::START_CLOTHES, 
-	//	world_->GetKeepDatas().playerLane_, 
-	//	Vector2(STAGE_TIP_SIZE, 0), 
-	//	0.5f, false));
 
 	//csvの行(row)と列(col)から位置を出し、オブジェクト判別し、生成
 	for (int i = 0; i < row; i++) {
@@ -166,15 +157,6 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		pin_list.pop();
 		break;
 	}
-	case 2: {
-		float weight = Random::GetInstance().Range(0.0f, 1.5f);
-		auto test = std::make_shared<TestClothes>(world_, CLOTHES_ID::TEST_CLOTHES, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE, weight, pin_list.front());
-		world_->Add(ACTOR_ID::STAGE_ACTOR, test);
-		if (pin_list.front())
-			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50, 50), test.get(), test->GetFulcrum()));
-		pin_list.pop();
-		break;
-	}
 	case 3: {
 		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, laneNum, Vector2(j, 0) * STAGE_TIP_SIZE));
 		break;
@@ -243,7 +225,8 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		pin_list.pop();
 		break;
 	}
-
+	default:
+		break;
 	}
 
 }

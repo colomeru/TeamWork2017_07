@@ -1,7 +1,4 @@
 #include "FluffyClothes.h"
-#include "../MyGame/scr/game/Random.h"
-#include "../../ClothesPin.h"
-#include "../../../player/Player.h"
 
 FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
@@ -10,10 +7,6 @@ FluffyClothes::FluffyClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Ve
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100.0f, 200.0f);
-	parameter_.mat
-		= Matrix::CreateScale(Vector3::One)
-		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	spriteId_ = SPRITE_ID::FLUFFY_SPRITE;
 	laneNum_ = laneNum;
@@ -51,11 +44,6 @@ void FluffyClothes::Update()
 
 void FluffyClothes::Draw() const
 {
-	//Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::FLUFFY_SPRITE) / 2;
-	//Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, 15);
-	//Vector2 hangPos = GetDrawPosVect(fulcrum_);
-	//Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, hangPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
-	//Sprite::GetInstance().SplitDraw(SPRITE_ID::FLUFFY_SPRITE, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 	auto drawPos = GetDrawPosVect(position_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(spriteId_) / 2;
 	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, drawFrame_, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);

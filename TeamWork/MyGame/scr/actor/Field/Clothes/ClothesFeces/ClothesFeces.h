@@ -14,9 +14,6 @@ public:
 	//•`‰æ
 	virtual void Draw() const override;
 
-	void ClearThis() {
-		parameter_.isDead = true;
-	}
 private:
 	Vector2 pos_;
 	Vector2 fulcrum_;

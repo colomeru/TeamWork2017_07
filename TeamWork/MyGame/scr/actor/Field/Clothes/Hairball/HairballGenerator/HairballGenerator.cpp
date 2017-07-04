@@ -1,8 +1,6 @@
 #include "HairballGenerator.h"
 #include "../Hairball.h"
-#include "../MyGame/scr/Def.h"
 #include "../MyGame/scr/game/Random.h"
-#include "../MyGame/scr/scene/GamePlayDefine.h"
 
 HairballGenerator::HairballGenerator(IWorld * world, int laneNum, Vector2 pos, int frequencyHairball, int hairballCnt)
 	:Actor(world)
@@ -10,12 +8,6 @@ HairballGenerator::HairballGenerator(IWorld * world, int laneNum, Vector2 pos, i
 	,generate_Count_(0)
 {
 	parameter_.ID = ACTOR_ID::BEGIN_ACTOR;
-	parameter_.radius = 0.0f;
-	parameter_.size = Vector2::Zero;
-	parameter_.mat
-		= Matrix::CreateScale(Vector3::Zero)
-		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	laneNum_ = laneNum;
 	position_ = pos;
@@ -50,10 +42,6 @@ void HairballGenerator::Update()
 }
 
 void HairballGenerator::Draw() const
-{
-}
-
-void HairballGenerator::OnUpdate()
 {
 }
 

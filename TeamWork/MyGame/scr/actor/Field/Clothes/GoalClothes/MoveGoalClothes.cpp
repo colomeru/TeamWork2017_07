@@ -9,10 +9,6 @@ MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 	parameter_.ID = ACTOR_ID::GOAL_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(200.0f, 1500.0f);
-	parameter_.mat
-		= Matrix::CreateScale(Vector3::One)
-		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	laneNum_ = laneNum;
 
@@ -45,20 +41,6 @@ void MoveGoalClothes::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos - Vector2(0, 200), crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
 	if (BuildMode != 1) return;
-	//if (!collisionPoints.empty()) {
-	//	auto drawP1 = GetDrawPosVect(collisionPoints[0]);
-	//	auto drawP2 = GetDrawPosVect(collisionPoints[1]);
-	//	auto drawP3 = GetDrawPosVect(collisionPoints[2]);
-	//	auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-	//	DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
-	//	DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
-	//	DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
-	//	DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
-	//}
-
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
@@ -76,11 +58,6 @@ void MoveGoalClothes::Draw() const
 	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
 	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-}
-
-void MoveGoalClothes::OnUpdate()
-{
-
 }
 
 void MoveGoalClothes::OnCollide(Actor & other, CollisionParameter colpara)

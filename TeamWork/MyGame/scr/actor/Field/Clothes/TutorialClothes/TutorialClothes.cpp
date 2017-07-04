@@ -1,8 +1,4 @@
 #include "TutorialClothes.h"
-#include "../../../player/Player.h"
-#include "../../../player/Player_Head.h"
-#include "../MyGame/scr/game/Random.h"
-#include "../../../../graphic/Sprite.h"
 
 TutorialClothes::TutorialClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)

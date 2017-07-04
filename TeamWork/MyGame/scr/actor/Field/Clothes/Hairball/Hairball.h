@@ -1,6 +1,5 @@
 #pragma once
 #include "../Clothes.h"
-#include "../MyGame/scr/actor/player/Player.h"
 #include "../MyGame/scr/actor/player/Player_Head.h"
 
 class Hairball : public Clothes, public std::enable_shared_from_this<Hairball>
@@ -14,8 +13,6 @@ public:
 	virtual void Update() override;
 	//描画
 	virtual void Draw() const override;
-	//受動更新
-	virtual void OnUpdate() override;
 	//衝突時のアクション
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	//メッセージ取得

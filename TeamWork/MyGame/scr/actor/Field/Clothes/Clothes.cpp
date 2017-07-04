@@ -1,7 +1,5 @@
 #include "Clothes.h"
-#include "../MyGame/scr/math/MyFuncionList.h"
 #include "../MyGame/scr/game/Random.h"
-#include "Hanger\Hanger.h"
 #include "../MyGame/scr/scene/GamePlayDefine.h"
 #include "../MyGame/scr/tween/TweenManager.h"
 #include "ClothesFeces\ClothesFeces.h"
@@ -13,10 +11,10 @@
 //コンストラクタ
 Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
 	:Actor(world)
-	, isHit_(false), isPendulum_(false), isFriction_(false), isWind_(false)
-	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), gravity_(0.3f), friction_(1.0f), count_(0)
+	, isHit_(false), isFriction_(false), isWind_(false)
+	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), friction_(1.0f), count_(0)
 	, clothesState_(ClothesState::WINDLESS), cuttingState_(CuttingState::Normal), weight_(weight), drawFrame_(0)
-	, isDroping_(false), clothesFeces_(nullptr), penState_(NONE), player_(nullptr), isDrawRange_(false), currentStage_(Stage::Stage1)
+	, isDroping_(false), clothesFeces_(nullptr), player_(nullptr), isDrawRange_(false), currentStage_(Stage::Stage1)
 {
 	clothes_ID = clothes;
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
@@ -63,6 +61,7 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 		if (cuttingState_ != CuttingState::Normal || clothes_ID == CLOTHES_ID::NOT_SLASH_CLOTHES) break;
 		isDroping_ = false;
+		clothesFeces_ = nullptr;
 		Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
 		int rand = Random::GetInstance().Range(0, 2);
 		switch (rand)
@@ -75,7 +74,6 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 				ACTOR_ID::CLOTHES_DROPING_ACTOR,
 				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
 				);
-			SetLocalPoints();
 			break;
 		}
 		case 1: {
@@ -86,7 +84,6 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 				ACTOR_ID::CLOTHES_DROPING_ACTOR,
 				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
 				);
-			SetLocalPoints();
 			break;
 		}
 		}
@@ -96,7 +93,7 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::ENEMY_ACTOR: 
 	{
-		if (isDroping_ || isPendulum_ || cuttingState_ != CuttingState::Normal) return;
+		if (isDroping_ || cuttingState_ != CuttingState::Normal) return;
 		Vector2 pos = other.GetPosition() - fulcrum_;
 		clothesFeces_ = std::make_shared<ClothesFeces>(world_, laneNum_, pos, this->GetActor());
 		isDroping_ = true;
@@ -117,7 +114,7 @@ void Clothes::OnMessage(EventMessage message, void * param)
 	{
 	case EventMessage::BEGIN_WIND:
 	{
-		if (!isUpdate_ || isPendulum_) break;
+		if (!isUpdate_) break;
 		int rand = Random::GetInstance().Range(0, 100);
 		if (rand > frequencyWind_) break;
 		float dRand = Random::GetInstance().Range(0.0f, 1.5f);
@@ -144,9 +141,9 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 
 	//重力移動量を反映した重りの位置
 	auto length_vec = position_ - fulcrum;
-	auto t = -(length_vec.y * gravity_) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
+	auto t = -(length_vec.y * GRAVITY) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
 	auto move_weightX = position_.x + t * length_vec.x;
-	auto move_weightY = position_.y + gravity_ + t * length_vec.y;
+	auto move_weightY = position_.y + GRAVITY + t * length_vec.y;
 
 	//2つの重りの位置の角度差
 	auto r = MathHelper::ATan(move_weightY - fulcrum.y, move_weightX - fulcrum.x);
@@ -200,92 +197,6 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 	}
 }
 
-void Clothes::Pendulum(std::vector<Vector2> & deformPos, float rot_spd, float length)
-{
-	for (int i = 2; i < deformPos.size(); i++) {
-		PenStateDecision();
-		auto dRot = MathHelper::Abs(rot_spd);
-		auto fulcrum = deformPos[i - 2];
-		auto rot = MathHelper::ATan(deformPos[i].y - deformPos[i - 2].y, deformPos[i].x - deformPos[i - 2].x);
-		
-		if (i < 4) {
-			length = 50;
-		}
-		else if (i < 6) {
-			length = 190;
-		}
-		
-		//現在の重りの位置
-		deformPos[i].x = fulcrum.x + MathHelper::Cos(rot) * length;
-		deformPos[i].y = fulcrum.y + MathHelper::Sin(rot) * length;
-
-		//重力移動量を反映した重りの位置
-		auto length_vec = deformPos[i] - fulcrum;
-		auto t = -(length_vec.y * gravity_) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
-		auto gx = deformPos[i].x + t * length_vec.x;
-		auto gy = deformPos[i].y + gravity_ + t * length_vec.y;
-
-		//2つの重りの位置の角度差
-		auto r = MathHelper::ATan(gy - fulcrum.y, gx - fulcrum.x);
-
-		//角度差を角速度に加算
-		auto sub = r - rot;
-		sub -= std::floor(sub / 360.0f) * 360.0f;
-		if (sub < -180.0f) sub += 360.0f;
-		if (sub > 180.0f) sub -= 360.0f;
-
-		auto temp = rot_spd + sub;
-
-		rot_spd = temp;
-		//rot_spd_ += sub;
-
-		//摩擦
-		rot *= friction_;
-
-		//角度に角速度を加算
-		rot += rot_spd;
-
-		//新しい重りの位置
-		deformPos[i].x = fulcrum.x + MathHelper::Cos(rot) * length;
-		deformPos[i].y = fulcrum.y + MathHelper::Sin(rot) * length;
-
-		//switch (penState_)
-		//{
-		//case Clothes::CENTER_LEFT: {
-		//	if (i == 2)
-		//		deformPos[i].y *= 1.01f;
-		//	else if (i == 3)
-		//		deformPos[i].y *= 0.99f;
-		//	break;
-		//}
-		//case Clothes::LEFT_CENTER: {
-		//	if (i == 2)
-		//		deformPos[i].y *= 0.99f;
-		//	else if (i == 3)
-		//		deformPos[i].y *= 1.01f;
-		//	break;
-		//}
-		//case Clothes::CENTER_RIGHT: {
-		//	if (i == 2)
-		//		deformPos[i].y *= 0.99f;
-		//	else if (i == 3)
-		//		deformPos[i].y *= 1.01f;
-		//	break;
-		//}
-		//case Clothes::RIGHT_CENTER: {
-		//	if (i == 2)
-		//		deformPos[i].y *= 1.01f;
-		//	else if (i == 3)
-		//		deformPos[i].y *= 0.99f;
-		//	break;
-		//}
-		//default:
-		//	break;
-		//}
-
-	}
-}
-
 void Clothes::ShakesClothes()
 {
 	if (isDraw_) {
@@ -317,7 +228,6 @@ void Clothes::ShakesClothes()
 			angle_ = 0;
 			isFriction_ = false;
 			count_ = 0;
-			isPendulum_ = false;
 			clothesState_ = ClothesState::WINDLESS;
 			world_->sendMessage(EventMessage::END_WIND);
 			break;
@@ -350,42 +260,18 @@ void Clothes::SetPointsUpdate()
 		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
 
 	auto p1
-		= Matrix::CreateTranslation(localPoints[0]) * mat;
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][0]) * mat;
 	auto p2
-		= Matrix::CreateTranslation(localPoints[1]) * mat;
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][1]) * mat;
 	auto p3
-		= Matrix::CreateTranslation(localPoints[2]) * mat;
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][2]) * mat;
 	auto p4
-		= Matrix::CreateTranslation(localPoints[3]) * mat;
+		= Matrix::CreateTranslation(localPoints_[cuttingState_][3]) * mat;
 
 	collisionPoints.push_back(Vector2(p1.Translation().x, p1.Translation().y));
 	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
 	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
 	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
-}
-
-void Clothes::SetLocalPoints()
-{
-	localPoints.clear();
-	switch (cuttingState_)
-	{
-	case CuttingState::Normal: {
-		SetNormal();
-		break;
-	}
-	case CuttingState::RightUpSlant: {
-		clothesFeces_ = nullptr;
-		isDroping_ = false;
-		SetRightUpSlant();
-		break;
-	}
-	case CuttingState::LeftUpSlant: {
-		clothesFeces_ = nullptr;
-		isDroping_ = false;
-		SetLeftUpSlant();
-		break;
-	}
-	}
 }
 
 void Clothes::UpdateClothesFeces()
@@ -429,135 +315,6 @@ void Clothes::SetCurrentStage(Stage currentStage)
 	currentStage_ = currentStage;
 }
 
-void Clothes::SetNormal()
-{
-	switch (clothes_ID)
-	{
-	case CLOTHES_ID::TEST_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::GUM_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::THIN_CLOTHES: {
-		localPoints.push_back(Vector3(-50, -90 + length_, 0));
-		localPoints.push_back(Vector3(-50, 95 + length_, 0));
-		localPoints.push_back(Vector3(35, 95 + length_, 0));
-		localPoints.push_back(Vector3(35, -90 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::START_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 90 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	default:
-		break;
-	}
-}
-
-void Clothes::SetRightUpSlant()
-{
-	switch (clothes_ID)
-	{
-	case CLOTHES_ID::TEST_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::GUM_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::THIN_CLOTHES: {
-		localPoints.push_back(Vector3(-50, -90 + length_, 0));
-		localPoints.push_back(Vector3(-50, 55 + length_, 0));
-		localPoints.push_back(Vector3(35, 30 + length_, 0));
-		localPoints.push_back(Vector3(35, -90 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::START_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	default:
-		break;
-	}
-}
-
-void Clothes::SetLeftUpSlant()
-{
-	switch (clothes_ID)
-	{
-	case CLOTHES_ID::TEST_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::GUM_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::THIN_CLOTHES: {
-		localPoints.push_back(Vector3(-50, -90 + length_, 0));
-		localPoints.push_back(Vector3(-50, 30 + length_, 0));
-		localPoints.push_back(Vector3(35, 50 + length_, 0));
-		localPoints.push_back(Vector3(35, -90 + length_, 0));
-		break;
-	}
-	case CLOTHES_ID::START_CLOTHES: {
-		localPoints.push_back(Vector3(-60, 0 + length_, 0));
-		localPoints.push_back(Vector3(-60, 30 + length_, 0));
-		localPoints.push_back(Vector3(60, 50 + length_, 0));
-		localPoints.push_back(Vector3(60, 0 + length_, 0));
-		break;
-	}
-	default:
-		break;
-	}
-
-}
-
-void Clothes::PenStateDecision()
-{
-	//中心から左
-	if (rot_ > 90.0f && rot_spd_ > 0.0f)
-		penState_ = PendulumState::CENTER_LEFT;
-	//左から中心
-	else if (rot_ > 90.0f && rot_spd_ < 0.0f)
-		penState_ = PendulumState::LEFT_CENTER;
-	//中心から右
-	else if (rot_ < 90.0f && rot_spd_ < 0.0f)
-		penState_ = PendulumState::CENTER_RIGHT;
-	//右から中心
-	else if (rot_ < 90.0f && rot_spd_ > 0.0f)
-		penState_ = PendulumState::RIGHT_CENTER;
-
-}
-
 void Clothes::DrawRange() const
 {
 	if (currentStage_ != Stage::Stage1 || 
@@ -565,6 +322,7 @@ void Clothes::DrawRange() const
 		!isDrawRange_ ||
 		isWind_ ||
 		isDroping_) return;
+
 	auto topSize = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_TOP_SPRITE);
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_SPRITE) / 2;
 	auto topOrigin = topSize / 2;

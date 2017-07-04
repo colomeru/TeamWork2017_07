@@ -1,5 +1,4 @@
 #include "Hairball.h"
-#include "../MyGame/scr/Def.h"
 #include "../MyGame/scr/tween/TweenManager.h"
 
 Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
@@ -9,19 +8,10 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(50, 50.f);
-	parameter_.mat
-		= Matrix::CreateScale(Vector3::One)
-		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	laneNum_ = laneNum;
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, length_);
-
-	world_->EachActor(ACTOR_ID::PLAYER_HEAD_ACTOR, [&, this](const Actor& other) {
-		player_Head_ = static_cast<Player_Head*>(const_cast<Actor*>(&other));
-	});
-	//player_ = static_cast<Player*>(player_Head_->GetParent());
 
 	localPoints.push_back(Vector3());
 	localPoints.push_back(Vector3());
@@ -36,9 +26,6 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	vecY_ = position_.y + 150.0f;
 	TweenManager::GetInstance().Delay(8.0f, [=]() {Dead(); });
 	TweenManager::GetInstance().Loop(EaseInOutQuad, &position_.y, vecY_, 1.5f);
-
-	isHit_ = false;
-
 }
 
 Hairball::~Hairball()
@@ -67,10 +54,6 @@ void Hairball::Draw() const
 	auto drawPos = GetDrawPosVect(position_);
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::HAIRBALL_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::HAIRBALL_SPRITE, drawPos, crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
-}
-
-void Hairball::OnUpdate()
-{
 }
 
 void Hairball::OnCollide(Actor & other, CollisionParameter colpara)

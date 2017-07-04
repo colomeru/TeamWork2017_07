@@ -1,7 +1,5 @@
 #include "ClothesFeces.h"
 #include "../MyGame/scr/graphic/Sprite.h"
-#include "../MyGame/scr/input/Keyboard.h"
-#include "../MyGame/scr/graphic/Sprite.h"
 #include "../Clothes.h"
 
 ClothesFeces::ClothesFeces(IWorld * world, int laneNum, Vector2 pos, Actor* clothes)
@@ -10,10 +8,6 @@ ClothesFeces::ClothesFeces(IWorld * world, int laneNum, Vector2 pos, Actor* clot
 	parameter_.ID = ACTOR_ID::CLOTHES_DROPING_ACTOR;
 	parameter_.radius = 32.0f;
 	parameter_.size = Vector2(32.0f, 32.0f);
-	parameter_.mat
-		= Matrix::CreateScale(Vector3::One)
-		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
 
 	laneNum_ = laneNum;
 	position_ = pos;

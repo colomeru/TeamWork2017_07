@@ -1,6 +1,4 @@
 #include "DropClothes.h"
-#include "../Clothes.h"
-#include "../../../../Def.h"
 #include "../../../../tween/TweenManager.h"
 
 DropClothes::DropClothes(IWorld * world, Vector2 pos, int laneNum, SPRITE_ID spriteID, int drawFrame)

@@ -1,7 +1,4 @@
 #include "ThinClothes.h"
-#include "../MyGame/scr/game/Random.h"
-#include "../../ClothesPin.h"
-#include "../../../player/Player.h"
 
 ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
@@ -10,13 +7,6 @@ ThinClothes::ThinClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100, 300.f);
-	parameter_.mat
-		= Matrix::CreateScale(Vector3::One)
-		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
-	parameter_.ClothSegmentPoints_.push_back(Vector2(-100.f, 100.f));
-	parameter_.ClothSegmentPoints_.push_back(Vector2(0.f, 100.f));
-	parameter_.ClothSegmentPoints_.push_back(Vector2(100.f, 100.f));
 
 	spriteId_ = SPRITE_ID::TOWEL_CLOTHES_SPRITE;
 	laneNum_ = laneNum;
@@ -75,6 +65,18 @@ void ThinClothes::Draw() const
 	}
 }
 
-void ThinClothes::OnUpdate()
+void ThinClothes::SetLocalPoints()
 {
+	localPoints_[CuttingState::Normal].push_back(Vector3(-50, -90 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-50, 95 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(35, 95 + length_, 0));
+	localPoints_[CuttingState::Normal].push_back(Vector3(35, -90 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-50, -90 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-50, 55 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(35, 30 + length_, 0));
+	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(35, -90 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-50, -90 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-50, 30 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(35, 50 + length_, 0));
+	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(35, -90 + length_, 0));
 }

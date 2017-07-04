@@ -2,9 +2,6 @@
 #include "../../Actor.h"
 #include "../../player/Player.h"
 #include "../MyGame/scr/game/ID.h"
-#include <array>
-#include <vector>
-#include <map>
 
 enum CuttingState
 {
@@ -12,7 +9,6 @@ enum CuttingState
 	RightUpSlant,			//右斜め上に向かって切れてる
 	LeftUpSlant,			//左斜め上に向かって切れてる
 };
-
 
 class Clothes : public Actor
 {
@@ -28,15 +24,6 @@ protected:
 		END_WIND,				//風が終了
 	};
 
-	enum PendulumState
-	{
-		CENTER_LEFT,			//中心から左に振るとき
-		LEFT_CENTER,			//右から中心に振るとき
-		CENTER_RIGHT,			//中心から右に振るとき
-		RIGHT_CENTER,			//右から中心に振るとき
-		NONE
-	};
-
 public:
 	//コンストラクタ
 	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight);
@@ -46,6 +33,12 @@ public:
 	virtual void Update() = 0;
 	//描画
 	virtual void Draw() const = 0;
+	// 当たり判定処理
+	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
+	// メッセージ処理
+	virtual void OnMessage(EventMessage message, void* param) override;
+	//切断状態による当たり判定のポイントの設定
+	virtual void SetLocalPoints() {};
 
 	//IDの取得
 	CLOTHES_ID GetClothesID() const {
@@ -63,42 +56,24 @@ public:
 	std::vector<Vector2> GetCollisionPoints() const {
 		return collisionPoints;
 	}
-	//切断状態の取得
-	CuttingState GetCuttingState() {
-		return cuttingState_;
-	}
-	//画像のコマ番号の取得
-	int GetDrawFrame() const {
-		return drawFrame_;
-	}
-
-	// 当たり判定処理
-	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
-	// メッセージ処理
-	virtual void OnMessage(EventMessage message, void* param) override;
-
 	//振り子運動(風用)
 	void Pendulum(Vector2 fulcrum, float length);
-	void Pendulum(std::vector<Vector2>& deformPos, float rot_spd, float length);
 	//風による服揺らし
 	void ShakesClothes();
 	//強い風によるプレイヤーへの作用
 	void WindSwing();
 	//服の当たり判定の設定
 	virtual void SetPointsUpdate();
-	//切断状態による当たり判定のポイントの設定
-	virtual void SetLocalPoints();
 	//服に付着した鳥の糞の更新
 	void UpdateClothesFeces();
 	//服に付着した鳥の糞の描画
 	void DrawClothesFeces() const;
-	//
+	//補助線描画をするかどうか
 	void DrawRangeUpdate();
 	//補助線描画
 	void DrawRange() const;
 	//プレイヤーを服に同期させる振り子
 	void Synchronize();
-
 	//服の揺れる確率の設定
 	void SetFrequencyWind(int wind);
 	//現在のステージ番号の設定
@@ -107,14 +82,6 @@ public:
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
 	Clothes& operator = (const Clothes& other) = delete;
-
-
-private:
-	//切断状態による当たり判定のポイントの変更
-	void SetNormal();
-	void SetRightUpSlant();
-	void SetLeftUpSlant();
-	void PenStateDecision();
 
 protected:
 	//衝突しているか
@@ -139,8 +106,6 @@ protected:
 	float dNumber_;
 	//服に付着した糞
 	ActorPtr clothesFeces_;
-	//振り子の状態
-	PendulumState penState_;
 	//プレイヤー
 	Player* player_;
 	//振り子の移動量
@@ -154,9 +119,11 @@ protected:
 	//補助線描画条件
 	bool isDrawRange_;
 
+	std::map<CuttingState, std::vector<Vector3>> localPoints_;
+
 	//振り子関連(服用)
-	//振り子フラグ
-	bool isPendulum_;
+	//重力加速度
+	const float GRAVITY{ 0.3f };
 	//摩擦が増加か減衰か
 	bool isFriction_;
 	//風を受けているか
@@ -169,8 +136,6 @@ protected:
 	float rot_spd_;
 	//紐の長さ
 	float length_;
-	//重力加速度
-	float gravity_;
 	//摩擦
 	float friction_;
 	//振り子カウント

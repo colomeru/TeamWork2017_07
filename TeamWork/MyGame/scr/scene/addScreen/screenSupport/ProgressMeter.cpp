@@ -50,23 +50,19 @@ void ProgressMeter::Update()
 //描画
 void ProgressMeter::Draw() const
 {
-	if (BuildMode == 1) {
-		DrawFormatString(0, 80, GetColor(255, 255, 255), "nowLane_:%d", nowLane_);
-		DrawFormatString(0, 100, GetColor(255, 255, 255), "pPosY:%f", pPosY_);
-
-	}
+	Sprite& ins = Sprite::GetInstance();
 
 	//スタート
-	Sprite::GetInstance().Draw(SPRITE_ID::METER_START_SPRITE, Vector2(meterPos_.x - startSize_.x / 2, meterPos_.y + 35), Vector2(startSize_.x / 2, startSize_.y / 2), Vector2::One, 1.0f, false);
+	ins.Draw(SPRITE_ID::METER_START_SPRITE, Vector2(meterPos_.x - startSize_.x / 2, meterPos_.y + 35), Vector2(startSize_.x / 2, startSize_.y / 2), Vector2::One, 1.0f, false);
 	//ゴール
-	Sprite::GetInstance().Draw(SPRITE_ID::METER_GOAL_SPRITE, Vector2(meterPos_.x + meterLen_ + goalSize_.x / 2, meterPos_.y + 35), Vector2(goalSize_.x / 2, goalSize_.y / 2), Vector2::One, 1.0f, false);
+	ins.Draw(SPRITE_ID::METER_GOAL_SPRITE, Vector2(meterPos_.x + meterLen_ + goalSize_.x / 2, meterPos_.y + 35), Vector2(goalSize_.x / 2, goalSize_.y / 2), Vector2::One, 1.0f, false);
 
 	//メーターを描画
 	for (int i = 0; i < meterNum_; i++) {
-		Sprite::GetInstance().Draw(SPRITE_ID::METER_SPRITE, Vector2(meterPos_.x, meterPos_.y + i * dis_), Vector2(0,laneSize_.y / 4), Vector2(meterLen_ / laneSize_.x, 0.5f), 1.0f, false);
+		ins.Draw(SPRITE_ID::METER_SPRITE, Vector2(meterPos_.x, meterPos_.y + i * dis_), Vector2(0,laneSize_.y / 4), Vector2(meterLen_ / laneSize_.x, 0.5f), 1.0f, false);
 		if (i == nowLane_) {
 			//現在プレイヤーがいるレーンのメーターに表示
-			Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_HEAD_SPRITE, pIconPos_, Vector2(pIconSize_.x / 4, pIconSize_.y / 1.5), Vector2(0.5f, 0.5f), 1.0f, false);
+			ins.Draw(SPRITE_ID::OROCHI_HEAD_SPRITE, pIconPos_, Vector2(pIconSize_.x / 4, pIconSize_.y / 1.5), Vector2(0.5f, 0.5f), 1.0f, false);
 		}
 	}
 
@@ -76,6 +72,12 @@ void ProgressMeter::Draw() const
 		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, Vector2(pin.posX * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y + pin.lane * dis_ + pinSize_.y / 8), Vector2(pinSize_.x / 4, pinSize_.y / 4), Vector2(0.5f,0.5f), 180.0f);
 	});
 
+	//デバッグ表示
+	if (BuildMode == 1) {
+		DrawFormatString(0, 80, GetColor(255, 255, 255), "nowLane_:%d", nowLane_);
+		DrawFormatString(0, 100, GetColor(255, 255, 255), "pPosY:%f", pPosY_);
+
+	}
 }
 
 //終了

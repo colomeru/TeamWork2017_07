@@ -16,7 +16,6 @@ public:
 
 private:
 	void ClothAdd();
-	void PostAdd();
 
 private:
 	const float DefTime = 0.5f;

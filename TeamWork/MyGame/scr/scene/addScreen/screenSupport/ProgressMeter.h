@@ -46,7 +46,7 @@ private:
 	//画像のサイズ
 	Vector2 pinSize_; //ピン
 	Vector2 pIconSize_; //プレイヤーアイコン
-	Vector2 laneSize_; //レーン１
+	Vector2 laneSize_; //レーン
 	Vector2 startSize_; //スタート
 	Vector2 goalSize_; //ゴール
 

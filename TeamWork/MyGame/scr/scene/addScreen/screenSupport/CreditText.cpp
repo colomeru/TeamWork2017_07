@@ -19,10 +19,10 @@ CreditText::CreditText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneN
 	TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(toX, fulcrum_.y), 10.0f);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
-	localPoints.push_back(Vector3(-parameter_.size.x / 2.0f, 0.0f, 0.0f));
-	localPoints.push_back(Vector3(-parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
-	localPoints.push_back(Vector3(parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
-	localPoints.push_back(Vector3(parameter_.size.x / 2.0f, 0.0f, 0.0f));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-parameter_.size.x / 2.0f, 0.0f, 0.0f));
+	localPoints_[CuttingState::Normal].push_back(Vector3(-parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
+	localPoints_[CuttingState::Normal].push_back(Vector3(parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
+	localPoints_[CuttingState::Normal].push_back(Vector3(parameter_.size.x / 2.0f, 0.0f, 0.0f));
 	SetPointsUpdate();
 }
 
@@ -37,14 +37,14 @@ void CreditText::Update()
 
 	SetPointsUpdate();
 
-	if (parent_ == nullptr || player_ == nullptr) return;
-	if (!player_->GetIsBiteMode()) {
+	if (parent_ == nullptr || cPlayer_ == nullptr) return;
+	if (!cPlayer_->GetIsBiteMode()) {
 		parent_ = nullptr;
 		return;
 	}
 
 	Vector2 pos = parent_->GetPosition() + velocity_;
-	player_->setCurPHeadSPos(pos);
+	cPlayer_->setCurPHeadSPos(pos);
 	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
 
 }
@@ -83,7 +83,7 @@ void CreditText::OnCollide(Actor & other, CollisionParameter colpara)
 	
 	parent_ = &other;
 	static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-	player_ = temp;
-	player_->CurHeadBite(other.GetPosition());
-	player_->SetIsBiteMode(true);
+	cPlayer_ = temp;
+	cPlayer_->CurHeadBite(other.GetPosition());
+	cPlayer_->SetIsBiteMode(true);
 }

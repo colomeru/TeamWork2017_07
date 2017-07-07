@@ -39,7 +39,7 @@ enum {
 
 class Player : public Actor, public std::enable_shared_from_this<Player>
 {
-private:
+protected:
 	enum LaneChangeType {
 		LaneChange_Normal,
 		LaneChange_Fall
@@ -250,7 +250,7 @@ public:
 	void SetIsTutorialTextWriting(bool is) {
 		isTutorialText_ = is;
 	}
-private:
+protected:
 	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius);
 	void Multiple();
 	//多重振り子に移動量を加算
@@ -330,7 +330,7 @@ private:
 
 
 //プレイヤーの状態に応じた更新
-private:
+protected:
 	void FallUpdate();
 	void ShootUpdate();
 	void ShootEndUpdate();
@@ -339,7 +339,8 @@ private:
 	void ResistUpdate();
 	void ClearUpdate();
 	void DeadUpdate();
-private:
+
+protected:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
 	using PSwordPtr = std::shared_ptr<Player_Sword>;
 	//ステージの最大レーン数
@@ -425,7 +426,7 @@ private:
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
 
-private:
+protected:
 	const float gravity_{0.5f};
 	const float spdLimit{ 2.75f };
 

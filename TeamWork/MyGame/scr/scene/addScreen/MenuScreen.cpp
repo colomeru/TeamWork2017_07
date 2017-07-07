@@ -209,50 +209,51 @@ void MenuScreen::Pattern2Update()
 //パターン２描画
 void MenuScreen::Pattern2Draw() const
 {
+	Sprite& ins = Sprite::GetInstance();
 
 	////流れ星
-	//for (int i = 0; i < sStarNum_; i++) {
-	//	Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_ Vector2(sStar_[i].scale_, sStar_[i].scale_));
-	//}
+	for (int i = 0; i < StarNum; i++) {
+		ins.Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_, Vector2(sStar_[i].scale_, sStar_[i].scale_));
+	}
 
 	//背景
-	static auto bgSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_BACK_SPRITE);
-	static auto builSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_M_SPRITE);
-	static auto wwwSize = Sprite::GetInstance().GetSize(SPRITE_ID::WWW_SPRITE);
-	static auto nightSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE);
+	static auto bgSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_BACK_SPRITE);
+	static auto builSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_M_SPRITE);
+	static auto wwwSize = ins.GetSize(SPRITE_ID::WWW_SPRITE);
+	static auto nightSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE);
 
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_BACK_SPRITE, BgPos + from_ * 0.7f, Vector2(bgSize.x / 2.0f - 100.0f, bgSize.y), Vector2(1.5f, 1.5f), 1.0f, false);
+	ins.Draw(SPRITE_ID::STAGE_SELECT_BACK_SPRITE, BgPos + from_ * 0.7f, Vector2(bgSize.x / 2.0f - 100.0f, bgSize.y), Vector2(1.5f, 1.5f), 1.0f, false);
 
 	//星
 	Vector2 drawNightSize = Vector2(WINDOW_WIDTH / nightSize.x, WINDOW_HEIGHT / nightSize.y);
 	/*パターン２*/
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[2], drawNightSize);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[1], drawNightSize);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[0], drawNightSize);
+	ins.Draw(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[2], drawNightSize);
+	ins.Draw(SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[1], drawNightSize);
+	ins.Draw(SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[0], drawNightSize);
 
 
 	//カラス
-	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::BIRD_SPRITE);
+	Vector2 origin = ins.GetSize(SPRITE_ID::BIRD_SPRITE);
 	anmManager_.Draw(crowPos_[2] + cFrom_[2], origin, Vector2::One, 1.0f);
 
 	//ビルと草
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_M_SPRITE, BuilPos + from_, Vector2(builSize.x / 2.0f - 24.0f, builSize.y), Vector2(3.0f, 3.0f), 1.0f, false);
-	Sprite::GetInstance().Draw(SPRITE_ID::WWW_SPRITE, WwwPos + from_, Vector2(wwwSize.x / 2.0f, wwwSize.y), Vector2(2.0f, 2.2f), 1.0f, false);
+	ins.Draw(SPRITE_ID::STAGE_SELECT_M_SPRITE, BuilPos + from_, Vector2(builSize.x / 2.0f - 24.0f, builSize.y), Vector2(3.0f, 3.0f), 1.0f, false);
+	ins.Draw(SPRITE_ID::WWW_SPRITE, WwwPos + from_, Vector2(wwwSize.x / 2.0f, wwwSize.y), Vector2(2.0f, 2.2f), 1.0f, false);
 
 	//ステージパネルを描画
-	static auto panelSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_1_SPRITE);
-	static auto trainingSize = Sprite::GetInstance().GetSize(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE);
-	Sprite::GetInstance().Draw(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE, panel[0].position + from_, Vector2(trainingSize.x / 2.0f, trainingSize.y / 2.0f), panel[0].alpha, Vector2::One);
+	static auto panelSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_1_SPRITE);
+	static auto trainingSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE);
+	ins.Draw(SPRITE_ID::STAGE_SELECT_TRAINING_SPRITE, panel[0].position + from_, Vector2(trainingSize.x / 2.0f, trainingSize.y / 2.0f), panel[0].alpha, Vector2::One);
 	static int spriteNum = SPRITE_ID::STAGE_SELECT_1_SPRITE - 1;
 	for (int i = 1; i <= 8; i++) {
-		Sprite::GetInstance().Draw((SPRITE_ID)(spriteNum + i), panel[i].position + from_, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[i].alpha, Vector2::One);
+		ins.Draw((SPRITE_ID)(spriteNum + i), panel[i].position + from_, Vector2(panelSize.x / 2.0f, panelSize.y / 2.0f), panel[i].alpha, Vector2::One);
 	}
 
 	//戻るパネルを描画
-	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SELECT_SPRITE, Vector2(0.0f, WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f, 0.5f));
+	ins.Draw(SPRITE_ID::TITLE_SELECT_SPRITE, Vector2(0.0f, WINDOW_HEIGHT - 108.5f), Vector2::Zero, 1.0f, Vector2(0.5f, 0.5f));
 
 	//カーソルを描画
-	Sprite::GetInstance().Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos_, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect_);
+	ins.Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos_, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect_);
 
 	//カラス
 	anmManager_.Draw(crowPos_[0] + cFrom_[0], origin, Vector2::One, 1.0f);
@@ -271,9 +272,9 @@ void MenuScreen::Pattern2Draw() const
 	}
 
 	//流れ星
-	for (int i = 0; i < StarNum; i++) {
-		Sprite::GetInstance().Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_, Vector2(sStar_[i].scale_, sStar_[i].scale_));
-	}
+	//for (int i = 0; i < StarNum; i++) {
+	//	ins.Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_, Vector2(sStar_[i].scale_, sStar_[i].scale_));
+	//}
 
 }
 
@@ -310,34 +311,36 @@ bool MenuScreen::IsInputAny() const
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::RIGHT);
 }
 
-
-
 //星
 void MenuScreen::Star()
 {
 	alphaValue_ = 0.007 * (9 - stageNum_);
 
 	/*パターン２(フルサイズ画像版)*/
-	if (stageNum_ == 8) {
+	switch (stageNum_)
+	{
+	case 8:
 		starAlpha_[0] += alphaValue_;
 		starAlpha_[1] += alphaValue_;
 		starAlpha_[2] += alphaValue_;
-	}
-	else if (stageNum_ == 7) {
+		break;
+	case 7:
 		starAlpha_[0] += alphaValue_;
 		starAlpha_[1] += alphaValue_;
 		starAlpha_[2] -= alphaValue_;
-	}
-	else if (stageNum_ == 6) {
+		break;
+	case 6:
 		starAlpha_[0] += alphaValue_;
 		starAlpha_[1] -= alphaValue_;
 		starAlpha_[2] -= alphaValue_;
-	}
-	else {
+		break;
+	default:
 		starAlpha_[0] -= alphaValue_;
 		starAlpha_[1] -= alphaValue_;
 		starAlpha_[2] -= alphaValue_;
+		break;
 	}
+
 	for (int i = 0; i < 3; i++) {
 		starAlpha_[i] = MathHelper::Clamp(starAlpha_[i], 0.0f, 1.0f);
 	}

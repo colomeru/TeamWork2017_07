@@ -16,7 +16,7 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 
 private:
-	CreditPlayer* player_;
+	CreditPlayer* cPlayer_;
 	int frame_;
 	float f2;
 };

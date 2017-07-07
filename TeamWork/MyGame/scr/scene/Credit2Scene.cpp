@@ -260,7 +260,7 @@ void Credit2Scene::PlayerRestart()
 		player_->AllResurrectHead();
 		player_->SetIsBiteMode(false);
 		player_->CurHeadBite(pHeadPos_);
-		player_->PHeadLengthReset();
+		//player_->PHeadLengthReset();
 		playerStatte_ = RESTART;
 		pHeadPos_ = player_->GetCurrentPHeadPosition(); //プレイヤー座標
 		player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);

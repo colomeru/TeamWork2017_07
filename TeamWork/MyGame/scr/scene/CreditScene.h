@@ -1,4 +1,5 @@
 #pragma once
+
 #include "IScene.h"
 #include <map>
 #include "../camera/Camera.h"
@@ -6,12 +7,23 @@
 #include "../math/Vector3.h"
 #include "../stageGenerator/StageGeneratorManager.h"
 #include "../actor/player/Player.h"
-#include "../actor/Field/Clothes/GoalClothes/GoalClothes.h"
 #include "GamePlayDefine.h"
-#include "addScreen\BackgroundScreen.h"
+#include "addScreen/BackgroundScreen.h"
+#include "addScreen/TutorialTextScreen.h"
+#include <array>
+#include "../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
+
+class CreditPlayer;
+class CreditText;
 
 class CreditScene : public IScene
 {
+	enum {
+		RESTART = 0,
+		BITE = 1,
+		FALL = 2,
+	};
+
 public:
 	// コンストラクタ
 	CreditScene();
@@ -32,30 +44,52 @@ public:
 	virtual void End() override;
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
+	//画面外か？
+	bool ScreenOut() const;
+	//プレイヤーリスタート
+	void PlayerRestart();
+
 
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
-	using PlayerPtr = std::shared_ptr<Player>;
-	using GoalPtr = std::shared_ptr<GoalClothes>;
+	using PlayerPtr = std::shared_ptr<CreditPlayer>;
+	using CreditPtr = std::shared_ptr<CreditText>;
+
 	// ワールド
 	WorldPtr		world_;
 	PlayerPtr		player_;
-	GoalPtr			goal_;
-
-	Vector3 camera_pos_;
-	Vector3 target_;
+	CreditPtr		credit_;
 
 	BackgroundScreen bgScreen_;
-
-	//テスト用フラグ
-	bool isTest_;
-
-	Vector2 size;
 
 	//ステージ作成マネージャー
 	StageGenerateManager stageGeneratorManager;
 
+	CharacterAnmManager anmManager_;
+
 	// 次のシーン
 	Scene			nextScene_;
+
+	TutorialTextScreen textScreen_;
+
+	bool isRetry_;
+
+	//
+	Vector2 pHeadPos_;
+	Vector2 startPos_;
+	bool operate_;
+	int playerStatte_;
+	Vector2 correction;
+	const float SceneTime = 54.0f;
+	float sceneTimer_;
+	std::array<Vector2, 2> whitePos_;
+	Vector2 dWhitePos_;
+	Vector2 wCorr;
+	bool waiting_;
+
+
+	bool test;
+	bool test2;
+	bool test3;
 };

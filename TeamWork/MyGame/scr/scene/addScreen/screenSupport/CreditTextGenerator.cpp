@@ -26,13 +26,6 @@ CreditTextGenerator::CreditTextGenerator(IWorld * world, Vector2 position) :
 	for (int i = 0; i < 7; i++) {
 		postSize_.push_back(Sprite::GetInstance().GetSize(postId_.at(i)));
 	}
-	//postSize_.push_back(Vector2(786, 150));
-	//postSize_.push_back(Vector2(1302, 150));
-	//postSize_.push_back(Vector2(899, 150));
-	//postSize_.push_back(Vector2(899, 150));
-	//postSize_.push_back(Vector2(899, 150));
-	//postSize_.push_back(Vector2(1291, 150));
-	//postSize_.push_back(Vector2(775, 150));
 
 	auto count = id_.size();
 	TweenManager::GetInstance().LoopCount(Linear, count, &loopHandle_, 1.0f, 6.0f, [=]() {ClothAdd(); });
@@ -60,9 +53,4 @@ void CreditTextGenerator::ClothAdd()
 	world_->Add(ACTOR_ID::STAGE_ACTOR, std::make_shared<CreditPostText>(world_, CLOTHES_ID::TEXT_CLOTHES, postId_[idCount_], world_->GetKeepDatas().playerLane_, Vector2(WINDOW_WIDTH + 520.0f, -140.0f), postSize_[idCount_], 0));
 
 	idCount_++;
-}
-
-void CreditTextGenerator::PostAdd()
-{
-
 }

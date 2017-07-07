@@ -53,9 +53,9 @@ void Game1::Initialize()
 	mSceneManager.Add(Scene::Tutorial, std::make_shared<TutorialScene>());
 	mSceneManager.Add(Scene::GamePlay, std::make_shared<GamePlayScene>());
 	mSceneManager.Add(Scene::Credit, std::make_shared<CreditScene>());
-	mSceneManager.Add(Scene::Ending, std::make_shared<EndingScene>());
+	//mSceneManager.Add(Scene::Ending, std::make_shared<EndingScene>());
 	mSceneManager.Add(Scene::Movie, std::make_shared<MovieScene>());
-	mSceneManager.Add(Scene::Credit2, std::make_shared<Credit2Scene>());
+	//mSceneManager.Add(Scene::Credit2, std::make_shared<Credit2Scene>());
 
 	// ƒV[ƒ“‚Ì“Ç‚İ‚İ
 	mSceneManager.SetScene(Scene::Demo);

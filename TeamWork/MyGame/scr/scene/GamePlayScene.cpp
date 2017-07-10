@@ -3,7 +3,7 @@
 #include "../time/Time.h"
 #include "../fade/FadePanel.h"
 #include"../sound/sound.h"
-
+#include"../debug/DebugDraw.h"
 #include "../actor/SampleActor.h"
 #include"../camera/Camera.h"
 #include"../conv/DXConverter.h"
@@ -195,9 +195,8 @@ void GamePlayScene::Draw() const
 		pauseScreen_.Draw();
 	}
 
-	if (BuildMode != 1)return;
-
-	DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+	DebugDraw::DebugDrawFormatString(0, 20, GetColor(255, 255, 255), "ÇçÇ≥Ç¶Çã");
+	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 }
 
 bool GamePlayScene::IsEnd() const

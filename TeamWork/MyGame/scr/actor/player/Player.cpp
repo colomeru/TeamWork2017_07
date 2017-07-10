@@ -18,6 +18,7 @@
 #include"../../sound/sound.h"
 #include"../../cheat/CheatData.h"
 #include"PlayerFallPin.h"
+#include"PlayerNeck/PlayerNeckPendulumSupport.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -117,6 +118,7 @@ Player::~Player()
 	mRot_spd.clear();
 	correctionLens.clear();
 	drawPoints.clear();
+	neckDrawPoints.clear();
 	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 }
 
@@ -152,6 +154,9 @@ void Player::Update()
 
 	worldSetMyDatas();
 
+	//for (int i = 0; i < neckDrawPoints.size();i++) {
+	//	neckDrawPoints[i]=MathNeckPiecePoint(fPos_[i], multiplePos[i], resWidth);
+	//}
 }
 
 void Player::Draw() const
@@ -177,15 +182,24 @@ void Player::Draw() const
 	
 	if (!pHeadDead_[currentHead_]) {
 
-		for (int i = drawPoints.size() - 1; i > 0; i--) {
-			auto p = drawPoints[i];
-			Vector2 p0 = GetDrawPosVect(p.p0);
-			Vector2 p1 = GetDrawPosVect(p.p1);
-			Vector2 p2 = GetDrawPosVect(p.p2);
-			Vector2 p3 = GetDrawPosVect(p.p3);
-			DrawRectModiGraphF(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 0, 0, 41, (int)(76.0f * correctionLens[i]), Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
+		//for (int i = drawPoints.size() - 1; i > 0; i--) {
+		//	auto p = drawPoints[i];
+		//	Vector2 p0 = GetDrawPosVect(p.p0);
+		//	Vector2 p1 = GetDrawPosVect(p.p1);
+		//	Vector2 p2 = GetDrawPosVect(p.p2);
+		//	Vector2 p3 = GetDrawPosVect(p.p3);
+		//	DrawRectModiGraphF(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 0, 0, 41, (int)(76.0f * correctionLens[i]), Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
+		//}
+		for (int i = neckDrawPoints.size() - 1; i > 0; i--) {
+			auto p = neckDrawPoints[i];
+			Vector2 p0 = GetDrawPosVect(p.fulcrumLeft);
+			Vector2 p1 = GetDrawPosVect(p.fulcrumRight);
+			Vector2 p2 = GetDrawPosVect(p.tipPosLeft);
+			Vector2 p3 = GetDrawPosVect(p.tipPosRight);
+			DrawRectModiGraphF(p0.x, p0.y, p1.x, p1.y, p2.x, p2.y, p3.x, p3.y, 0, 0, 41, (int)(76.0f), Sprite::GetInstance().GetHandle(SPRITE_ID::OROCHI_NECK_SPRITE), 1);
 		}
 	}
+
 	for (int i = 0; i < (int)pHeads_.size();i++) {
 		if (i == currentHead_)continue;
 		if (pHeadDead_[i])continue;
@@ -286,6 +300,9 @@ void Player::deadLine()
 }
 void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radius)
 {
+	PlayerNeckPendulumSupport::Init(pHeads_[currentHead_]->GetPosition(), pHeadPoses_[currentHead_], fPos_, multiplePos, mRot, mRot_spd, neckDrawPoints);
+	return;
+	
 	mRot.clear();
 	mRot_spd.clear();
 	fPos_.clear();
@@ -325,6 +342,24 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radiu
 }
 void Player::Multiple()
 {
+	if (GetUseKey()) {
+		if ((mRot_spd[0] < 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::D) || GamePad::GetInstance().Stick().x>0.01f)) ||
+			(mRot_spd[0] > 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) || GamePad::GetInstance().Stick().x < -0.01f)))
+		{
+			for (auto& r : mRot_spd) {
+				r += sign(r)*1.f;
+				r = MathHelper::Clamp(r, -60.f, 60.f);
+			}
+		}
+	}
+	pendulumVect_=PlayerNeckPendulumSupport::Pendulum(fPos_, multiplePos, mRot, mRot_spd, neckDrawPoints);
+	pendulumVect_ *= jumpShotPower_;
+	Vector2 positionSurp = position_ - pHeadPoses_[currentHead_];
+
+	position_ = multiplePos.back()+ positionSurp;
+
+	return;
+
 	for (auto& i : mRot_spd) {
 		i = MathHelper::Clamp(i, -80.f, 80.f);
 	}
@@ -419,6 +454,12 @@ void Player::SetMultiplePos(const Vector2 & addpos) {
 		if (i > 0) fPos_[i] = multiplePos[i - 1];
 	}
 	fPos_.front() = pHeads_[currentHead_]->GetPosition() + addpos;
+	for (auto& n : neckDrawPoints) {
+		n.fulcrumLeft += addpos;
+		n.fulcrumRight += addpos;
+		n.tipPosLeft += addpos;
+		n.tipPosRight += addpos;
+	}
 }
 void Player::SetNeckNonMult() {
 	mRot.clear();
@@ -449,6 +490,7 @@ void Player::SetNeckNonMult() {
 }
 void Player::DeformationDraw()
 {
+	return;
 	drawPoints.clear();
 
 	DrawPos p;
@@ -526,21 +568,21 @@ void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 
 void Player::SetDrawNeckParts(const Vector2 & bodyPoint, const Vector2 & headPoint)
 {
-	drawPoints.clear();
-	DrawPos p;
+	neckDrawPoints.clear();
+	NeckPiecePoint p;
 
 	Vector2 dir(bodyPoint - headPoint);
 	for (int i = 0; i < (float)fPos_.size(); i++) {
 		if ((fPos_[i] - position_).Length() <= parameter_.radius) {
-			if (drawPoints.empty()) {
-				p = MathDrawPoint(fPos_[i], Vector2::Zero, resWidth, (int)oneLength);
+			if (neckDrawPoints.empty()) {
+				p = MathNeckPiecePoint(fPos_[i], multiplePos[i], resWidth);
 			}
-			else p = drawPoints.back();
-			drawPoints.push_back(p);
+			else p = neckDrawPoints.back();
+			neckDrawPoints.push_back(p);
 			continue;
 		}
-		p = MathDrawPoint(fPos_[i], dir, resWidth, (int)oneLength);
-		drawPoints.push_back(p);
+		p = MathNeckPiecePoint(fPos_[i], multiplePos[i], resWidth);
+		neckDrawPoints.push_back(p);
 	}
 
 }

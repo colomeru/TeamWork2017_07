@@ -5,6 +5,7 @@
 #include"../../math/MyFuncionList.h"
 #include"../../Def.h"
 #include"../../graphic/DrawPos.h"
+#include"PlayerNeck\NeckPiecePoint.h"
 
 class Player_Head;
 class Player_Sword;
@@ -360,6 +361,8 @@ protected:
 	std::vector<float> mRot_spd;
 	std::vector<float> correctionLens;
 	std::vector<DrawPos> drawPoints;
+	//ñ•`‰æƒeƒXƒg
+	std::vector<NeckPiecePoint> neckDrawPoints;
 
 	//Head‚ªÃ~‚·‚éˆÊ’u‚ğŠi”[‚·‚é
 	Vector2 stopPos_;

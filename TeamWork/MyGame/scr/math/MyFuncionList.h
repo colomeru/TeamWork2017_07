@@ -4,6 +4,7 @@
 #include"../math/Matrix.h"
 #include"../math/Vector3.h"
 #include"../math/MathHelper.h"
+#include"../actor/player/PlayerNeck/NeckPiecePoint.h"
 #include<vector>
 
 template<typename _Tp> inline int sign(_Tp val) {
@@ -57,6 +58,32 @@ inline DrawPos MathDrawPoint(const Vector2& basePos,const Vector2& dir, int widt
 
 	p.p2 = drawBasePos + (pHtBNVerticalVec*(float)width);
 	p.p3 = drawBasePos - (pHtBNVerticalVec*(float)width);
+
+	return p;
+}
+inline NeckPiecePoint MathNeckPiecePoint(const Vector2& fulcrum, const Vector2& tipPos, float width) {
+	NeckPiecePoint p;
+
+	//頭から体へのベクトル(正規化)
+	Vector2 pHtoBVec2 = Vector2::Normalize(tipPos - fulcrum);
+	Vector3 pHtoBVec3 = pHtoBVec2;
+
+	//HtoBベクトルを90度回転
+	Vector3 pHtBRotateVec = pHtoBVec3*Matrix::CreateRotationZ(90);
+	//Vec2に変換
+	Vector2 pHtBNVerticalVec(pHtBRotateVec.x, pHtBRotateVec.y);
+	pHtBNVerticalVec = pHtBNVerticalVec.Normalize();
+
+	Vector2 drawBasePos = fulcrum;
+
+	p.fulcrumLeft = drawBasePos - (pHtBNVerticalVec*width);
+	p.fulcrumRight = drawBasePos + (pHtBNVerticalVec*width);
+
+	float height = Vector2::Distance(fulcrum, tipPos)*1.2f;
+	drawBasePos += pHtoBVec2*height;
+
+	p.tipPosLeft = drawBasePos + (pHtBNVerticalVec*width);
+	p.tipPosRight = drawBasePos - (pHtBNVerticalVec*width);
 
 	return p;
 }

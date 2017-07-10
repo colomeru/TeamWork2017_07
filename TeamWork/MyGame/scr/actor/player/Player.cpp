@@ -19,6 +19,7 @@
 #include"../../cheat/CheatData.h"
 #include"PlayerFallPin.h"
 #include"PlayerNeck/PlayerNeckPendulumSupport.h"
+#include"../../debug/DebugDraw.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -207,18 +208,17 @@ void Player::Draw() const
 		PlayerNeckDraw().Draw(GetDrawPosVect(pHeadPoses_[i]), pHeads_[i]->GetDrawPos());
 	}
 
-	if (BuildMode != 1)return;
 	
-	DrawFormatString(50, 100, GetColor(255, 255, 255), "%d", playerMode_);
-	int count = 0;
-	for (auto srmt : pHeadDead_)
-	{
-		if (srmt)DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "true");
-		else DrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "false");
-		count++;
-	}
+	DebugDraw::DebugDrawFormatString(50, 100, GetColor(255, 255, 255), "%d", playerMode_);
+	//int count = 0;
+	//for (auto srmt : pHeadDead_)
+	//{
+	//	if (srmt)DebugDraw::DebugDrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "true");
+	//	else DebugDraw::DebugDrawFormatString(300, 300 + (30 * count), GetColor(255, 255, 255), "false");
+	//	count++;
+	//}
 
-	DrawFormatString(600, 750, GetColor(255, 0, 0), "%f", mRot.front());
+	DebugDraw::DebugDrawFormatString(600, 750, GetColor(255, 0, 0), "%f", mRot.front());
 	
 }
 

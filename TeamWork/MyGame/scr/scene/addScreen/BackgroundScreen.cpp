@@ -5,6 +5,7 @@
 #include"../../game/Random.h"
 #include"../../Def.h"
 #include"../GamePlayDefine.h"
+#include"../../debug/DebugDraw.h"
 
 static const int defTimeCount_ = 60;
 static const int defGenerateCharaCount = 10;
@@ -77,9 +78,8 @@ void BackgroundScreen::Draw() const
 	
 	Sprite::GetInstance().Draw(SPRITE_ID::CEILING_SPRITE, ceilPos);
 
-	if (BuildMode != 1)return;
 
-	DrawFormatString(700, 700, GetColor(255, 255, 255), "%f", myds);
+	DebugDraw::DebugDrawFormatString(700, 700, GetColor(255, 255, 255), "%f", myds);
 }
 
 void BackgroundScreen::End()

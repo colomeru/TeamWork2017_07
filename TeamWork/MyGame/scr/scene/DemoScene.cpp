@@ -3,6 +3,7 @@
 #include "../tween/TweenManager.h"
 #include"../graphic/Sprite.h"
 #include"../Def.h"
+#include"../debug/DebugDraw.h"
 
 
 static const int animDelay = 3;
@@ -81,10 +82,9 @@ void DemoScene::Draw() const
 	Vector2 wmorigin = Sprite::GetInstance().GetSize(wMachineFrame_.at((int)roundf(currentLoadCount_/animDelay)%animSize)) / 2;
 	Sprite::GetInstance().Draw(wMachineFrame_.at((int)roundf(currentLoadCount_/animDelay) % animSize), Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), wmorigin, Vector2::One);
 
-	if (BuildMode != 1)return;
 	auto load = 100.0f - (currentLoadCount_ / maxLoadContentCount_) * 100.0f;
-	DrawFormatString(0, 100, GetColor(255, 255, 255), "NowLoadind... %.1f", load);
-	DrawFormatString(0, 0, GetColor(255, 255, 255), "DemoScene");
+	DebugDraw::DebugDrawFormatString(0, 100, GetColor(255, 255, 255), "NowLoadind... %.1f", load);
+	DebugDraw::DebugDrawFormatString(0, 0, GetColor(255, 255, 255), "DemoScene");
 }
 
 bool DemoScene::IsEnd() const

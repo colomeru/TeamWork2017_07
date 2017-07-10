@@ -1,5 +1,6 @@
 #include "Player_Sword.h"
 #include"../../math/MyFuncionList.h"
+#include"../../debug/DebugDraw.h"
 
 Player_Sword::Player_Sword(IWorld * world, Player * targetP, Vector2 pos)
 	:Actor(world,targetP),swordStartPos_(pos),swordEndPos_(pos),player_(targetP),useSword_(false)
@@ -32,9 +33,8 @@ void Player_Sword::Draw() const
 	Vector2 origin((float)Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).x/2.f,0);
 	Sprite::GetInstance().Draw(SPRITE_ID::SWORD_SPRITE, pos,origin, Vector2::One, angle);
 
-	if (BuildMode != 1)return;
-	DrawLine((int)startDP.x, (int)startDP.y, (int)endDP.x, (int)endDP.y, GetColor(0, 0, 255));
-	DrawFormatString(400, 400, GetColor(255, 255, 255), "%f", angle);
+	DebugDraw::DebugDrawLine((int)startDP.x, (int)startDP.y, (int)endDP.x, (int)endDP.y, GetColor(0, 0, 255));
+	DebugDraw::DebugDrawFormatString(400, 400, GetColor(255, 255, 255), "%f", angle);
 }
 
 void Player_Sword::OnUpdate()

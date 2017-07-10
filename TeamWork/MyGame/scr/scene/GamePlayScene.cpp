@@ -195,8 +195,7 @@ void GamePlayScene::Draw() const
 		pauseScreen_.Draw();
 	}
 
-	DebugDraw::DebugDrawFormatString(0, 20, GetColor(255, 255, 255), "ÇçÇ≥Ç¶Çã");
-	//DrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
+	DebugDraw::DebugDrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
 }
 
 bool GamePlayScene::IsEnd() const

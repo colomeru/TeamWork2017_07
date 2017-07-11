@@ -12,6 +12,7 @@
 #include"addScreen\StageEffectScreen.h"
 #include"addScreen/AllClearScreen.h"
 #include"addScreen/UIScreen.h"
+#include"../method/MethodTimer.h"
 
 class Player;
 class EnemyGenerator;
@@ -53,7 +54,28 @@ private:
 	void nextUpdate();
 	void nextSwitchUpdate();
 
+private:
+	//風を発生させる
+	void BeginWind();
+	//風の生成タイマーを初期化する
+	void InitWindTime();
+	//風の生成タイマーを再設定する
+	void ResetWindTime();
+private:
+	//ポーズからゲーム画面に戻る際、そのまま再開するか、最初に戻るかを調べる
+	void pause_Check_Resume(PauseScreen::returnGameType backType);
 
+	//通常クリア時のUpdate
+	void clear_Normal_Update();
+	//全クリア時のUpdate
+	void clear_All_Update();
+
+private:
+	void ToOverMode();
+	void ToClearMode();
+	void ToPauseMode();
+
+	Stage AddStageNum(Stage current);
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
@@ -89,18 +111,15 @@ private:
 
 	int changeCount_;
 
+	MethodTimer windTimer_;
+
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
-
-	std::map<Stage, Stage> nextStageList_;
 
 	std::map<Stage,BGM_ID> stageBGMList_;
 
 	std::map<Stage, int> defWindTime_;
-	
-	std::map<Stage, int> stagenum_;
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
-
 
 };

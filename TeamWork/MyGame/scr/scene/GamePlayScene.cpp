@@ -52,15 +52,6 @@ GamePlayScene::GamePlayScene() :
 	updateFunctionMap_[1] = std::bind(&GamePlayScene::baseUpdate, this);
 	updateFunctionMap_[0] = std::bind(&GamePlayScene::startUpdate, this);
 
-	nextStageList_[Stage::Stage1] = Stage::Stage2;
-	nextStageList_[Stage::Stage2] = Stage::Stage3;
-	nextStageList_[Stage::Stage3] = Stage::Stage4;
-	nextStageList_[Stage::Stage4] = Stage::Stage5;
-	nextStageList_[Stage::Stage5] = Stage::Stage6;
-	nextStageList_[Stage::Stage6] = Stage::Stage7;
-	nextStageList_[Stage::Stage7] = Stage::Stage8;
-	nextStageList_[Stage::Stage8] = Stage::Stage1;
-
 	stageBGMList_[Stage::Stage1] = BGM_ID::STAGE_01_BGM;
 	stageBGMList_[Stage::Stage2] = BGM_ID::STAGE_02_BGM;
 	stageBGMList_[Stage::Stage3] = BGM_ID::STAGE_03_BGM;
@@ -78,15 +69,6 @@ GamePlayScene::GamePlayScene() :
 	defWindTime_[Stage::Stage6] = defWindTime[5];
 	defWindTime_[Stage::Stage7] = defWindTime[6];
 	defWindTime_[Stage::Stage8] = defWindTime[7];
-
-	stagenum_[Stage::Stage1] = 0;
-	stagenum_[Stage::Stage2] = 1;
-	stagenum_[Stage::Stage3] = 2;
-	stagenum_[Stage::Stage4] = 3;
-	stagenum_[Stage::Stage5] = 4;
-	stagenum_[Stage::Stage6] = 5;
-	stagenum_[Stage::Stage7] = 6;
-	stagenum_[Stage::Stage8] = 7;
 
 	bgScreen_ = BackgroundScreen(world_.get());
 	changeScreen_=LaneChangeScreen(world_.get());
@@ -154,6 +136,8 @@ void GamePlayScene::Initialize()
 	Sound::GetInstance().PlayBGM(stageBGMList_[currentStage_],DX_PLAYTYPE_LOOP);
 	FadePanel::GetInstance().SetInTime(1.0f, 0.5f);
 	FadePanel::GetInstance().FadeIn();
+
+	InitWindTime();
 
 	world_->GetCanChangedKeepDatas().currentStage_ = currentStage_;
 }
@@ -287,11 +271,8 @@ void GamePlayScene::baseUpdate()
 
 	int randT = Random::GetInstance().Range(0, 3);
 	windTime_ -= randT;
-	if (windTime_ <= 0) {
-		world_->sendMessage(EventMessage::BEGIN_WIND);
-		bgScreen_.addBGCharacters();
-		windTime_ = defWindTime_[currentStage_];
-	}
+	windTimer_.Action();
+	//BeginWind();
 	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8)) {
 		setNextMode(4);
 		TweenManager::GetInstance().StopAll();
@@ -309,71 +290,40 @@ void GamePlayScene::baseUpdate()
 void GamePlayScene::pauseUpdate()
 {
 	PauseScreen::returnGameType backType;
-	if (pauseScreen_.Update(nextScene_, backType)) {
-		if (nextScene_ == Scene::GamePlay) {
-			if (backType == PauseScreen::returnGameType::Resume) {
-				setNextMode(1);
-				TweenManager::GetInstance().Play();
-			}
-			else {
-				FadePanel::GetInstance().AddCollBack([=]() { End(); Initialize(); });
-				FadePanel::GetInstance().FadeOut();
-
-			}
-		}
-		else {
-			FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
-			FadePanel::GetInstance().FadeOut();
-		}
+	if (!pauseScreen_.Update(nextScene_, backType)) return;
+	
+	if (nextScene_ == Scene::GamePlay) {
+		pause_Check_Resume(backType);
+	}
+	else {
+		FadePanel::GetInstance().AddCollBack([=]() {isEnd_ = true; });
+		FadePanel::GetInstance().FadeOut();
 	}
 
 }
 
 void GamePlayScene::overUpdate()
 {
-	if (gameOverScreen_.Update(nextScene_)) {
-		if (nextScene_ == Scene::GamePlay) {
-			FadePanel::GetInstance().AddCollBack([=]() { End(); Initialize(); });
-		}
-		else {
-			FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
-		}
-		FadePanel::GetInstance().FadeOut();
+	if (!gameOverScreen_.Update(nextScene_)) return;
+	if (nextScene_ == Scene::GamePlay) {
+		FadePanel::GetInstance().AddCollBack([=]() { End(); Initialize(); });
 	}
-
+	else {
+		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+	}
+	FadePanel::GetInstance().FadeOut();
 }
 
 void GamePlayScene::clearUpdate()
 {
-	if (currentStage_ != Stage::Stage8) {
-		if (gameClearScreen_.Update(nextScene_)) {
-			if (nextScene_ == Scene::GamePlay) {
-				if (currentStage_ == Stage::Stage8) {
-					nextScene_ = Scene::Credit2;
-					FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
-
-				}
-				else {
-					FadePanel::GetInstance().AddCollBack([=]() {
-						currentStage_ = nextStageList_[currentStage_];
-						End();
-						Initialize();
-					});
-				}
-			}
-			else {
-				FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
-			}
-			FadePanel::GetInstance().FadeOut();
-
-		}
+	if (currentStage_ == Stage::Stage8) {
+		clear_All_Update();
 	}
 	else {
-		if (allClearScreen_.Update(nextScene_)) {
-			FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
-			FadePanel::GetInstance().FadeOut();
-		}
+		clear_Normal_Update();
 	}
+	return;
+
 }
 void GamePlayScene::nextUpdate()
 {
@@ -393,39 +343,125 @@ void GamePlayScene::nextSwitchUpdate()
 {
 }
 
+void GamePlayScene::BeginWind()
+{
+	world_->sendMessage(EventMessage::BEGIN_WIND);
+	bgScreen_.addBGCharacters();
+	ResetWindTime();
+	OutputDebugString("‚Å‚Î‚Á‚®");
+	OutputDebugString("\n");
+}
+
+void GamePlayScene::InitWindTime()
+{
+	windTimer_.Initialize();
+	windTimer_.AddEmpty(defWindTime_[currentStage_]);
+	windTimer_.Add([this] {BeginWind(); });
+}
+
+void GamePlayScene::ResetWindTime()
+{
+	windTimer_.InnerInitialize();
+	windTimer_.AddEmpty(defWindTime_[currentStage_]);
+	windTimer_.Add([this] {BeginWind(); });
+}
+
+void GamePlayScene::pause_Check_Resume(PauseScreen::returnGameType backType)
+{
+	if (backType == PauseScreen::returnGameType::Resume) {
+		setNextMode(1);
+		TweenManager::GetInstance().Play();
+	}
+	else {
+		FadePanel::GetInstance().AddCollBack([=]() { End(); Initialize(); });
+		FadePanel::GetInstance().FadeOut();
+	}
+
+}
+
+void GamePlayScene::clear_Normal_Update()
+{
+	if(!gameClearScreen_.Update(nextScene_))return;
+
+	if (nextScene_ == Scene::GamePlay) {
+		FadePanel::GetInstance().AddCollBack([=]() {
+			//currentStage_ = nextStageList_[currentStage_];
+			currentStage_ = (Stage)((int)currentStage_ + 1);
+			End();
+			Initialize();
+		});
+	}
+	else {
+		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+	}
+	FadePanel::GetInstance().FadeOut();
+}
+
+void GamePlayScene::clear_All_Update()
+{
+	if(!allClearScreen_.Update(nextScene_))return;
+
+	FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
+	FadePanel::GetInstance().FadeOut();
+	
+}
+
+void GamePlayScene::ToOverMode()
+{
+	TweenManager::GetInstance().StopAll();
+	gameOverScreen_.Init();
+	Sound::GetInstance().PlayBGM(BGM_ID::GAME_OVER_BGM);
+
+}
+
+void GamePlayScene::ToClearMode()
+{
+	CheatData::getInstance().SetClearData((int)currentStage_, true);
+
+	if (currentStage_ == Stage::Stage8) {
+		allClearScreen_.Init();
+		allClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(), currentStage_);
+	}
+	else {
+		CheatData::getInstance().SetSelectStage(AddStageNum(currentStage_));
+
+		gameClearScreen_.Init();
+		gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(), currentStage_);
+	}
+	Sound::GetInstance().SetBGMVolume(BGM_ID::STAGE_CLEAR_BGM, 0.7f);
+	Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);
+
+}
+
+void GamePlayScene::ToPauseMode()
+{
+	TweenManager::GetInstance().StopAll();
+	pauseScreen_.Init();
+	Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+}
+
+Stage GamePlayScene::AddStageNum(Stage current)
+{
+	int nextStage = ((int)current + 1);
+	nextStage %= (int)Stage::STAGE_COUNT;
+	return (Stage)nextStage;
+}
+
 void GamePlayScene::setNextMode(int mode) {
 	gamePlayMode_ = mode;
 	switch (gamePlayMode_)
 	{
 	case 2: {
-		TweenManager::GetInstance().StopAll();
-		gameOverScreen_.Init();
-		Sound::GetInstance().PlayBGM(BGM_ID::GAME_OVER_BGM);
-
+		ToOverMode();
 		break;
 	}
 	case 3: {
-		CheatData::getInstance().SetClearData(stagenum_[currentStage_], true);
-		if(currentStage_!=Stage::Stage8)
-			CheatData::getInstance().SetSelectStage(nextStageList_[currentStage_]);
-		
-		if (currentStage_ == Stage::Stage8) {
-			allClearScreen_.Init();
-			allClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(), currentStage_);
-
-		}
-		else {
-			gameClearScreen_.Init();
-			gameClearScreen_.SetScore(uiScreen_.GetScore(), ply1->GetPHeadLiveCount(), currentStage_);
-		}
-		Sound::GetInstance().SetBGMVolume(BGM_ID::STAGE_CLEAR_BGM, 0.7f);
-		Sound::GetInstance().PlayBGM(BGM_ID::STAGE_CLEAR_BGM);
+		ToClearMode();
 		break;
 	}
 	case 4: {
-		TweenManager::GetInstance().StopAll();
-		pauseScreen_.Init();
-		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+		ToPauseMode();
+		break;
 	}
 	default:
 		break;

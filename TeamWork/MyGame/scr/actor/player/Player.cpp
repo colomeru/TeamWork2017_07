@@ -555,11 +555,10 @@ void Player::SetDrawPoint(const Vector2 & bodyPoint, const Vector2 & headPoint)
 
 	vel = vel.Normalize()*oneLength;
 	
-	DrawPos p;
 	for (int i = 0; i < s; i++) {
 		fPos_.push_back(headPoint+(vel*(float)i));
 		multiplePos.push_back(headPoint + (vel*((float)i+1.f)));
-		mRot.push_back(0);
+		mRot.push_back(MathAngle(multiplePos.back() - fPos_.back()));
 		mRot_spd.push_back(0);
 	}
 
@@ -657,7 +656,7 @@ bool Player::ResurrectHead() {
 
 //Head‚ÌƒŒ[ƒ“‚ð–{‘Ì‚ÌƒŒ[ƒ“‚É‡‚í‚¹‚é
 
-void Player::SetMode(int pMode,bool isPlaySE) {
+void Player::SetMode(Player_Mode pMode,bool isPlaySE) {
 	if (!isUseKey_)return;
 	if (pMode == playerMode_)return;
 
@@ -667,67 +666,37 @@ void Player::SetMode(int pMode,bool isPlaySE) {
 		switch (playerMode_)
 		{
 		case MODE_FALL: {
-
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			ToFallMode(isPlaySE);
 			break;
 		}
 		case MODE_SHOOT: {
-
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			if (pHeadDead_[currentHead_]) {
-				Sound::GetInstance().PlaySE(SE_ID::BAD_SE);
-			}
-			else {
-				Sound::GetInstance().PlaySE(SE_ID::HEAD_SHOOT_SE, DX_PLAYTYPE_LOOP);
-			}
+			ToShootMode(isPlaySE);
 			break;
 		}
 		case MODE_SHOOT_END: {
-
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			ToShootEndMode(isPlaySE);
 			break;
 		}
 		case MODE_BITE: {
-			world_->FreeCameraPosY(false);
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
-			if(isPlaySE)Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
+			ToBiteMode(isPlaySE);
 			break;
 		}
 		case MODE_SLIP: {
-
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			ToSlipMode(isPlaySE);
 			break;
 		}
 		case MODE_RESIST: {
-
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			ToResistMode(isPlaySE);
 			break;
 		}
 		case MODE_CLEAR: {
-
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			ToClearMode(isPlaySE);
 			break;
 		}
 		case MODE_PLAYERDEAD: {
-
-			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerDeadHead>(world_, position_));
-			
-			for (int i = 0; i < 8; i++) {
-				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerDeadPin>(world_, position_));
-			}
-			Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
-			Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+			ToDeadMode(isPlaySE);
 			break;
 		}
-
-		default:
-			break;
 		}
 }
 
@@ -880,6 +849,79 @@ void Player::CreateBiteEffect()
 	vel = vel.Normalize();
 	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerBiteEffect>(world_, pHeads_[currentHead_]->GetPosition() + vel * 30));
 
+}
+
+void Player::ToFallMode(bool isPlaySE)
+{
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+
+}
+
+void Player::ToShootMode(bool isPlaySE)
+{
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	if (pHeadDead_[currentHead_]) {
+		Sound::GetInstance().PlaySE(SE_ID::BAD_SE);
+	}
+	else {
+		Sound::GetInstance().PlaySE(SE_ID::HEAD_SHOOT_SE, DX_PLAYTYPE_LOOP);
+	}
+
+}
+
+void Player::ToShootEndMode(bool isPlaySE)
+{
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+
+}
+
+void Player::ToBiteMode(bool isPlaySE)
+{
+	world_->FreeCameraPosY(false);
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+	if (isPlaySE)Sound::GetInstance().PlaySE(SE_ID::BITE_SE);
+
+}
+
+void Player::ToSlipMode(bool isPlaySE)
+{
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+
+}
+
+void Player::ToResistMode(bool isPlaySE)
+{
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+}
+
+void Player::ToClearMode(bool isPlaySE)
+{
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
+
+	clearShootTimer_.Initialize();
+	clearShootTimer_.Add([this] {
+		PHeadChanger();
+		isClearShoot_ = true;
+		pGrav_ = 0.0f;
+		pendulumVect_ = Vector2(0.f, 100.f);
+	});
+}
+
+void Player::ToDeadMode(bool isPlaySE)
+{
+	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerDeadHead>(world_, position_));
+
+	for (int i = 0; i < 8; i++) {
+		world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerDeadPin>(world_, position_));
+	}
+	Sound::GetInstance().StopSE(SE_ID::FATIGUE_SE);
+	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 }
 
 void Player::FallUpdate()
@@ -1123,12 +1165,7 @@ void Player::ClearUpdate()
 		i = MathHelper::Clamp(i, -60.f, 60.f);
 	}
 	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT+99.f)||isClearShoot_) {
-		if (!isClearShoot_) {
-			PHeadChanger();
-			isClearShoot_ = true;
-			pGrav_ = 0.0f;
-			pendulumVect_ = Vector2(0.f, 100.f);
-		}
+		clearShootTimer_.Action();
 		pendulumVect_.y *= 0.98f;
 		pendulumVect_.y = max(50.f,pendulumVect_.y);
 

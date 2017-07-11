@@ -6,6 +6,7 @@
 #include"../../Def.h"
 #include"../../graphic/DrawPos.h"
 #include"PlayerNeck\NeckPiecePoint.h"
+#include"../../method/MethodTimer.h"
 
 class Player_Head;
 class Player_Sword;
@@ -26,7 +27,7 @@ static const float fallAddPosMult = 3.4f;
 static const float defResistTime = 0.5f;
 //レーンの本数
 
-enum {
+enum Player_Mode{
 	MODE_FALL = 0,
 	MODE_SHOOT = 1,
 	MODE_SHOOT_END = 2,
@@ -102,9 +103,15 @@ public:
 	}
 	void StartPendulum();
 
+	//首の根本の位置を調べる
 	Vector2 GetHeadPos(int headNum)const {
 		return pHeadPoses_[headNum];
 	}
+	//現在の首の根本の位置を調べる
+	Vector2 GetHeadPos()const {
+		return pHeadPoses_[currentHead_];
+	}
+
 	//Headの長さを実際のゲームに反映される値に変換して返す
 	float GetHeadLengthChangeToPosMult(int headNum) const {
 		return pHeadLength_[headNum] * HeadShootMult;
@@ -160,6 +167,10 @@ public:
 	bool GetIsBiteMode()const {
 		return playerMode_ == MODE_BITE || playerMode_ == MODE_RESIST;
 	}
+	//プレイヤーの状態をチェックする、引数のモードと一致していればtrue
+	bool PlayerModeChecker(Player_Mode pMode) {
+		return playerMode_ == pMode;
+	}
 	bool GetIsResistMode()const {
 		return playerMode_ == MODE_RESIST;
 	}
@@ -178,7 +189,7 @@ public:
 		int setMode = (ismode) ? MODE_BITE : MODE_SHOOT;
 		playerMode_ = setMode;
 	}
-	void SetMode(int pMode, bool isPlaySE=true);
+	void SetMode(Player_Mode pMode, bool isPlaySE=true);
 	//シュート終了の瞬間かどうかを取る
 	bool GetIsShootModeEnd()const {
 		return playerMode_==MODE_SHOOT_END;
@@ -223,9 +234,15 @@ public:
 	Vector2 GetStopPos()const {
 		return stopPos_;
 	}
+	//首の先端の角度を調べる
 	float GetRot()const {
 		return mRot.front();
 	}
+	//首の根本の角度を調べる
+	float GetRotBack()const {
+		return mRot.back();
+	}
+
 	Vector2 GetHeadPosAddVect() const{
 		return headPosAddVect_;
 	}
@@ -329,9 +346,17 @@ protected:
 	}
 	void CreateBiteEffect();
 
-
 //プレイヤーの状態に応じた更新
 protected:
+	void ToFallMode(bool isPlaySE);
+	void ToShootMode(bool isPlaySE);
+	void ToShootEndMode(bool isPlaySE);
+	void ToBiteMode(bool isPlaySE);
+	void ToSlipMode(bool isPlaySE);
+	void ToResistMode(bool isPlaySE);
+	void ToClearMode(bool isPlaySE);
+	void ToDeadMode(bool isPlaySE);
+	
 	void FallUpdate();
 	void ShootUpdate();
 	void ShootEndUpdate();
@@ -429,9 +454,13 @@ protected:
 
 	std::map<int, std::function<void()>> updateFunctionMap_;
 
+	//クリア時にプレイヤーが発射される瞬間の処理を行う
+	MethodTimer clearShootTimer_;
 protected:
 	const float gravity_{0.5f};
 	const float spdLimit{ 2.75f };
+
+	friend class PlayerModify;
 
 };
 

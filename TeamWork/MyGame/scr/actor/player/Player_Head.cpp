@@ -32,6 +32,7 @@ Player_Head::Player_Head(IWorld * world, Player* targetP, Vector2 pos, int myNum
 	colFuncMap_[COL_ID::PHEAD_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_Circle_Capsules, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::BOX_HANGER_COL] = std::bind(&CollisionFunction::IsHit_PHead_Hanger, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::PHEAD_GOAL_COL] = std::bind(&CollisionFunction::IsHit_PHead_Goal, colFunc_, std::placeholders::_1, std::placeholders::_2);
+
 }
 
 Player_Head::~Player_Head()
@@ -124,6 +125,14 @@ void Player_Head::Draw() const
 
 	float angle = (float)(((int)MathAngle(player_->GetPosition()- position_))%360);
 	if (getIsCurrentHead()) {
+		//float angle = (float)(((int)MathAngle(player_->GetHeadPos() - position_)) % 360);
+		angle = player_->GetRot()-90.f;
+		if(player_->PlayerModeChecker(Player_Mode::MODE_BITE)) {
+			angle = MathHeadRotation_Bite();
+		}
+		else {
+			angle = MathHeadRotation_Fall();
+		}
 		if (angle > 90 && 180 > angle)angle = 90;
 		else if (angle < 270 && 180 <= angle) {
 			angle = 270;
@@ -199,3 +208,15 @@ void Player_Head::CreateFatigueEffect()
 	Sound::GetInstance().PlaySE(SE_ID::FATIGUE_SE);
 	isAlreadyCreateSplash_ = true;
 }
+
+float Player_Head::MathHeadRotation_Bite()const
+{
+	return player_->GetRot() - 90.f;
+}
+
+float Player_Head::MathHeadRotation_Fall()const
+{
+	return (float)(((int)MathAngle(player_->GetHeadPos() - position_)) % 360);
+
+}
+

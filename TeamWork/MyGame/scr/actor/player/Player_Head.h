@@ -97,6 +97,11 @@ public:
 	void SetBiteSprite() {
 		biteSpriteTimer_ = 0.15f;
 	}
+
+private:
+	float MathHeadRotation_Bite()const;
+	float MathHeadRotation_Fall()const;
+
 private:
 	//è’ìÀÇµÇƒÇ¢ÇÈÇ©
 	bool isHit_;
@@ -118,4 +123,6 @@ private:
 	int fatigueCheckColor_;
 
 	bool isAlreadyCreateSplash_;
+
+	friend class PlayerModify;
 };

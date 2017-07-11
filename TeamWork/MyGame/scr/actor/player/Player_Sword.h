@@ -77,4 +77,6 @@ private:
 	Vector2 swordEndPos_;
 
 	bool useSword_;
+
+	friend class PlayerModify;
 };

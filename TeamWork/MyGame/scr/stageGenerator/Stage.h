@@ -10,6 +10,8 @@ enum class Stage
 	Stage5,
 	Stage6,
 	Stage7,
-	Stage8
+	Stage8,
 
+
+	STAGE_COUNT
 };

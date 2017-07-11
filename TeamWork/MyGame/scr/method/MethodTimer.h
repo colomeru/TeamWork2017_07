@@ -6,9 +6,13 @@ class MethodTimer {
 public:
 	//登録した関数を順番に呼び出すクラス
 	MethodTimer();
+	~MethodTimer();
 
 	//登録されている関数を全て削除し、カウントを0にする
 	void Initialize();
+
+	//Action関数内でInitializeする場合は此方
+	void InnerInitialize();
 	//カウントを0にする
 	void NumReset();
 	//空の関数を追加する
@@ -20,8 +24,16 @@ public:
 	//登録された最大値のカウントに移動し、関数を実行する
 	void ToLastAction();
 private:
+	//空の関数処理カウントを進める
+	void CountEmpty(int count);
+
+private:
 	//呼び出し回数カウンタ
 	int count_;
+
+	std::vector<int> emptyCount_;
+	std::vector<int> MAX_EMPTY_COUNT;
+
 	//関数リスト
 	std::vector<std::function<void()>> targetFuncList_;
 };

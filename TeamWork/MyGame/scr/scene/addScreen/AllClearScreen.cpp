@@ -12,7 +12,7 @@
 
 AllClearScreen::AllClearScreen() :inputCount_(0), sinCount_(defSinC), fscore_(0.f), fheadCount_(0.f)
 {
-	changeSceneList_.push_back(Scene::Title);
+	changeSceneList_.push_back(Scene::Credit);
 
 	textAlphaList_.push_back(1.f);
 

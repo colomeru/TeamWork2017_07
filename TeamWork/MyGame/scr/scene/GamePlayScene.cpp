@@ -44,13 +44,21 @@ GamePlayScene::GamePlayScene() :
 		handleMessage(msg, param);
 	});
 
-	updateFunctionMap_[6] = std::bind(&GamePlayScene::nextSwitchUpdate, this);
-	updateFunctionMap_[5] = std::bind(&GamePlayScene::nextUpdate, this);
-	updateFunctionMap_[4] = std::bind(&GamePlayScene::pauseUpdate, this);
-	updateFunctionMap_[3] = std::bind(&GamePlayScene::clearUpdate, this);
-	updateFunctionMap_[2] = std::bind(&GamePlayScene::overUpdate, this);
-	updateFunctionMap_[1] = std::bind(&GamePlayScene::baseUpdate, this);
 	updateFunctionMap_[0] = std::bind(&GamePlayScene::startUpdate, this);
+	updateFunctionMap_[1] = std::bind(&GamePlayScene::baseUpdate, this);
+	updateFunctionMap_[2] = std::bind(&GamePlayScene::overUpdate, this);
+	updateFunctionMap_[3] = std::bind(&GamePlayScene::clearUpdate, this);
+	updateFunctionMap_[4] = std::bind(&GamePlayScene::pauseUpdate, this);
+	updateFunctionMap_[5] = std::bind(&GamePlayScene::nextUpdate, this);
+	updateFunctionMap_[6] = std::bind(&GamePlayScene::nextSwitchUpdate, this);
+
+	changeModeFunctionMap_[0] = [this] {ToStartMode(); };
+	changeModeFunctionMap_[1] = [this] {ToBaseMode(); };
+	changeModeFunctionMap_[2] = [this] {ToOverMode(); };
+	changeModeFunctionMap_[3] = [this] {ToClearMode(); };
+	changeModeFunctionMap_[4] = [this] {ToPauseMode(); };
+	changeModeFunctionMap_[5] = [this] {ToNextMode(); };
+	changeModeFunctionMap_[6] = [this] {ToSwitchMode(); };
 
 	stageBGMList_[Stage::Stage1] = BGM_ID::STAGE_01_BGM;
 	stageBGMList_[Stage::Stage2] = BGM_ID::STAGE_02_BGM;
@@ -60,15 +68,6 @@ GamePlayScene::GamePlayScene() :
 	stageBGMList_[Stage::Stage6] = BGM_ID::STAGE_03_BGM;
 	stageBGMList_[Stage::Stage7] = BGM_ID::STAGE_01_BGM;
 	stageBGMList_[Stage::Stage8] = BGM_ID::STAGE_02_BGM;
-
-	defWindTime_[Stage::Stage1] = defWindTime[0];
-	defWindTime_[Stage::Stage2] = defWindTime[1];
-	defWindTime_[Stage::Stage3] = defWindTime[2];
-	defWindTime_[Stage::Stage4] = defWindTime[3];
-	defWindTime_[Stage::Stage5] = defWindTime[4];
-	defWindTime_[Stage::Stage6] = defWindTime[5];
-	defWindTime_[Stage::Stage7] = defWindTime[6];
-	defWindTime_[Stage::Stage8] = defWindTime[7];
 
 	bgScreen_ = BackgroundScreen(world_.get());
 	changeScreen_=LaneChangeScreen(world_.get());
@@ -92,7 +91,6 @@ GamePlayScene::~GamePlayScene()
 
 void GamePlayScene::Initialize()
 {
-	changeCount_ = 600;
 	currentStage_ = CheatData::getInstance().GetSelectStage();
 
 	isEnd_ = false;
@@ -164,19 +162,22 @@ void GamePlayScene::Draw() const
 
 	uiScreen_.Draw();
 
-	if (gamePlayMode_ == 2) {
-		gameOverScreen_.Draw();
+
+	switch (gamePlayMode_)
+	{
+	case 2: {
+		OverDraw();
+		break;
 	}
-	else if (gamePlayMode_ == 3) {
-		if (currentStage_ == Stage::Stage8) {
-			allClearScreen_.Draw();
-		}
-		else {
-			gameClearScreen_.Draw();
-		}
+	case 3: {
+		ClearDraw();
+		break;
 	}
-	else if (gamePlayMode_ == 4) {
-		pauseScreen_.Draw();
+	case 4: {
+		PauseDraw();
+	}
+	default:
+		break;
 	}
 
 	DebugDraw::DebugDrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
@@ -278,9 +279,11 @@ void GamePlayScene::baseUpdate()
 		TweenManager::GetInstance().StopAll();
 
 	}
-	if (BuildMode==1&&Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
+#ifndef NDEBUG
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::L)) {
 		setNextMode(3);
 	}
+#endif
 
 	bgScreen_.Update();
 	changeScreen_.Update();
@@ -327,14 +330,13 @@ void GamePlayScene::clearUpdate()
 }
 void GamePlayScene::nextUpdate()
 {
-
 	world_->Update();
 	bgScreen_.Update();
 	changeScreen_.Update();
 	stageEffectScreen_.Update();
 	
-	if(world_->GetKeepDatas().camPosY_<=-WINDOW_HEIGHT)changeCount_--;
-	if (changeCount_ <= 0) setNextMode(3);
+	if(world_->GetKeepDatas().camPosY_<=-WINDOW_HEIGHT)clearTimer_.Action();
+	
 	bgScreen_.DownCeil();
 
 }
@@ -348,21 +350,19 @@ void GamePlayScene::BeginWind()
 	world_->sendMessage(EventMessage::BEGIN_WIND);
 	bgScreen_.addBGCharacters();
 	ResetWindTime();
-	OutputDebugString("‚Å‚Î‚Á‚®");
-	OutputDebugString("\n");
 }
 
 void GamePlayScene::InitWindTime()
 {
 	windTimer_.Initialize();
-	windTimer_.AddEmpty(defWindTime_[currentStage_]);
+	windTimer_.AddEmpty(defWindTime[(int)currentStage_]);
 	windTimer_.Add([this] {BeginWind(); });
 }
 
 void GamePlayScene::ResetWindTime()
 {
 	windTimer_.InnerInitialize();
-	windTimer_.AddEmpty(defWindTime_[currentStage_]);
+	windTimer_.AddEmpty(defWindTime[(int)currentStage_]);
 	windTimer_.Add([this] {BeginWind(); });
 }
 
@@ -406,6 +406,14 @@ void GamePlayScene::clear_All_Update()
 	
 }
 
+void GamePlayScene::ToStartMode()
+{
+}
+
+void GamePlayScene::ToBaseMode()
+{
+}
+
 void GamePlayScene::ToOverMode()
 {
 	TweenManager::GetInstance().StopAll();
@@ -440,6 +448,17 @@ void GamePlayScene::ToPauseMode()
 	Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 }
 
+void GamePlayScene::ToNextMode()
+{
+	windTimer_.Initialize();
+	windTimer_.AddEmpty(changeCount_);
+	windTimer_.Add([this] {setNextMode(3); });
+}
+
+void GamePlayScene::ToSwitchMode()
+{
+}
+
 Stage GamePlayScene::AddStageNum(Stage current)
 {
 	int nextStage = ((int)current + 1);
@@ -447,25 +466,31 @@ Stage GamePlayScene::AddStageNum(Stage current)
 	return (Stage)nextStage;
 }
 
+void GamePlayScene::OverDraw() const
+{
+	gameOverScreen_.Draw();
+}
+
+void GamePlayScene::ClearDraw() const
+{
+	if (currentStage_ == Stage::Stage8) {
+		allClearScreen_.Draw();
+	}
+	else {
+		gameClearScreen_.Draw();
+	}
+}
+
+void GamePlayScene::PauseDraw() const
+{
+	pauseScreen_.Draw();
+}
+
 void GamePlayScene::setNextMode(int mode) {
 	gamePlayMode_ = mode;
-	switch (gamePlayMode_)
-	{
-	case 2: {
-		ToOverMode();
-		break;
-	}
-	case 3: {
-		ToClearMode();
-		break;
-	}
-	case 4: {
-		ToPauseMode();
-		break;
-	}
-	default:
-		break;
-	}
+
+	changeModeFunctionMap_[gamePlayMode_]();
+
 }
 
 void GamePlayScene::startUpdate()

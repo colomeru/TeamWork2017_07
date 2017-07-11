@@ -124,5 +124,4 @@ private:
 
 	bool isAlreadyCreateSplash_;
 
-	friend class PlayerModify;
 };

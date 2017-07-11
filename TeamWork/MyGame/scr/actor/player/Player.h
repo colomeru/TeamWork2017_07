@@ -313,22 +313,11 @@ protected:
 		Vector2 nextVel_;
 		//上がるとき
 		if (updateNum < 0) {
-			nextVel_ = Vector2(0, -15.f);
-			pGrav_ = 0.f;
-			PHeadChanger();
-			SetMode(MODE_FALL);
-			world_->sendMessage(EventMessage::LANE_CHANGE_UP_END);
+			nextVel_=LaneChange_Up();
 		}
 		//降りる時
 		else if (updateNum > 0) {
-			if (changeType == LaneChangeType::LaneChange_Fall) {
-				nextVel_ = pendulumVect_ / 3;
-				pGrav_ *= 0.1f;
-
-				world_->sendMessage(EventMessage::LANE_CHANGE_FALL);
-			}
-			world_->sendMessage(EventMessage::LANE_CHANGE_DOWN_END);
-
+			nextVel_ =LaneChange_Down(changeType);
 		}
 	
 		laneNum_ += updateNum;
@@ -344,6 +333,9 @@ protected:
 
 		worldSetMyDatas();
 	}
+	Vector2 LaneChange_Up();
+	Vector2 LaneChange_Down(LaneChangeType changeType);
+
 	void CreateBiteEffect();
 
 //プレイヤーの状態に応じた更新
@@ -460,7 +452,6 @@ protected:
 	const float gravity_{0.5f};
 	const float spdLimit{ 2.75f };
 
-	friend class PlayerModify;
 
 };
 

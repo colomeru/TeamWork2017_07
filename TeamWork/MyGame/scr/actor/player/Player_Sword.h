@@ -78,5 +78,4 @@ private:
 
 	bool useSword_;
 
-	friend class PlayerModify;
 };

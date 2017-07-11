@@ -350,6 +350,8 @@ void Player::Multiple()
 				r += sign(r)*1.f;
 				r = MathHelper::Clamp(r, -60.f, 60.f);
 			}
+			mRot.front() = MathHelper::Clamp(mRot.front(), -45.f, 225.f);
+
 		}
 	}
 	pendulumVect_=PlayerNeckPendulumSupport::Pendulum(fPos_, multiplePos, mRot, mRot_spd, neckDrawPoints);
@@ -842,6 +844,31 @@ void Player::CurPHeadLengPlus(float addPow) {
 	}
 }
 
+Vector2 Player::LaneChange_Up()
+{
+	pGrav_ = 0.f;
+	PHeadChanger();
+	SetMode(MODE_FALL);
+	world_->sendMessage(EventMessage::LANE_CHANGE_UP_END);
+
+	return Vector2(0, -15.f);
+}
+
+Vector2 Player::LaneChange_Down(LaneChangeType changeType)
+{
+	Vector2 result = Vector2(0.0f, 0.0f);
+
+	if (changeType == LaneChangeType::LaneChange_Fall) {
+		result = pendulumVect_ / 3;
+		pGrav_ *= 0.1f;
+
+		world_->sendMessage(EventMessage::LANE_CHANGE_FALL);
+	}
+	world_->sendMessage(EventMessage::LANE_CHANGE_DOWN_END);
+	
+	return result;
+}
+
 void Player::CreateBiteEffect()
 {
 	if (pHeadDead_[currentHead_])return;
@@ -1164,6 +1191,8 @@ void Player::ClearUpdate()
 		i*=1.02f;
 		i = MathHelper::Clamp(i, -60.f, 60.f);
 	}
+	mRot.front() = MathHelper::Clamp(mRot.front(), 0.f, 180.f);
+
 	if ((pHeads_[currentHead_]->GetDrawPos().y>= WINDOW_HEIGHT+99.f)||isClearShoot_) {
 		clearShootTimer_.Action();
 		pendulumVect_.y *= 0.98f;

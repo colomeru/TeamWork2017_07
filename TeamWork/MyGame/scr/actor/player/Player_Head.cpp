@@ -134,7 +134,7 @@ void Player_Head::Draw() const
 			angle = MathHeadRotation_Fall();
 		}
 		if (angle > 90 && 180 > angle)angle = 90;
-		else if (angle < 270 && 180 <= angle) {
+		else if ((angle < 270 && 180 <= angle)||angle<=-90.f) {
 			angle = 270;
 		}
 		Vector2 headOrigin = Sprite::GetInstance().GetSize(spriteId_) / 2;

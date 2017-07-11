@@ -71,11 +71,20 @@ private:
 	void clear_All_Update();
 
 private:
+	void ToStartMode();
+	void ToBaseMode();
 	void ToOverMode();
 	void ToClearMode();
 	void ToPauseMode();
+	void ToNextMode();
+	void ToSwitchMode();
 
 	Stage AddStageNum(Stage current);
+
+	void OverDraw()const;
+	void ClearDraw()const;
+	void PauseDraw()const;
+	
 private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
@@ -109,17 +118,24 @@ private:
 	int maxLaneCount;
 	float stageLen_;
 
-	int changeCount_;
-
+	//風の生成タイマー
 	MethodTimer windTimer_;
-
+	
+	//ステージクリアタイマー
+	MethodTimer clearTimer_;
 	//0=Start,1=Gameplay,2=Gameover,3=Gameclear,4=Pause
 	int	gamePlayMode_;
 
 	std::map<Stage,BGM_ID> stageBGMList_;
 
-	std::map<Stage, int> defWindTime_;
+	//更新モードを変更するための関数リスト
+	std::map<int, std::function<void()>> changeModeFunctionMap_;
 
+	//更新モードの関数リスト
 	std::map<int, std::function<void()>> updateFunctionMap_;
+
+private:
+	//強制的にステージを変更する基準値
+	const int changeCount_{ 600 };
 
 };

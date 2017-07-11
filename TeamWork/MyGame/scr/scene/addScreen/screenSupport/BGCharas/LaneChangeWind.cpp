@@ -2,7 +2,7 @@
 #include"../../../../graphic/Sprite.h"
 #include"../../../../game/Random.h"
 #include"../../../../Def.h"
-#include"../../../../debug/DebugDraw.h"
+#include"../../../../debugdata/DebugDraw.h"
 
 LaneChangeWind::LaneChangeWind(IWorld* world, const Vector2& position, WindDir dir) :
 	BackgroundCharacters(world, position),dir_(dir),speed_(Random::GetInstance().Range(1.0f, 10.0f)),alphaTime_(0),alpha_(0)

@@ -3,7 +3,7 @@
 #include "../time/Time.h"
 #include "../fade/FadePanel.h"
 #include"../sound/sound.h"
-#include"../debug/DebugDraw.h"
+#include"../debugdata/DebugDraw.h"
 #include "../actor/SampleActor.h"
 #include"../camera/Camera.h"
 #include"../conv/DXConverter.h"

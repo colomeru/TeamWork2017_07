@@ -19,7 +19,7 @@
 #include"../../cheat/CheatData.h"
 #include"PlayerFallPin.h"
 #include"PlayerNeck/PlayerNeckPendulumSupport.h"
-#include"../../debug/DebugDraw.h"
+#include"../../debugdata/DebugDraw.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;

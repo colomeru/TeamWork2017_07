@@ -1,6 +1,6 @@
 #include "Player_Sword.h"
 #include"../../math/MyFuncionList.h"
-#include"../../debug/DebugDraw.h"
+#include"../../debugdata/DebugDraw.h"
 
 Player_Sword::Player_Sword(IWorld * world, Player * targetP, Vector2 pos)
 	:Actor(world,targetP),swordStartPos_(pos),swordEndPos_(pos),player_(targetP),useSword_(false)

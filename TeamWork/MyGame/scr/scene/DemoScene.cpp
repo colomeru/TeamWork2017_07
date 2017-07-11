@@ -3,7 +3,7 @@
 #include "../tween/TweenManager.h"
 #include"../graphic/Sprite.h"
 #include"../Def.h"
-#include"../debug/DebugDraw.h"
+#include"../debugdata/DebugDraw.h"
 
 
 static const int animDelay = 3;

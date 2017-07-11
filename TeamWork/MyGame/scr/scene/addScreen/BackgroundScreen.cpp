@@ -5,7 +5,7 @@
 #include"../../game/Random.h"
 #include"../../Def.h"
 #include"../GamePlayDefine.h"
-#include"../../debug/DebugDraw.h"
+#include"../../debugdata/DebugDraw.h"
 
 static const int defTimeCount_ = 60;
 static const int defGenerateCharaCount = 10;

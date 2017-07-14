@@ -10,6 +10,8 @@ public:
 	static void DebugDrawFormatString(int x,int y,unsigned int color,const std::string& text, T ...args){}
 
 	static void DebugDrawLine(int x1, int y1, int x2, int y2, unsigned int color, int thickness = 1) {}
+	static void DebugDrawCircle(int x, int y, int r, unsigned int color, int FillFlag=1, int LineThickness = 1) {}
+
 #else
 	template<class ...T>
 	//デバッグ用文字列描画
@@ -17,8 +19,12 @@ public:
 		DrawFormatString(x, y, color, text.c_str(), args...);
 	}
 	//デバッグ用線分描画
-	static void DebugDrawLine(int x1,int y1,int x2,int y2,unsigned int color,int thickness=1) {
-		DrawLine(x1,y1,x2,y2,color,thickness);
+	static void DebugDrawLine(int x1, int y1, int x2, int y2, unsigned int color, int thickness = 1) {
+		DrawLine(x1, y1, x2, y2, color, thickness);
+	}
+	//デバッグ用線分描画
+	static void DebugDrawCircle(int x, int y, int r, unsigned int color,int FillFlag=1, int LineThickness = 1) {
+		DrawCircle(x, y,r, color,FillFlag,LineThickness);
 	}
 
 #endif

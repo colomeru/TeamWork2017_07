@@ -10,7 +10,7 @@
 #include"../sound/sound.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
 #include "../cheat/CheatData.h"
-
+#include"../input/InputChecker.h"
 
 TitleScene::TitleScene() :
 	nextScene_(Scene::Menu)
@@ -49,7 +49,7 @@ void TitleScene::Initialize()
 	}
 	FadePanel::GetInstance().SetInTime(0.5f);
 	FadePanel::GetInstance().FadeIn();
-	isTrigger_ = true;
+
 }
 
 void TitleScene::Update()
@@ -61,7 +61,8 @@ void TitleScene::Update()
 	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
 	if (!isPushKey_) {
-		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+		//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 			SetNextPanel();
 
 		}
@@ -70,7 +71,8 @@ void TitleScene::Update()
 	}
 	
 	timer += Time::DeltaTime;
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 		if (selectNum_ == 0) {
 			FadePanel::GetInstance().AddCollBack([=]() {
 				SetBackgroundColor(153, 204, 255);
@@ -85,22 +87,19 @@ void TitleScene::Update()
 		}
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)|| (GamePad::GetInstance().Stick().y < -0.3f&&isTrigger_)) {
-		isTrigger_ = false;
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)|| (GamePad::GetInstance().Stick().y < -0.3f&&isTrigger_)) {
+	if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Up)) {
 		selectNum_++;
 		selectNum_ %=2;
 		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || (GamePad::GetInstance().Stick().y>0.3f&&isTrigger_)) {
-		isTrigger_ = false;
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || (GamePad::GetInstance().Stick().y>0.3f&&isTrigger_)) {
+	if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Down)) {
 		selectNum_++;
 		selectNum_ %= 2;
 		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
-	}
-	if (abs(GamePad::GetInstance().Stick().y) <= 0.3f) {
-		isTrigger_=true;
 	}
 	for (int i = 0; i < alpha_.size(); i++) {
 		if (i == selectNum_) {

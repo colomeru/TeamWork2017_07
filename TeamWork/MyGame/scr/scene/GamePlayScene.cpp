@@ -30,6 +30,7 @@
 #include"../actor/Effects/PlayerEffect/PlayerMetamorEffect.h"
 #include"../cheat/CheatData.h"
 #include"../fade/FadePanel.h"
+#include"../input/InputChecker.h"
 
 GamePlayScene::GamePlayScene() :
 	nextScene_(Scene::Credit), windTime_(defWindTime[0]), maxLaneCount(3),
@@ -274,7 +275,8 @@ void GamePlayScene::baseUpdate()
 	windTime_ -= randT;
 	windTimer_.Action();
 	//BeginWind();
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8)) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8)) {
+	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::Start)) {
 		setNextMode(4);
 		TweenManager::GetInstance().StopAll();
 

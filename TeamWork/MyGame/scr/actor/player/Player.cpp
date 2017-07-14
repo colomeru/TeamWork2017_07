@@ -20,6 +20,7 @@
 #include"PlayerFallPin.h"
 #include"PlayerNeck/PlayerNeckPendulumSupport.h"
 #include"../../debugdata/DebugDraw.h"
+#include"../../input/InputChecker.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -955,16 +956,17 @@ void Player::FallUpdate()
 {
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
-		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) &&
-			isCanNextHeadRot) {
+		//if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) &&isCanNextHeadRot){
+		if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Left)) {
 			SetMode(MODE_FALL);
 			//ÉLÅ[ÇâüÇµíºÇµÇΩÇ©ÇÃîªíf
 			PHeadChanger();
 			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
-		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) &&
-			isCanNextHeadRot) {
+		//if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) &&
+		//isCanNextHeadRot) {
+		if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Right)) {
 			SetMode(MODE_FALL);
 			//ÉLÅ[ÇâüÇµíºÇµÇΩÇ©ÇÃîªíf
 			PHeadChanger(1);
@@ -977,12 +979,14 @@ void Player::FallUpdate()
 			isCanNextHeadRot = true;
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::R1)) {
 			world_->sendMessage(EventMessage::NECK_SHOOT);
 			SetMode(MODE_SHOOT);
 			isNextPushKey_ = false;
 		}
-		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+		//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);
 		}
@@ -999,18 +1003,21 @@ void Player::ShootUpdate()
 {
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
-		if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)|| GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
+		//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)|| GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2)) {
+		if(InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)){
 			pHeads_[currentHead_]->SetBiteSprite();
 			SetMode(MODE_SHOOT_END);
 		}
-		else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyStateDown(KEYCODE::M)) {
+		//else if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyStateDown(KEYCODE::N)) {
+		else if (InputChecker::GetInstance().KeyStateDown(InputChecker::Input_Key::R1)) {
 			CurPHeadLengPlus(headShotPower);
 		}
 		else {
 			SetMode(MODE_FALL);
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::R1)) {
 			SetMode(MODE_SHOOT);
 			isNextPushKey_ = false;
 		}
@@ -1028,12 +1035,14 @@ void Player::ShootEndUpdate()
 	SetMode(MODE_FALL);
 	pGrav_ += defPGravPow;
 	if (isUseKey_) {
-		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
+		//if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
+		if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Left)) {
 			PHeadChanger();
 			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
-		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
+		//if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
+		if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Right)) {
 			//ÉLÅ[ÇâüÇµíºÇµÇΩÇ©ÇÃîªíf
 			PHeadChanger(1);
 			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
@@ -1043,8 +1052,8 @@ void Player::ShootEndUpdate()
 			isCanNextHeadRot = true;
 		}
 
-
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM6) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::R1)) {
 			SetMode(MODE_SHOOT);
 			isNextPushKey_ = false;
 		}
@@ -1061,7 +1070,8 @@ void Player::BiteUpdate()
 	Multiple();
 	if (isUseKey_) {
 
-		if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		//if (GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM1) || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		if (InputChecker::GetInstance().KeyStateDown(InputChecker::Input_Key::A)) {
 			if (!pSword_->GetUseSword()) {
 				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<GetSwordEffect>(world_, pSword_->GetPosition(), pSword_.get()));
 				world_->sendMessage(EventMessage::USE_SWORD);
@@ -1069,8 +1079,10 @@ void Player::BiteUpdate()
 				Sound::GetInstance().PlaySE(SE_ID::CREATE_SWORD_SE);
 			}
 		}
-		if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM5) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
-			if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+		//if ((GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM5) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S))) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::L1)) {
+			//if (GamePad::GetInstance().Stick().y > 0.5f || Keyboard::GetInstance().KeyStateDown(KEYCODE::W)) {
+			if (InputChecker::GetInstance().StickStateDown(InputChecker::Input_Stick::Up)) {
 				SetNextLane(1);
 			}
 			else if (mRot.front() < 0.f || mRot.front() > 180.f) {
@@ -1078,7 +1090,8 @@ void Player::BiteUpdate()
 			}
 		}
 
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+		//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 			SetMode(MODE_FALL);
 			//HeadÇåë„Ç∑ÇÈ
 			PHeadChanger();
@@ -1093,16 +1106,16 @@ void Player::BiteUpdate()
 		//éÊÇ¡ÇΩäpìxÇ™10à»â∫Ç»ÇÁçüï˚Ç…ì¸ÇÍÇÈ
 
 		if (isUseKey_) {
-			if (otherClothesID_ == CLOTHES_ID::FLUFFY_CLOTHES && (MathHelper::Abs(GamePad::GetInstance().Stick().x > 0.01f) ||
-				Keyboard::GetInstance().KeyStateDown(KEYCODE::D) ||
-				Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) &&
-				MathHelper::Abs(mRot_spd[0]) <= 0.01f&&
-				ptoDownAngle <= 10.f&&
-				pHeads_[currentHead_]->GetPosition().y < position_.y) {
-				for (auto& spd : mRot_spd) {
-					spd += (spdLimit)*2;
-				}
-			}
+			//if (otherClothesID_ == CLOTHES_ID::FLUFFY_CLOTHES && (MathHelper::Abs(GamePad::GetInstance().Stick().x > 0.01f) ||
+			//	Keyboard::GetInstance().KeyStateDown(KEYCODE::D) ||
+			//	Keyboard::GetInstance().KeyStateDown(KEYCODE::A)) &&
+			//	MathHelper::Abs(mRot_spd[0]) <= 0.01f&&
+			//	ptoDownAngle <= 10.f&&
+			//	pHeads_[currentHead_]->GetPosition().y < position_.y) {
+			//	for (auto& spd : mRot_spd) {
+			//		spd += (spdLimit)*2;
+			//	}
+			//}
 
 			slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];
 			if (slipCount_ <= 0.f) {
@@ -1134,7 +1147,8 @@ void Player::SlipUpdate()
 	//	playerMode_ = MODE_FALL;
 	//}
 	if (isUseKey_) {
-		if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
+		//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N)) {
+		if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 			//if (GetIsSlipped()) {
 				//MODE_SLIP;
 				//HeadÇåë„Ç∑ÇÈ
@@ -1144,13 +1158,15 @@ void Player::SlipUpdate()
 			isNextPushKey_ = false;
 
 		}
-		if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
+		//if ((GamePad::GetInstance().Stick().x < -0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::A))) && isCanNextHeadRot) {
+		if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Left)) {
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			PHeadChanger();
 			world_->sendMessage(EventMessage::CHANGE_HEAD_KEY);
 			isCanNextHeadRot = false;
 		}
-		if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
+		//if ((GamePad::GetInstance().Stick().x > 0.3f || (Keyboard::GetInstance().KeyStateDown(KEYCODE::D))) && isCanNextHeadRot) {
+		if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Right)) {
 			SetMode(MODE_FALL);//playerMode_ = MODE_FALL;
 			//ÉLÅ[ÇâüÇµíºÇµÇΩÇ©ÇÃîªíf
 			PHeadChanger(1);

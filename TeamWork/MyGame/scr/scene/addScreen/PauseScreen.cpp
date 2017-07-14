@@ -8,6 +8,7 @@
 #include"../../tween/TweenManager.h"
 #include"../../sound/sound.h"
 #include"../../fade/FadePanel.h"
+#include"../../input/InputChecker.h"
 
 PauseScreen::PauseScreen() :inputCount_(0), sinCount_(defSinC)
 {
@@ -58,7 +59,8 @@ bool PauseScreen::Update(Scene& nextScene, returnGameType& type)
 	if (abs(GamePad::GetInstance().Stick().y)<=0.1f) {
 		isAlreadyPush_ = false;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || (GamePad::GetInstance().Stick().y > 0.3f&&!isAlreadyPush_)) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || (GamePad::GetInstance().Stick().y > 0.3f&&!isAlreadyPush_)) {
+	if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Down)) {
 		isAlreadyPush_ = true;
 		inputCount_++;
 		if (inputCount_ <= (int)changeSceneList_.size() - 1) {
@@ -71,7 +73,8 @@ bool PauseScreen::Update(Scene& nextScene, returnGameType& type)
 
 		sinCount_ = defSinC;
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || (GamePad::GetInstance().Stick().y < -0.3f&&!isAlreadyPush_)) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || (GamePad::GetInstance().Stick().y < -0.3f&&!isAlreadyPush_)) {
+	if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Up)) {
 		isAlreadyPush_ = true;
 		inputCount_--;
 		if (inputCount_ >= 0) {
@@ -86,7 +89,8 @@ bool PauseScreen::Update(Scene& nextScene, returnGameType& type)
 	}
 	drawUpdate();
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 		nextScene = changeSceneList_[inputCount_];
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 

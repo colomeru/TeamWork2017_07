@@ -1,6 +1,7 @@
 #include "GamePad.h"
+#include<string>
 
-GamePad::GamePad()
+GamePad::GamePad():curStick_(Vector2::Zero),prevStick_(Vector2::Zero)
 {
 	m_inputbuttons.clear();
 	m_onbuttons.clear();
@@ -173,6 +174,17 @@ Vector2 GamePad::Stick(int pad)
 	return Vector2((float)stickX / 1000.0f, (float)stickY / 1000.0f);
 }
 
+Vector2 GamePad::GetCurrentStick()
+{
+	return curStick_;
+}
+
+//前フレームの1番目コントローラのスティック入力を受け取る
+Vector2 GamePad::GetPreviousStick()
+{
+	return prevStick_;
+}
+
 // 指定のパッドの振動を開始する
 void GamePad::VibrationStart(int power = 500, int time = 60, int pad)
 {
@@ -212,6 +224,15 @@ void GamePad::Update()
 			m_onpovbuttons[pad]++;
 		}
 	}
+	prevStick_ = curStick_;
+	int stickX, stickY;
+	GetJoypadAnalogInput(&stickX, &stickY, 1);
+	curStick_ = Vector2((float)stickX / 1000.0f, (float)stickY / 1000.0f);
+
+	OutputDebugString(std::to_string(curStick_.x).c_str());
+	OutputDebugString("\n");
+	OutputDebugString(std::to_string(curStick_.y).c_str());
+
 }
 
 void GamePad::Exception(int pad, int button)

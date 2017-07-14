@@ -9,6 +9,7 @@
 #include"screenSupport\DrawScore.h"
 #include"../../sound/sound.h"
 #include"../../fade/FadePanel.h"
+#include"../../input/InputChecker.h"
 
 AllClearScreen::AllClearScreen() :inputCount_(0), sinCount_(defSinC), fscore_(0.f), fheadCount_(0.f)
 {
@@ -77,7 +78,8 @@ bool AllClearScreen::Update(Scene & nextScene)
 
 	if (!FadePanel::GetInstance().IsClearScreen()) return false;
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::S) || GamePad::GetInstance().Stick().y > 0.3f) {
+	if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Down)) {
 		inputCount_++;
 		if (inputCount_ <= (int)changeSceneList_.size() - 1) {
 			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
@@ -89,7 +91,8 @@ bool AllClearScreen::Update(Scene & nextScene)
 		sinCount_ = defSinC;
 
 	}
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W) || GamePad::GetInstance().Stick().y < -0.3f) {
+	if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Up)) {
 		inputCount_--;
 		if (inputCount_ >= 0) {
 			Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
@@ -103,7 +106,8 @@ bool AllClearScreen::Update(Scene & nextScene)
 
 	drawUpdate();
 
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
+	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 		nextScene = changeSceneList_[inputCount_];
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 

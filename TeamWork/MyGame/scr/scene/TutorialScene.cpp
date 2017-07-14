@@ -22,6 +22,7 @@
 #include"../actor/Effects/PlayerEffect/CursorEffect.h"
 #include"../sound/sound.h"
 #include"../graphic/FontManager.h"
+#include"../input/InputChecker.h"
 
 static int maxTextCount[maxTutorialNum]{
 	3,
@@ -214,13 +215,9 @@ void TutorialScene::Update()
 	}
 	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
-	//風テスト
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H)) {
-		world_->sendMessage(EventMessage::BEGIN_WIND);
-	}
-
 	// 終了
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
+	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
+	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::Start))
 	{
 		if (!isNext_) {
 			FadePanel::GetInstance().AddCollBack([=]() {Sound::GetInstance().StopBGM(); isEnd_ = true; });

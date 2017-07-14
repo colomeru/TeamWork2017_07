@@ -93,6 +93,14 @@ public:
 	///</summary>
 	Vector2 Stick(int pad = PADNUM::PAD1);
 	///<summary>
+	/// 現フレームの1番目コントローラのスティック入力を受け取る
+	///</summary>
+	Vector2 GetCurrentStick();
+	///<summary>
+	/// 前フレームの1番目コントローラのスティック入力を受け取る
+	///</summary>
+	Vector2 GetPreviousStick();
+	///<summary>
 	/// 指定のパッドの右アナログスティックの入力具合を調べる
 	/// (X = -1.0～1.0, Y = -1.0～1.0)
 	///</summary>
@@ -120,4 +128,7 @@ private:
 
 	std::vector<int> m_inputbuttons;// ボタン入力判定達
 	std::vector<int> m_pads;// パッド番号達
+	
+	Vector2 curStick_;//現フレームのスティック入力
+	Vector2 prevStick_;//前フレームのスティック入力
 };

@@ -206,6 +206,7 @@
     <ClCompile Include="scr\actor\Field\Enemys\Enemys.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\TutorialManager.cpp" />
     <ClCompile Include="scr\actor\player\CreditPlayer.cpp" />
+    <ClCompile Include="scr\actor\player\Data\PlayerModify.cpp" />
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
     <ClCompile Include="scr\actor\player\Player3.cpp" />
@@ -213,6 +214,7 @@
     <ClCompile Include="scr\actor\player\PlayerDeadPin.cpp" />
     <ClCompile Include="scr\actor\player\PlayerEffectManager.cpp" />
     <ClCompile Include="scr\actor\player\PlayerFallPin.cpp" />
+    <ClCompile Include="scr\actor\player\PlayerNeck\PlayerNeckPendulumSupport.cpp" />
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\player\Player_Sword.cpp" />
     <ClCompile Include="scr\actor\SampleActor.cpp" />
@@ -240,6 +242,7 @@
     <ClCompile Include="scr\graphic\TextDraw.cpp" />
     <ClCompile Include="scr\input\CsvReader.cpp" />
     <ClCompile Include="scr\input\GamePad.cpp" />
+    <ClCompile Include="scr\input\InputChecker.cpp" />
     <ClCompile Include="scr\input\Keyboard.cpp" />
     <ClCompile Include="scr\main.cpp" />
     <ClCompile Include="scr\math\Color.cpp" />
@@ -250,6 +253,7 @@
     <ClCompile Include="scr\math\Quaternion.cpp" />
     <ClCompile Include="scr\math\Vector2.cpp" />
     <ClCompile Include="scr\math\Vector3.cpp" />
+    <ClCompile Include="scr\method\MethodTimer.cpp" />
     <ClCompile Include="scr\scene\addScreen\AllClearScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\BackgroundScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\GameClearScreen.cpp" />
@@ -346,6 +350,7 @@
     <ClInclude Include="scr\actor\Field\Enemys\TutorialList.h" />
     <ClInclude Include="scr\actor\Field\Enemys\TutorialManager.h" />
     <ClInclude Include="scr\actor\player\CreditPlayer.h" />
+    <ClInclude Include="scr\actor\player\Data\PlayerModify.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />
     <ClInclude Include="scr\actor\player\Player3.h" />
@@ -354,6 +359,8 @@
     <ClInclude Include="scr\actor\player\PlayerEffectManager.h" />
     <ClInclude Include="scr\actor\player\PlayerFallPin.h" />
     <ClInclude Include="scr\actor\player\PlayerNeckDraw.h" />
+    <ClInclude Include="scr\actor\player\PlayerNeck\NeckPiecePoint.h" />
+    <ClInclude Include="scr\actor\player\PlayerNeck\PlayerNeckPendulumSupport.h" />
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\player\Player_Sword.h" />
     <ClInclude Include="scr\actor\SampleActor.h" />
@@ -367,6 +374,7 @@
     <ClInclude Include="scr\collision\CollisionFunction.h" />
     <ClInclude Include="scr\collision\CollisionParameter.h" />
     <ClInclude Include="scr\collision\MyCol.h" />
+    <ClInclude Include="scr\debugdata\DebugDraw.h" />
     <ClInclude Include="scr\Def.h" />
     <ClInclude Include="scr\conv\DXConverter.h" />
     <ClInclude Include="scr\fade\FadePanel.h" />
@@ -390,6 +398,7 @@
     <ClInclude Include="scr\graphic\TextDraw.h" />
     <ClInclude Include="scr\input\CsvReader.h" />
     <ClInclude Include="scr\input\GamePad.h" />
+    <ClInclude Include="scr\input\InputChecker.h" />
     <ClInclude Include="scr\input\Keyboard.h" />
     <ClInclude Include="scr\math\Color.h" />
     <ClInclude Include="scr\math\Easing.h" />
@@ -400,6 +409,7 @@
     <ClInclude Include="scr\math\Quaternion.h" />
     <ClInclude Include="scr\math\Vector2.h" />
     <ClInclude Include="scr\math\Vector3.h" />
+    <ClInclude Include="scr\method\MethodTimer.h" />
     <ClInclude Include="scr\myData\MyTestCamera.h" />
     <ClInclude Include="scr\myData\MyTestCol.h" />
     <ClInclude Include="scr\scene\addScreen\AllClearScreen.h" />

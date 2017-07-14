@@ -2,7 +2,9 @@
 #include "../../../tween/TweenManager.h"
 #include "../../../actor/player/Player_Head.h"
 #include "../../../game/ID.h"
+#include "../../../debugdata/DebugDraw.h"
 
+//コンストラクタ
 CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, Vector2 size, int frame) :
 	Clothes(world, id, laneNum, 0.0f), f2(0.0f)
 {
@@ -32,14 +34,17 @@ CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, i
 	anmManager_.SetIsRepeat(true);
 }
 
+//デストラクタ
 CreditPostText::~CreditPostText()
 {
 }
 
+//更新
 void CreditPostText::Update()
 {
 	anmManager_.Update();
 
+	//前フレームからの移動量を取得
 	velocity_ = Vector2(position_.x - f2, 0.0f);
 	f2 = position_.x;
 
@@ -51,16 +56,20 @@ void CreditPostText::Update()
 		return;
 	}
 
+	//頭座標
 	Vector2 pos = parent_->GetPosition() + velocity_;
 	cPlayer_->setCurPHeadSPos(pos);
 	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
 }
 
+//描画
 void CreditPostText::Draw() const
 {
 	Sprite& ins = Sprite::GetInstance();
 	auto drawPos = GetDrawPosVect(position_);
+	//タオル
 	ins.Draw(SPRITE_ID::CREDIT_TOWEL_SPRITE, Vector2(drawPos.x - parameter_.size.x / 2.0f - 20, drawPos.y), Vector2(0, parameter_.size.y / 2.0f), Vector2(parameter_.size.x / 600.0f + 0.1f, 1.5f));
+	//役職名
 	ins.Draw(spriteId_, Vector2(drawPos.x, drawPos.y), Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f), Vector2::One);
 
 	//カラス
@@ -94,6 +103,7 @@ void CreditPostText::Draw() const
 
 }
 
+//衝突判定
 void CreditPostText::OnCollide(Actor & other, CollisionParameter colpara)
 {
 	parent_ = &other;

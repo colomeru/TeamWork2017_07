@@ -24,6 +24,8 @@
 #include "../scene/addScreen/screenSupport/CreditText.h"
 #include "../actor/DummyActor.h"
 #include "../sound/sound.h"
+#include "../debugdata/DebugDraw.h"
+#include "../actor/player/PlayerNeck/PlayerNeckPendulumSupport.h"
 
 CreditScene::CreditScene() :
 	nextScene_(Scene::Title)
@@ -77,12 +79,10 @@ void CreditScene::Initialize()
 	startPos_ = Vector2(WINDOW_WIDTH / 2.0f - correction.x, -110.0f);
 
 	pHeadPos_ = startPos_;
-	playerStatte_ = RESTART;
 	operate_ = true;
 	sceneTimer_ = 0.0f;
-	test = false;
-	test2 = false;
-	test3 = true;
+	sceneChange_ = false;
+	mulInit_ = true;
 
 	//カラス
 	whitePos_ = { player_->GetCurrentPHeadPosition() + correction + wCorr,
@@ -119,13 +119,11 @@ void CreditScene::Update()
 
 	whitePos_[0] = player_->GetCurrentPHeadPosition() + correction + wCorr;
 
-	if (!player_->GetIsBiteMode()) playerStatte_ = FALL;
-
 	PlayerRestart();
 
 	sceneTimer_ += Time::DeltaTime;
 	if (sceneTimer_ >= SceneTime) {
-		test2 = true;
+		sceneChange_ = true;
 		FadePanel::GetInstance().AddCollBack([=]() { isEnd_ = true; });
 		FadePanel::GetInstance().FadeOut();
 	}
@@ -148,15 +146,12 @@ void CreditScene::Draw() const
 	DrawFormatString(0, 40, GetColor(255, 255, 255), "PHeadyPos_:%f %f", pHeadPos_.x, pHeadPos_.y);
 	DrawFormatString(0, 60, GetColor(255, 255, 255), "PlayerPos_:%f %f", player_->GetCurrentPHeadPosition().x, player_->GetCurrentPHeadPosition().y);
 
-	if (test) DrawFormatString(0, 100, GetColor(255, 255, 255), "触れている");
-	else DrawFormatString(0, 100, GetColor(255, 255, 255), "触れていない");
-
 	if (operate_) DrawFormatString(0, 120, GetColor(255, 255, 255), "操作できます！");
 	else DrawFormatString(0, 120, GetColor(255, 255, 255), "操作できません！");
 
 	DrawFormatString(0, 140, GetColor(255, 255, 255), "sceneTimer_:[%f]", sceneTimer_);
 
-	if (test2) DrawFormatString(0, 160, GetColor(255, 255, 255), "遷移できます！");
+	if (sceneChange_) DrawFormatString(0, 160, GetColor(255, 255, 255), "遷移できます！");
 	else DrawFormatString(0, 160, GetColor(255, 255, 255), "遷移できません！");
 
 	DrawFormatString(0, 180, GetColor(255, 255, 255), "PlayerPos_:%f %f", player_->GetPosition().x, player_->GetPosition().y);
@@ -217,7 +212,6 @@ void CreditScene::handleMessage(EventMessage message, void * param)
 		break;
 	case EventMessage::PLAYER_DEAD:
 	{
-		//isRetry_ = true;
 		FadePanel::GetInstance().AddCollBack([=]() { Initialize(); });
 		FadePanel::GetInstance().FadeOut();
 		break;
@@ -248,9 +242,9 @@ void CreditScene::PlayerRestart()
 
 		dWhitePos_ = whitePos_[0];
 
-		if (test3) {
+		if (mulInit_) {
 			player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
-			test3 = false;
+			mulInit_ = false;
 		}
 	}
 
@@ -262,13 +256,13 @@ void CreditScene::PlayerRestart()
 		player_->SetIsBiteMode(false);
 		player_->CurHeadBite(pHeadPos_);
 		player_->PHeadLengthReset();
-		playerStatte_ = RESTART;
 		pHeadPos_ = player_->GetCurrentPHeadPosition(); //プレイヤー座標
 		player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);
 		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadPos_, startPos_, 2.0f);
 		int flag = 0;
 		world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
 		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
+		//TweenManager::GetInstance().Add(EaseOutQuart, &dWhitePos_, whitePos_[0], 0.5f);
 	}
 
 	//スタート位置に戻ったら
@@ -278,7 +272,7 @@ void CreditScene::PlayerRestart()
 		player_->GravityReset();
 		operate_ = true;
 		waiting_ = true;
-		test3 = true;
+		mulInit_ = true;
 		int flag = 1;
 		world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
 	}

@@ -18,12 +18,6 @@ class CreditText;
 
 class CreditScene : public IScene
 {
-	enum {
-		RESTART = 0,
-		BITE = 1,
-		FALL = 2,
-	};
-
 public:
 	// コンストラクタ
 	CreditScene();
@@ -48,7 +42,6 @@ public:
 	bool ScreenOut() const;
 	//プレイヤーリスタート
 	void PlayerRestart();
-
 
 private:
 	// ワールド用シェアドポインタ
@@ -76,20 +69,16 @@ private:
 	bool isRetry_;
 
 	//
-	Vector2 pHeadPos_;
-	Vector2 startPos_;
-	bool operate_;
-	int playerStatte_;
-	Vector2 correction;
-	const float SceneTime = 54.0f;
-	float sceneTimer_;
-	std::array<Vector2, 2> whitePos_;
-	Vector2 dWhitePos_;
-	Vector2 wCorr;
-	bool waiting_;
-
-
-	bool test;
-	bool test2;
-	bool test3;
+	const float SceneTime = 54.0f;		//遷移するまでの時間
+	float sceneTimer_;					//遷移するまでのカウント
+	Vector2 pHeadPos_;					//頭座標
+	Vector2 startPos_;					//スタート座標
+	bool operate_;						//操作可能か
+	Vector2 correction;					//補正値
+	std::array<Vector2, 2> whitePos_;	//白カラスの目的地座標
+	Vector2 dWhitePos_;					//白カラスの描画座標
+	Vector2 wCorr;						//白カラスの補正値
+	bool waiting_;						//待機中
+	bool sceneChange_;					//遷移可能か
+	bool mulInit_;						//多重振り子初期化
 };

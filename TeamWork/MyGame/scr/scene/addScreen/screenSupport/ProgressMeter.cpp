@@ -11,11 +11,12 @@ ProgressMeter::ProgressMeter(World * world, int stageLength, Vector2 position) :
 	world_(world), stageLen_(stageLength), meterNum_(3), prevLane_(1), dis_(30),
 	meterLen_(700), meterPos_(position), nowLane_(1), pIconPos_(0, 0), pPosY_(30)
 {
-	pinSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE);
-	pIconSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::SNAKE_SPRITE);
-	laneSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::METER_SPRITE);
-	startSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::METER_START_SPRITE);
-	goalSize_ = Sprite::GetInstance().GetSize(SPRITE_ID::METER_GOAL_SPRITE);
+	Sprite& ins = Sprite::GetInstance();
+	pinSize_ = ins.GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE);
+	pIconSize_ = ins.GetSize(SPRITE_ID::SNAKE_SPRITE);
+	laneSize_ = ins.GetSize(SPRITE_ID::METER_SPRITE);
+	startSize_ = ins.GetSize(SPRITE_ID::METER_START_SPRITE);
+	goalSize_ = ins.GetSize(SPRITE_ID::METER_GOAL_SPRITE);
 
 }
 
@@ -38,7 +39,7 @@ void ProgressMeter::Update()
 
 	if (nowLane_ != prevLane_) {
 		TweenManager::GetInstance().Add(EaseOutQuad, &pPosY_, (float)nowLane_ * dis_, 1.0f);
-		prevLane_ = world_->GetKeepDatas().playerLane_; //現在のレーン
+		prevLane_ = world_->GetKeepDatas().playerLane_;
 	}
 
 	//プレイヤーアイコン座標
@@ -59,7 +60,7 @@ void ProgressMeter::Draw() const
 
 	//メーターを描画
 	for (int i = 0; i < meterNum_; i++) {
-		ins.Draw(SPRITE_ID::METER_SPRITE, Vector2(meterPos_.x, meterPos_.y + i * dis_), Vector2(0,laneSize_.y / 4), Vector2(meterLen_ / laneSize_.x, 0.5f), 1.0f, false);
+		ins.Draw(SPRITE_ID::METER_SPRITE, Vector2(meterPos_.x, meterPos_.y + i * dis_), Vector2(0, laneSize_.y / 4), Vector2(meterLen_ / laneSize_.x, 0.5f), 1.0f, false);
 		if (i == nowLane_) {
 			//現在プレイヤーがいるレーンのメーターに表示
 			ins.Draw(SPRITE_ID::OROCHI_HEAD_SPRITE, pIconPos_, Vector2(pIconSize_.x / 4, pIconSize_.y / 1.5), Vector2(0.5f, 0.5f), 1.0f, false);
@@ -69,7 +70,7 @@ void ProgressMeter::Draw() const
 	//ピンを描画
 	world_->EachActor(ACTOR_ID::PIN_ACTOR, [=](Actor& other) {
 		PinStruct pin = { other.GetLaneNum(), other.GetPosition().x };
-		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, Vector2(pin.posX * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y + pin.lane * dis_ + pinSize_.y / 8), Vector2(pinSize_.x / 4, pinSize_.y / 4), Vector2(0.5f,0.5f), 180.0f);
+		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, Vector2(pin.posX * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y + pin.lane * dis_ + pinSize_.y / 8), Vector2(pinSize_.x / 4, pinSize_.y / 4), Vector2(0.5f, 0.5f), 180.0f);
 	});
 
 	//デバッグ表示

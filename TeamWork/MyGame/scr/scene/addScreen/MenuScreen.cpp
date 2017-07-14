@@ -9,8 +9,9 @@
 #include "../../Def.h"
 #include "../../game/Random.h"
 #include "../../sound/sound.h"
-#include"../GamePlayDefine.h"
-#include"../../cheat/CheatData.h"
+#include "../GamePlayDefine.h"
+#include "../../cheat/CheatData.h"
+#include "../../debugdata/DebugDraw.h"
 
 //カーソル
 const Vector2 CursorPos[2]{ Vector2(WINDOW_WIDTH / 2.0f - 410.0f, WINDOW_HEIGHT / 2.0f),
@@ -51,7 +52,7 @@ MenuScreen::MenuScreen() :
 
 	interval_ = { 5.0f,12.0f,8.0f };
 	cTimer_ = { 3.0f,0.0f,0.0f };
-	crowPos_ = { Vector2(WINDOW_WIDTH + 300.0f, 300.0f),Vector2(-300.0f, 500.0f), Vector2(WINDOW_WIDTH + 300.0f, 700.0f) };
+	crowPos_ = { Vector2(WINDOW_WIDTH + 300.0f, 300.0f),Vector2(WINDOW_WIDTH + 300.0f, 500.0f), Vector2(WINDOW_WIDTH + 300.0f, 700.0f) };
 	cVelocity_ = { Vector2(-5.0f, 0.0f),Vector2(-5.0f, 0.0f),Vector2(-5.0f, 0.0f) };
 	cFrom_ = { 0.0f,0.0f,0.0f };
 	cDis_ = { 0.0f,0.0f,0.0f };
@@ -82,66 +83,22 @@ void MenuScreen::Init()
 		sStar_[i].position_ = Vector2(randX, randY);
 		sStar_[i].isAlpha_ = 0.0f;
 		sStar_[i].timer_ = 0.0f;
-		prevPos_[i] = sStar_[i].position_;
-		ssAlpha_[i] = 0.0f;
+		sStar_[i].prevPos_ = sStar_[i].position_;
 		sStar_[i].scale_ = 1.0f;
 	}
 	waitTime_ = { 10.0f,7.0f,20.0f,12.0f,34.0f,16.0f,19.0,24.0f,19.0f,15.0f };
 
 	ResetBG();
 
+	//BGM
 	if (!Sound::GetInstance().IsPlayBGM()) {
 		Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM, DX_PLAYTYPE_LOOP);
 		Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 1.0f);
 	}
-
 }
 
 //更新
 void MenuScreen::Update()
-{
-	anmManager_.Update();
-	Crow();
-}
-
-//描画
-void MenuScreen::Draw() const
-{
-	Pattern2Draw();
-}
-
-//
-void MenuScreen::Action()
-{
-}
-
-//前のステージをクリアしているか？
-bool MenuScreen::CheckPreviousStage(int sNum)
-{
-	if ((sNum > 0 && panel[sNum].isDraw == true) || sNum == 0) return true;
-	else return false;
-}
-
-//次のステージの解放
-void MenuScreen::OpenNextStage(int sNum)
-{
-	if (sNum == 0)return;
-	if (CheatData::getInstance().GetClearData(sNum - 1))
-	{
-		panel[sNum + 1].isDraw = true;
-		panel[sNum + 1].alpha = 1.0f;
-	}
-}
-
-//次のステージが解放されているか？
-bool MenuScreen::CheckNextStage(int sNum)
-{
-	if (sNum < 8 && panel[sNum + 1].isDraw == true) return true;
-	else return false;
-}
-
-//パターン２更新
-void MenuScreen::Pattern2Update()
 {
 	if (!backSelect_) {
 		if (IsInputUp())
@@ -154,6 +111,7 @@ void MenuScreen::Pattern2Update()
 			TweenManager::GetInstance().Add(Linear, &color_, BgColor[stageNum_], MoveTime);
 			for (int i = 0; i < 3; i++)
 			{
+				if (cTimer_[i] <= interval_[i]) continue;
 				cDis_[i] += BetDis;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
@@ -162,7 +120,7 @@ void MenuScreen::Pattern2Update()
 		}
 		if (IsInputDown())
 		{
-			if (stageNum_ == 0.0f) return;
+			if (stageNum_ == 0) return;
 			dis_ -= BetDis;
 			stageNum_--;
 
@@ -170,6 +128,7 @@ void MenuScreen::Pattern2Update()
 			TweenManager::GetInstance().Add(Linear, &color_, BgColor[stageNum_], MoveTime);
 			for (int i = 0; i < 3; i++)
 			{
+				if (cTimer_[i] <= interval_[i]) continue;
 				cDis_[i] -= BetDis;
 				TweenManager::GetInstance().Add(EaseOutExpo, &cFrom_[i], Vector2(0.0f, cDis_[i]), MoveTime);
 			}
@@ -195,19 +154,16 @@ void MenuScreen::Pattern2Update()
 
 	}
 
-	//背景色
+	//背景色セット
 	SetBackgroundColor(color_.x, color_.y, color_.z);
 
 	Star();
 
-	ShootingStar();
-
 	SE();
-
 }
 
-//パターン２描画
-void MenuScreen::Pattern2Draw() const
+//描画
+void MenuScreen::Draw() const
 {
 	Sprite& ins = Sprite::GetInstance();
 
@@ -216,17 +172,16 @@ void MenuScreen::Pattern2Draw() const
 		ins.Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_, Vector2(sStar_[i].scale_, sStar_[i].scale_));
 	}
 
-	//背景
 	static auto bgSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_BACK_SPRITE);
 	static auto builSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_M_SPRITE);
 	static auto wwwSize = ins.GetSize(SPRITE_ID::WWW_SPRITE);
 	static auto nightSize = ins.GetSize(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE);
 
+	//背景
 	ins.Draw(SPRITE_ID::STAGE_SELECT_BACK_SPRITE, BgPos + from_ * 0.7f, Vector2(bgSize.x / 2.0f - 100.0f, bgSize.y), Vector2(1.5f, 1.5f), 1.0f, false);
 
 	//星
 	Vector2 drawNightSize = Vector2(WINDOW_WIDTH / nightSize.x, WINDOW_HEIGHT / nightSize.y);
-	/*パターン２*/
 	ins.Draw(SPRITE_ID::STAGE_SELECT_NIGHT1_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[2], drawNightSize);
 	ins.Draw(SPRITE_ID::STAGE_SELECT_NIGHT2_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[1], drawNightSize);
 	ins.Draw(SPRITE_ID::STAGE_SELECT_NIGHT3_SPRITE, Vector2::Zero, Vector2::Zero, starAlpha_[0], drawNightSize);
@@ -259,23 +214,43 @@ void MenuScreen::Pattern2Draw() const
 	anmManager_.Draw(crowPos_[0] + cFrom_[0], origin, Vector2::One, 1.0f);
 	anmManager_.Draw(crowPos_[1] + cFrom_[1], origin, Vector2::One, 1.0f);
 
-
+	//デバッグ表示
 	if (BuildMode == 1) {
-		DrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum_);
-		DrawFormatString(0, 100, GetColor(255, 255, 255), "dis %f", dis_);
+		DebugDraw::DebugDrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum_);
 		for (int i = 0; i < 3; i++) {
-			DrawFormatString(1600, 0 + i * 20, GetColor(255, 255, 255), "cTimer_ %f", cTimer_[i]);
-			DrawFormatString(1600, 60 + i * 20, GetColor(255, 255, 255), "crowPos_X %f", crowPos_[i].x);
-			DrawFormatString(1600, 120 + i * 20, GetColor(255, 255, 255), "cVelocity_X %f", cVelocity_[i].x);
-			DrawFormatString(1600, 180 + i * 20, GetColor(255, 255, 255), "cDis_ %f", cDis_[i]);
+			DebugDraw::DebugDrawFormatString(0, 80 + i * 20, GetColor(255, 255, 255), "cDis_:%f", cDis_[i]);
+			DebugDraw::DebugDrawFormatString(0, 160 + i * 20, GetColor(255, 255, 255), "cTimer_:%f", cTimer_[i]);
 		}
+		//流れ星
+		//for (int i = 0; i < StarNum; i++) {
+		//	ins.Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_, Vector2(sStar_[i].scale_, sStar_[i].scale_));
+		//}
 	}
+}
 
-	//流れ星
-	//for (int i = 0; i < StarNum; i++) {
-	//	ins.Draw(SPRITE_ID::STAR_SPRITE, sStar_[i].position_, Vector2::Zero, sStar_[i].isAlpha_, Vector2(sStar_[i].scale_, sStar_[i].scale_));
-	//}
+//前のステージをクリアしているか？
+bool MenuScreen::CheckPreviousStage(int sNum)
+{
+	if ((sNum > 0 && panel[sNum].isDraw == true) || sNum == 0) return true;
+	else return false;
+}
 
+//次のステージの解放
+void MenuScreen::OpenNextStage(int sNum)
+{
+	if (sNum == 0)return;
+	if (CheatData::getInstance().GetClearData(sNum - 1))
+	{
+		panel[sNum + 1].isDraw = true;
+		panel[sNum + 1].alpha = 1.0f;
+	}
+}
+
+//次のステージが解放されているか？
+bool MenuScreen::CheckNextStage(int sNum)
+{
+	if (sNum < 8 && panel[sNum + 1].isDraw == true) return true;
+	else return false;
 }
 
 //"上"が入力されたか
@@ -311,6 +286,13 @@ bool MenuScreen::IsInputAny() const
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::RIGHT);
 }
 
+//チェックボタンが入力されたか
+bool MenuScreen::IsInputCheck() const
+{
+	return Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
+		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2);
+}
+
 //星
 void MenuScreen::Star()
 {
@@ -340,85 +322,118 @@ void MenuScreen::Star()
 		starAlpha_[2] -= alphaValue_;
 		break;
 	}
-
 	for (int i = 0; i < 3; i++) {
 		starAlpha_[i] = MathHelper::Clamp(starAlpha_[i], 0.0f, 1.0f);
 	}
-
 }
 
 //流れ星
 void MenuScreen::ShootingStar()
 {
-	if (stageNum_ >= 0) {
-		for (int i = 0; i < StarNum; i++) {
-			sStar_[i].timer_ += Time::DeltaTime;
-			sStar_[i].isAlpha_ = MathHelper::Clamp(sStar_[i].isAlpha_, 0.0f, 1.0f);
-			if (sStar_[i].timer_ >= waitTime_[i]) {
-				sStar_[i].position_ += Vector2(-20.0f, 10.0f);
-				sStar_[i].isAlpha_ += 0.25f;
-				if (sStar_[i].isAlpha_ >= 1.0f) sStar_[i].isAlpha_ -= 0.25f;
-				if (sStar_[i].timer_ >= waitTime_[i] + 0.5f) {
-					sStar_[i].timer_ = 0.0f;
-					sStar_[i].position_ = prevPos_[i];
-					sStar_[i].isAlpha_ = 0.0f;
-					sStar_[i].scale_ = Random::GetInstance().Range(0.5f, 2.5f);
-				}
-			}
+	//if (stageNum_ >= 7) {
+	//	for (int i = 0; i < StarNum; i++) {
+	//		sStar_[i].timer_ += Time::DeltaTime;
+	//		if (sStar_[i].timer_ >= waitTime_[i]) {
+	//			sStar_[i].position_ += Vector2(-20.0f, 10.0f);
+	//			sStar_[i].isAlpha_ += 0.25f;
+	//			if (sStar_[i].isAlpha_ >= 1.0f) sStar_[i].isAlpha_ -= 0.25f;
+	//			if (sStar_[i].timer_ >= waitTime_[i] + 0.5f) {
+	//				sStar_[i].timer_ = 0.0f;
+	//				sStar_[i].position_ = sStar_[i].prevPos_;
+	//				sStar_[i].isAlpha_ = 0.0f;
+	//				sStar_[i].scale_ = Random::GetInstance().Range(0.5f, 2.5f);
+	//			}
+	//		}
+	//		sStar_[i].isAlpha_ = MathHelper::Clamp(sStar_[i].isAlpha_, 0.0f, 1.0f);
+	//	}
+	//}
+
+	for (int i = 0; i < StarNum; i++) {
+		if (sStar_[i].isAlpha_ >= 1.0f) sStar_[i].isAlpha_ -= 0.25f;
+		if (sStar_[i].timer_ > waitTime_[i] + 0.5f) { //0.5間移動
+			sStar_[i].timer_ = 0.0f;
+			sStar_[i].position_ = sStar_[i].prevPos_;
+			sStar_[i].isAlpha_ = 0.0f;
+			sStar_[i].scale_ = Random::GetInstance().Range(0.5f, 2.0f);
 		}
+		if (stageNum_ <= 6 && sStar_[i].isAlpha_ == 0.0f) continue;
+		sStar_[i].timer_ += Time::DeltaTime;
+		if (sStar_[i].timer_ > waitTime_[i]) {
+			sStar_[i].position_ += Vector2(-20.0f, 10.0f);
+			sStar_[i].isAlpha_ += 0.25f;
+		}
+		sStar_[i].isAlpha_ = MathHelper::Clamp(sStar_[i].isAlpha_, 0.0f, 1.0f);
 	}
 }
 
 //カラス
 void MenuScreen::Crow()
 {
-	for (int i = 0; i < 3; i++) {
-		if (crowPos_[i].x <= -300.0f || crowPos_[i].x >= WINDOW_WIDTH + 300.0f) {
-			cTimer_[i] += Time::DeltaTime;
-			//座標リセット
-			cDis_[i] = 0.0f;
-			cFrom_[i] = 0.0f;
+	//for (int i = 0; i < 3; i++) {
+	//	if (crowPos_[i].x <= -300.0f /*|| crowPos_[i].x >= WINDOW_WIDTH + 300.0f*/) {
+	//		cTimer_[i] += Time::DeltaTime;
+	//		//座標リセット
+	//		cDis_[i] = 0.0f;
+	//		cFrom_[i] = 0.0f;
 
-			crowPos_[i].x = WINDOW_WIDTH + 302.0f;
-		}
-		if (cTimer_[i] >= interval_[i] - 1.0f) {
+	//		crowPos_[i].x = WINDOW_WIDTH + 302.0f;
+	//	}
+	//	if (cTimer_[i] >= interval_[i] - 1.0f) {
+	//		cTimer_[i] = 0.0f;
+	//	}
+	//	if (cTimer_[i] == 0.0f) {
+	//		if (stageNum_ >= 7 && crowPos_[i].x == WINDOW_WIDTH + 302.0f) return;
+	//		crowPos_[i] += cVelocity_[i];
+	//	}
+	//	crowPos_[i].x = MathHelper::Clamp(crowPos_[i].x, -302.0f, WINDOW_WIDTH + 302.0f);
+	//	cTimer_[i] = MathHelper::Min(cTimer_[i], interval_[i]);
+	//}
+
+	anmManager_.Update();
+
+	for (int i = 0; i < 3; i++) {
+		if (crowPos_[i].x <= -300.0f) {
 			cTimer_[i] = 0.0f;
+			crowPos_[i].x = WINDOW_WIDTH + 300.0f;
 		}
-		if (cTimer_[i] == 0.0f) {
-			if (stageNum_ >= 7 && crowPos_[i].x == WINDOW_WIDTH + 302.0f) return;
+		if (crowPos_[i].x == WINDOW_WIDTH + 300.0f) {
+			if (stageNum_ >= 7) continue;
+			cTimer_[i] += Time::DeltaTime;
+		}
+		if (cTimer_[i] > interval_[i]) {
 			crowPos_[i] += cVelocity_[i];
 		}
-
-		crowPos_[i].x = MathHelper::Clamp(crowPos_[i].x, -302.0f, WINDOW_WIDTH + 302.0f);
-		cTimer_[i] = MathHelper::Min(cTimer_[i], interval_[i]);
+		else {
+			cDis_[i] = 0.0f;
+			cFrom_[i] = 0.0f;
+		}
 	}
 }
 
 //SE
 void MenuScreen::SE()
 {
-	if (backSelect_ == false &&
-		(Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
-			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
+	if (backSelect_ == false && IsInputCheck()) {
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
-	if (backSelect_ == true &&
-		(Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
-			GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2))) {
+	if (backSelect_ == true && IsInputCheck()) {
 		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
 	}
 }
 
+//終了
 void MenuScreen::End()
 {
 	Sound::GetInstance().StopBGM();
 }
 
+//ステージを取得
 Stage MenuScreen::GetGamePlayStage() const
 {
 	return stageList_[stageNum_];
 }
 
+//ステージをセット
 void MenuScreen::InputSelectStage()
 {
 	CheatData::getInstance().SetStartStage(stageNum_);

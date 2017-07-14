@@ -24,13 +24,13 @@ public:
 	//星
 	struct StarStruct
 	{
-		Vector2 position_;
-		float isAlpha_;
-		float timer_;
-		float scale_;
-
+		Vector2 position_;	//座標
+		float isAlpha_;		//アルファ値
+		float timer_;		//タイマ
+		float scale_;		//拡大値
+		float waitTime_;	//待機時間
+		Vector2 prevPos_;	//戻り座標
 	};
-
 
 	//コンストラクタ
 	MenuScreen();
@@ -42,17 +42,12 @@ public:
 	void Update();
 	//描画
 	void Draw() const;
-	//
-	void Action();
 	//前のステージをクリアしているか？
 	bool CheckPreviousStage(int sNum);
 	//次のステージの解放
 	void OpenNextStage(int sNum);
 	//次のステージが解放されているか？
 	bool CheckNextStage(int sNum);
-	//パターン２
-	void Pattern2Update();
-	void Pattern2Draw() const;
 	//"上"が入力されたか
 	bool IsInputUp() const;
 	//"下"が入力されたか
@@ -61,6 +56,8 @@ public:
 	bool IsInputLeft() const;
 	//"上/下/右"のいずれかが入力されたか
 	bool IsInputAny() const;
+	//チェックボタンが押されたか
+	bool IsInputCheck() const;
 	//星
 	void Star();
 	//流れ星
@@ -69,63 +66,63 @@ public:
 	void Crow();
 	//SE
 	void SE();
-	//
+	//終了
 	void End();
-
-
+	//ステージを取得
 	Stage GetGamePlayStage()const;
 
 	//外部クラス用
 public:
+	//「戻る」が選択されているか？
 	bool GetIsBackSelect()const {
 		return backSelect_;
 	}
+	//チュートリアルステージが選択されているか？
 	bool GetIsTutorialSelect()const {
 		return stageNum_ == 0;
 	}
+	//ステージをセット
 	void InputSelectStage();
+	//背景リセット
 	void ResetBG();
 
 private:
-	const float Height = WINDOW_HEIGHT / 4.0f * 2.0f; //パネル１のy座標
-	const float MoveTime = 0.5f;
-	const float BetDis = 339.0f; //間距離
-	const int StarNum = 10;
-	const Vector2 BgPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f); //背景座標
-	const Vector2 BuilPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f); //ビル座標
-	const Vector2 WwwPos = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT); //草座標
+	const float Height = WINDOW_HEIGHT / 4.0f * 2.0f;	//パネル１のy座標
+	const float MoveTime = 0.5f;						//移動にかかる時間
+	const float BetDis = 339.0f;						//間距離
+	const int StarNum = 10;								//星の個数
+	const Vector2 BgPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f);		//背景座標
+	const Vector2 BuilPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f);	//ビル座標
+	const Vector2 WwwPos = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT);						//草座標
 
-	int stageNum_; //ステージ番号
-	bool backSelect_; //戻るを選択しているか？
-	Vector2 cursorPos_; //カーソルの座標
-	std::array<PanelStruct, 9> panel; //PanelStructをステージ数分生成
+	int stageNum_;						//ステージ番号
+	bool backSelect_;					//戻るを選択しているか？
+	Vector2 cursorPos_;					//カーソルの座標
+	std::array<PanelStruct, 9> panel;	//PanelStructをステージ数分生成
 
 	//
-	float dis_;
-	Vector2 from_;
+	float dis_;		//目的値
+	Vector2 from_;	//移動座標
 
-	//背景色
-	Vector3 color_;
+	Vector3 color_;	//背景色
 
 	//星
-	float alphaValue_;
-	std::array<float, 3> starAlpha_;
+	float alphaValue_;					//アルファ変更値
+	std::array<float, 3> starAlpha_;	//アルファ値
 
 	//流れ星
-	std::array<StarStruct, 10> sStar_;
-	std::array<float, 10> waitTime_;
-	std::array<Vector2, 10> prevPos_;
-	std::array<float, 10> ssAlpha_;
+	std::array<StarStruct, 10> sStar_;	//流れ星構造体
+	std::array<float, 10> waitTime_;	//待機時間
 
 	//カラス
-	std::array<Vector2, 3> crowPos_;
-	std::array<float, 3> interval_;
-	std::array<float, 3> cTimer_;
-	std::array<Vector2, 3> cVelocity_;
-	std::array<Vector2, 3> cFrom_;
-	std::array<float, 3> cDis_;
+	std::array<Vector2, 3> crowPos_;	//カラス座標
+	std::array<float, 3> interval_;		//繰り返し時間
+	std::array<float, 3> cTimer_;		//カラスタイマ
+	std::array<Vector2, 3> cVelocity_;	//カラス移動量
+	std::array<Vector2, 3> cFrom_;		//目標値
+	std::array<float, 3> cDis_;			//移動座標
 
-	CharacterAnmManager anmManager_;
+	CharacterAnmManager anmManager_;	//アニメーション
 
-	std::array<Stage, 9> stageList_;
+	std::array<Stage, 9> stageList_;	//ステージリスト
 };

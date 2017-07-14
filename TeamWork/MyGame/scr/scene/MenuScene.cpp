@@ -36,7 +36,8 @@ void MenuScene::Update()
 	// XV
 	world_->Update();
 
-	menu.Update();
+	menu.Crow();
+	menu.ShootingStar();
 
 	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
@@ -56,7 +57,7 @@ void MenuScene::Update()
 		menu.InputSelectStage();
 	}
 
-	menu.Pattern2Update();
+	menu.Update();
 }
 
 void MenuScene::Draw() const

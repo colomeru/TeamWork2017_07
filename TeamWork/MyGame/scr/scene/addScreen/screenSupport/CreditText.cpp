@@ -3,6 +3,7 @@
 #include "../../../actor/player/Player_Head.h"
 #include "../../../game/ID.h"
 
+//コンストラクタ
 CreditText::CreditText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, Vector2 size, int frame) :
 	Clothes(world, id, laneNum, 0.0f),f2(0.0f)
 {
@@ -26,12 +27,15 @@ CreditText::CreditText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneN
 	SetPointsUpdate();
 }
 
+//デストラクタ
 CreditText::~CreditText()
 {
 }
 
+//更新
 void CreditText::Update()
 {
+	//前フレームからの移動量を取得
 	velocity_ = Vector2(position_.x - f2, 0.0f);
 	f2 = position_.x;
 
@@ -43,19 +47,23 @@ void CreditText::Update()
 		return;
 	}
 
+	//頭座標
 	Vector2 pos = parent_->GetPosition() + velocity_;
 	cPlayer_->setCurPHeadSPos(pos);
 	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
 
 }
 
+//描画
 void CreditText::Draw() const
 {
 	auto drawPos = GetDrawPosVect(position_);
-	auto min = drawPos - Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f);
-	auto max = drawPos + Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f);
+	auto min = drawPos - Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f); //左上
+	auto max = drawPos + Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f); //右下
 
+	//服
 	Sprite::GetInstance().SplitDraw(SPRITE_ID::BASE_CLOTHES_04_SPRITE, Vector2(drawPos.x, drawPos.y - 100.0f), 0, Vector2(100, 100), Vector2(2.0f, 2.0f));
+	//名前
 	Sprite::GetInstance().SplitDraw(spriteId_, drawPos, frame_, Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f), Vector2::One);
 
 	if (BuildMode != 1) return;
@@ -75,6 +83,7 @@ void CreditText::Draw() const
 
 }
 
+//衝突判定
 void CreditText::OnCollide(Actor & other, CollisionParameter colpara)
 {
 	if (other.GetParameter().ID != ACTOR_ID::PLAYER_HEAD_ACTOR) return;

@@ -6,8 +6,9 @@
 
 //コンストラクタ
 CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, Vector2 size, int frame) :
-	Clothes(world, id, laneNum, 0.0f), f2(0.0f)
+	Clothes(world, id, laneNum, 0.0f), f2(0.0f), cPlayer_(nullptr)
 {
+	player_ = nullptr;
 	spriteId_ = sprite;
 	frame_ = frame;
 	laneNum_ = world_->GetKeepDatas().playerLane_;
@@ -16,10 +17,14 @@ CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, i
 	parameter_.radius = 32.0f;
 	fulcrum_ = Vector2(position_.x, position_.y - parameter_.size.y / 2.0f);
 	auto toX = -400 - 1070;
-	TweenManager::GetInstance().Add(Linear, &position_, Vector2(toX, position_.y), 10.3f, [=]() {Dead(); });
+	TweenManager::GetInstance().Add(Linear, &position_, Vector2(toX, position_.y), 10.3f, [=]() {
+		Dead();
+		if (cPlayer_ != nullptr) {
+			world_->sendMessage(EventMessage::PLAYER_POS_RESET);
+		}
+	});
 	TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(toX, fulcrum_.y), 10.3f);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
-	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	localPoints_[CuttingState::Normal].push_back(Vector3(-parameter_.size.x / 2.0f, 0.0f, 0.0f));
 	localPoints_[CuttingState::Normal].push_back(Vector3(-parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
 	localPoints_[CuttingState::Normal].push_back(Vector3(parameter_.size.x / 2.0f, parameter_.size.y, 0.0f));
@@ -37,12 +42,15 @@ CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, i
 //デストラクタ
 CreditPostText::~CreditPostText()
 {
+
 }
 
 //更新
 void CreditPostText::Update()
 {
 	anmManager_.Update();
+
+	//if (cPlayer_->GetIsBiteMode() == false) cPlayer_ = nullptr;
 
 	//前フレームからの移動量を取得
 	velocity_ = Vector2(position_.x - f2, 0.0f);
@@ -111,4 +119,17 @@ void CreditPostText::OnCollide(Actor & other, CollisionParameter colpara)
 	cPlayer_ = static_cast<CreditPlayer*>(parent_->GetParent());
 	cPlayer_->CurHeadBite(other.GetPosition());
 	cPlayer_->SetIsBiteMode(true);
+}
+
+// メッセージ処理
+void CreditPostText::OnMessage(EventMessage message, void * param)
+{
+	switch (message)
+	{
+	case EventMessage::OPERATE_FLAG:
+		if ((int)param < 1) {
+			cPlayer_ = nullptr;
+		}
+		break;
+	}
 }

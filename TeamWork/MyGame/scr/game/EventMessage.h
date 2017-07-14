@@ -26,4 +26,5 @@ enum class EventMessage
 	OPERATE_FLAG,
 	TUTORIAL_GOAL_FLASH,
 	CREATE_METAMOR_EFFECT,//首変更エフェクトの生成を知らせる
+	PLAYER_POS_RESET,
 };

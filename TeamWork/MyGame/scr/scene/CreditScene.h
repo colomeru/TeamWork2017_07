@@ -12,6 +12,7 @@
 #include "addScreen/TutorialTextScreen.h"
 #include <array>
 #include "../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
+#include "../actor/player/Input/PlayerInputChecker.h"
 
 class CreditPlayer;
 class CreditText;
@@ -42,6 +43,12 @@ public:
 	bool ScreenOut() const;
 	//プレイヤーリスタート
 	void PlayerRestart();
+	//リスタートセット	
+	void RestartSet();
+	//操作不能時
+	void NotOperate();
+	//スタート時
+	void PlayerStart();
 
 private:
 	// ワールド用シェアドポインタ
@@ -61,6 +68,8 @@ private:
 
 	CharacterAnmManager anmManager_;
 
+	PlayerInputChecker isUseKey_;
+
 	// 次のシーン
 	Scene			nextScene_;
 
@@ -78,7 +87,7 @@ private:
 	std::array<Vector2, 2> whitePos_;	//白カラスの目的地座標
 	Vector2 dWhitePos_;					//白カラスの描画座標
 	Vector2 wCorr;						//白カラスの補正値
-	bool waiting_;						//待機中
 	bool sceneChange_;					//遷移可能か
 	bool mulInit_;						//多重振り子初期化
+	bool waiting_;						//待機中
 };

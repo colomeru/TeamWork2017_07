@@ -26,9 +26,10 @@
 #include "../sound/sound.h"
 #include "../debugdata/DebugDraw.h"
 #include "../actor/player/PlayerNeck/PlayerNeckPendulumSupport.h"
+#include "../input/InputChecker.h"
 
 CreditScene::CreditScene() :
-	nextScene_(Scene::Title)
+	nextScene_(Scene::Title),isUseKey_(true)
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -83,12 +84,12 @@ void CreditScene::Initialize()
 	sceneTimer_ = 0.0f;
 	sceneChange_ = false;
 	mulInit_ = true;
+	waiting_ = true;
 
 	//カラス
 	whitePos_ = { player_->GetCurrentPHeadPosition() + correction + wCorr,
 		Vector2(WINDOW_WIDTH / 2.0f, -300.0f) + wCorr };
 	dWhitePos_ = whitePos_[0];
-	waiting_ = true;
 	int crowIdNum = WHITE_ANM_01_SPRITE;
 	for (int i = 0; i < 8; i++) {
 		anmManager_.Add((SPRITE_ID)(crowIdNum + i));
@@ -181,6 +182,8 @@ void CreditScene::End()
 {
 	// 初期化
 	world_->Clear();
+	player_.reset();
+	credit_.reset();
 	bgScreen_.End();
 
 	Sound::GetInstance().StopBGM();
@@ -190,30 +193,9 @@ void CreditScene::handleMessage(EventMessage message, void * param)
 {
 	switch (message)
 	{
-	case EventMessage::BEGIN_WIND:
-		break;
-	case EventMessage::STRONG_WIND:
-		break;
-	case EventMessage::ATTENUATE_WIND:
-		break;
-	case EventMessage::END_WIND:
-		break;
-	case EventMessage::START_LANE_CHANGE:
-		break;
-	case EventMessage::GOAL_FLAG:
-		break;
-	case EventMessage::GAME_CLEAR_FLAG:
-		break;
-	case EventMessage::TAPPER_DEAD:
-		break;
-	case EventMessage::PLAY_NEXT_STAGE:
-		break;
-	case EventMessage::ADD_SCORE:
-		break;
-	case EventMessage::PLAYER_DEAD:
+	case EventMessage::PLAYER_POS_RESET:
 	{
-		FadePanel::GetInstance().AddCollBack([=]() { Initialize(); });
-		FadePanel::GetInstance().FadeOut();
+		RestartSet();
 		break;
 	}
 	default:
@@ -234,51 +216,68 @@ bool CreditScene::ScreenOut() const
 //プレイヤーリスタート
 void CreditScene::PlayerRestart()
 {
+	//操作不能時
 	if (!operate_) {
-		player_->SetIsBiteMode(true);
-
-		player_->setCurPHeadSPos(pHeadPos_);
-		player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
-
-		dWhitePos_ = whitePos_[0];
-
-		if (mulInit_) {
-			player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
-			mulInit_ = false;
-		}
+		NotOperate();
 	}
 
 	//画面外に出たら
-	if ((ScreenOut() || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::K)) &&
-		operate_) {
-		operate_ = false;
-		player_->AllResurrectHead();
-		player_->SetIsBiteMode(false);
-		player_->CurHeadBite(pHeadPos_);
-		player_->PHeadLengthReset();
-		pHeadPos_ = player_->GetCurrentPHeadPosition(); //プレイヤー座標
-		player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);
-		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadPos_, startPos_, 2.0f);
-		int flag = 0;
-		world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
-		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
-		//TweenManager::GetInstance().Add(EaseOutQuart, &dWhitePos_, whitePos_[0], 0.5f);
+	if (ScreenOut() && operate_) {
+		RestartSet();
 	}
 
 	//スタート位置に戻ったら
 	Vector2 dis = player_->GetCurrentPHeadPosition() - startPos_;
 	if (dis.Length() <= 2.0f && !operate_) {
-		player_->SetIsBiteMode(true);
-		player_->GravityReset();
-		operate_ = true;
-		waiting_ = true;
-		mulInit_ = true;
-		int flag = 1;
-		world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
+		PlayerStart();
 	}
 
-	if (waiting_ && (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::N) || GamePad::GetInstance().ButtonStateDown(PADBUTTON::NUM2))) {
+	//待機中
+	if (waiting_ && (isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B) || InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::X))) {
 		TweenManager::GetInstance().Add(EaseInQuart, &dWhitePos_, whitePos_[1], 2.0f);
 		waiting_ = false;
 	}
+}
+
+void CreditScene::RestartSet()
+{
+	operate_ = false;
+	player_->AllResurrectHead();
+	player_->SetIsBiteMode(false);
+	player_->CurHeadBite(pHeadPos_);
+	player_->PHeadLengthReset();
+	pHeadPos_ = player_->GetCurrentPHeadPosition(); //プレイヤー座標
+	player_->SetOtherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES);
+	TweenManager::GetInstance().Add(EaseOutQuart, &pHeadPos_, startPos_, 2.0f);
+	int flag = 0;
+	world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
+	Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
+}
+
+//操作不能時
+void CreditScene::NotOperate()
+{
+	player_->SetIsBiteMode(true);
+
+	player_->setCurPHeadSPos(pHeadPos_);
+	player_->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
+
+	dWhitePos_ = whitePos_[0];
+
+	if (mulInit_) {
+		player_->MultipleInit(110.0f, player_->GetCurrentPHeadPosition(), player_->GetRot(), 60.0f);
+		mulInit_ = false;
+	}
+}
+
+//スタート時
+void CreditScene::PlayerStart()
+{
+	player_->SetIsBiteMode(true);
+	player_->GravityReset();
+	operate_ = true;
+	mulInit_ = true;
+	waiting_ = true;
+	int flag = 1;
+	world_->sendMessage(EventMessage::OPERATE_FLAG, (void*)flag);
 }

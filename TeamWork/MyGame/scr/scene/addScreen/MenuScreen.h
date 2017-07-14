@@ -5,6 +5,7 @@
 #include "../../stageGenerator/Stage.h"
 #include "../../math/Vector3.h"
 #include "../../actor/Field/Enemys/EnemyCharas/CharacterAnmManager.h"
+#include "screenSupport/MenuCrow.h"
 
 class MenuScreen
 {
@@ -42,8 +43,6 @@ public:
 	void Update();
 	//描画
 	void Draw() const;
-	//前のステージをクリアしているか？
-	bool CheckPreviousStage(int sNum);
 	//次のステージの解放
 	void OpenNextStage(int sNum);
 	//次のステージが解放されているか？
@@ -85,6 +84,8 @@ public:
 	void InputSelectStage();
 	//背景リセット
 	void ResetBG();
+	//ステージ番号を取得
+	int GetStageNumber();
 
 private:
 	const float Height = WINDOW_HEIGHT / 4.0f * 2.0f;	//パネル１のy座標
@@ -94,6 +95,7 @@ private:
 	const Vector2 BgPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 475.0f);		//背景座標
 	const Vector2 BuilPos = Vector2(WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT / 2.0f + 285.0f);	//ビル座標
 	const Vector2 WwwPos = Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT);						//草座標
+	const float OffSet = 300.0f;
 
 	int stageNum_;						//ステージ番号
 	bool backSelect_;					//戻るを選択しているか？
@@ -112,7 +114,6 @@ private:
 
 	//流れ星
 	std::array<StarStruct, 10> sStar_;	//流れ星構造体
-	std::array<float, 10> waitTime_;	//待機時間
 
 	//カラス
 	std::array<Vector2, 3> crowPos_;	//カラス座標
@@ -121,6 +122,7 @@ private:
 	std::array<Vector2, 3> cVelocity_;	//カラス移動量
 	std::array<Vector2, 3> cFrom_;		//目標値
 	std::array<float, 3> cDis_;			//移動座標
+	std::array<MenuCrow, 3> crow_;		//カラス
 
 	CharacterAnmManager anmManager_;	//アニメーション
 

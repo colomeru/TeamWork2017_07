@@ -229,10 +229,6 @@ void GamePad::Update()
 	GetJoypadAnalogInput(&stickX, &stickY, 1);
 	curStick_ = Vector2((float)stickX / 1000.0f, (float)stickY / 1000.0f);
 
-	OutputDebugString(std::to_string(curStick_.x).c_str());
-	OutputDebugString("\n");
-	OutputDebugString(std::to_string(curStick_.y).c_str());
-
 }
 
 void GamePad::Exception(int pad, int button)

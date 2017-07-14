@@ -33,7 +33,7 @@ static int maxTextCount[maxTutorialNum]{
 };
 
 TutorialScene::TutorialScene() :
-	nextScene_(Scene::Menu), dummy_(0), sinCount_(0), isDrawCtrl_(false), isNext_(false),stageTextNum_(0)
+	nextScene_(Scene::Menu), dummy_(0), sinCount_(0), isDrawCtrl_(false), isNext_(false),stageTextNum_(0), isUpdate_(false)
 {
 	// ワールド生成
 	world_ = std::make_shared<World>();
@@ -90,6 +90,7 @@ void TutorialScene::Initialize()
 	ResetLockNum();
 	SceneInit();
 	isDrawCtrl_ = false;
+	isUpdate_ = false;
 }
 
 void TutorialScene::SceneInit()
@@ -97,6 +98,7 @@ void TutorialScene::SceneInit()
 	isNext_ = false;
 	sinCount_ = 0;
 	isDrawCtrl_ = false;
+	isUpdate_ = false;	
 	isAlreadyPutButton_ = false;
 	isEnd_ = false;
 	world_->Initialize();
@@ -176,7 +178,7 @@ void TutorialScene::Update()
 		}
 	}
 	// 更新
-	world_->Update();
+	if(isUpdate_)world_->Update();
 	player_->deadLine();
 
 	//ロック関係
@@ -203,9 +205,11 @@ void TutorialScene::Update()
 			isAlreadyPutButton_ = true;
 			player_->SetUseKey(true);
 			if (currentTutorialNum_ >= maxTutorialNum - 1 &&tutorialLockNum_ >= 1) {
+				isUpdate_ = true;
 			}
 			else {
 				isDrawCtrl_ = true;
+				isUpdate_ = true;
 				arrowEffectGenerator_.StartEffect();
 			}
 		}
@@ -216,7 +220,6 @@ void TutorialScene::Update()
 	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
 	// 終了
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8))
 	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::Start))
 	{
 		if (!isNext_) {
@@ -399,6 +402,7 @@ void TutorialScene::SceneLock()
 {
 	isAlreadyPutButton_ = false;
 	isDrawCtrl_ = false;
+	isUpdate_ = false;
 	for (auto& i : lockList_) {
 		i.isLock = false;
 	}

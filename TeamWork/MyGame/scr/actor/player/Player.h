@@ -7,12 +7,12 @@
 #include"../../graphic/DrawPos.h"
 #include"PlayerNeck\NeckPiecePoint.h"
 #include"../../method/MethodTimer.h"
+#include"Input/PlayerInputChecker.h"
 
 class Player_Head;
 class Player_Sword;
 
 static const Vector2 pHDist = Vector2(32, 32);
-static const int headAngleSetter = -2;
 static const float defHeadChangeTime = 0.2f;
 static const float defHeadLength = 2.f;
 static const float defPGravPow = 0.05f;
@@ -35,7 +35,8 @@ enum Player_Mode{
 	MODE_SLIP = 4,
 	MODE_RESIST = 5,
 	MODE_CLEAR = 6,
-	MODE_PLAYERDEAD = 7
+	MODE_PLAYERDEAD = 7,
+	MODE_BACK_SHOOT=8,
 };
 
 
@@ -138,7 +139,6 @@ public:
 	//使用する頭を右隣の物に変更
 	void changeHead() {
 		//回転した時点でSlip状態を直す
-		isSlipped_ = false;
 		currentHead_++;
 		if (currentHead_ >= (int)pHeads_.size())currentHead_ = 0;
 		headChangeTime_ = defHeadChangeTime;
@@ -262,9 +262,9 @@ public:
 	Actor* GetCurrentHead() const;
 	void deadLine();
 	void SetUseKey(bool key) {
-		isUseKey_ = key;
+		isUseKey_.SetUseKey(key);
 	}
-	bool GetUseKey()const { return isUseKey_; }
+	bool GetUseKey()const { return isUseKey_.GetUseKey(); }
 	void SetIsTutorialTextWriting(bool is) {
 		isTutorialText_ = is;
 	}
@@ -281,8 +281,6 @@ protected:
 			if (i > 0) fPos_[i] = multiplePos[i - 1];
 		}
 	}
-	void SetNeckNonMult();
-	void DeformationDraw();
 	//首の描画に必要な一連の動作を行う
 	void SetDrawNeck(const Vector2& bodyPoint,const Vector2& headPoint);
 	//首の描画位置を設定
@@ -297,14 +295,13 @@ protected:
 		chainAddLength_ = 0.f;
 		chainAddLengthMath_ =0.f;
 
-		//チェーンのロックをリセットする
-		chainLock_ = false;
 		for (auto& pHL : pHeadLength_) {
 			pHL = 2.f;
 		}
 	}
 	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
+	void CurPHeadLengBackPlus(float addPow);
 	void UpdateLaneNum(int updateNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal) {
 		if (updateNum == 0)return;
 		if (laneNum_ + updateNum > (maxLaneSize_ - 1) || laneNum_ + updateNum < 0)return;
@@ -336,7 +333,10 @@ protected:
 	Vector2 LaneChange_Up();
 	Vector2 LaneChange_Down(LaneChangeType changeType);
 
+	//噛み付きエフェクトを生成
 	void CreateBiteEffect();
+	//首変更エフェクトを生成
+	void CreateMetamorEffect();
 
 //プレイヤーの状態に応じた更新
 protected:
@@ -348,7 +348,8 @@ protected:
 	void ToResistMode(bool isPlaySE);
 	void ToClearMode(bool isPlaySE);
 	void ToDeadMode(bool isPlaySE);
-	
+	void ToBackShootMode(bool isPlaySE);
+
 	void FallUpdate();
 	void ShootUpdate();
 	void ShootEndUpdate();
@@ -357,6 +358,7 @@ protected:
 	void ResistUpdate();
 	void ClearUpdate();
 	void DeadUpdate();
+	void BackShootUpdate();
 
 protected:
 	using PHeadPtr = std::shared_ptr<Player_Head>;
@@ -409,8 +411,6 @@ protected:
 
 	float slipCount_;
 
-	bool isSlipped_;
-
 	bool isPlayerFallLane_;
 
 	Vector2 headPosAddVect_;
@@ -418,12 +418,11 @@ protected:
 	//滑り落ちるまでの時間
 	float slipResistTime_;
 
+	//頭の位置を決定する,0で右
+	float headAngleSetter;
 	//0=滞空 1=発射時 2=発射終了 3=噛み付き 4=滑り落ち
 	int playerMode_;
-	//キーロック
-	bool isNextPushKey_;
 	float jumpShotPower_;
-	bool chainLock_;
 
 	//レーン移動したフレームで噛む対象があるかを調べる
 	bool isNextLaneBite_;
@@ -432,12 +431,9 @@ protected:
 
 	int chainLockCoolTime_;
 	
-	//Head回転をロックする(スティックを0に戻す事でリセット)
-	bool isCanNextHeadRot;
-
 	bool isClearShoot_;
 
-	bool isUseKey_;
+	PlayerInputChecker isUseKey_;
 	bool isTutorialText_;
 	CLOTHES_ID otherClothesID_;
 	LaneChangeType changeType_;

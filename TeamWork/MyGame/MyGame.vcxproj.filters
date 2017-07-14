@@ -423,10 +423,10 @@
     <ClCompile Include="scr\method\MethodTimer.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\actor\player\Data\PlayerModify.cpp">
+    <ClCompile Include="scr\input\InputChecker.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\input\InputChecker.cpp">
+    <ClCompile Include="scr\actor\player\Input\PlayerInputChecker.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -947,10 +947,10 @@
     <ClInclude Include="scr\debugdata\DebugDraw.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\actor\player\Data\PlayerModify.h">
+    <ClInclude Include="scr\input\InputChecker.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\input\InputChecker.h">
+    <ClInclude Include="scr\actor\player\Input\PlayerInputChecker.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

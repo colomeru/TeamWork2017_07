@@ -206,7 +206,7 @@
     <ClCompile Include="scr\actor\Field\Enemys\Enemys.cpp" />
     <ClCompile Include="scr\actor\Field\Enemys\TutorialManager.cpp" />
     <ClCompile Include="scr\actor\player\CreditPlayer.cpp" />
-    <ClCompile Include="scr\actor\player\Data\PlayerModify.cpp" />
+    <ClCompile Include="scr\actor\player\Input\PlayerInputChecker.cpp" />
     <ClCompile Include="scr\actor\player\Player.cpp" />
     <ClCompile Include="scr\actor\player\Player2.cpp" />
     <ClCompile Include="scr\actor\player\Player3.cpp" />
@@ -350,7 +350,7 @@
     <ClInclude Include="scr\actor\Field\Enemys\TutorialList.h" />
     <ClInclude Include="scr\actor\Field\Enemys\TutorialManager.h" />
     <ClInclude Include="scr\actor\player\CreditPlayer.h" />
-    <ClInclude Include="scr\actor\player\Data\PlayerModify.h" />
+    <ClInclude Include="scr\actor\player\Input\PlayerInputChecker.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
     <ClInclude Include="scr\actor\player\Player2.h" />
     <ClInclude Include="scr\actor\player\Player3.h" />

@@ -12,7 +12,7 @@ enum class EventMessage
 	GAME_CLEAR_FLAG,	//ステージ終了フラグ
 	TAPPER_DEAD,	//叩き死亡
 	PLAY_NEXT_STAGE,
-	ADD_SCORE,
+	ADD_SCORE,//スコア加算
 	PLAYER_DEAD,
 	LANE_CHANGE_FALL,
 	LANE_CHANGE_DOWN_END,
@@ -25,4 +25,5 @@ enum class EventMessage
 	CHANGE_HEAD_KEY,
 	OPERATE_FLAG,
 	TUTORIAL_GOAL_FLASH,
+	CREATE_METAMOR_EFFECT,//首変更エフェクトの生成を知らせる
 };

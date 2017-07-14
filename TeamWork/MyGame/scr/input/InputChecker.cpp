@@ -2,9 +2,11 @@
 
 InputChecker::InputChecker()
 {
-	inputList_[Input_Key::B] = Connect_Key_Pad(KEYCODE::M, PADBUTTON::NUM2);
-	inputList_[Input_Key::R1] = Connect_Key_Pad(KEYCODE::N, PADBUTTON::NUM6);
+	//各種キーの関連付け
 	inputList_[Input_Key::A] = Connect_Key_Pad(KEYCODE::W, PADBUTTON::NUM1);
+	inputList_[Input_Key::B] = Connect_Key_Pad(KEYCODE::M, PADBUTTON::NUM2);
+	inputList_[Input_Key::X] = Connect_Key_Pad(KEYCODE::B, PADBUTTON::NUM3);
+	inputList_[Input_Key::R1] = Connect_Key_Pad(KEYCODE::N, PADBUTTON::NUM6);
 	inputList_[Input_Key::L1] = Connect_Key_Pad(KEYCODE::S, PADBUTTON::NUM5);
 	inputList_[Input_Key::Start] = Connect_Key_Pad(KEYCODE::H, PADBUTTON::NUM8);
 	inputList_[Input_Key::Back] = Connect_Key_Pad(KEYCODE::B, PADBUTTON::NUM7);
@@ -27,7 +29,7 @@ bool InputChecker::KeyStateDown(Input_Key key)const
 
 bool InputChecker::KeyStateUp(Input_Key key)const
 {
-	return Keyboard::GetInstance().KeyStateUp(inputList_.at(key).first) || GamePad::GetInstance().ButtonStateUp(inputList_.at(key).second);
+	return Keyboard::GetInstance().KeyStateUp(inputList_.at(key).first) && GamePad::GetInstance().ButtonStateUp(inputList_.at(key).second);
 }
 
 Vector2 InputChecker::Stick()const

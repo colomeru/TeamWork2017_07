@@ -6,9 +6,10 @@
 class InputChecker {
 public:
 	enum Input_Key {
-		B,
-		R1,
 		A,
+		B,
+		X,
+		R1,
 		L1,
 		Start,
 		Back,

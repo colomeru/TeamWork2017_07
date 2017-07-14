@@ -136,8 +136,10 @@ private:
 
 	bool isAlreadyPutButton_;
 
+	//コントローラを描画するかどうか
 	bool isDrawCtrl_;
-
+	//worldの更新を行うかどうか
+	bool isUpdate_;
 	bool isNext_;
 
 	std::vector<LockList> lockList_;

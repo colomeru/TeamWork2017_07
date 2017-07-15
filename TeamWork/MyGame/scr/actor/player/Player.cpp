@@ -298,8 +298,8 @@ void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radiu
 void Player::Multiple()
 {
 	if (GetUseKey()) {
-		if ((mRot_spd[0] < 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::D) || GamePad::GetInstance().Stick().x>0.01f)) ||
-			(mRot_spd[0] > 0 && (Keyboard::GetInstance().KeyStateDown(KEYCODE::A) || GamePad::GetInstance().Stick().x < -0.01f)))
+		if ((mRot_spd[0] < 0 && (isUseKey_.StickStateDown(InputChecker::Input_Stick::Right)) ||
+			(mRot_spd[0] > 0 && (isUseKey_.StickStateDown(InputChecker::Input_Stick::Left)))))
 		{
 			for (auto& r : mRot_spd) {
 				r += sign(r)*1.f;
@@ -904,7 +904,7 @@ void Player::FallUpdate()
 			SetMode(MODE_SHOOT);
 		}
 		else if (isUseKey_.KeyTriggerDown(InputChecker::Input_Key::X)) {
-			world_->sendMessage(EventMessage::NECK_SHOOT);
+			world_->sendMessage(EventMessage::NECK_BACK_SHOOT);
 			SetMode(MODE_BACK_SHOOT);
 		}
 	
@@ -972,7 +972,7 @@ void Player::BiteUpdate()
 	}
 
 	//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
-	if (isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B) || InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::X)) {
+	if (isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B) || isUseKey_.KeyTriggerDown(InputChecker::Input_Key::X)) {
 		if (mRot.front() < 0.f || mRot.front() > 180.f) {
 			SetNextLane(-1);
 		}

@@ -13,6 +13,7 @@ public:
 		L1,
 		Start,
 		Back,
+		Key_Count//—˜—p‚·‚éƒL[‚Ì”
 	};
 	enum Input_Stick {
 		Up,

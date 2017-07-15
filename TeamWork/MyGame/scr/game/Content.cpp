@@ -126,6 +126,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("gamepad/gamepad.png", SPRITE_ID::GAMEPAD_SPRITE);
 	sprite.Load("gamepad/gamepad_A.png", SPRITE_ID::GAMEPAD_A_SPRITE);
 	sprite.Load("gamepad/gamepad_B.png", SPRITE_ID::GAMEPAD_B_SPRITE);
+	sprite.Load("gamepad/gamepad_X.png", SPRITE_ID::GAMEPAD_X_SPRITE);
 	sprite.Load("gamepad/gamepad_RB.png", SPRITE_ID::GAMEPAD_RB_SPRITE);
 	sprite.Load("gamepad/gamepad_LB.png", SPRITE_ID::GAMEPAD_LB_SPRITE);
 	sprite.Load("gamepad/gamepad_Stick.png", SPRITE_ID::GAMEPAD_STICK_SPRITE);

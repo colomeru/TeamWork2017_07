@@ -26,6 +26,19 @@ public:
 	bool GetUseKey()const;
 	//キーを利用可能かを設定する
 	void SetUseKey(bool isUse);
+
+	//スティックのロックを設定する
+	void SetStickLock(bool isLock);
+	//特定キーのロックを設定する
+	void SetKeyLock(InputChecker::Input_Key key, bool isLock);
+	//全てのキーのロックを設定する
+	void SetKeyLock(bool isLock);
 private:
+	//全体に対するキーロック
 	bool useKey_;
+
+	//特定キーに対するキーロック
+	std::map<InputChecker::Input_Key, bool> keyLockList_;
+	//スティックに対するキーロック
+	bool stickLock_;
 };

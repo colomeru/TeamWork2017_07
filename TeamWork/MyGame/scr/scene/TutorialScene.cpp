@@ -25,7 +25,7 @@
 #include"../input/InputChecker.h"
 
 static int maxTextCount[maxTutorialNum]{
-	3,
+	4,
 	1,
 	1,
 	1,
@@ -63,15 +63,16 @@ TutorialScene::TutorialScene() :
 	setLockFuncList_.push_back([this](int i) {SetLock4(i); });
 	setLockFuncList_.push_back([this](int i) {SetLock5(i); });
 
-	stageTexts_[0] = "•ž‚ð’Í‚ñ‚Å‚Ý‚æ‚¤";
+	stageTexts_[0] = "g‘Ì‚ðU‚Á‚Ä‚Ý‚æ‚¤";
 	stageTexts_[1] = "Žñ‚ðL‚Î‚µ‚Ä‚Ý‚æ‚¤";
-	stageTexts_[2] = "“ª‚ðØ‚è‘Ö‚¦‚Ä‚Ý‚æ‚¤";
-	stageTexts_[3] = "‰º‚É—Ž‚¿‚Ä‚Ý‚æ‚¤";
-	stageTexts_[4] = "ã‚É“o‚Á‚Ä‚Ý‚æ‚¤";
-	stageTexts_[5] = "•z’c’@‚«‚ðØ‚Á‚Ä‚Ý‚æ‚¤";
-	stageTexts_[6] = "ƒS[ƒ‹‚ð–ÚŽw‚»‚¤";
-	stageTexts_[7] = "";
+	stageTexts_[2] = "Žñ‚ð‹t‘¤‚ÉL‚Î‚µ‚Ä‚Ý‚æ‚¤";
+	stageTexts_[3] = "“ª‚ðØ‚è‘Ö‚¦‚Ä‚Ý‚æ‚¤";
+	stageTexts_[4] = "‰º‚É—Ž‚¿‚Ä‚Ý‚æ‚¤";
+	stageTexts_[5] = "ã‚É“o‚Á‚Ä‚Ý‚æ‚¤";
+	stageTexts_[6] = "•z’c’@‚«‚ðØ‚Á‚Ä‚Ý‚æ‚¤";
+	stageTexts_[7] = "ƒS[ƒ‹‚ð–ÚŽw‚»‚¤";
 	stageTexts_[8] = "";
+	stageTexts_[9] = "";
 
 }
 
@@ -184,6 +185,10 @@ void TutorialScene::Update()
 	//ƒƒbƒNŠÖŒW
 	if (player_->GetRot() >= 180.f || player_->GetRot() <= 0.f) {
 		UnLock(UnLockType::FullStick);
+	}
+	else if (player_->GetRot() >= 150.f || player_->GetRot() <= 30.f) {
+		UnLock(UnLockType::HalfFullStick);
+
 	}
 	else if (player_->GetRot() >= 120.f || player_->GetRot() <= 60.f) {
 		UnLock(UnLockType::Stick);
@@ -383,6 +388,10 @@ void TutorialScene::handleMessage(EventMessage message, void * param)
 		UnLock(TutorialScene::PlayerShoot);
 		break;
 	}
+	case EventMessage::NECK_BACK_SHOOT: {
+		UnLock(TutorialScene::PlayerBackShoot);
+		break;
+	}
 	case EventMessage::NECK_SHOOT_END: {
 		ReLockNeckShoot();
 		break;
@@ -494,6 +503,9 @@ void TutorialScene::SetLockList(int currentTutorial,int tutorialLockNum)
 	KeySpriteList_.clear();
 	LastKeySpriteList_.clear();
 
+	player_->isUseKey_.SetKeyLock(false);
+	player_->isUseKey_.SetStickLock(false);
+
 	setLockFuncList_[currentTutorial](tutorialLockNum);
 
 }
@@ -503,34 +515,47 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
+		player_->isUseKey_.SetKeyLock(true);
+		
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_STICK_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
 
-		lockList_.push_back(LockList(UnLockType::Stick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
-		lockList_.push_back(LockList(UnLockType::BiteClothes, false,SPRITE_ID::GAMEPAD_B_SPRITE));
+		lockList_.push_back(LockList(UnLockType::HalfFullStick, false,SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		break;
 	}
 	case 1: {
+		player_->isUseKey_.SetStickLock(true);
+		player_->isUseKey_.SetKeyLock(InputChecker::Input_Key::X, true);
+
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_RB_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
 
-		lockList_.push_back(LockList(UnLockType::Stick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
-		lockList_.push_back(LockList(UnLockType::ChangeHead, false, SPRITE_ID::GAMEPAD_B_SPRITE));
-		lockList_.push_back(LockList(UnLockType::PlayerShoot, false,SPRITE_ID::GAMEPAD_RB_SPRITE));
+		lockList_.push_back(LockList(UnLockType::PlayerShoot, false,SPRITE_ID::GAMEPAD_B_SPRITE));
 		lockList_.push_back(LockList(UnLockType::BiteClothes, false,SPRITE_ID::GAMEPAD_B_SPRITE));
 		break;
 	}
 	case 2: {
+		player_->isUseKey_.SetKeyLock(InputChecker::Input_Key::B,true);
+
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_STICK_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_RB_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
-		
-		lockList_.push_back(LockList(UnLockType::Stick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
+
+		lockList_.push_back(LockList(UnLockType::PlayerBackShoot, false, SPRITE_ID::GAMEPAD_X_SPRITE));
+		lockList_.push_back(LockList(UnLockType::BiteClothes, false, SPRITE_ID::GAMEPAD_X_SPRITE));
+		break;
+	}
+	case 3: {
+		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
+		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_STICK_SPRITE);
+		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_RB_SPRITE);
+		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_B_SPRITE);
+
 		lockList_.push_back(LockList(UnLockType::ChangeHead, false, SPRITE_ID::GAMEPAD_B_SPRITE));
-		lockList_.push_back(LockList(UnLockType::ChangeHeadKey, false,SPRITE_ID::GAMEPAD_STICK_SPRITE));
-		lockList_.push_back(LockList(UnLockType::BiteClothes, false,SPRITE_ID::GAMEPAD_B_SPRITE));
+		lockList_.push_back(LockList(UnLockType::ChangeHeadKey, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
+		lockList_.push_back(LockList(UnLockType::BiteClothes, false, SPRITE_ID::GAMEPAD_B_SPRITE));
 		break;
 	}
 	default:
@@ -586,6 +611,9 @@ void TutorialScene::SetLock4(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
+		player_->isUseKey_.SetKeyLock(true);
+		player_->isUseKey_.SetKeyLock(InputChecker::Input_Key::A,false);
+
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_A_SPRITE);
 		KeySpriteList_.push_back(SPRITE_ID::GAMEPAD_STICK_SPRITE);
 
@@ -674,7 +702,7 @@ void TutorialScene::ReLockPendulum()
 	for (int i = lockList_.size() - 1; i > -1; i--) {
 		if (lockList_[i].isLock) {
 
-			if (lockList_[i].type == UnLockType::Stick || lockList_[i].type == UnLockType::FullStick) {
+			if (lockList_[i].type == UnLockType::Stick|| lockList_[i].type == UnLockType::HalfFullStick || lockList_[i].type == UnLockType::FullStick) {
 				lockList_[i].isLock = false;
 			}
 			return;

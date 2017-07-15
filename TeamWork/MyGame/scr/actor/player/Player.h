@@ -42,6 +42,8 @@ enum Player_Mode{
 
 class Player : public Actor, public std::enable_shared_from_this<Player>
 {
+	friend class TutorialScene;
+
 protected:
 	enum LaneChangeType {
 		LaneChange_Normal,
@@ -447,7 +449,6 @@ protected:
 protected:
 	const float gravity_{0.5f};
 	const float spdLimit{ 2.75f };
-
 
 };
 

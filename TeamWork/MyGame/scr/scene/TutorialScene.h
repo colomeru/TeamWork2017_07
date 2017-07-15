@@ -32,9 +32,11 @@ public:
 		ChangeHeadKey,
 		ClearStage,
 		PlayerShoot,
+		PlayerBackShoot,
 		EndStage,
 		Dummy,
 		Stick,
+		HalfFullStick,
 		FullStick,
 	};
 
@@ -146,7 +148,7 @@ private:
 	std::vector<SPRITE_ID> KeySpriteList_;
 	std::vector<SPRITE_ID> LastKeySpriteList_;
 
-	std::array<std::string, 9> stageTexts_;
+	std::array<std::string, 10> stageTexts_;
 	int stageTextNum_;
 
 	std::vector<std::function<void(int)>> setLockFuncList_;

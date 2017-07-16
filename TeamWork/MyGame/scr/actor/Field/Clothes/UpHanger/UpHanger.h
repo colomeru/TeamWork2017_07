@@ -19,6 +19,14 @@ public:
 	virtual void OnMessage(EventMessage message, void* param) override;
 
 private:
-	//ハンガーの機能が生きているかどうか
-	bool isStop_;		
+	//ばねの計算
+	void Spring(const Vector2& pos, float stiffnes, float friction, float mass);
+
+private:
+	bool isMove_;
+	bool isPull_;
+	Vector2 startPos_;
+	Vector2 pHeadPos_;
+	Vector2 codePos_[6];
+	Vector2 codeCenterPos_;
 };

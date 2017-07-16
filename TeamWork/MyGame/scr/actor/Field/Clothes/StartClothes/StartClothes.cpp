@@ -12,9 +12,7 @@ StartClothes::StartClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vect
 	laneNum_ = laneNum;
 
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, length_);
-
-	SetLocalPoints();
+	fulcrum_ = position_ - Vector2(0, LENGTH);
 
 	SetPointsUpdate();
 
@@ -63,34 +61,17 @@ void StartClothes::Draw() const
 
 	DrawClothesFeces();
 
-	if (BuildMode != 1) return;
 	if (!collisionPoints.empty()) {
 		auto drawP1 = GetDrawPosVect(collisionPoints[0]);
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);
 		auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-		DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
-		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
-		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
-}
-
-void StartClothes::SetLocalPoints()
-{
-	localPoints_[CuttingState::Normal].push_back(Vector3(-60, 0 + length_, 0));
-	localPoints_[CuttingState::Normal].push_back(Vector3(-60, 90 + length_, 0));
-	localPoints_[CuttingState::Normal].push_back(Vector3(60, 90 + length_, 0));
-	localPoints_[CuttingState::Normal].push_back(Vector3(60, 0 + length_, 0));
-	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-60, 0 + length_, 0));
-	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(-60, 50 + length_, 0));
-	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(60, 30 + length_, 0));
-	localPoints_[CuttingState::RightUpSlant].push_back(Vector3(60, 0 + length_, 0));
-	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-60, 0 + length_, 0));
-	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(-60, 30 + length_, 0));
-	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(60, 50 + length_, 0));
-	localPoints_[CuttingState::LeftUpSlant].push_back(Vector3(60, 0 + length_, 0));
 }

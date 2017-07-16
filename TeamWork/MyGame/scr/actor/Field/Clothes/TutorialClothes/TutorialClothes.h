@@ -6,7 +6,14 @@ class TutorialClothes : public Clothes, public std::enable_shared_from_this<Tuto
 {
 public:
 	//コンストラクタ
-	TutorialClothes(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin = false);
+	TutorialClothes(
+		IWorld* world,
+		int laneNum, 
+		Vector2 pos,
+		float weight,
+		std::pair<CLOTHES_ID, SPRITE_ID> ids,
+		std::map<CuttingState, std::vector<Vector3>> localPoints,
+		bool is_Pin = false);
 	//デストラクタ
 	virtual ~TutorialClothes() override;
 	//更新
@@ -15,12 +22,8 @@ public:
 	virtual void Draw() const override;
 	//受動更新
 	virtual void OnUpdate() override;
-	//切断状態による当たり判定のポイントの設定
-	virtual void SetLocalPoints() override;
 
 private:
 	//当たり判定の範囲を描画
 	void DrawRange() const;
-private:
-	BasePointManager pointManager_;
 };

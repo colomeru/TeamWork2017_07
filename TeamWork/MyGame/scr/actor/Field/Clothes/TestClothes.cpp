@@ -8,7 +8,7 @@
 TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)
 {
-	clothes_ID = CLOTHES_ID::TEST_CLOTHES;
+	//clothes_ID = CLOTHES_ID::TEST_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(200, 200.f);
@@ -19,9 +19,8 @@ TestClothes::TestClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 
 	laneNum_ = laneNum;
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, length_);
+	fulcrum_ = position_ - Vector2(0, LENGTH);
 
-	SetLocalPoints();
 	SetPointsUpdate();
 }
 

@@ -22,7 +22,7 @@ private:
 	//衝突したか
 	bool isHit_;
 	//チュートリアルで点滅する条件
-	bool is_Flash;
+	bool isFlash_;
 	//チュートリアルで光るアクター
 	ActorPtr tutorialFlash_;
 };

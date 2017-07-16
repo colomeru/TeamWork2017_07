@@ -348,12 +348,6 @@
     <ClCompile Include="scr\actor\Field\Enemys\TutorialManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\actor\Field\Clothes\BasePointManager\BasePointManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyPointManager\FluffyPointManager.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\actor\Field\Clothes\NotShakeClothes\NotShakeClothes.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -427,6 +421,12 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\actor\player\Input\PlayerInputChecker.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\scene\addScreen\screenSupport\MenuCrow.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\actor\Field\Clothes\PointSetter\PointSetter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -845,12 +845,6 @@
     <ClInclude Include="scr\actor\Field\Enemys\TutorialManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\actor\Field\Clothes\BasePointManager\BasePointManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyPointManager\FluffyPointManager.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\actor\Field\Clothes\NotShakeClothes\NotShakeClothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -951,6 +945,12 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\player\Input\PlayerInputChecker.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\scene\addScreen\screenSupport\MenuCrow.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\actor\Field\Clothes\PointSetter\PointSetter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

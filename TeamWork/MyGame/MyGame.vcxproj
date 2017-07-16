@@ -177,12 +177,10 @@
     <ClCompile Include="scr\actor\Field\ClothesLine.cpp" />
     <ClCompile Include="scr\actor\Field\ClothesPin.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\BaseClothes.cpp" />
-    <ClCompile Include="scr\actor\Field\Clothes\BasePointManager\BasePointManager.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Clothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\ClothesFeces\ClothesFeces.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\DropClothes\DropClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.cpp" />
-    <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyPointManager\FluffyPointManager.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\TutorialFlash.cpp" />
@@ -192,6 +190,7 @@
     <ClCompile Include="scr\actor\Field\Clothes\Hanger\Hanger.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\NotShakeClothes\NotShakeClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\NotSlashClothes\NotSlashClothes.cpp" />
+    <ClCompile Include="scr\actor\Field\Clothes\PointSetter\PointSetter.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\StartClothes\StartClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp" />
@@ -268,6 +267,7 @@
     <ClCompile Include="scr\scene\addScreen\screenSupport\CreditTextGenerator.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\DrawScore.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\DrawStar.cpp" />
+    <ClCompile Include="scr\scene\addScreen\screenSupport\MenuCrow.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\NameClothes.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\ProgressMeter.cpp" />
     <ClCompile Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.cpp" />
@@ -320,12 +320,10 @@
     <ClInclude Include="scr\actor\Field\ClothesLine.h" />
     <ClInclude Include="scr\actor\Field\ClothesPin.h" />
     <ClInclude Include="scr\actor\Field\Clothes\BaseClothes.h" />
-    <ClInclude Include="scr\actor\Field\Clothes\BasePointManager\BasePointManager.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Clothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\ClothesFeces\ClothesFeces.h" />
     <ClInclude Include="scr\actor\Field\Clothes\DropClothes\DropClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.h" />
-    <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyPointManager\FluffyPointManager.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\TutorialFlash.h" />
@@ -335,6 +333,7 @@
     <ClInclude Include="scr\actor\Field\Clothes\Hanger\Hanger.h" />
     <ClInclude Include="scr\actor\Field\Clothes\NotShakeClothes\NotShakeClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\NotSlashClothes\NotSlashClothes.h" />
+    <ClInclude Include="scr\actor\Field\Clothes\PointSetter\PointSetter.h" />
     <ClInclude Include="scr\actor\Field\Clothes\StartClothes\StartClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h" />
@@ -427,6 +426,7 @@
     <ClInclude Include="scr\scene\addScreen\screenSupport\CreditTextGenerator.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\DrawScore.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\DrawStar.h" />
+    <ClInclude Include="scr\scene\addScreen\screenSupport\MenuCrow.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\NameClothes.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\ProgressMeter.h" />
     <ClInclude Include="scr\scene\addScreen\screenSupport\StartCameraPointAct.h" />

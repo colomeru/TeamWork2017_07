@@ -3,15 +3,13 @@
 
 Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
-	,isStop_(false)
+	,isStop_(false), isSlip_(false)
 {
 	clothes_ID = CLOTHES_ID::HANGER;
 	parameter_.ID = ACTOR_ID::HANGER_ACTOR;
 	parameter_.size = Vector2(150, 80.f);
 
-	laneNum_ = laneNum;
-
-	position_ = pos - Vector2(0, length_ / 2);
+	position_ = pos - Vector2(0, LENGTH / 2);
 	velocity_ = Vector2(10.0f, 0.0f);
 
 	colFuncMap_[COL_ID::BOX_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
@@ -48,26 +46,11 @@ void Hanger::Draw() const
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
-	if (BuildMode != 1) return;
-	auto is = Matrix::CreateRotationZ(angle_);
-	auto pos = drawPos_;
-	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 4));
-
-	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
-	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;
-	auto box3 = Vector3(-sizeVec.x, +sizeVec.y)*is;
-	auto box4 = Vector3(+sizeVec.x, +sizeVec.y)*is;
-	//¶ã,‰Eã,¶‰º,‰E‰º
-	auto pos1 = Vector3(pos.x + box1.x, pos.y + box1.y);
-	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
-	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
-	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-
-	DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-
+	Vector2 startPos = drawPos - Vector2(parameter_.size.x / 2, 0);
+	Vector2 endPos = drawPos + Vector2(parameter_.size.x / 2, 0);
+	DebugDraw::DebugDrawCircle(startPos.x, startPos.y, parameter_.radius, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawCircle(endPos.x, endPos.y, parameter_.radius, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(startPos.x, startPos.y, endPos.x, endPos.y, GetColor(255, 255, 255));
 }
 
 void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
@@ -88,8 +71,9 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 		if (position_.x >= other.GetPosition().x) return;
 		isStop_ = true;
-		if (player_->GetRot() > 80) return;
+		if (player_->GetRot() > 80 || isSlip_) return;
 		player_->SetMode(MODE_SLIP);
+		isSlip_ = true;
 		parent_ = nullptr;
 		break;
 	}

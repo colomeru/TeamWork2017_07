@@ -1,7 +1,14 @@
 #include "TutorialClothes.h"
 
-TutorialClothes::TutorialClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, SPRITE_ID spriteId, bool is_Pin)
-	:Clothes(world, clothes, laneNum, weight)
+TutorialClothes::TutorialClothes(
+	IWorld * world,
+	int laneNum,
+	Vector2 pos,
+	float weight,
+	std::pair<CLOTHES_ID, SPRITE_ID> ids,
+	std::map<CuttingState, std::vector<Vector3>> localPoints,
+	bool is_Pin)
+	:Clothes(world, ids.first, laneNum, weight, localPoints)
 {
 	clothes_ID = CLOTHES_ID::FLUFFY_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -10,10 +17,8 @@ TutorialClothes::TutorialClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 	laneNum_ = laneNum;
 
 	position_ = pos + Vector2(0, -10);
-	fulcrum_ = position_ - Vector2(0, length_);
-	spriteId_ = spriteId;
-
-	SetLocalPoints();
+	fulcrum_ = position_ - Vector2(0, LENGTH);
+	spriteId_ = ids.second;
 
 	SetPointsUpdate();
 }
@@ -53,29 +58,25 @@ void TutorialClothes::OnUpdate()
 {
 }
 
-void TutorialClothes::SetLocalPoints()
-{
-	pointManager_.SetLocalPoints(spriteId_, localPoints_, length_);
-}
-
 void TutorialClothes::DrawRange() const
 {
-	auto topSize = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_TOP_SPRITE);
-	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_SPRITE) / 2;
+	Sprite& instance = Sprite::GetInstance();
+	auto topSize = instance.GetSize(SPRITE_ID::BITE_RANGE_TOP_SPRITE);
+	auto origin = instance.GetSize(SPRITE_ID::BITE_RANGE_SPRITE) / 2;
 	auto topOrigin = topSize / 2;
-	Vector2 drawP[4];
+	Vector2 codePos_[4];
 	for (int i = 0; i < 4; i++) {
-		drawP[i] = GetDrawPosVect(collisionPoints[i]);
+		codePos_[i] = GetDrawPosVect(collisionPoints[i]);
 	}
 	Vector2 modiPos[4][4];
 	for (int i = 0; i < 4; i++) {
 		//collisionPointから見て、左、右、上、下
-		modiPos[i][0] = drawP[i] + Vector2(-topSize.x / 2, 0);
-		modiPos[i][1] = drawP[i] + Vector2(topSize.x / 2, 0);
-		modiPos[i][2] = drawP[i] + Vector2(0, -topSize.x / 2);
-		modiPos[i][3] = drawP[i] + Vector2(0, topSize.x / 2);
+		modiPos[i][0] = codePos_[i] + Vector2(-topSize.x / 2, 0);
+		modiPos[i][1] = codePos_[i] + Vector2(topSize.x / 2, 0);
+		modiPos[i][2] = codePos_[i] + Vector2(0, -topSize.x / 2);
+		modiPos[i][3] = codePos_[i] + Vector2(0, topSize.x / 2);
 	}
-	auto handle = Sprite::GetInstance().GetHandle(SPRITE_ID::BITE_RANGE_SPRITE);
+	auto handle = instance.GetHandle(SPRITE_ID::BITE_RANGE_SPRITE);
 	DrawModiGraph(modiPos[0][0].x, modiPos[0][0].y, modiPos[0][1].x, modiPos[0][1].y, 
 		modiPos[1][1].x, modiPos[1][1].y, modiPos[1][0].x, modiPos[1][0].y, handle, true);
 	DrawModiGraph(modiPos[1][2].x, modiPos[1][2].y, modiPos[2][2].x, modiPos[2][2].y, 
@@ -83,17 +84,16 @@ void TutorialClothes::DrawRange() const
 	DrawModiGraph(modiPos[3][0].x, modiPos[3][0].y, modiPos[3][1].x, modiPos[3][1].y, 
 		modiPos[2][1].x, modiPos[2][1].y, modiPos[2][0].x, modiPos[2][0].y, handle, true);
 
-	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[0], topOrigin, Vector2::One, angle_);
-	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[1], topOrigin, Vector2::One, angle_);
-	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[2], topOrigin, Vector2::One, angle_);
-	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[3], topOrigin, Vector2::One, angle_);
+	instance.Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, codePos_[0], topOrigin, Vector2::One, angle_);
+	instance.Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, codePos_[1], topOrigin, Vector2::One, angle_);
+	instance.Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, codePos_[2], topOrigin, Vector2::One, angle_);
+	instance.Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, codePos_[3], topOrigin, Vector2::One, angle_);
 
-	if (BuildMode != 1) return;
-	DrawCircle(drawP[0].x, drawP[0].y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP[1].x, drawP[1].y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP[2].x, drawP[2].y, parameter_.radius, GetColor(255, 255, 255));
-	DrawCircle(drawP[3].x, drawP[3].y, parameter_.radius, GetColor(255, 255, 255));
-	DrawLine(drawP[0].x, drawP[0].y, drawP[1].x, drawP[1].y, GetColor(255, 255, 255));
-	DrawLine(drawP[1].x, drawP[1].y, drawP[2].x, drawP[2].y, GetColor(255, 255, 255));
-	DrawLine(drawP[2].x, drawP[2].y, drawP[3].x, drawP[3].y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawCircle(codePos_[0].x, codePos_[0].y, parameter_.radius, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawCircle(codePos_[1].x, codePos_[1].y, parameter_.radius, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawCircle(codePos_[2].x, codePos_[2].y, parameter_.radius, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawCircle(codePos_[3].x, codePos_[3].y, parameter_.radius, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(codePos_[0].x, codePos_[0].y, codePos_[1].x, codePos_[1].y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(codePos_[1].x, codePos_[1].y, codePos_[2].x, codePos_[2].y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(codePos_[2].x, codePos_[2].y, codePos_[3].x, codePos_[3].y, GetColor(255, 255, 255));
 }

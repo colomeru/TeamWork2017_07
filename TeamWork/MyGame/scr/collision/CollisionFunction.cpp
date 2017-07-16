@@ -40,23 +40,38 @@ CollisionParameter CollisionFunction::IsHit_PHead_Goal(const Actor & sprite1, co
 
 CollisionParameter CollisionFunction::IsHit_PHead_Hanger(const Actor & sprite1, const Actor & sprite2)
 {
-	OBB obb1;
-	OBB obb2;
-	Vector2 sp1Translation = sprite1.GetPosition();
-	Vector2 sp2Translation = sprite2.GetPosition();
-	auto sp2CY = MathHelper::Abs(MathHelper::Cos(sprite2.GetAngle())) * sprite2.GetParameter().size.y / 8.0f;
+	Circle circle;
+	Segment pHeadSeg;
+	Segment seg;
+	Vector2 headPos = sprite1.GetPosition();
+	Vector2 headSize = sprite1.GetParameter().size;
+	Vector2 startPos = sprite2.GetPosition() - Vector2(sprite2.GetParameter().size.x / 2, 0);
+	Vector2 endPos = sprite2.GetPosition() + Vector2(sprite2.GetParameter().size.x / 2, 0);
 
-	MyCol::CreateOBB(&obb1, sp1Translation, Matrix::CreateRotationZ(sprite1.GetAngle()), Vector2(sprite1.GetParameter().size.x / 2.0f, sprite1.GetParameter().size.y / 2.0f));
-	MyCol::CreateOBB(&obb2, sp2Translation + Vector2(0, sp2CY), Matrix::CreateRotationZ(sprite2.GetAngle()), Vector2(sprite2.GetParameter().size.x / 2.0f, sprite2.GetParameter().size.y / 12.0f));
+	MyCol::CreateCircle(&circle, headPos, sprite1.GetParameter().radius);
+	MyCol::CreateSegment(&pHeadSeg, headPos + headSize / 2, headPos - headSize / 2);
+	MyCol::CreateSegment(&seg, startPos, endPos);
 
-	return CollisionParameter(COL_ID::BOX_HANGER_COL, MyCol::TestOBBOBB(obb1, obb2), sprite1.GetPosition());
+	auto circleCenter = DXConverter::GetInstance().ToVECTOR(Vector3(circle.pos.x, circle.pos.y, 0));
+	auto capPos1 = DXConverter::GetInstance().ToVECTOR(Vector3(seg.startPoint.x, seg.startPoint.y, 0));
+	auto capPos2 = DXConverter::GetInstance().ToVECTOR(Vector3(seg.endPoint.x, seg.endPoint.y, 0));
+
+	Vector2 intersect;
+	bool flag = HitCheck_Sphere_Capsule(circleCenter, circle.rad, capPos1, capPos2, sprite2.GetParameter().radius);
+	//if (HitCheck_Sphere_Capsule(circleCenter, circle.rad, capPos1, capPos2, sprite2.GetParameter().radius)) {
+	//	return CollisionParameter(COL_ID::PHEAD_CLOTHES_COL, true);
+	//}
+	bool dummyFlag = MyCol::Col_Segment_Segment(seg, pHeadSeg, intersect);
+	if (!dummyFlag)
+		intersect = sprite2.GetPosition();
+
+	return CollisionParameter(COL_ID::BOX_HANGER_COL, flag, intersect);
 }
 
 CollisionParameter CollisionFunction::IsHit_Circle_Capsules(const Actor & sprite1, const Actor & sprite2)
 {
 	std::vector<Vector2> collisionPoints = static_cast<Clothes*>(const_cast<Actor*>(&sprite2))->GetCollisionPoints();
 	if(collisionPoints.empty()) return CollisionParameter(COL_ID::PHEAD_CLOTHES_COL, false);
-	Circle head;
 	Vector3 headTranslation = sprite1.GetPose().Translation();
 
 	for (int i = 0; i < 3; i++) {

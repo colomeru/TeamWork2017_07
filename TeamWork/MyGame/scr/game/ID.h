@@ -92,6 +92,8 @@ enum SPRITE_ID
 	TEST_CLOTHES_SPRITE,
 	GOAL_UI_SPRITE,
 	HANGER_SPRITE,
+	UPHANGER_SPRITE,
+	UPHANGER_CODE_SPRITE,
 	FLUFFY_SPRITE,
 	FLUFFY_02_SPRITE,
 	FLUFFY_03_SPRITE,
@@ -336,16 +338,32 @@ enum FONT_ID {
 // 服ID
 enum CLOTHES_ID
 {
-	TEST_CLOTHES,		//テスト用
-	BASE_CLOTHES,		//普通の服
+	//TEST_CLOTHES,		//テスト用
+	//BASE_CLOTHES,		//普通の服
+	//GUM_CLOTHES,		//ゴムの服
+	//FLUFFY_CLOTHES,		//ふわふわな服
+	//THIN_CLOTHES,		//薄い生地
+	//HANGER,				//ハンガー
+	//GOAL_CLOTHES,		//ゴール
+	//HAIRBALL,			//毛玉
+	//START_CLOTHES,		//スタート用の服
+	//NOT_SHAKE_CLOTHES,	//揺れない服
+	//NOT_SLASH_CLOTHES,	//切れない服
+	//TEXT_CLOTHES,		//テキストの服
+
+
+	BASE_CLOTHES = 1,		//普通の服
+	FLUFFY_CLOTHES,			//ふわふわな服
+	THIN_CLOTHES,			//薄い生地
+	NOT_SHAKE_CLOTHES,		//揺れない服
+	NOT_SLASH_CLOTHES,		//切れない服
+	HANGER,					//ハンガー
+	TUTORIAL_CLOTHES,		//チュートリアル用の服
+	HAIRBALL,				//毛玉
+	GOAL_CLOTHES,			//ゴール
+	START_CLOTHES,			//スタート用の服
+	TEXT_CLOTHES,			//テキストの服
+
 	GUM_CLOTHES,		//ゴムの服
-	FLUFFY_CLOTHES,		//ふわふわな服
-	THIN_CLOTHES,		//薄い生地
-	HANGER,				//ハンガー
-	GOAL_CLOTHES,		//ゴール
-	HAIRBALL,			//毛玉
-	START_CLOTHES,		//スタート用の服
-	NOT_SHAKE_CLOTHES,	//揺れない服
-	NOT_SLASH_CLOTHES,	//切れない服
-	TEXT_CLOTHES,		//テキストの服
+	TEST_CLOTHES,		//テスト用
 };

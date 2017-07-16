@@ -20,5 +20,7 @@ public:
 
 private:
 	//ハンガーの機能が生きているかどうか
-	bool isStop_;		
+	bool isStop_;
+	//Playerがスリップしたかどうか
+	bool isSlip_;
 };

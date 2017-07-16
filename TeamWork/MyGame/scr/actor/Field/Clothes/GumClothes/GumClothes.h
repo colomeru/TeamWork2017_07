@@ -15,6 +15,4 @@ public:
 	virtual void Draw() const override;
 	//衝突時のアクション
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
-	//当たり判定のローカル座標の設定
-	virtual void SetLocalPoints() override;
 };

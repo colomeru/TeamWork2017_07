@@ -66,7 +66,6 @@ void ClothesPin::Draw() const
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos, origin, parent_->GetParameter().spriteAlpha_, Vector2::One, angle_ + 180);
 
-	if (BuildMode != 1)return;
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
@@ -80,10 +79,10 @@ void ClothesPin::Draw() const
 	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	DrawLine((int)pos1.x, (int)pos1.y, (int)pos2.x, (int)pos2.y, GetColor(255, 255, 255));
-	DrawLine((int)pos1.x, (int)pos1.y, (int)pos3.x, (int)pos3.y, GetColor(255, 255, 255));
-	DrawLine((int)pos2.x, (int)pos2.y, (int)pos4.x, (int)pos4.y, GetColor(255, 255, 255));
-	DrawLine((int)pos3.x, (int)pos3.y, (int)pos4.x, (int)pos4.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine((int)pos1.x, (int)pos1.y, (int)pos2.x, (int)pos2.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine((int)pos1.x, (int)pos1.y, (int)pos3.x, (int)pos3.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine((int)pos2.x, (int)pos2.y, (int)pos4.x, (int)pos4.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine((int)pos3.x, (int)pos3.y, (int)pos4.x, (int)pos4.y, GetColor(255, 255, 255));
 
 
 }

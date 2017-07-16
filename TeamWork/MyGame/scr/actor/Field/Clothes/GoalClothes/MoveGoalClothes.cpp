@@ -14,7 +14,7 @@ MoveGoalClothes::MoveGoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum
 	laneNum_ = laneNum;
 
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, length_);
+	fulcrum_ = position_ - Vector2(0, LENGTH);
 }
 
 MoveGoalClothes::~MoveGoalClothes()
@@ -23,7 +23,7 @@ MoveGoalClothes::~MoveGoalClothes()
 
 void MoveGoalClothes::Update()
 {
-	Pendulum(fulcrum_, length_);
+	Pendulum(fulcrum_, LENGTH);
 
 	if (player_ == nullptr || parent_ == nullptr)return;
 
@@ -39,7 +39,6 @@ void MoveGoalClothes::Draw() const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_CLOTHES_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::GOAL_CLOTHES_SPRITE, drawPos - Vector2(0, 200), crcOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
-	if (BuildMode != 1) return;
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
 	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
@@ -53,10 +52,10 @@ void MoveGoalClothes::Draw() const
 	auto pos2 = Vector3(pos.x + box2.x, pos.y + box2.y);
 	auto pos3 = Vector3(pos.x + box3.x, pos.y + box3.y);
 	auto pos4 = Vector3(pos.x + box4.x, pos.y + box4.y);
-	DrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
-	DrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
-	DrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
-	DrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(pos1.x, pos1.y, pos2.x, pos2.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(pos1.x, pos1.y, pos3.x, pos3.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(pos2.x, pos2.y, pos4.x, pos4.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawLine(pos3.x, pos3.y, pos4.x, pos4.y, GetColor(255, 255, 255));
 }
 
 void MoveGoalClothes::OnCollide(Actor & other, CollisionParameter colpara)

@@ -2,6 +2,7 @@
 #include "../StageGenerator.h"
 #include "../Stage.h"
 #include "../../game/ID.h"
+#include "../../actor/Field/Clothes/PointSetter/PointSetter.h"
 #include <queue>
 #include <vector>
 #include <map>
@@ -22,7 +23,8 @@ public:
 	virtual Vector2 GetStageSize() const override {
 		return stageSize_;
 	}
-	virtual void CreateClothes();
+	//チュートリアル用の服生成
+	void CreateClothes();
 protected:
 	//ピン追加関数
 	void Pin_Add(int i, int j, int data, int laneNum);
@@ -44,4 +46,6 @@ protected:
 	int hairballCnt_;
 	//現在のステージ
 	Stage currentStage_;
+	//服のポイント設定係
+	PointSetter pointSetter_;
 };

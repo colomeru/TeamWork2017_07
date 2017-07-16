@@ -12,24 +12,21 @@
 const float GRAVITY = 0.3f;
 
 //コンストラクタ
-Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight)
+Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, std::map<CuttingState, std::vector<Vector3>> localPoints)
 	:Actor(world)
-	, clothes_ID(clothes), isFriction_(false), isWind_(false)
-	, fulcrum_(0, 0), rot_spd_(0.08f), length_(125.0f), friction_(1.0f), count_(0)
+	, clothes_ID(clothes), isFriction_(false), isWind_(false), localPoints_(localPoints)
+	, fulcrum_(0, 0), rot_spd_(0.08f), friction_(1.0f), count_(0)
 	, clothesState_(ClothesState::WINDLESS), cuttingState_(CuttingState::Normal), dNumber_(0.0f), weight_(weight), drawFrame_(0)
 	, isDroping_(false), clothesFeces_(nullptr), player_(nullptr), frequencyWind_(0), isDrawRange_(false), currentStage_(Stage::Stage1)
 {
+	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
+
+	laneNum_ = laneNum;
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
 
-	localPoints_[CuttingState::Normal].clear();
-	localPoints_[CuttingState::RightUpSlant].clear();
-	localPoints_[CuttingState::LeftUpSlant].clear();
 	collisionPoints.clear();
 
-	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [=](Actor& other)
-	{
-		player_ = static_cast<Player*>(&other);
-	});
+	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [=](Actor& other) { player_ = static_cast<Player*>(&other); });
 }
 
 Clothes::~Clothes()
@@ -56,7 +53,6 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 			player_->CurHeadBite(other.GetPosition());
 			player_->SetIsBiteMode(true);
 			player_->SetOtherClothesID_(clothes_ID);
-			break;
 		}
 		break;
 	}
@@ -66,30 +62,14 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 		isDroping_ = false;
 		clothesFeces_ = nullptr;
 		Sound::GetInstance().PlaySE(SE_ID::SLASH_SE);
-		int rand = Random::GetInstance().Range(0, 2);
-		switch (rand)
-		{
-		case 0: {
-			cuttingState_ = CuttingState::RightUpSlant;
-			drawFrame_ = 1;
-			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
-			world_->Add(
-				ACTOR_ID::CLOTHES_DROPING_ACTOR,
-				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
-				);
-			break;
-		}
-		case 1: {
-			cuttingState_ = CuttingState::LeftUpSlant;
-			drawFrame_ = 2;
-			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
-			world_->Add(
-				ACTOR_ID::CLOTHES_DROPING_ACTOR,
-				std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
-				);
-			break;
-		}
-		}
+		int rand = Random::GetInstance().Range(1, 3);
+		cuttingState_ = (CuttingState)rand;
+		drawFrame_ = rand;
+		world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<SwordAttackEffect>(world_, colpara.colPos));
+		world_->Add(
+			ACTOR_ID::CLOTHES_DROPING_ACTOR,
+			std::make_shared<DropClothes>(world_, position_, laneNum_, spriteId_, drawFrame_)
+			);
 		break;
 	}
 	case ACTOR_ID::ENEMY_ACTOR: 
@@ -129,14 +109,6 @@ void Clothes::OnMessage(EventMessage message, void * param)
 		break;
 	}
 	}
-}
-
-void Clothes::SetLocalPoints()
-{
-	localPoints_[CuttingState::Normal].push_back(Vector3());
-	localPoints_[CuttingState::Normal].push_back(Vector3());
-	localPoints_[CuttingState::Normal].push_back(Vector3());
-	localPoints_[CuttingState::Normal].push_back(Vector3());
 }
 
 void Clothes::SetPointsUpdate()
@@ -232,7 +204,7 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 void Clothes::ShakesClothes()
 {
 	if (isDraw_) {
-		Pendulum(fulcrum_, length_);
+		Pendulum(fulcrum_, LENGTH);
 
 		switch (clothesState_)
 		{

@@ -2,6 +2,7 @@
 #include "../../Actor.h"
 #include "../../player/Player.h"
 #include "../MyGame/scr/game/ID.h"
+#include "../../../debugdata/DebugDraw.h"
 
 enum CuttingState
 {
@@ -26,7 +27,8 @@ protected:
 
 public:
 	//コンストラクタ
-	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight);
+	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, 
+		std::map<CuttingState, std::vector<Vector3>> localPoints = std::map<CuttingState, std::vector<Vector3>>());
 	//デストラクタ
 	virtual ~Clothes() override;
 	//更新
@@ -37,8 +39,6 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param) override;
-	//切断状態による当たり判定のポイントの設定
-	virtual void SetLocalPoints();
 	//服の当たり判定の設定
 	virtual void SetPointsUpdate();
 
@@ -119,6 +119,8 @@ protected:
 	bool isDrawRange_;
 
 	//振り子関連(服用)
+	//紐の長さ
+	const float LENGTH = 125.0f;
 	//摩擦が増加か減衰か
 	bool isFriction_;
 	//風を受けているか
@@ -129,8 +131,6 @@ protected:
 	float rot_;
 	//角速度
 	float rot_spd_;
-	//紐の長さ
-	float length_;
 	//摩擦
 	float friction_;
 	//振り子カウント

@@ -274,8 +274,6 @@ void GamePlayScene::baseUpdate()
 	int randT = Random::GetInstance().Range(0, 3);
 	windTime_ -= randT;
 	windTimer_.Action();
-	//BeginWind();
-	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::H) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM8)) {
 	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::Start)) {
 		setNextMode(4);
 		TweenManager::GetInstance().StopAll();
@@ -387,7 +385,6 @@ void GamePlayScene::clear_Normal_Update()
 
 	if (nextScene_ == Scene::GamePlay) {
 		FadePanel::GetInstance().AddCollBack([=]() {
-			//currentStage_ = nextStageList_[currentStage_];
 			currentStage_ = (Stage)((int)currentStage_ + 1);
 			End();
 			Initialize();

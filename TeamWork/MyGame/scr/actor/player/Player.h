@@ -51,7 +51,7 @@ protected:
 	};
 public:
 	//コンストラクタ
-	Player(IWorld* world,int maxLaneSize=3,int startLane=1);
+	Player(IWorld* world,int maxLaneSize=3,int startLane=1,const Vector2& position=Vector2(0.f,200.f));
 	//デストラクタ
 	~Player();
 	//更新
@@ -265,16 +265,7 @@ protected:
 	void SetDrawNeckParts(const Vector2& bodyPoint, const Vector2& headPoint);
 	//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
 
-	void PHeadLengthReset() {
-		world_->sendMessage(EventMessage::NECK_SHOOT_END);
-		//長さの補間をリセットする
-		chainAddLength_ = 0.f;
-		chainAddLengthMath_ =0.f;
-
-		for (auto& pHL : pHeadLength_) {
-			pHL = 2.f;
-		}
-	}
+	void PHeadLengthReset();
 	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
 	void CurPHeadLengBackPlus(float addPow);

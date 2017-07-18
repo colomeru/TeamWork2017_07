@@ -104,7 +104,9 @@ void TutorialScene::SceneInit()
 	isEnd_ = false;
 	world_->Initialize();
 
-	player_ = std::make_shared<Player>(world_.get());
+	Vector2 pPos = Vector2(0.f, 200.f);
+	if(currentTutorialNum_==0)pPos = Vector2(200.f, 200.f);
+	player_ = std::make_shared<Player>(world_.get(),3,1, pPos);
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
 	world_->PushStackActor(player_);
 
@@ -165,6 +167,7 @@ void TutorialScene::SceneInit()
 	default:
 		break;
 	} 
+	world_->Update();
 }
 
 void TutorialScene::Update()
@@ -179,8 +182,12 @@ void TutorialScene::Update()
 	if (player_->GetRot() >= 180.f || player_->GetRot() <= 0.f) {
 		UnLock(UnLockType::FullStick);
 	}
-	else if (player_->GetRot() >= 150.f || player_->GetRot() <= 30.f) {
-		UnLock(UnLockType::HalfFullStick);
+	else if (player_->GetRot() <= 40.f) {
+		UnLock(UnLockType::HalfFullRightStick);
+
+	}
+	else if (player_->GetRot() >= 140.f) {
+		UnLock(UnLockType::HalfFullLeftStick);
 
 	}
 	else if (player_->GetRot() >= 120.f || player_->GetRot() <= 60.f) {
@@ -506,10 +513,14 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 	case 0: {
 		player_->isUseKey_.SetKeyLock(true);
 		
-		lockList_.push_back(LockList(UnLockType::HalfFullStick, false,SPRITE_ID::GAMEPAD_STICK_SPRITE));
+		lockList_.push_back(LockList(UnLockType::HalfFullRightStick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
+		lockList_.push_back(LockList(UnLockType::HalfFullLeftStick, false,SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		break;
 	}
 	case 1: {
+		for (auto& rs : player_->mRot_spd) {
+			rs = MathHelper::Clamp(rs, 10.f, 10.f);
+		}
 		player_->isUseKey_.SetStickLock(true);
 		player_->isUseKey_.SetKeyLock(InputChecker::Input_Key::X, true);
 
@@ -658,7 +669,7 @@ void TutorialScene::ReLockPendulum()
 	for (int i = lockList_.size() - 1; i > -1; i--) {
 		if (lockList_[i].isLock) {
 
-			if (lockList_[i].type == UnLockType::Stick|| lockList_[i].type == UnLockType::HalfFullStick || lockList_[i].type == UnLockType::FullStick) {
+			if (lockList_[i].type == UnLockType::Stick|| lockList_[i].type == UnLockType::FullStick) {
 				lockList_[i].isLock = false;
 			}
 			return;

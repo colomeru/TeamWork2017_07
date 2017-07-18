@@ -35,7 +35,8 @@ public:
 		EndStage,
 		Dummy,
 		Stick,
-		HalfFullStick,
+		HalfFullRightStick,
+		HalfFullLeftStick,
 		FullStick,
 	};
 

@@ -21,6 +21,7 @@
 #include"PlayerNeck/PlayerNeckPendulumSupport.h"
 #include"../../debugdata/DebugDraw.h"
 #include"../../input/InputChecker.h"
+#include"../../tween/TweenManager.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -37,7 +38,7 @@ const int headCount = 8;
 const int frontHead = -2;
 const int backHead = -4;
 
-Player::Player(IWorld * world,int maxLaneSize, int startLane)
+Player::Player(IWorld * world,int maxLaneSize, int startLane,const Vector2& position)
 	:Actor(world), isUseKey_(true), clearAddRot_(0.0f), isTutorialText_(false),
 	currentHead_(0),
 	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL),
@@ -63,7 +64,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane)
 		* Matrix::CreateRotationZ(0.0f)
 		* Matrix::CreateTranslation(Vector3::Zero);
 
-	position_ = Vector2(0, 200);
+	position_ = position;
 	prevPosition_ = position_;
 
 	slipCountMult_[CLOTHES_ID::BASE_CLOTHES]
@@ -607,6 +608,18 @@ void Player::SetStopPos(Vector2 target) {
 }
 
 
+void Player::PHeadLengthReset() {
+	world_->sendMessage(EventMessage::NECK_SHOOT_END);
+	//’·‚³‚Ì•âŠÔ‚ðƒŠƒZƒbƒg‚·‚é
+	chainAddLength_ = 0.f;
+	chainAddLengthMath_ = 0.f;
+
+	for (auto& pHL : pHeadLength_) {
+		
+		pHL = 2.f;
+	}
+}
+
 void Player::CurPHeadLengPlus(float addPow) {
 
 	if (pHeadDead_[currentHead_])return;
@@ -1028,7 +1041,6 @@ void Player::BiteUpdate()
 		}
 	}
 
-	//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 	if (isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B) || isUseKey_.KeyTriggerDown(InputChecker::Input_Key::X)) {
 		if (mRot.front() < 0.f || mRot.front() > 180.f) {
 			SetNextLane(-1);

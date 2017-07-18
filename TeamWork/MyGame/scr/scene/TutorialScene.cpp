@@ -105,7 +105,7 @@ void TutorialScene::SceneInit()
 	world_->Initialize();
 
 	Vector2 pPos = Vector2(0.f, 200.f);
-	if(currentTutorialNum_==0)pPos = Vector2(200.f, 200.f);
+	if(currentTutorialNum_==0)pPos = Vector2(600.f, 200.f);
 	player_ = std::make_shared<Player>(world_.get(),3,1, pPos);
 	world_->Add(ACTOR_ID::PLAYER_ACTOR, player_);
 	world_->PushStackActor(player_);

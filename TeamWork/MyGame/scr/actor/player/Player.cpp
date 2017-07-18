@@ -615,7 +615,6 @@ void Player::PHeadLengthReset() {
 	chainAddLengthMath_ = 0.f;
 
 	for (auto& pHL : pHeadLength_) {
-		
 		pHL = 2.f;
 	}
 }
@@ -869,9 +868,10 @@ void Player::ToShootMode(bool isPlaySE)
 			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[(currentHead_ + headCount - 2) % headCount]));
 			world_->sendMessage(EventMessage::CREATE_METAMOR_EFFECT);
 		}
-		PHeadLengthReset();
+		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadLength_[currentHead_], 2.f);
 		headAngleSetter = frontHead;
 		currentHead_ = (currentHead_ + 2) % headCount;
+		TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
 		CreateMetamorEffect();
 	}
 
@@ -945,9 +945,10 @@ void Player::ToBackShootMode(bool isPlaySE)
 			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerMetamorEffect>(world_, pHeads_[currentHead_]->GetPosition(), pHeads_[(currentHead_ + 2) % headCount]));
 			world_->sendMessage(EventMessage::CREATE_METAMOR_EFFECT);
 		}
-		PHeadLengthReset();
+		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadLength_[currentHead_], 2.f);
 		headAngleSetter = backHead;
 		currentHead_ = (currentHead_+headCount-2)%headCount;
+		TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
 		CreateMetamorEffect();
 	}
 

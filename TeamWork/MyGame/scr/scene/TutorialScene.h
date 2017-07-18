@@ -10,7 +10,6 @@
 #include "GamePlayDefine.h"
 #include "addScreen\BackgroundScreen.h"
 #include "addScreen/TutorialTextScreen.h"
-#include"../actor/Effects/PlayerEffect/ArrowEffectGenerator.h"
 
 static const int maxTutorialNum = 5;
 
@@ -102,6 +101,7 @@ private:
 private:
 	void ChangeNextTutorial();
 
+	//シーン毎の最初のステージ番号に戻る
 	void ResetLockNum();
 private:
 	// ワールド用シェアドポインタ
@@ -110,50 +110,43 @@ private:
 	// ワールド
 	WorldPtr		world_;
 	PlayerPtr		player_;
-
-	BackgroundScreen bgScreen_;
-
+	//背景描画クラス
+	BackgroundScreen bgScreen_; 
 	//ステージ作成マネージャー
 	StageGenerateManager stageGeneratorManager;
-
 	// 次のシーン
 	Scene			nextScene_;
-
+	//チュートリアル用テキスト描画クラス
 	TutorialTextScreen textScreen_;
-
 	//現在のチュートリアルのベース番号
 	int currentTutorialNum_;
 	//チュートリアルの停止番号
 	int tutorialLockNum_;
-
+	//シーン毎の共通ファイル名リスト
 	std::string StageNameList_[maxTutorialNum];
-	
+	//シーン毎のステージファイル切り分け文字列
 	std::string TextAddList_[4];
 
-	float dummy_;
-
 	float timeCount_;
-
 	int sinCount_;
 
+	//既にテキストを全て飛ばし、ボタンを入力したか
 	bool isAlreadyPutButton_;
-
 	//コントローラを描画するかどうか
 	bool isDrawCtrl_;
 	//worldの更新を行うかどうか
 	bool isUpdate_;
+	//次のシーンへの遷移を開始しているかどうか
 	bool isNext_;
-
+	//チュートリアルクリア項目リスト
 	std::vector<LockList> lockList_;
-	std::vector<SPRITE_ID> KeySpriteList_;
-	std::vector<SPRITE_ID> LastKeySpriteList_;
-
+	//チュートリアルステージ名リスト
 	std::array<std::string, 10> stageTexts_;
+	//現在のステージ番号
 	int stageTextNum_;
-
+	//ロック設定関数リスト
 	std::vector<std::function<void(int)>> setLockFuncList_;
-
+	//チュートリアル時エネミー生成クラス
 	std::shared_ptr<TutorialManager> enemGenerator_;
 
-	ArrowEffectGenerator arrowEffectGenerator_;
 };

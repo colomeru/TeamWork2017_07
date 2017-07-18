@@ -234,6 +234,17 @@ void Player::OnMessage(EventMessage message, void * param)
 	}
 
 }
+void Player::LaneChangeFall() {
+
+	float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
+	laneLerpNum = min(1.f, laneLerpNum);
+	int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
+	drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+
+	if (changeType_ == LaneChangeType::LaneChange_Fall) {
+		drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
+	}
+}
 void Player::StartPendulum() {
 	Vector2 lngPs = pHeads_[currentHead_]->GetPosition() - position_;
 	MultipleInit(lngPs.Length(), pHeads_[currentHead_]->GetPosition(), MathAngle(position_-pHeadPoses_[currentHead_],Vector2::Down),parameter_.radius);
@@ -402,6 +413,23 @@ Vector2 Player::GetCurrentHeadLength() const {
 	float msxLe = msx.Length();
 	float lep = MathHelper::Abs(velLe - msxLe);
 	return msx;
+}
+
+void Player::HeadPosUpdate()
+{
+	headChangeTime_ -= 0.016f*sign(headChangeTime_);
+
+	rotTimer = 0;
+	if (MathHelper::Abs(headChangeTime_) <= 0.01f)headChangeTime_ = 0;
+	else if (MathHelper::Abs(headChangeTime_) > 0)rotTimer = headChangeTime_ * 5;//MathHelper::Abs(defHeadChangeTime/1.f);
+
+	rotTimer += clearAddRot_;
+	for (int i = 0; i < (int)pHeadPoses_.size(); i++) {
+		Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((i + headAngleSetter - currentHead_) * 45)/*+angle_*/ + ((rotTimer)* 45));
+		Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
+		pHeadPoses_[i] = cgToV2;
+	}
+
 }
 
 void Player::SwordPosUpdate() {
@@ -734,6 +762,35 @@ void Player::CurPHeadLengBackPlus(float addPow) {
 	}
 }
 
+void Player::UpdateLaneNum(int updateNum, LaneChangeType changeType) {
+	if (updateNum == 0)return;
+	if (laneNum_ + updateNum > (maxLaneSize_ - 1) || laneNum_ + updateNum < 0)return;
+
+	//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
+	Vector2 nextVel_;
+	//上がるとき
+	if (updateNum < 0) {
+		nextVel_ = LaneChange_Up();
+	}
+	//降りる時
+	else if (updateNum > 0) {
+		nextVel_ = LaneChange_Down(changeType);
+	}
+
+	laneNum_ += updateNum;
+	//レーン最大範囲を超えたらVectの補正を行わない
+
+	laneNum_ = MathHelper::Clamp(laneNum_, 0, (maxLaneSize_ - 1));
+
+	pendulumVect_ = nextVel_;
+
+	if (GetIsBiteMode())playerMode_ = MODE_SLIP;
+
+	world_->sendMessage(EventMessage::LANE_CHANGE_END);
+
+	worldSetMyDatas();
+}
+
 Vector2 Player::LaneChange_Up()
 {
 	pGrav_ = 0.f;
@@ -755,7 +812,7 @@ Vector2 Player::LaneChange_Down(LaneChangeType changeType)
 		world_->sendMessage(EventMessage::LANE_CHANGE_FALL);
 	}
 	world_->sendMessage(EventMessage::LANE_CHANGE_DOWN_END);
-	
+
 	return result;
 }
 

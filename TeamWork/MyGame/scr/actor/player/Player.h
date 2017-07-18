@@ -90,17 +90,7 @@ public:
 		}
 		LaneChangeFall();
 	}
-	virtual void LaneChangeFall() override {
-
-		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
-		laneLerpNum = min(1.f, laneLerpNum);
-		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
-		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
-
-		if (changeType_ == LaneChangeType::LaneChange_Fall) {
-			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
-		}
-	}
+	virtual void LaneChangeFall() override;
 	bool isLaneChangeFall() const{
 		return changeType_ == LaneChangeType::LaneChange_Fall;
 	}
@@ -121,22 +111,7 @@ public:
 	}
 	//現在のHeadの首の長さを返す
 	Vector2 GetCurrentHeadLength()const;
-	void HeadPosUpdate()
-	{
-		headChangeTime_ -= 0.016f*sign(headChangeTime_);
-
-		rotTimer = 0;
-		if (MathHelper::Abs(headChangeTime_) <= 0.01f)headChangeTime_ = 0;
-		else if (MathHelper::Abs(headChangeTime_) > 0)rotTimer = headChangeTime_ * 5;//MathHelper::Abs(defHeadChangeTime/1.f);
-
-		rotTimer+=clearAddRot_;
-		for (int i = 0; i < (int)pHeadPoses_.size(); i++) {
-			Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((i + headAngleSetter - currentHead_) * 45)/*+angle_*/ + ((rotTimer)* 45));
-			Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);
-			pHeadPoses_[i] = cgToV2;
-		}
-
-	}
+	void HeadPosUpdate();
 	void SwordPosUpdate();
 	//使用する頭を右隣の物に変更
 	void changeHead() {
@@ -215,7 +190,6 @@ public:
 
 		SetMultiplePos(sPos - stopPos_);
 		stopPos_ = sPos;
-
 	}
 	void setMaxLaneSize(int size) {
 		maxLaneSize_ = size;
@@ -304,34 +278,7 @@ protected:
 	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
 	void CurPHeadLengBackPlus(float addPow);
-	void UpdateLaneNum(int updateNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal) {
-		if (updateNum == 0)return;
-		if (laneNum_ + updateNum > (maxLaneSize_ - 1) || laneNum_ + updateNum < 0)return;
-
-		//次のレーンに対応したベクトルを作成し、重力の加算をリセットする
-		Vector2 nextVel_;
-		//上がるとき
-		if (updateNum < 0) {
-			nextVel_=LaneChange_Up();
-		}
-		//降りる時
-		else if (updateNum > 0) {
-			nextVel_ =LaneChange_Down(changeType);
-		}
-	
-		laneNum_ += updateNum;
-		//レーン最大範囲を超えたらVectの補正を行わない
-
-		laneNum_ = MathHelper::Clamp(laneNum_, 0, (maxLaneSize_ - 1));
-
-		pendulumVect_ = nextVel_;
-
-		if(GetIsBiteMode())playerMode_ = MODE_SLIP;
-
-		world_->sendMessage(EventMessage::LANE_CHANGE_END);
-
-		worldSetMyDatas();
-	}
+	void UpdateLaneNum(int updateNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal);
 	Vector2 LaneChange_Up();
 	Vector2 LaneChange_Down(LaneChangeType changeType);
 

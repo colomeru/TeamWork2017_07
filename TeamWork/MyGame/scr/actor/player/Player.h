@@ -244,6 +244,7 @@ public:
 	void SetIsTutorialTextWriting(bool is) {
 		isTutorialText_ = is;
 	}
+	bool IsLookBack()const;
 protected:
 	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius);
 	void Multiple();

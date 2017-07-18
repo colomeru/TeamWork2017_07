@@ -116,7 +116,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane,const Vector2& posi
 Player::~Player()
 {
 	for (auto& phl : pHeadLength_) {
-		TweenManager::GetInstance().Add(EaseOutQuart, &phl , 2.f);
+		TweenManager::GetInstance().Cancel(&phl);
 	}
 
 	slipCountMult_.clear();
@@ -302,6 +302,10 @@ void Player::deadLine()
 		world_->GetCanChangedKeepDatas().fallAddPos_ = 100.f;
 	}
 
+}
+bool Player::IsLookBack() const
+{
+	return headAngleSetter==backHead;
 }
 void Player::MultipleInit(float len, const Vector2& fPos, float rot, float radius)
 {
@@ -618,6 +622,7 @@ void Player::PHeadLengthReset() {
 	chainAddLengthMath_ = 0.f;
 
 	for (auto& pHL : pHeadLength_) {
+		//TweenManager::GetInstance().Add(EaseOutQuart, &pHL, 2.f,0.5f);
 		pHL = 2.f;
 	}
 }
@@ -874,9 +879,9 @@ void Player::ToShootMode(bool isPlaySE)
 		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadLength_[currentHead_], 2.f);
 		headAngleSetter = frontHead;
 		currentHead_ = (currentHead_ + 2) % headCount;
-		TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
 		CreateMetamorEffect();
 	}
+	TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
 
 }
 
@@ -951,9 +956,9 @@ void Player::ToBackShootMode(bool isPlaySE)
 		TweenManager::GetInstance().Add(EaseOutQuart, &pHeadLength_[currentHead_], 2.f);
 		headAngleSetter = backHead;
 		currentHead_ = (currentHead_+headCount-2)%headCount;
-		TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
 		CreateMetamorEffect();
 	}
+	TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
 
 }
 

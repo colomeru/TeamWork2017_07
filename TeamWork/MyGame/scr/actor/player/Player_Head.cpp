@@ -103,7 +103,7 @@ void Player_Head::Draw() const
 			pos += vect * 20.f;
 			Vector2 badOrigin = Sprite::GetInstance().GetSize(BAD_SPRITE) / 2;
 
-			Sprite::GetInstance().Draw(BAD_SPRITE, pos, badOrigin, parameter_.spriteAlpha_, Vector2::One, 0, true, false);
+			Sprite::GetInstance().Draw(BAD_SPRITE, pos, badOrigin, parameter_.spriteAlpha_, Vector2::One, 0, true,player_->IsLookBack() );
 		}
 		return;
 	}

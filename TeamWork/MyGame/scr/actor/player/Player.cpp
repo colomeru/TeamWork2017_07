@@ -22,6 +22,7 @@
 #include"../../debugdata/DebugDraw.h"
 #include"../../input/InputChecker.h"
 #include"../../tween/TweenManager.h"
+#include"../../time/Time.h"
 
 static const float headShotPower = 0.3f;
 static const float defMaxChainLength = 16.f;
@@ -45,7 +46,7 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane,const Vector2& posi
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower),
 	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
 	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero),
-	headAngleSetter(frontHead)
+	headAngleSetter(frontHead), addLengthLocker_(false)
 {
 	addscorelist_[0] = 300;
 	addscorelist_[1] = 200;
@@ -533,8 +534,8 @@ void Player::SetMode(Player_Mode pMode,bool isPlaySE) {
 			break;
 		}
 		case MODE_RESIST: {
-			ToResistMode(isPlaySE);
-			break;
+ToResistMode(isPlaySE);
+break;
 		}
 		case MODE_CLEAR: {
 			ToClearMode(isPlaySE);
@@ -569,7 +570,7 @@ void Player::worldSetMyDatas() {
 }
 
 void Player::SetNextLane(int addNum, LaneChangeType changeType) {
-	if (laneNum_ + addNum > (maxLaneSize_ - 1) || laneNum_ + addNum<0)return;
+	if (laneNum_ + addNum > (maxLaneSize_ - 1) || laneNum_ + addNum < 0)return;
 
 	changeType_ = changeType;
 	if (changeType_ == LaneChangeType::LaneChange_Fall) {
@@ -602,7 +603,7 @@ void Player::PHeadChanger(int rot) {
 	}
 	PHeadLengthReset();
 	(sign(rot) == 1) ? backChangeHead() : changeHead();
-	
+
 	world_->sendMessage(EventMessage::CHANGE_HEAD);
 
 	CreateMetamorEffect();
@@ -622,164 +623,140 @@ void Player::PHeadLengthReset() {
 	chainAddLengthMath_ = 0.f;
 
 	for (auto& pHL : pHeadLength_) {
-		//TweenManager::GetInstance().Add(EaseOutQuart, &pHL, 2.f,0.5f);
-		pHL = 2.f;
+		TweenManager::GetInstance().Add(EaseOutQuart, &pHL, 2.f, 0.5f);
+		//pHL = 2.f;
 	}
 }
 
 void Player::CurPHeadLengPlus(float addPow) {
 
 	if (pHeadDead_[currentHead_])return;
-
-	//floatの誤差と、addPowによるLengthのズレを補正するための値、首の長さの値に補正が発生した場合は、この補正値をそこに加算する事で、長さの違和感を解決する
-	float fSaveAddNum = 0.2f;
-	if (pHeadLength_[currentHead_] > 16.f+ fSaveAddNum) {
-		pHeadLength_[currentHead_] = 16.f+ fSaveAddNum + chainAddLength_- chainAddLengthMath_;
-		//長さの上昇に対する補間値
-		chainAddLengthMath_ -= 0.4f;
-		chainAddLengthMath_ = max(chainAddLengthMath_, 0.f);
-
-		for (int i = currentHead_; i > -(int)pHeads_.size() + currentHead_; i--) {
-			int trgNum = i;
-			if (trgNum<0) {
-				trgNum = trgNum + pHeads_.size();
-			}
-
-			if (pHeadDead_[trgNum])continue;
-			if (trgNum == currentHead_)continue;
-
-			if (pHeadLength_[trgNum] <= 0.1f) {
-				if (chainLockCoolTime_>0) {
-					break;
-				}
-				chainLockCoolTime_ = defChainLockCoolTime_;
-				chainAddLength_ += 2.f;
-				chainAddLengthMath_ += 2.f;
-				Vector2 toPos = pHeadPoses_[trgNum] - position_;
-				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_, pHeads_[trgNum]->GetPosition(), toPos));
-				pHeadDead_[trgNum] = true;
-			}
-			else {
-			}
+	if (chainAddLengthMath_>0.f) {
+		chainAddLengthMath_ -= Time::DeltaTime;
+		if (chainAddLengthMath_ <= 0.f) {
+			chainAddLengthMath_ = 0.f;
+			addLengthLocker_ = false;
 		}
-
 		return;
 	}
-	//現在のHead以外の長さを伸ばした分だけマイナスする
 	pHeadLength_[currentHead_] += addPow;
-	//左隣がターゲット
-	int targetNum = currentHead_ - 1;
-
-
-	float LengthKeepNum = 1.01f;
-	if (targetNum<0) {
-		targetNum = targetNum + (int)pHeads_.size();
+	pHeadLength_[currentHead_] = MathHelper::Clamp(pHeadLength_[currentHead_], 0.f, 16.f + chainAddLength_);
+	if(pHeadLength_[currentHead_] >=16.f+chainAddLength_&&addLengthLocker_) {
+		chainAddLengthMath_ = 0.0001f;
 	}
-	for (;;) {
-		if (LengthKeepNum < 0.f)break;
+	if (addLengthLocker_)return;
 
-		if (pHeadLength_[targetNum] < LengthKeepNum)
-		{
-			targetNum--;
+	//headの左隣を基準とする
+	int targetNum = (currentHead_+headCount-1)%headCount;
 
-			if (targetNum<0) {
-				targetNum = targetNum + (int)pHeads_.size();
-			}
-
-			if (targetNum == currentHead_) {
-				LengthKeepNum -= 1.f;
-				targetNum--;
-
-				if (targetNum<0) {
-					targetNum = targetNum + (int)pHeads_.size();
-				}
-			}
-
-			continue;
+	//死んでたらもう1つ手前にする
+DEAD_CHECK:
+		if (pHeadDead_[targetNum]) {
+			if (((targetNum + headCount - 1) % headCount) == currentHead_)goto DEAD_END;
+			targetNum = (targetNum + headCount - 1) % headCount;
+			goto DEAD_CHECK;
 		}
+DEAD_END:
+
+		//全員の長さの最低値を調べて
+		float LengthDefaultNum = 2.f;
+		for (int i = 0; i < headCount; i++) {
+			if (pHeadDead_[i])continue;
+			if (i == currentHead_)continue;
+			LengthDefaultNum = min(pHeadLength_[i], LengthDefaultNum);
+		}
+		//長さの最低値に応じて首の停止位置を決める
+		float LengthKeepNum = 1.f;
+		if (LengthDefaultNum <= 1.f)LengthKeepNum = -0.1f;
+
+		//長さを減らして、規定値を超えたら死ぬ
 		pHeadLength_[targetNum] -= addPow;
-		if (pHeadLength_[targetNum] < 0)pHeadLength_[targetNum] = 0;
+		pHeadLength_[targetNum] = max(pHeadLength_[targetNum],LengthKeepNum);
+		if (pHeadLength_[targetNum] < 0.f) {
+			Vector2 toPos = pHeadPoses_[targetNum] - position_;
+			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_, pHeads_[targetNum]->GetPosition(), toPos));
+			pHeadDead_[targetNum] = true;
+			
+			chainAddLength_ += 2.f;
 
-
-		break;
-	}
-}
-void Player::CurPHeadLengBackPlus(float addPow) {
-
-	if (pHeadDead_[currentHead_])return;
-
-	//floatの誤差と、addPowによるLengthのズレを補正するための値、首の長さの値に補正が発生した場合は、この補正値をそこに加算する事で、長さの違和感を解決する
-	float fSaveAddNum = 0.2f;
-	if (pHeadLength_[currentHead_] > 16.f + fSaveAddNum) {
-		pHeadLength_[currentHead_] = 16.f + fSaveAddNum + chainAddLength_ - chainAddLengthMath_;
-		//長さの上昇に対する補間値
-		chainAddLengthMath_ -= 0.4f;
-		chainAddLengthMath_ = max(chainAddLengthMath_, 0.f);
-
-		for (int i = currentHead_; i > -(int)pHeads_.size() + currentHead_; i--) {
-			int trgNum = i;
-			if (trgNum<0) {
-				trgNum = trgNum + pHeads_.size();
-			}
-
-			if (pHeadDead_[trgNum])continue;
-			if (trgNum == currentHead_)continue;
-
-			if (pHeadLength_[trgNum] <= 0.1f) {
-				if (chainLockCoolTime_>0) {
-					break;
-				}
-				chainLockCoolTime_ = defChainLockCoolTime_;
-				chainAddLength_ += 2.f;
-				chainAddLengthMath_ += 2.f;
-				Vector2 toPos = pHeadPoses_[trgNum] - position_;
-				world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_, pHeads_[trgNum]->GetPosition(), toPos));
-				pHeadDead_[trgNum] = true;
-			}
-			else {
-			}
+			addLengthLocker_ = true;
 		}
+	return;
 
-		return;
-	}
-	//現在のHead以外の長さを伸ばした分だけマイナスする
-	pHeadLength_[currentHead_] += addPow;
-	//左隣がターゲット
-	int targetNum = currentHead_ - 1;
-
-
-	float LengthKeepNum = 1.01f;
-	if (targetNum<0) {
-		targetNum = targetNum + (int)pHeads_.size();
-	}
-	for (;;) {
-		if (LengthKeepNum < 0.f)break;
-
-		if (pHeadLength_[targetNum] < LengthKeepNum)
-		{
-			targetNum--;
-
-			if (targetNum<0) {
-				targetNum = targetNum + (int)pHeads_.size();
-			}
-
-			if (targetNum == currentHead_) {
-				LengthKeepNum -= 1.f;
-				targetNum--;
-
-				if (targetNum<0) {
-					targetNum = targetNum + (int)pHeads_.size();
-				}
-			}
-
-			continue;
-		}
-		pHeadLength_[targetNum] -= addPow;
-		if (pHeadLength_[targetNum] < 0)pHeadLength_[targetNum] = 0;
-
-
-		break;
-	}
+	////floatの誤差と、addPowによるLengthのズレを補正するための値、首の長さの値に補正が発生した場合は、この補正値をそこに加算する事で、長さの違和感を解決する
+	//float fSaveAddNum = 0.2f;
+	//if (pHeadLength_[currentHead_] > 16.f+ fSaveAddNum) {
+	//	pHeadLength_[currentHead_] = 16.f+ fSaveAddNum + chainAddLength_- chainAddLengthMath_;
+	//	//長さの上昇に対する補間値
+	//	chainAddLengthMath_ -= 0.4f;
+	//	chainAddLengthMath_ = max(chainAddLengthMath_, 0.f);
+	//
+	//	for (int i = currentHead_; i > -(int)pHeads_.size() + currentHead_; i--) {
+	//		int trgNum = i;
+	//		if (trgNum<0) {
+	//			trgNum = trgNum + pHeads_.size();
+	//		}
+	//
+	//		if (pHeadDead_[trgNum])continue;
+	//		if (trgNum == currentHead_)continue;
+	//
+	//		if (pHeadLength_[trgNum] <= 0.1f) {
+	//			if (chainLockCoolTime_>0) {
+	//				break;
+	//			}
+	//			chainLockCoolTime_ = defChainLockCoolTime_;
+	//			chainAddLength_ += 2.f;
+	//			chainAddLengthMath_ += 2.f;
+	//			Vector2 toPos = pHeadPoses_[trgNum] - position_;
+	//			world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFallPin>(world_, pHeads_[trgNum]->GetPosition(), toPos));
+	//			pHeadDead_[trgNum] = true;
+	//		}
+	//		else {
+	//		}
+	//	}
+	//
+	//	return;
+	//}
+	////現在のHead以外の長さを伸ばした分だけマイナスする
+	//pHeadLength_[currentHead_] += addPow;
+	////左隣がターゲット
+	//int targetNum = currentHead_ - 1;
+	//
+	//
+	//float LengthKeepNum = 1.01f;
+	//if (targetNum<0) {
+	//	targetNum = targetNum + (int)pHeads_.size();
+	//}
+	//
+	//for (;;) {
+	//	if (LengthKeepNum < 0.f)break;
+	//
+	//	if (pHeadLength_[targetNum] < LengthKeepNum)
+	//	{
+	//		targetNum--;
+	//
+	//		if (targetNum<0) {
+	//			targetNum = targetNum + (int)pHeads_.size();
+	//		}
+	//
+	//		if (targetNum == currentHead_) {
+	//			LengthKeepNum -= 1.f;
+	//			targetNum--;
+	//
+	//			if (targetNum<0) {
+	//				targetNum = targetNum + (int)pHeads_.size();
+	//			}
+	//		}
+	//
+	//		continue;
+	//	}
+	//
+	//	pHeadLength_[targetNum] -= addPow;
+	//	pHeadLength_[targetNum] = max(pHeadLength_[targetNum], 0.f);
+	//
+	//
+	//	break;
+	//}
 }
 
 void Player::UpdateLaneNum(int updateNum, LaneChangeType changeType) {
@@ -882,6 +859,7 @@ void Player::ToShootMode(bool isPlaySE)
 		CreateMetamorEffect();
 	}
 	TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
+	addLengthLocker_ = true;
 
 }
 
@@ -959,6 +937,7 @@ void Player::ToBackShootMode(bool isPlaySE)
 		CreateMetamorEffect();
 	}
 	TweenManager::GetInstance().Cancel(&pHeadLength_[currentHead_]);
+	addLengthLocker_ = true;
 
 }
 

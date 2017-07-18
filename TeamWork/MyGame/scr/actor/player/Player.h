@@ -269,7 +269,6 @@ protected:
 	void PHeadLengthReset();
 	//チェーンの長さを加算する
 	void CurPHeadLengPlus(float addPow);
-	void CurPHeadLengBackPlus(float addPow);
 	void UpdateLaneNum(int updateNum, LaneChangeType changeType = LaneChangeType::LaneChange_Normal);
 	Vector2 LaneChange_Up();
 	Vector2 LaneChange_Down(LaneChangeType changeType);
@@ -381,6 +380,9 @@ protected:
 
 	//クリア時にプレイヤーが発射される瞬間の処理を行う
 	MethodTimer clearShootTimer_;
+	
+	//首をロックする処理を行う
+	bool addLengthLocker_;
 protected:
 	const float gravity_{0.5f};
 	const float spdLimit{ 2.75f };

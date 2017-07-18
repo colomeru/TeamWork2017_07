@@ -1,10 +1,12 @@
 #include "GoalUI.h"
 #include "../../Def.h"
+#include"../../tween/TweenManager.h"
 
 GoalUI::GoalUI(IWorld * world, Vector2 pos)
-	:Actor(world), timeCount_(120)
+	:Actor(world), timeCount_(120), txtSize_(Vector2(0.7f, 0.7f))
 {
 	position_ = pos;
+	TweenManager::GetInstance().Add(EaseOutElastic, &txtSize_, Vector2::One, 0.2f);
 }
 
 GoalUI::~GoalUI()
@@ -25,8 +27,12 @@ void GoalUI::Update()
 void GoalUI::Draw() const
 {
 	if (timeCount_ != 0) {
+		float spritealpha = timeCount_ / 120.f;
+		spritealpha *= 5.f;
+		spritealpha = MathHelper::Clamp(spritealpha, 0.0f, 1.0f);
+		
 		Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GOAL_UI_SPRITE) / 2;
-		Sprite::GetInstance().Draw(SPRITE_ID::GOAL_UI_SPRITE, Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), crcOrigin, 1.0f, Vector2::One);
+		Sprite::GetInstance().Draw(SPRITE_ID::GOAL_UI_SPRITE, Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), crcOrigin, spritealpha, txtSize_);
 	}
 }
 

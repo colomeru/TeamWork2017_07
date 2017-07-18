@@ -141,7 +141,7 @@ void PauseScreen::drawUpdate()
 		textAlphaList_[i] = 1.f;
 		textSizeList_[i] = 1.f;
 	}
-	textAlphaList_[inputCount_] = MathHelper::Sin(sinCount_);
+	textAlphaList_[inputCount_] = abs(MathHelper::Sin(sinCount_));
 	textSizeList_[inputCount_] = mxmSize;
 
 }

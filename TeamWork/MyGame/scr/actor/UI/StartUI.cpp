@@ -1,20 +1,24 @@
 #include "StartUI.h"
 #include "../../Def.h"
+#include"../../tween/TweenManager.h"
 
 StartUI::StartUI(IWorld * world, Vector2 pos)
-	:Actor(world), timeCount_(120)
+	:Actor(world), timeCount_(120),txtSize_(Vector2(0.7f,0.7f))
 {
 	position_ = pos;
+	
+	TweenManager::GetInstance().Add(EaseOutElastic, &txtSize_, Vector2::One,0.2f);
 }
 
 StartUI::~StartUI()
 {
+	TweenManager::GetInstance().Cancel(&txtSize_);
 }
 
 void StartUI::Update()
 {
 	timeCount_--;
-
+	
 	if (timeCount_ <= 0) {
 		parameter_.isDead = true;
 	}
@@ -28,9 +32,7 @@ void StartUI::Draw() const
 		spritealpha = MathHelper::Clamp(spritealpha, 0.0f, 1.0f);
 
 		Vector2 crcOrigin = Sprite::GetInstance().GetSize(SPRITE_ID::GAME_START_TEXT_SPRITE) / 2;
-		Vector2 txtSize = Vector2::One;
-		if (timeCount_ >= 120)txtSize *= 1.5f;
-		Sprite::GetInstance().Draw(SPRITE_ID::GAME_START_TEXT_SPRITE, Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), crcOrigin, spritealpha, txtSize);
+		Sprite::GetInstance().Draw(SPRITE_ID::GAME_START_TEXT_SPRITE, Vector2(WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2), crcOrigin, spritealpha, txtSize_);
 	}
 }
 

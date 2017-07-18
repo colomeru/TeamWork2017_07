@@ -39,12 +39,12 @@ const int frontHead = -2;
 const int backHead = -4;
 
 Player::Player(IWorld * world,int maxLaneSize, int startLane,const Vector2& position)
-	:Actor(world), isUseKey_(true), clearAddRot_(0.0f), isTutorialText_(false),
+	:Actor(world), isUseKey_(true), isTutorialText_(false),
 	currentHead_(0),
-	headChangeTime_(0), pGrav_(defPGravPow), maxChainLength_(defMaxChainLength), playerMode_(MODE_FALL),
+	headChangeTime_(0), pGrav_(defPGravPow), playerMode_(MODE_FALL),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower),
 	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
-	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), isPlayerFallLane_(false), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero),
+	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero),
 	headAngleSetter(frontHead)
 {
 	addscorelist_[0] = 300;
@@ -115,6 +115,10 @@ Player::Player(IWorld * world,int maxLaneSize, int startLane,const Vector2& posi
 
 Player::~Player()
 {
+	for (auto& phl : pHeadLength_) {
+		TweenManager::GetInstance().Add(EaseOutQuart, &phl , 2.f);
+	}
+
 	slipCountMult_.clear();
 	updateFunctionMap_.clear();
 	pHeadDead_.clear();
@@ -424,7 +428,6 @@ void Player::HeadPosUpdate()
 	if (MathHelper::Abs(headChangeTime_) <= 0.01f)headChangeTime_ = 0;
 	else if (MathHelper::Abs(headChangeTime_) > 0)rotTimer = headChangeTime_ * 5;//MathHelper::Abs(defHeadChangeTime/1.f);
 
-	rotTimer += clearAddRot_;
 	for (int i = 0; i < (int)pHeadPoses_.size(); i++) {
 		Vector3 tgtRot = Vector3(pHDist.x, pHDist.y)*Matrix::CreateRotationZ(((i + headAngleSetter - currentHead_) * 45)/*+angle_*/ + ((rotTimer)* 45));
 		Vector2 cgToV2 = position_ + Vector2(tgtRot.x, tgtRot.y);

@@ -345,13 +345,8 @@ protected:
 	float pGrav_;
 
 	float rotTimer;
-	float clearAddRot_;
-
-	float maxChainLength_;
 
 	float slipCount_;
-
-	bool isPlayerFallLane_;
 
 	Vector2 headPosAddVect_;
 
@@ -372,14 +367,15 @@ protected:
 	int chainLockCoolTime_;
 	
 	bool isClearShoot_;
-
+	//プレイヤー用のキー入力チェッカー
 	PlayerInputChecker isUseKey_;
 	bool isTutorialText_;
+	//現在掴んでいる服
 	CLOTHES_ID otherClothesID_;
 	LaneChangeType changeType_;
 	//滑る時間の倍数(服毎)
 	std::map<CLOTHES_ID, float> slipCountMult_;
-
+	//更新関数リスト
 	std::map<int, std::function<void()>> updateFunctionMap_;
 
 	//クリア時にプレイヤーが発射される瞬間の処理を行う

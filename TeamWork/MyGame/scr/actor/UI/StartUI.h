@@ -1,5 +1,6 @@
 #pragma once
 #include "../Actor.h"
+#include"../../math/Vector2.h"
 
 class StartUI : public Actor
 {
@@ -21,5 +22,6 @@ public:
 
 private:
 	int timeCount_;
+	Vector2 txtSize_;
 };
 

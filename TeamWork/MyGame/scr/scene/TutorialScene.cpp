@@ -709,6 +709,7 @@ void TutorialScene::ChangeNextTutorial()
 {
 	if (currentTutorialNum_ >= maxTutorialNum - 1) {
 		if (!isNext_) {
+			isUpdate_ = true;
 			isNext_ = true;
 			FadePanel::GetInstance().AddCollBack([=]() { Sound::GetInstance().StopBGM(); isEnd_ = true; });
 			if (!FadePanel::GetInstance().IsAction()) FadePanel::GetInstance().FadeOut();
@@ -716,6 +717,7 @@ void TutorialScene::ChangeNextTutorial()
 	}
 	else {
 		if (!isNext_) {
+			isUpdate_ = true;
 			isNext_ = true;
 			FadePanel::GetInstance().AddCollBack([=]() { End(); addCurrentNum(); ResetLockNum(); SceneInit(); });
 			FadePanel::GetInstance().SetOutTime(0.5f, 1.0f);

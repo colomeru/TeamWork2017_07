@@ -1042,7 +1042,7 @@ void Player::BiteUpdate()
 	}
 
 	if (isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B) || isUseKey_.KeyTriggerDown(InputChecker::Input_Key::X)) {
-		if (mRot.front() < 0.f || mRot.front() > 180.f) {
+		if ((mRot.front() < 0.f || mRot.front() > 180.f)&&laneNum_!=0) {
 			SetNextLane(-1);
 		}
 		else {

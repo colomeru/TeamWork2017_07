@@ -170,6 +170,17 @@ void Player::Update()
 
 }
 
+//事前更新
+
+void Player::FastUpdate() {
+	if (!world_->GetIsCamChangeMode()) {
+		int nexLane = world_->GetKeepDatas().nextLane_;
+		UpdateLaneNum(nexLane, changeType_);
+		world_->GetCanChangedKeepDatas().SetPlayerNextLane(0);
+	}
+
+}
+
 void Player::Draw() const
 {
 	auto is = Matrix::CreateRotationZ(angle_);
@@ -342,6 +353,7 @@ void Player::Multiple()
 void Player::UpdateMultiplePos() {
 	SetMultiplePos((position_ - prevPosition_));
 }
+//軸と先端の位置を修正し、同時に描画位置を変更する
 void Player::SetMultiplePos(const Vector2 & addpos) {
 	for (int i = 0; i < (int)multiplePos.size(); i++) {
 		multiplePos[i] += addpos;

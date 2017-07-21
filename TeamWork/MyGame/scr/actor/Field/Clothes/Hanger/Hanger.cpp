@@ -50,8 +50,8 @@ void Hanger::Draw() const
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
-	Vector2 startPos = drawPos - Vector2(parameter_.size.x / 2.0f, 0.0f);
-	Vector2 endPos = drawPos + Vector2(parameter_.size.x / 2.0f, 0.0f);
+	Vector2 startPos = position_ - Vector2(parameter_.size.x / 2.0f, 0.0f);
+	Vector2 endPos = position_ + Vector2(parameter_.size.x / 2.0f, 0.0f);
 	DrawHangerRange(startPos, endPos);
 
 	DebugDraw::DebugDrawCircle(startPos.x, startPos.y, parameter_.radius, GetColor(255, 255, 255));

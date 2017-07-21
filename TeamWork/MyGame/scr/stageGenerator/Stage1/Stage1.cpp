@@ -101,6 +101,10 @@ void Stage1::AddStage()
 				world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other) {
 					static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
 					static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
+				});			
+				world_->EachActor(ACTOR_ID::HANGER_ACTOR, [=](Actor& other) {
+					static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
+					static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
 				});
 				break;
 			}

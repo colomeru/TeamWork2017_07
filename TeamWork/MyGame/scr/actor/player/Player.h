@@ -194,6 +194,12 @@ public:
 	void setMaxLaneSize(int size) {
 		maxLaneSize_ = size;
 	}
+	Vector2 GetPendulumVect()const {
+		return pendulumVect_;
+	}
+	void SetPendulumVect(const Vector2& pvect) {
+		pendulumVect_ = pvect;
+	}
 	//現在の頭に対して滑るかどうかをセットする
 	void curPHeadSlip(bool isSlip);
 	//プレイヤーが死んでるか

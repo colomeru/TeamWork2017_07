@@ -1,7 +1,9 @@
 #include "UpHanger.h"
-#include "../MyGame/scr/actor/player/Player_Head.h"
+#include "../../../player/Player_Head.h"
 #include "../../../../tween/TweenManager.h"
 #include "../../../../time/Time.h"
+#include "../../../../debugdata/DebugDraw.h"
+#include "../../../../graphic/Sprite.h"
 
 const float DESTINATION = -400.0f;		//目標値
 
@@ -17,7 +19,6 @@ UpHanger::UpHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	laneNum_ = laneNum;
 
 	position_ = pos - Vector2(0, LENGTH / 2.0f);
-	startPos_ = position_;
 
 	bonePos_[0] = position_ - Vector2(parameter_.size.x / 2.0f, parameter_.size.y);
 	bonePos_[1] = position_ + Vector2(parameter_.size.x / 2.0f, -parameter_.size.y);
@@ -29,6 +30,7 @@ UpHanger::UpHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	codePos_[3] = codeCenterPos_ + Vector2(0.0f, 2.5f);
 	codePos_[4] = position_ + Vector2(parameter_.size.x / 2.0f, -2.5f);
 	codePos_[5] = position_ + Vector2(parameter_.size.x / 2.0f, 2.5f);
+	baseCenter_ = codeCenterPos_;
 }
 
 UpHanger::~UpHanger()
@@ -38,6 +40,8 @@ UpHanger::~UpHanger()
 
 void UpHanger::Update()
 {
+	DrawRangeUpdate();
+
 	if (!isMove_) return;
 
 	codePos_[2] = codeCenterPos_ + Vector2(0.0f, -2.5f);
@@ -74,6 +78,8 @@ void UpHanger::Draw() const
 	DrawModiGraph(drawP[0].x, drawP[0].y, drawP[2].x, drawP[2].y, drawP[3].x, drawP[3].y, drawP[1].x, drawP[1].y, codeHandle, true);
 	DrawModiGraph(drawP[2].x, drawP[2].y, drawP[4].x, drawP[4].y, drawP[5].x, drawP[5].y, drawP[3].x, drawP[3].y, codeHandle, true);
 
+	DrawHangerRange(codePos_[0], codePos_[4]);
+
 	Vector2 startPos = drawPos - Vector2(parameter_.size.x / 2, 0);
 	Vector2 endPos = drawPos + Vector2(parameter_.size.x / 2, 0);
 	DebugDraw::DebugDrawCircle(startPos.x, startPos.y, parameter_.radius, GetColor(255, 255, 255));
@@ -95,34 +101,8 @@ void UpHanger::OnCollide(Actor & other, CollisionParameter colpara)
 		player_->SetOtherClothesID_(clothes_ID);
 
 		if (player_->GetPosition().y - player_->GetPrevPosition().y < 0.0f || laneNum_ == 0) return;
-		player_->SetUseKey(false);
-		isMove_ = true;
-		isPull_ = true;
-		auto baseCenter = codeCenterPos_;
-		pHeadPos_ = parent_->GetPosition();
 		codeCenterPos_ = colpara.colPos;
-		auto pullPos = position_ + Vector2(0.0f, 150.0f);
-		float easeStart = Easing::EaseOutQuad(0.0f, codeCenterPos_.y, pullPos.y, 1.0f);
-		float easeDelta = Easing::EaseOutQuad(Time::DeltaTime, codeCenterPos_.y, pullPos.y, 1.0f);
-		float time = MathHelper::Clamp(MathHelper::Abs(player_->GetVelocity().y / (easeDelta - easeStart)), 0.5f, 1.0f);
-		Vector2 baseCode1 = codePos_[1];
-		Vector2 baseCode2 = codePos_[5];
-		Vector2 deformCode1 = codePos_[1] + Vector2(5.0f, 8.0f);
-		Vector2 deformCode2 = codePos_[5] + Vector2(-5.0f, 8.0f);
-		TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[1], deformCode1, time);
-		TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[5], deformCode2, time);
-		TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, pullPos, time, [=]() {
-			isPull_ = false;
-			TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[1], baseCode1, 0.4f);
-			TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[5], baseCode2, 0.4f);
-			TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_.y, baseCenter.y, 0.4f);
-			TweenManager::GetInstance().Add(EaseInOutSine, &pHeadPos_.y, DESTINATION, 0.5f, [=]() {
-				world_->ChangeCamMoveMode(-1);
-				player_->SetLaneNum(laneNum_);
-				player_->SetUseKey(true);
-				isMove_ = false;
-			});
-		});
+		UpPlayer();
 		break;
 	}
 	}
@@ -154,5 +134,42 @@ void UpHanger::Cancel()
 	isPull_ = false;
 	isMove_ = false;
 	parent_ = nullptr;
-	player_ = nullptr;
+}
+
+void UpHanger::UpPlayer()
+{
+	player_->SetUseKey(false);
+	isMove_ = true;
+	isPull_ = true;
+	pHeadPos_ = parent_->GetPosition();
+	auto pullPos = position_ + Vector2(0.0f, 150.0f);
+
+	//プレイヤーの落下速度によってひもを引っ張る時間を変える
+	float easeStart = Easing::EaseOutQuad(0.0f, codeCenterPos_.y, pullPos.y, 1.0f);
+	float easeDelta = Easing::EaseOutQuad(Time::DeltaTime, codeCenterPos_.y, pullPos.y, 1.0f);
+	float time = MathHelper::Clamp(MathHelper::Abs(player_->GetVelocity().y / (easeDelta - easeStart)), 0.5f, 1.0f);
+
+	//移動前の位置を保存
+	Vector2 baseCode1 = codePos_[1];
+	Vector2 baseCode2 = codePos_[5];
+	Vector2 deformCode1 = codePos_[1] + Vector2(5.0f, 8.0f);
+	Vector2 deformCode2 = codePos_[5] + Vector2(-5.0f, 8.0f);
+
+	//ハンガーのしなりと紐の引っ張り
+	TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[1], deformCode1, time);
+	TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[5], deformCode2, time);
+	TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, pullPos, time, [=]() {
+		isPull_ = false;
+		//ハンガーが元に戻るのとプレイヤーを飛ばす
+		TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[1], baseCode1, 0.4f);
+		TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[5], baseCode2, 0.4f);
+		TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_.y, baseCenter_.y, 0.4f);
+		TweenManager::GetInstance().Add(EaseInOutSine, &pHeadPos_.y, DESTINATION, 0.5f, [=]() {
+			world_->ChangeCamMoveMode(-1);
+			player_->SetLaneNum(laneNum_);
+			player_->SetUseKey(true);
+			isMove_ = false;
+		});
+	});
+
 }

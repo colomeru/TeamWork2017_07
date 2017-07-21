@@ -24,6 +24,8 @@ Hanger::~Hanger()
 
 void Hanger::Update()
 {
+	DrawRangeUpdate();
+
 	if (parent_ == nullptr || player_ == nullptr) return;
 	if (!player_->GetIsBiteMode()) {
 		parent_ = nullptr;
@@ -50,6 +52,8 @@ void Hanger::Draw() const
 
 	Vector2 startPos = drawPos - Vector2(parameter_.size.x / 2.0f, 0.0f);
 	Vector2 endPos = drawPos + Vector2(parameter_.size.x / 2.0f, 0.0f);
+	DrawHangerRange(startPos, endPos);
+
 	DebugDraw::DebugDrawCircle(startPos.x, startPos.y, parameter_.radius, GetColor(255, 255, 255));
 	DebugDraw::DebugDrawCircle(endPos.x, endPos.y, parameter_.radius, GetColor(255, 255, 255));
 	DebugDraw::DebugDrawLine(startPos.x, startPos.y, endPos.x, endPos.y, GetColor(255, 255, 255));

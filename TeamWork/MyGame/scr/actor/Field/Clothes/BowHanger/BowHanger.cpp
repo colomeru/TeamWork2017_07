@@ -1,6 +1,8 @@
 #include "BowHanger.h"
-#include "../MyGame/scr/actor/player/Player_Head.h"
+#include "../../../player/Player_Head.h"
 #include "../../../../tween/TweenManager.h"
+#include "../../../../graphic/Sprite.h"
+#include <DxLib.h>
 
 const float DESTINATION = -400.0f;
 
@@ -15,7 +17,7 @@ BowHanger::BowHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 po
 
 	laneNum_ = laneNum;
 
-	position_ = pos - Vector2(0, LENGTH / 2);
+	position_ = pos - Vector2(0, LENGTH / 2.0f);
 
 	codeCenterPos_ = position_;
 	codePos_[0] = position_ + Vector2(-parameter_.size.x / 2.0f + 1.0f, -2.5f);
@@ -33,6 +35,8 @@ BowHanger::~BowHanger()
 
 void BowHanger::Update()
 {
+	DrawRangeUpdate();
+
 	if (!isMove_) return;
 
 	codePos_[2] = codeCenterPos_ + Vector2(0.0f, -2.5f);
@@ -64,12 +68,7 @@ void BowHanger::Draw() const
 	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::BOWHANGER_SPRITE).x / 2, parameter_.size.y);
 	Sprite::GetInstance().Draw(SPRITE_ID::BOWHANGER_SPRITE, drawPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
-	//Vector2 startPos = drawPos - Vector2(parameter_.size.x / 2, 0);
-	//Vector2 endPos = drawPos + Vector2(parameter_.size.x / 2, 0);
-	//DebugDraw::DebugDrawCircle(startPos.x, startPos.y, parameter_.radius, GetColor(255, 255, 255));
-	//DebugDraw::DebugDrawCircle(endPos.x, endPos.y, parameter_.radius, GetColor(255, 255, 255));
-	//DebugDraw::DebugDrawLine(startPos.x, startPos.y, endPos.x, endPos.y, GetColor(255, 255, 255));
-	DebugDraw::DebugDrawFormatString(200, 0, GetColor(255, 255, 255), "center.x:%f, center.y:%f", codeCenterPos_.x, codeCenterPos_.y);
+	DrawHangerRange(codePos_[0], codePos_[4]);
 }
 
 void BowHanger::OnCollide(Actor & other, CollisionParameter colpara)
@@ -92,20 +91,9 @@ void BowHanger::OnCollide(Actor & other, CollisionParameter colpara)
 			if (parent_ == nullptr) return;
 			auto toSpringPos = position_ + (player_->GetPosition() - position_).Normalize() * 100.0f;
 			TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, toSpringPos, 1.0f, [=]() {
-				TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {
-					isMove_ = false;
-					isPull_ = false;
-				});
-				if (parent_ == nullptr) return;
-				static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
-				player_->SetIsBiteMode(false);
-				auto toPos = (position_ - parent_->GetPosition()).Normalize();
-				toPos.x = toPos.x * 90.0f;
-				toPos.y = toPos.y * 40.0f;
-				player_->SetPendulumVect(toPos);
-				player_->SetMode(MODE_SLIP);
-				parent_ = nullptr;
-				player_ = nullptr;
+				TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {isMove_ = false;});
+				isPull_ = false;
+				Shoot();
 			});
 		});
 		break;
@@ -133,13 +121,25 @@ void BowHanger::Spring(const Vector2& pos, float stiffnes, float friction, float
 
 void BowHanger::Cancel()
 {
-	TweenManager::GetInstance().Cancel(&codeCenterPos_);
-	TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {
+	TweenManager& instance = TweenManager::GetInstance();
+	instance.Cancel(&codeCenterPos_);
+	instance.Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {
 		isMove_ = false;
 		isPull_ = false;
 	});
-	//isPull_ = false;
-	//isMove_ = false;
 	parent_ = nullptr;
-	player_ = nullptr;
+}
+
+void BowHanger::Shoot()
+{
+	if (parent_ == nullptr) return;
+	static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
+	player_->SetIsBiteMode(false);
+	auto toPos = (position_ - parent_->GetPosition()).Normalize();
+	toPos.x = toPos.x * player_->GetCurrentHeadLength().x / 8.0f;
+	toPos.x = MathHelper::Min(toPos.x, 80.0f);
+	toPos.y = toPos.y * 40.0f;
+	player_->SetPendulumVect(toPos);
+	player_->SetMode(MODE_SLIP);
+	parent_ = nullptr;
 }

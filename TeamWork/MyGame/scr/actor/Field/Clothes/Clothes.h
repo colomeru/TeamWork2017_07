@@ -64,6 +64,8 @@ public:
 	void DrawRangeUpdate();
 	//補助線描画
 	void DrawRange() const;
+	//補助線描画（ハンガー用）
+	void DrawHangerRange(Vector2 startPos, Vector2 endPos) const;
 	//プレイヤーを服に同期させる振り子
 	void Synchronize();
 	//服の揺れる確率の設定

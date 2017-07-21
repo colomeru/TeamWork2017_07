@@ -118,6 +118,9 @@ public:
 	virtual void CamMoveDown() {
 		LaneChangeFall();
 	}
+	Vector2 GetVelocity()const {
+		return velocity_;
+	}
 	Vector2 GetDrawPosVect(const Vector2& pos)const{
 		Vector2 retPos;
 

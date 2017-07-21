@@ -16,18 +16,15 @@ BowHanger::BowHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 po
 	laneNum_ = laneNum;
 
 	position_ = pos - Vector2(0, LENGTH / 2);
-	startPos_ = position_;
 
-	Vector2 cor = Vector2(0.0f, 2.5f);
-	codeCenterPos_[0] = position_ + Vector2(-parameter_.size.x / 2.0f, 0.0f);
-	codePos_[0] = codeCenterPos_[0] - cor;
-	codePos_[1] = codeCenterPos_[0] + cor;
-	codeCenterPos_[1] = position_;
-	codePos_[2] = codeCenterPos_[1] - cor;
-	codePos_[3] = codeCenterPos_[1] + cor;
-	codeCenterPos_[2] = position_ + Vector2(parameter_.size.x / 2.0f, 0.0f);
-	codePos_[4] = codeCenterPos_[2] - cor;
-	codePos_[5] = codeCenterPos_[2] + cor;
+	codeCenterPos_ = position_;
+	codePos_[0] = position_ + Vector2(-parameter_.size.x / 2.0f + 1.0f, -2.5f);
+	codePos_[1] = position_ + Vector2(-parameter_.size.x / 2.0f + 1.0f, 2.5f);
+	codePos_[2] = codeCenterPos_ + Vector2(0.0f, -2.5f);
+	codePos_[3] = codeCenterPos_ + Vector2(0.0f, 2.5f);
+	codePos_[4] = position_ + Vector2(parameter_.size.x / 2.0f - 1.0f, -2.5f);
+	codePos_[5] = position_ + Vector2(parameter_.size.x / 2.0f - 1.0f, 2.5f);
+	baseCenter_ = codeCenterPos_;
 }
 
 BowHanger::~BowHanger()
@@ -36,46 +33,43 @@ BowHanger::~BowHanger()
 
 void BowHanger::Update()
 {
+	if (!isMove_) return;
+
+	codePos_[2] = codeCenterPos_ + Vector2(0.0f, -2.5f);
+	codePos_[3] = codeCenterPos_ + Vector2(0.0f, 2.5f);
+
 	if (parent_ == nullptr || player_ == nullptr) return;
 	if (!player_->GetIsBiteMode()) {
-		parent_ = nullptr;
-		isMove_ = false;
+		Cancel();
 		return;
 	}
 
-	if (player_->GetRotBack() < 90.0f)
-		isMove_ = true;
-
-	if (!isMove_) return;
-	angle_ = player_->GetRotBack() - 90.0f;
-
 	if (isPull_) {
-		Spring(codeCenterPos_[1], 1.0f, 0.5f, 0.8f);
+		Spring(codeCenterPos_, 1.0f, 0.5f, 0.8f);
 	}
 	player_->setCurPHeadSPos(pHeadPos_);
-	parent_->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));
+	parent_->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0.0f)));
 }
 
 void BowHanger::Draw() const
 {
 	Vector2 drawPos = GetDrawPosVect(position_);
-	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::HANGER_SPRITE).x / 2, parameter_.size.y);
-	Sprite::GetInstance().Draw(SPRITE_ID::HANGER_SPRITE, drawPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
-	//auto handle = Sprite::GetInstance().GetHandle(SPRITE_ID::UPHANGER_CODE_SPRITE);
-	//auto drawP0 = GetDrawPosVect(codePos_[0]);
-	//auto drawP1 = GetDrawPosVect(codePos_[1]);
-	//auto drawP2 = GetDrawPosVect(codePos_[2]);
-	//auto drawP3 = GetDrawPosVect(codePos_[3]);
-	//auto drawP4 = GetDrawPosVect(codePos_[4]);
-	//auto drawP5 = GetDrawPosVect(codePos_[5]);
-	//DrawModiGraph(drawP0.x, drawP0.y, drawP2.x, drawP2.y, drawP3.x, drawP3.y, drawP1.x, drawP1.y, handle, true);
-	//DrawModiGraph(drawP2.x, drawP2.y, drawP4.x, drawP4.y, drawP5.x, drawP5.y, drawP3.x, drawP3.y, handle, true);
+	auto handle = Sprite::GetInstance().GetHandle(SPRITE_ID::BOWHANGER_CODE_SPRITE);
+	Vector2 drawP[6];
+	for (int i = 0; i < 6; i++) {
+		drawP[i] = GetDrawPosVect(codePos_[i]);
+	}
+	DrawModiGraph(drawP[0].x, drawP[0].y, drawP[2].x, drawP[2].y, drawP[3].x, drawP[3].y, drawP[1].x, drawP[1].y, handle, true);
+	DrawModiGraph(drawP[2].x, drawP[2].y, drawP[4].x, drawP[4].y, drawP[5].x, drawP[5].y, drawP[3].x, drawP[3].y, handle, true);
+	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::BOWHANGER_SPRITE).x / 2, parameter_.size.y);
+	Sprite::GetInstance().Draw(SPRITE_ID::BOWHANGER_SPRITE, drawPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
 
 	//Vector2 startPos = drawPos - Vector2(parameter_.size.x / 2, 0);
 	//Vector2 endPos = drawPos + Vector2(parameter_.size.x / 2, 0);
 	//DebugDraw::DebugDrawCircle(startPos.x, startPos.y, parameter_.radius, GetColor(255, 255, 255));
 	//DebugDraw::DebugDrawCircle(endPos.x, endPos.y, parameter_.radius, GetColor(255, 255, 255));
 	//DebugDraw::DebugDrawLine(startPos.x, startPos.y, endPos.x, endPos.y, GetColor(255, 255, 255));
+	DebugDraw::DebugDrawFormatString(200, 0, GetColor(255, 255, 255), "center.x:%f, center.y:%f", codeCenterPos_.x, codeCenterPos_.y);
 }
 
 void BowHanger::OnCollide(Actor & other, CollisionParameter colpara)
@@ -90,8 +84,30 @@ void BowHanger::OnCollide(Actor & other, CollisionParameter colpara)
 		player_->CurHeadBite(other.GetPosition());
 		player_->SetIsBiteMode(true);
 		player_->SetOtherClothesID_(clothes_ID);
-		//player_->SetUseKey(false);
 		pHeadPos_ = parent_->GetPosition();
+		codeCenterPos_ = colpara.colPos;
+		isMove_ = true;
+		isPull_ = true;
+		TweenManager::GetInstance().Delay(2.0f, [=]() {
+			if (parent_ == nullptr) return;
+			auto toSpringPos = position_ + (player_->GetPosition() - position_).Normalize() * 100.0f;
+			TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, toSpringPos, 1.0f, [=]() {
+				TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {
+					isMove_ = false;
+					isPull_ = false;
+				});
+				if (parent_ == nullptr) return;
+				static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
+				player_->SetIsBiteMode(false);
+				auto toPos = (position_ - parent_->GetPosition()).Normalize();
+				toPos.x = toPos.x * 90.0f;
+				toPos.y = toPos.y * 40.0f;
+				player_->SetPendulumVect(toPos);
+				player_->SetMode(MODE_SLIP);
+				parent_ = nullptr;
+				player_ = nullptr;
+			});
+		});
 		break;
 	}
 	}
@@ -115,7 +131,15 @@ void BowHanger::Spring(const Vector2& pos, float stiffnes, float friction, float
 	pHeadPos_ += velocity_;
 }
 
-void BowHanger::RotatePoint()
+void BowHanger::Cancel()
 {
-
+	TweenManager::GetInstance().Cancel(&codeCenterPos_);
+	TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {
+		isMove_ = false;
+		isPull_ = false;
+	});
+	//isPull_ = false;
+	//isMove_ = false;
+	parent_ = nullptr;
+	player_ = nullptr;
 }

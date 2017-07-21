@@ -21,14 +21,13 @@ public:
 private:
 	//‚Î‚Ë‚ÌŒvŽZ
 	void Spring(const Vector2& pos, float stiffnes, float friction, float mass);
-	//
-	void RotatePoint();
+	void Cancel();
 
 private:
 	bool isMove_;
 	bool isPull_;
-	Vector2 startPos_;
+	Vector2 baseCenter_;
 	Vector2 pHeadPos_;
 	Vector2 codePos_[6];
-	Vector2 codeCenterPos_[3];
+	Vector2 codeCenterPos_;
 };

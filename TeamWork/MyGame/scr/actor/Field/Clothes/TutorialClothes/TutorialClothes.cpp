@@ -16,8 +16,8 @@ TutorialClothes::TutorialClothes(
 	parameter_.size = Vector2(100.0f, 200.0f);
 	laneNum_ = laneNum;
 
-	position_ = pos + Vector2(0, -10);
-	fulcrum_ = position_ - Vector2(0, LENGTH);
+	position_ = pos + Vector2(0.0f, -10.0f);
+	fulcrum_ = position_ - Vector2(0.0f, LENGTH);
 	spriteId_ = ids.second;
 
 	SetPointsUpdate();
@@ -71,10 +71,10 @@ void TutorialClothes::DrawRange() const
 	Vector2 modiPos[4][4];
 	for (int i = 0; i < 4; i++) {
 		//collisionPointから見て、左、右、上、下
-		modiPos[i][0] = codePos_[i] + Vector2(-topSize.x / 2, 0);
-		modiPos[i][1] = codePos_[i] + Vector2(topSize.x / 2, 0);
-		modiPos[i][2] = codePos_[i] + Vector2(0, -topSize.x / 2);
-		modiPos[i][3] = codePos_[i] + Vector2(0, topSize.x / 2);
+		modiPos[i][0] = codePos_[i] + Vector2(-topSize.x / 2.0f, 0.0f);
+		modiPos[i][1] = codePos_[i] + Vector2(topSize.x / 2.0f, 0.0f);
+		modiPos[i][2] = codePos_[i] + Vector2(0.0f, -topSize.x / 2.0f);
+		modiPos[i][3] = codePos_[i] + Vector2(0.0f, topSize.x / 2.0f);
 	}
 	auto handle = instance.GetHandle(SPRITE_ID::BITE_RANGE_SPRITE);
 	DrawModiGraph(modiPos[0][0].x, modiPos[0][0].y, modiPos[0][1].x, modiPos[0][1].y, 

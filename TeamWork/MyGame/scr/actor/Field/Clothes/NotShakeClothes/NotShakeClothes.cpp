@@ -15,8 +15,8 @@ NotShakeClothes::NotShakeClothes(
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100.0f, 200.0f);
 
-	position_ = pos - Vector2(0, 20);
-	fulcrum_ = position_ - Vector2(0, LENGTH);
+	position_ = pos - Vector2(0.0f, 20.0f);
+	fulcrum_ = position_ - Vector2(0.0f, LENGTH);
 	spriteId_ = ids.second;
 
 	SetPointsUpdate();

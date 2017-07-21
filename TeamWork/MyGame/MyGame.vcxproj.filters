@@ -168,9 +168,6 @@
     <ClCompile Include="scr\actor\Field\Clothes\Clothes.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\actor\Field\Clothes\TestClothes.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\actor\player\Player_Head.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -178,9 +175,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\input\GamePad.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\actor\Field\Clothes\GumClothes\GumClothes.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.cpp">
@@ -429,6 +423,9 @@
     <ClCompile Include="scr\actor\Field\Clothes\PointSetter\PointSetter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="scr\actor\Field\Clothes\BowHanger\BowHanger.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\AllInclude.h">
@@ -632,9 +629,6 @@
     <ClInclude Include="scr\actor\Field\Clothes\Clothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\actor\Field\Clothes\TestClothes.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\actor\player\Player_Head.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -648,9 +642,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\input\GamePad.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\actor\Field\Clothes\GumClothes\GumClothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\Field\Clothes\ThinClothes\ThinClothes.h">
@@ -951,6 +942,9 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\Field\Clothes\PointSetter\PointSetter.h">
+      <Filter>ヘッダー ファイル</Filter>
+    </ClInclude>
+    <ClInclude Include="scr\actor\Field\Clothes\BowHanger\BowHanger.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>

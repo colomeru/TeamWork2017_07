@@ -16,8 +16,8 @@ NotSlashClothes::NotSlashClothes(
 	parameter_.size = Vector2(100.0f, 200.0f);
 	laneNum_ = laneNum;
 
-	position_ = pos - Vector2(0, 45);
-	fulcrum_ = position_ - Vector2(0, LENGTH);
+	position_ = pos - Vector2(0.0f, 45.0f);
+	fulcrum_ = position_ - Vector2(0.0f, LENGTH);
 	spriteId_ = ids.second;
 
 	SetPointsUpdate();

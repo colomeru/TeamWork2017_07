@@ -1,7 +1,7 @@
 #pragma once
 #include "../../Actor.h"
 #include "../../player/Player.h"
-#include "../MyGame/scr/game/ID.h"
+#include "../../../game/ID.h"
 #include "../../../debugdata/DebugDraw.h"
 
 enum CuttingState
@@ -58,7 +58,7 @@ public:
 	std::vector<Vector2> GetCollisionPoints() const {
 		return collisionPoints;
 	}
-	//振り子運動(風用)
+	//振り子運動
 	void Pendulum(Vector2 fulcrum, float length);
 	//風による服揺らし
 	void ShakesClothes();
@@ -89,7 +89,6 @@ protected:
 	//当たり判定のポイント
 	std::vector<Vector2> collisionPoints;
 	//当たり判定のポイントのローカル座標
-	std::vector<Vector3> localPoints;
 	std::map<CuttingState, std::vector<Vector3>> localPoints_;
 	//重さ
 	float weight_;

@@ -1,5 +1,5 @@
 #pragma once
-#include "../MyGame/scr/actor/Actor.h"
+#include "../../../Actor.h"
 
 //•ž‚É•t‚¢‚½•³
 class ClothesFeces : public Actor, public std::enable_shared_from_this<Actor>

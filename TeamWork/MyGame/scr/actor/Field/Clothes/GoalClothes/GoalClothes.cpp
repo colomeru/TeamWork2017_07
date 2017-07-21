@@ -1,5 +1,5 @@
 #include "GoalClothes.h"
-#include "../MyGame/scr/actor/UI/GoalUI.h"
+#include "../../../UI/GoalUI.h"
 #include "../../../player/Player_Head.h"
 #include "TutorialFlash.h"
 
@@ -47,7 +47,7 @@ void GoalClothes::Draw() const
 
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos_;
-	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
+	auto sizeVec = Vector3((parameter_.size.x / 2.0f), (parameter_.size.y / 2.0f));
 
 	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
 	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;

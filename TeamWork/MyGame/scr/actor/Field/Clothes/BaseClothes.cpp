@@ -1,5 +1,4 @@
 #include "BaseClothes.h"
-#include "../../../debugdata/DebugDraw.h"
 
 BaseClothes::BaseClothes(
 	IWorld * world,
@@ -16,8 +15,8 @@ BaseClothes::BaseClothes(
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100.0f, 200.0f);
 
-	position_ = pos + Vector2(0, -10);
-	fulcrum_ = position_ - Vector2(0, LENGTH);
+	position_ = pos + Vector2(0.0f, -10.0f);
+	fulcrum_ = position_ - Vector2(0.0f, LENGTH);
 	spriteId_ = ids.second;
 
 	SetPointsUpdate();

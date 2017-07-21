@@ -12,7 +12,7 @@ StartClothes::StartClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vect
 	laneNum_ = laneNum;
 
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, LENGTH);
+	fulcrum_ = position_ - Vector2(0.0f, LENGTH);
 
 	SetPointsUpdate();
 
@@ -46,7 +46,7 @@ void StartClothes::Update()
 		pendulumVec_ = (position_ - beforePos_);
 		auto pos = player->GetCurrentPHeadPosition() + pendulumVec_;
 		auto p = player->GetCurrentHead();
-		player->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
+		player->GetCurrentHead()->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0.0f)));
 		player->setCurPHeadSPos(pos);
 	}
 	else 

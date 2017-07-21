@@ -1,6 +1,5 @@
 #pragma once
 #include "../Clothes.h"
-#include "FluffyPointManager\FluffyPointManager.h"
 
 //‚Ó‚í‚Ó‚í‚È•ž
 class FluffyClothes : public Clothes, public std::enable_shared_from_this<FluffyClothes>

@@ -1,6 +1,5 @@
 #pragma once
 #include "../Clothes.h"
-#include <map>
 
 class NotShakeClothes : public Clothes, public std::enable_shared_from_this<NotShakeClothes>
 {

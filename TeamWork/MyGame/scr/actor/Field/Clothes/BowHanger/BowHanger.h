@@ -2,13 +2,13 @@
 #include "../Clothes.h"
 
 //ハンガー
-class UpHanger : public Clothes, public std::enable_shared_from_this<UpHanger>
+class BowHanger : public Clothes, public std::enable_shared_from_this<BowHanger>
 {
 public:
 	//コンストラクタ
-	UpHanger(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
+	BowHanger(IWorld* world, CLOTHES_ID clothes, int laneNum, Vector2 pos);
 	//デストラクタ
-	virtual ~UpHanger() override;
+	virtual ~BowHanger() override;
 	//更新
 	virtual void Update() override;
 	//描画
@@ -22,14 +22,13 @@ private:
 	//ばねの計算
 	void Spring(const Vector2& pos, float stiffnes, float friction, float mass);
 	//
-	void Cancel();
+	void RotatePoint();
 
 private:
 	bool isMove_;
 	bool isPull_;
 	Vector2 startPos_;
 	Vector2 pHeadPos_;
-	Vector2 bonePos_[2];
 	Vector2 codePos_[6];
-	Vector2 codeCenterPos_;
+	Vector2 codeCenterPos_[3];
 };

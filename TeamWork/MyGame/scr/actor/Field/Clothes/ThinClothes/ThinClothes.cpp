@@ -13,12 +13,12 @@ ThinClothes::ThinClothes(
 	clothes_ID = CLOTHES_ID::THIN_CLOTHES;
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
-	parameter_.size = Vector2(100, 300.f);
+	parameter_.size = Vector2(100.0f, 300.0f);
 
 	spriteId_ = ids.second;
 
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, LENGTH);
+	fulcrum_ = position_ - Vector2(0.0f, LENGTH);
 
 	SetPointsUpdate();
 }

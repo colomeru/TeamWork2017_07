@@ -1,8 +1,9 @@
 #include "UpHanger.h"
 #include "../MyGame/scr/actor/player/Player_Head.h"
 #include "../../../../tween/TweenManager.h"
+#include "../../../../time/Time.h"
 
-const float DESTINATION = -600.0f;
+const float DESTINATION = -400.0f;		//目標値
 
 UpHanger::UpHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
@@ -10,45 +11,48 @@ UpHanger::UpHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 {
 	clothes_ID = CLOTHES_ID::FLUFFY_CLOTHES;
 	parameter_.ID = ACTOR_ID::HANGER_ACTOR;
-	parameter_.size = Vector2(150.f, 80.f);
+	parameter_.size = Vector2(150.0f, 80.0f);
 	parameter_.radius = 12.0f;
 
 	laneNum_ = laneNum;
 
-	position_ = pos - Vector2(0, LENGTH / 2);
+	position_ = pos - Vector2(0, LENGTH / 2.0f);
 	startPos_ = position_;
-	velocity_ = Vector2(0.0f, -5.0f);
 
-	codePos_[0] = position_ - Vector2(parameter_.size.x / 2.0f + 3.0f, 5.0f);
-	codePos_[1] = position_ - Vector2(parameter_.size.x / 2.0f + 3.0f, 0.0f);
-	codeCenterPos_ = position_ + Vector2(0.0f, -2.5f);
-	codePos_[2] = codeCenterPos_ + Vector2(0.0f, 2.5f);
-	codePos_[3] = codeCenterPos_ + Vector2(0.0f, -2.5f);
-	codePos_[4] = position_ + Vector2(parameter_.size.x / 2.0f - 6.0f, 0.0f);
-	codePos_[5] = position_ + Vector2(parameter_.size.x / 2.0f - 6.0f, -5.0f);
+	bonePos_[0] = position_ - Vector2(parameter_.size.x / 2.0f, parameter_.size.y);
+	bonePos_[1] = position_ + Vector2(parameter_.size.x / 2.0f, -parameter_.size.y);
+
+	codeCenterPos_ = position_;
+	codePos_[0] = position_ + Vector2(-parameter_.size.x / 2.0f, -2.5f);
+	codePos_[1] = position_ + Vector2(-parameter_.size.x / 2.0f, 2.5f);
+	codePos_[2] = codeCenterPos_ + Vector2(0.0f, -2.5f);
+	codePos_[3] = codeCenterPos_ + Vector2(0.0f, 2.5f);
+	codePos_[4] = position_ + Vector2(parameter_.size.x / 2.0f, -2.5f);
+	codePos_[5] = position_ + Vector2(parameter_.size.x / 2.0f, 2.5f);
 }
 
 UpHanger::~UpHanger()
 {
+	Cancel();
 }
 
 void UpHanger::Update()
 {
-	if (isMove_) {
-		codePos_[2] = codeCenterPos_ + Vector2(0.0f, 2.5f);
-		codePos_[3] = codeCenterPos_ + Vector2(0.0f, -2.5f);
-	}
-	else return;
+	if (!isMove_) return;
+
+	codePos_[2] = codeCenterPos_ + Vector2(0.0f, -2.5f);
+	codePos_[3] = codeCenterPos_ + Vector2(0.0f, 2.5f);
 
 	if (parent_ == nullptr || player_ == nullptr) return;
 	if (!player_->GetIsBiteMode()) {
-		parent_ = nullptr;
+		Cancel();
 		return;
 	}
 
 	if (isPull_) {
 		Spring(codeCenterPos_, 1.0f, 0.5f, 0.8f);
 	}
+	//頭の座標を更新
 	player_->setCurPHeadSPos(pHeadPos_);
 	parent_->SetPose(Matrix::CreateTranslation(Vector3(pHeadPos_.x, pHeadPos_.y, 0)));	
 }
@@ -56,17 +60,19 @@ void UpHanger::Update()
 void UpHanger::Draw() const
 {
 	Vector2 drawPos = GetDrawPosVect(position_);
-	Vector2 hangOrigin = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::UPHANGER_SPRITE).x / 2, parameter_.size.y);
-	Sprite::GetInstance().Draw(SPRITE_ID::UPHANGER_SPRITE, drawPos, hangOrigin, parameter_.spriteAlpha_, Vector2::One, angle_);
-	auto handle = Sprite::GetInstance().GetHandle(SPRITE_ID::UPHANGER_CODE_SPRITE);
-	auto drawP0 = GetDrawPosVect(codePos_[0]);
-	auto drawP1 = GetDrawPosVect(codePos_[1]);
-	auto drawP2 = GetDrawPosVect(codePos_[2]);
-	auto drawP3 = GetDrawPosVect(codePos_[3]);
-	auto drawP4 = GetDrawPosVect(codePos_[4]);
-	auto drawP5 = GetDrawPosVect(codePos_[5]);
-	DrawModiGraph(drawP0.x, drawP0.y, drawP1.x, drawP1.y, drawP2.x, drawP2.y, drawP3.x, drawP3.y, handle, true);
-	DrawModiGraph(drawP3.x, drawP3.y, drawP2.x, drawP2.y, drawP4.x, drawP4.y, drawP5.x, drawP5.y, handle, true);
+	auto boneHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::UPHANGER_SPRITE);
+	Vector2 boneP[4];
+	for (int i = 0; i < 2; i++) {
+		boneP[i] = GetDrawPosVect(bonePos_[i]);
+	}
+	auto codeHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::UPHANGER_CODE_SPRITE);
+	Vector2 drawP[6];
+	for (int i = 0; i < 6; i++) {
+		drawP[i] = GetDrawPosVect(codePos_[i]);
+	}
+	DrawModiGraph(boneP[0].x, boneP[0].y, boneP[1].x, boneP[1].y, drawP[5].x, drawP[5].y, drawP[1].x, drawP[1].y, boneHandle, true);
+	DrawModiGraph(drawP[0].x, drawP[0].y, drawP[2].x, drawP[2].y, drawP[3].x, drawP[3].y, drawP[1].x, drawP[1].y, codeHandle, true);
+	DrawModiGraph(drawP[2].x, drawP[2].y, drawP[4].x, drawP[4].y, drawP[5].x, drawP[5].y, drawP[3].x, drawP[3].y, codeHandle, true);
 
 	Vector2 startPos = drawPos - Vector2(parameter_.size.x / 2, 0);
 	Vector2 endPos = drawPos + Vector2(parameter_.size.x / 2, 0);
@@ -87,16 +93,29 @@ void UpHanger::OnCollide(Actor & other, CollisionParameter colpara)
 		player_->CurHeadBite(other.GetPosition());
 		player_->SetIsBiteMode(true);
 		player_->SetOtherClothesID_(clothes_ID);
+
+		if (player_->GetPosition().y - player_->GetPrevPosition().y < 0.0f) return;
 		player_->SetUseKey(false);
 		isMove_ = true;
 		isPull_ = true;
 		auto baseCenter = codeCenterPos_;
 		pHeadPos_ = parent_->GetPosition();
 		codeCenterPos_ = colpara.colPos;
-		auto pullPos = position_ + Vector2(0, 150.0f);
-		TweenManager::GetInstance().Add(EaseInCubic, &codeCenterPos_, pullPos, 1.0f, [=]() {
+		auto pullPos = position_ + Vector2(0.0f, 150.0f);
+		float easeStart = Easing::EaseOutQuad(0.0f, codeCenterPos_.y, pullPos.y, 1.0f);
+		float easeDelta = Easing::EaseOutQuad(Time::DeltaTime, codeCenterPos_.y, pullPos.y, 1.0f);
+		float time = MathHelper::Clamp(MathHelper::Abs(player_->GetVelocity().y / (easeDelta - easeStart)), 0.5f, 1.0f);
+		Vector2 baseCode1 = codePos_[1];
+		Vector2 baseCode2 = codePos_[5];
+		Vector2 deformCode1 = codePos_[1] + Vector2(5.0f, 8.0f);
+		Vector2 deformCode2 = codePos_[5] + Vector2(-5.0f, 8.0f);
+		TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[1], deformCode1, time);
+		TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[5], deformCode2, time);
+		TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, pullPos, time, [=]() {
 			isPull_ = false;
-			TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_.y, baseCenter.y, 0.5f);
+			TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[1], baseCode1, 0.4f);
+			TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[5], baseCode2, 0.4f);
+			TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_.y, baseCenter.y, 0.4f);
 			TweenManager::GetInstance().Add(EaseInOutSine, &pHeadPos_.y, DESTINATION, 0.5f, [=]() {
 				world_->ChangeCamMoveMode(-1);
 				player_->SetLaneNum(laneNum_);
@@ -125,4 +144,15 @@ void UpHanger::Spring(const Vector2& pos, float stiffnes, float friction, float 
 	velocity_ = friction * (velocity_ + accelerration);
 	//座標の更新
 	pHeadPos_ += velocity_;
+}
+
+void UpHanger::Cancel()
+{
+	TweenManager::GetInstance().Cancel(&codeCenterPos_);
+	TweenManager::GetInstance().Cancel(&pHeadPos_);
+	player_->SetUseKey(true);
+	isPull_ = false;
+	isMove_ = false;
+	parent_ = nullptr;
+	player_ = nullptr;
 }

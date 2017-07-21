@@ -1,6 +1,5 @@
 #pragma once
 #include "../Clothes.h"
-#include "../BasePointManager\BasePointManager.h"
 
 class TutorialClothes : public Clothes, public std::enable_shared_from_this<TutorialClothes>
 {

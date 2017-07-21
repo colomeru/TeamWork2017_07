@@ -1,9 +1,5 @@
 #include "ClothesPin.h"
-#include "../MyGame/scr/graphic/Sprite.h"
-#include "../MyGame/scr/input/Keyboard.h"
-#include "../../graphic/Sprite.h"
 #include "Clothes\Clothes.h"
-#include "../../Def.h"
 #include"../player/Player_Head.h"
 #include"../Effects/PlayerEffect/ResurrectStayEffect.h"
 #include"../../sound/sound.h"
@@ -17,7 +13,7 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes,
 	parameter_.mat
 		= Matrix::CreateScale(Vector3::One)
 		* Matrix::CreateRotationZ(0.0f)
-		* Matrix::CreateTranslation(Vector3(0, 0, 0));
+		* Matrix::CreateTranslation(Vector3(0.0f, 0.0f, 0.0f));
 
 	laneNum_ = laneNum;
 	position_ = pos;
@@ -27,13 +23,13 @@ ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes,
 
 	//マトリクス情報
 	Matrix mat =
-		Matrix::CreateTranslation(Vector3(pos_.x, pos_.y, 0))
+		Matrix::CreateTranslation(Vector3(pos_.x, pos_.y, 0.0f))
 		* Matrix::CreateRotationZ(parent_->GetAngle())
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0.0f));
 	
 	SetPose(mat);
 
-	angle_ = 0.f;
+	angle_ = 0.0f;
 
 	colFuncMap_[COL_ID::PLAYER_PIN_COL] = std::bind(&CollisionFunction::IsHit_Circle_Circle, colFunc_, std::placeholders::_1, std::placeholders::_2);
 
@@ -53,9 +49,9 @@ void ClothesPin::Update()
 	angle_ = parent_->GetAngle();
 	//マトリクス情報
 	Matrix mat =
-		Matrix::CreateTranslation(Vector3(pos_.x, pos_.y, 0))
+		Matrix::CreateTranslation(Vector3(pos_.x, pos_.y, 0.0f))
 		* Matrix::CreateRotationZ(angle_)
-		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0));
+		* Matrix::CreateTranslation(Vector3(fulcrum_.x, fulcrum_.y, 0.0f));
 
 	SetPose(mat);
 }
@@ -64,11 +60,11 @@ void ClothesPin::Draw() const
 {
 	auto drawPos = GetDrawPosVect(position_);
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::PLAYER_HEAD_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos, origin, parent_->GetParameter().spriteAlpha_, Vector2::One, angle_ + 180);
+	Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, drawPos, origin, parent_->GetParameter().spriteAlpha_, Vector2::One, angle_ + 180.0f);
 
 	auto is = Matrix::CreateRotationZ(angle_);
 	auto pos = drawPos;
-	auto sizeVec = Vector3((parameter_.size.x / 2), (parameter_.size.y / 2));
+	auto sizeVec = Vector3((parameter_.size.x / 2.0f), (parameter_.size.y / 2.0f));
 
 	auto box1 = Vector3(-sizeVec.x, -sizeVec.y)*is;
 	auto box2 = Vector3(+sizeVec.x, -sizeVec.y)*is;

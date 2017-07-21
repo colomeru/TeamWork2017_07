@@ -1,9 +1,6 @@
 #include "PointSetter.h"
 
 PointSetter::PointSetter()
-	:fileName_()
-	,spriteId_()
-	,LENGTH()
 {
 }
 
@@ -20,7 +17,6 @@ void PointSetter::SetLocalPoints(const SPRITE_ID& startSpriteId, float length)
 {
 	int row = csvReader_.rows();
 	int col = csvReader_.columns();
-	int data = 0;
 	std::vector<Vector3> points;
 	int cutId = 0;
 

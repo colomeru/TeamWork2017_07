@@ -6,7 +6,7 @@ class DropClothes : public Actor
 {
 public:
 	// コンストラクタ
-	DropClothes(IWorld* world, Vector2 pos, int laneNum, SPRITE_ID spriteID, int drawFrame);
+	DropClothes(IWorld* world, Vector2 pos, int laneNum, SPRITE_ID spriteID, int drawFrame, float angle);
 	//デストラクタ
 	virtual ~DropClothes() override;
 	// 更新

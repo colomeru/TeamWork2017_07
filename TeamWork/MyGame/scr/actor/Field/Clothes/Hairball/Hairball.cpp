@@ -8,11 +8,12 @@ Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	clothes_ID = CLOTHES_ID::HAIRBALL;
 	parameter_.ID = ACTOR_ID::HAIRBALL_ACTOR;
 	parameter_.radius = 32.0f;
-	parameter_.size = Vector2(50, 50.f);
+	parameter_.size = Vector2(50.0f, 50.0f);
 
 	laneNum_ = laneNum;
 	position_ = pos;
-	fulcrum_ = position_ - Vector2(0, LENGTH);
+	velocity_ = Vector2(-10.0f, 0.0f);
+	fulcrum_ = position_ - Vector2(0.0f, LENGTH);
 
 	colFuncMap_[COL_ID::PHEAD_HAIRBALL_COL] = std::bind(&CollisionFunction::IsHit_Circle_Circle, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	colFuncMap_[COL_ID::PSWORD_HAIRBALL_COL] = std::bind(&CollisionFunction::IsHit_Hairball_PSword, colFunc_, std::placeholders::_1, std::placeholders::_2);
@@ -35,8 +36,6 @@ void Hairball::Update()
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_HEAD_ACTOR, COL_ID::PHEAD_HAIRBALL_COL);
 		world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_SWORD_ACTOR, COL_ID::PSWORD_HAIRBALL_COL);
 	}
-
-	velocity_ = Vector2(-10.0f, 0.0f);
 
 	position_ += velocity_;
 

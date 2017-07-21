@@ -1,7 +1,6 @@
 #pragma once
 #include "../world/IWorld.h"
 #include "../input/CsvReader.h"
-#include "../math/Vector2.h"
 #include "Stage.h"
 
 class StageGenerator

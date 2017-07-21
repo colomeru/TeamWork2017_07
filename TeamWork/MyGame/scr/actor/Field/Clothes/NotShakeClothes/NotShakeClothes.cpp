@@ -1,4 +1,6 @@
 #include "NotShakeClothes.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 NotShakeClothes::NotShakeClothes(
 	IWorld * world,

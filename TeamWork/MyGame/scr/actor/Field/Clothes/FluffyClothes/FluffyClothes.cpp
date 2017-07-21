@@ -1,4 +1,6 @@
 #include "FluffyClothes.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 FluffyClothes::FluffyClothes(
 	IWorld * world, 

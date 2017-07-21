@@ -28,11 +28,6 @@ public:
 private:
 	void SetNextPanel();
 private:
-	int selectNum_;
-	Vector2 selectPos_;
-	float timer;
-	float dummy_;
-private:
 	// ワールド用シェアドポインタ
 	using WorldPtr = std::shared_ptr<World>;
 	// ワールド
@@ -48,5 +43,10 @@ private:
 
 	bool isPushKey_;
 	bool isStartSetPanel_;
+
+	int selectNum_;
+	Vector2 selectPos_;
+	float timer_;
+	float dummy_;
 
 };

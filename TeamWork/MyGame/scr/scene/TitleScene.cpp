@@ -13,7 +13,8 @@
 #include"../input/InputChecker.h"
 
 TitleScene::TitleScene() :
-	nextScene_(Scene::Menu)
+	nextScene_(Scene::Menu),dummy_(0.0f), timer_(0.0f),isStartSetPanel_(false),
+	isPushKey_(false),sinCount_(0),selectNum_(0)
 {
 	world_ = std::make_shared<World>();
 
@@ -37,7 +38,7 @@ void TitleScene::Initialize()
 	isStartSetPanel_ = false;
 	selectPos_ = Vector2(430.f,750.f);
 	selectNum_ = 0;
-	timer = 0;
+	timer_ = 0;
 	alpha_.resize(2, 0.f);
 	bgScreen_.Init();
 	sinCount_ = 0;
@@ -70,7 +71,7 @@ void TitleScene::Update()
 		return;
 	}
 	
-	timer += Time::DeltaTime;
+	timer_ += Time::DeltaTime;
 	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
 		if (selectNum_ == 0) {

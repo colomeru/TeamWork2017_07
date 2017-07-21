@@ -1,8 +1,10 @@
 #include "ClothesPin.h"
-#include "Clothes\Clothes.h"
-#include"../player/Player_Head.h"
-#include"../Effects/PlayerEffect/ResurrectStayEffect.h"
-#include"../../sound/sound.h"
+#include "Clothes/Clothes.h"
+#include "../player/Player_Head.h"
+#include "../Effects/PlayerEffect/ResurrectStayEffect.h"
+#include "../../sound/sound.h"
+#include "../../graphic/Sprite.h"
+#include "../../debugdata/DebugDraw.h"
 
 ClothesPin::ClothesPin(IWorld * world, int laneNum, Vector2 pos, Actor* clothes, Vector2 fulcrum)
 	:Actor(world, clothes)

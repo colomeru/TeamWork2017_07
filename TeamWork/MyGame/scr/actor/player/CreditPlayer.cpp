@@ -1,7 +1,7 @@
 #include "CreditPlayer.h"
 #include "../../input/Keyboard.h"
 #include "../../conv/DXConverter.h"
-#include "../../graphic/Model.h"
+#include "../../graphic/Sprite.h"
 #include"../../math/MathHelper.h"
 #include"Player_Head.h"
 #include"../../math/Matrix.h"

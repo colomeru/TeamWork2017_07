@@ -102,7 +102,6 @@ inline int DigitLength(int num) {
 }
 
 inline std::vector<int> SligeDigit(int num) {
-	int mod = 0;
 	std::vector<int> result;
 
 	if (num == 0) {
@@ -110,6 +109,7 @@ inline std::vector<int> SligeDigit(int num) {
 		return result;
 	}
 
+	int mod = 0;
 	int i = 0;
 	while (num >= 1) {
 		mod = num % 10;

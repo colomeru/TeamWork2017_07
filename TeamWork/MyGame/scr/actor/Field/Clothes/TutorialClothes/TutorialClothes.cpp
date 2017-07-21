@@ -1,4 +1,6 @@
 #include "TutorialClothes.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 TutorialClothes::TutorialClothes(
 	IWorld * world,

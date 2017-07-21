@@ -1,6 +1,7 @@
 #include "DropClothes.h"
 #include "../../../../tween/TweenManager.h"
 #include "../../../../game/Random.h"
+#include "../../../../graphic/Sprite.h"
 
 DropClothes::DropClothes(IWorld * world, Vector2 pos, int laneNum, SPRITE_ID spriteID, int drawFrame, float angle)
 	:Actor(world)

@@ -129,9 +129,6 @@
     <ClCompile Include="scr\conv\DXConverter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\actor\SampleActor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\scene\CreditScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -250,9 +247,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\tween\TweenManager.cpp">
@@ -414,6 +408,9 @@
     <ClCompile Include="scr\actor\Field\Clothes\BowHanger\BowHanger.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
+    <ClCompile Include="scr\actor\player\PlayerNeckDraw.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="scr\AllInclude.h">
@@ -567,9 +564,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\conv\DXConverter.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\actor\SampleActor.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\scene\CreditScene.h">
@@ -726,9 +720,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\tween\TweenManager.h">

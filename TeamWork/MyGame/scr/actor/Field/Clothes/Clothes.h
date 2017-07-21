@@ -2,7 +2,6 @@
 #include "../../Actor.h"
 #include "../../player/Player.h"
 #include "../../../game/ID.h"
-#include "../../../debugdata/DebugDraw.h"
 
 enum CuttingState
 {

@@ -3,6 +3,7 @@
 #include "../../../actor/player/Player_Head.h"
 #include "../../../game/ID.h"
 #include "../../../debugdata/DebugDraw.h"
+#include "../../../graphic/Sprite.h"
 
 //コンストラクタ
 CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneNum, Vector2 position, Vector2 size, int frame) :

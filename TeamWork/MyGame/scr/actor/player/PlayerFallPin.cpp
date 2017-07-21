@@ -1,7 +1,7 @@
 #include "PlayerFallPin.h"
-
-#include"../../game/Random.h"
-#include"../../math/MyFuncionList.h"
+#include "../../game/Random.h"
+#include "../../math/MyFuncionList.h"
+#include "../../graphic/Sprite.h"
 
 PlayerFallPin::PlayerFallPin(IWorld * world, const Vector2& position,const Vector2& toPos) :
 	Actor(world), sinCount_(0), gravity_(Vector2::Zero), direction_((toPos - position).Normalize())

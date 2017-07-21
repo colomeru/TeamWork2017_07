@@ -48,7 +48,7 @@ void BackgroundScreen::Init(Stage currentStage)
 void BackgroundScreen::Update()
 {
 	timeCount_++;
-	if (createWindTimeAndPos_.size() <= 0)return;
+	if (createWindTimeAndPos_.empty())return;
 	if (createWindTimeAndPos_.front().windTime_ == timeCount_) {
 		Vector2 pPos = world_->GetKeepDatas().playerPos_;
 		world_->Add(ACTOR_ID::BACK_GROUND_ACTOR, std::make_shared<BackgroundPill>(world_, createWindTimeAndPos_.front().windPos_ + pPos));

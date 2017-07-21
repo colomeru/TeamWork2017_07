@@ -11,10 +11,7 @@
 #include <map>
 #include"../math/Vector3.h"
 #include"../world/World.h"
-#include"../graphic/Sprite.h"
 #include"../Def.h"
-
-#include "DxLib.h"
 
 static const float alphaSetter[2] = { 1.f,0.5f };
 //更新及び判定の制限範囲、0=更新範囲の左端,1=更新範囲の右端,2=判定範囲の左端,3=判定範囲の右端
@@ -56,172 +53,49 @@ public:
 	// 受動更新
 	virtual void OnUpdate();
 
-	void UpdateList() {
-		if (!isUpdate_)return;
-		Update();
-	}
-	virtual void FastUpdate() {
-	}
-	Vector2 GetDrawAddPos()const {
-		return drawAddPos_;
-	}
-	void FastComUpdate() {
-		drawAddPos_ = Vector2::Zero;
-		if (world_->isChangeFrame()) { 
-			isUpdate_ = true;
-		}
-		else {
-			isUpdate_ = drawPos_.x >= -WINDOW_WIDTH / 2.f&&drawPos_.x <= WINDOW_WIDTH*1.5f;
-		}
-	}
-	virtual void LateUpdate() {
-
-	}
-	void CommonUpdate() {
-		prevPosition_ = position_;
-	}
+	void UpdateList();
+	virtual void FastUpdate();
+	Vector2 GetDrawAddPos()const;
+	void FastComUpdate();
+	virtual void LateUpdate();
+	void CommonUpdate();
 	void LateComUpdate();
 	//レーン移動時限定のアップデート、virtualだが、Player以外はoverrideしないようにする事
-	virtual bool CamMoveUpdate() {
-		CamMoveOnlyUpdate();
-		parameter_.spriteAlpha_ = 0.5f;
-		if (0 > world_->GetKeepDatas().nextLane_) {
-			CamMoveUp();
-		}
-		else {
-			CamMoveDown();
-		}
-		drawPos_ = GetDrawPosVect(position_);
-		return true;
-	}
-	virtual void CamMoveOnlyUpdate(){}
-	virtual void StartOnlyUpdate() {
-
-	}
-	virtual void StartOnlyLateUpdate() {
-
-	}
-	bool StartModeUpdate() {
-		StartOnlyUpdate();
-		isDraw_ = drawPos_.x >= -WINDOW_WIDTH / 2.f&&drawPos_.x <= WINDOW_WIDTH*1.5f;
-		isUpdate_ = true;
-
-		StartOnlyLateUpdate();
-		return false;
-	}
-	virtual void CamMoveUp() {
-		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
-		laneLerpNum = min(1.f, laneLerpNum);
-		int targetNum = world_->GetKeepDatas().playerLane_-laneNum_+2;
-		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum+1], laneLerpNum)- defDrawLineChangePosY[targetNum];
-	}
-	virtual void CamMoveDown() {
-		LaneChangeFall();
-	}
-	Vector2 GetVelocity()const {
-		return velocity_;
-	}
-	Vector2 GetDrawPosVect(const Vector2& pos)const{
-		Vector2 retPos;
-
-		Vector3 cmpos3d = Vector3(pos.x, pos.y, 0)*world_->GetInv();
-		retPos = Vector2(cmpos3d.x, cmpos3d.y);
-		
-		int drawLane;
-		drawLane = laneNum_ - world_->GetKeepDatas().playerLane_;
-		
-		if (world_->GetIsFreeCamY_()&&drawLane < 0) {
-
-			retPos.y += defDrawLinePosY[drawLane + 1]*1.2f;
-
-			return retPos;
-		}
-
-		if (MathHelper::Abs (drawLane) >= 2) {
-			retPos.y = -500;
-		}
-		else {
-			retPos.y += defDrawLinePosY[drawLane + 1];
-
-		}
-		retPos += drawAddPos_;
-		return retPos;
-	}
+	virtual bool CamMoveUpdate();
+	virtual void CamMoveOnlyUpdate();
+	virtual void StartOnlyUpdate();
+	virtual void StartOnlyLateUpdate();
+	bool StartModeUpdate();
+	virtual void CamMoveUp();
+	virtual void CamMoveDown();
+	Vector2 GetVelocity()const;
+	Vector2 GetDrawPosVect(const Vector2& pos)const;
 	//lanenumを自由に指定してdrawposを算出
-	Vector2 GetFreeActorDrawPos(const Vector2& pos,int laneNum) const{
-		Vector2 retPos;
-
-		Vector3 cmpos3d = Vector3(pos.x, pos.y, 0)*world_->GetInv();
-		retPos = Vector2(cmpos3d.x, cmpos3d.y);
-
-		int drawLane;
-		drawLane = laneNum - world_->GetKeepDatas().playerLane_;
-
-		if (world_->GetIsFreeCamY_() && drawLane < 0) {
-
-			retPos.y += defDrawLinePosY[drawLane + 1] * 1.2f;
-
-			return retPos;
-		}
-
-		if (MathHelper::Abs(drawLane) >= 2) {
-			retPos.y = -500;
-		}
-		else {
-			retPos.y += defDrawLinePosY[drawLane + 1];
-
-		}
-		retPos += drawAddPos_;
-		return retPos;
-	}
+	Vector2 GetFreeActorDrawPos(const Vector2& pos, int laneNum) const;
 
 	// 自分取得
 	Actor* GetActor() const;
 	// 親取得
 	Actor* GetParent() const;
 
-	Vector2 GetPosition() const {
-
-		return position_;
-	}
-	Vector2 GetDrawPos()const {
-		return drawPos_;
-	}
-	Vector2 GetPrevPosition() const {
-		return prevPosition_;
-	}
-	float GetAngle() const {
-		return angle_;
-	}
-	int GetLaneNum() const {
-		return laneNum_;
-	}
-	bool GetIsUpdate()const {
-		return isUpdate_;
-	}
-	bool GetIsDraw()const {
-		return isDraw_;
-	}
-	void SetLaneNum(int laneNum) {
-		laneNum_ = laneNum;
-	}
+	Vector2 GetPosition() const;
+	Vector2 GetDrawPos()const;
+	Vector2 GetPrevPosition() const;
+	float GetAngle() const;
+	int GetLaneNum() const;
+	bool GetIsUpdate()const;
+	bool GetIsDraw()const;
+	void SetLaneNum(int laneNum);
 	// メッセージ処理
 	void handleMessage(EventMessage message, void* param);
-	void DrawUpdate() {
-		drawPos_ = GetDrawPosVect(position_);
-	}
+	void DrawUpdate();
 protected:
 	// 当たり判定処理
 	virtual void OnCollide(Actor& other, CollisionParameter colpara);
 	// メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param);
 	//落ちる時のレーン変更
-	virtual void LaneChangeFall() {
-		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
-		laneLerpNum = min(1.f, laneLerpNum);
-		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
-		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
-	}
+	virtual void LaneChangeFall();
 private:
 	/* コピー禁止 */
 	Actor(const Actor& other) = delete;

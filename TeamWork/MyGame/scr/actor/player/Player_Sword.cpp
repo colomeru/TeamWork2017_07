@@ -1,6 +1,7 @@
 #include "Player_Sword.h"
 #include"../../math/MyFuncionList.h"
 #include"../../debugdata/DebugDraw.h"
+#include "../../graphic/Sprite.h"
 
 Player_Sword::Player_Sword(IWorld * world, Player * targetP, Vector2 pos)
 	:Actor(world,targetP),swordStartPos_(pos),swordEndPos_(pos),player_(targetP),useSword_(false)
@@ -48,4 +49,61 @@ void Player_Sword::OnCollide(Actor & other, CollisionParameter colpara)
 
 void Player_Sword::OnMessage(EventMessage message, void * param)
 {
+}
+
+void Player_Sword::SetSwordVel(const Vector2 & vel) {
+	position_ = player_->GetPosition();
+	swordEndPos_ = position_ + (vel*(float)Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).y);
+
+	swordStartPos_ = position_ + (swordEndPos_ - position_).Normalize()*128.f;
+
+}
+
+bool Player_Sword::CamMoveUpdate() {
+	if (world_->GetKeepDatas().nextLane_ < 0) {
+		CamMoveUp();
+	}
+	else {
+		CamMoveDown();
+	}
+	return true;
+}
+
+void Player_Sword::CamMoveUp() {
+}
+
+void Player_Sword::CamMoveDown() {
+	if (!player_->isLaneChangeFall()) {
+		return;
+	}
+	LaneChangeFall();
+	drawPos_ = GetDrawPosVect(position_);
+
+}
+
+void Player_Sword::LaneChangeFall() {
+	float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
+	laneLerpNum = min(1.f, laneLerpNum);
+	int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
+	drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+
+	if (player_->isLaneChangeFall()) {
+		drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
+	}
+}
+
+Vector2 Player_Sword::GetSwordStartPos() const {
+	return swordStartPos_;
+}
+
+Vector2 Player_Sword::GetSwordEndPos() const {
+	return swordEndPos_;
+}
+
+void Player_Sword::SetUseSword(bool useSword) {
+	useSword_ = useSword;
+}
+
+bool Player_Sword::GetUseSword() const {
+	return useSword_;
 }

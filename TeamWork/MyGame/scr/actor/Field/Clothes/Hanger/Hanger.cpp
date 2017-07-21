@@ -1,5 +1,7 @@
 #include "Hanger.h"
-#include "../MyGame/scr/actor/player/Player_Head.h"
+#include "../../../player/Player_Head.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)

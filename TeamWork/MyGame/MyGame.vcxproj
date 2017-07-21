@@ -183,7 +183,6 @@
     <ClCompile Include="scr\actor\Field\Clothes\DropClothes\DropClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.cpp" />
-    <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\TutorialFlash.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Hairball\Hairball.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Hairball\HairballGenerator\HairballGenerator.cpp" />
@@ -210,10 +209,10 @@
     <ClCompile Include="scr\actor\player\PlayerDeadPin.cpp" />
     <ClCompile Include="scr\actor\player\PlayerEffectManager.cpp" />
     <ClCompile Include="scr\actor\player\PlayerFallPin.cpp" />
+    <ClCompile Include="scr\actor\player\PlayerNeckDraw.cpp" />
     <ClCompile Include="scr\actor\player\PlayerNeck\PlayerNeckPendulumSupport.cpp" />
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\player\Player_Sword.cpp" />
-    <ClCompile Include="scr\actor\SampleActor.cpp" />
     <ClCompile Include="scr\actor\UI\GoalUI.cpp" />
     <ClCompile Include="scr\actor\UI\StartUI.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
@@ -321,7 +320,6 @@
     <ClInclude Include="scr\actor\Field\Clothes\DropClothes\DropClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.h" />
-    <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\TutorialFlash.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Hairball\Hairball.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Hairball\HairballGenerator\HairballGenerator.h" />
@@ -354,7 +352,6 @@
     <ClInclude Include="scr\actor\player\PlayerNeck\PlayerNeckPendulumSupport.h" />
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\player\Player_Sword.h" />
-    <ClInclude Include="scr\actor\SampleActor.h" />
     <ClInclude Include="scr\actor\UI\GoalUI.h" />
     <ClInclude Include="scr\actor\UI\StartUI.h" />
     <ClInclude Include="scr\AllInclude.h" />

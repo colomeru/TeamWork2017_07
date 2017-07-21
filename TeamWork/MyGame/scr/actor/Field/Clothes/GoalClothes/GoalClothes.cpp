@@ -2,6 +2,8 @@
 #include "../../../UI/GoalUI.h"
 #include "../../../player/Player_Head.h"
 #include "TutorialFlash.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)

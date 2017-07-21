@@ -1,4 +1,6 @@
 #include "BaseClothes.h"
+#include "../../../graphic/Sprite.h"
+#include "../../../debugdata/DebugDraw.h"
 
 BaseClothes::BaseClothes(
 	IWorld * world,

@@ -1,4 +1,6 @@
 #include "NotSlashClothes.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 NotSlashClothes::NotSlashClothes(
 	IWorld * world, 

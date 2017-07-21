@@ -1,6 +1,7 @@
 #include "PlayerDeadPin.h"
-#include"../../game/Random.h"
-#include"../../math/MyFuncionList.h"
+#include "../../game/Random.h"
+#include "../../math/MyFuncionList.h"
+#include "../../graphic/Sprite.h"
 
 PlayerDeadPin::PlayerDeadPin(IWorld * world,const Vector2& position):
 	Actor(world),sinCount_(0), gravity_(Vector2::Zero)

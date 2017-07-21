@@ -1,8 +1,7 @@
 #include "Player_Head.h"
-
 #include "../../input/Keyboard.h"
 #include "../../conv/DXConverter.h"
-#include "../../graphic/Model.h"
+#include "../../graphic/Sprite.h"
 #include"../Field/Clothes/Clothes.h"
 #include"../Field/ClothesPin.h"
 #include"../Effects/PlayerEffect/PlayerFatigueEffect.h"

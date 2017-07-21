@@ -21,8 +21,8 @@ void GameFrame::Run()
 	SetWaitVSyncFlag(TRUE);
 
 #ifndef NDEBUG
-	ChangeWindowMode(TRUE);		// ウィンドウモード
 #endif // NDEBUG
+	ChangeWindowMode(TRUE);		// ウィンドウモード
 
 
 	if (DxLib_Init() == -1)		// DXライブラリ初期化処理

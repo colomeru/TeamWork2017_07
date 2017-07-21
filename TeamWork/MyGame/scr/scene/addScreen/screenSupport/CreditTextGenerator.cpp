@@ -3,6 +3,7 @@
 #include "CreditText.h"
 #include "../../../time/Time.h"
 #include "CreditPostText.h"
+#include "../../../graphic/Sprite.h"
 
 //コンストラクタ
 CreditTextGenerator::CreditTextGenerator(IWorld * world, Vector2 position) :

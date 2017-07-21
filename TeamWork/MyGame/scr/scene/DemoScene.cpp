@@ -11,7 +11,9 @@ static const int animSize = 8;
 DemoScene::DemoScene() :
 	maxLoadContentCount_((float)GetASyncLoadNum()),
 	currentLoadCount_(0.0f),
-	prevLoadCount_(0.0f)
+	prevLoadCount_(0.0f),
+	LoadWashMachineFrame_(0),
+	timeCount_(0)
 {
 }
 

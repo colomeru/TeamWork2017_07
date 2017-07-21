@@ -6,6 +6,8 @@
 #include "../../Effects/PlayerEffect/SwordAttackEffect.h"
 #include "../../../sound/sound.h"
 #include "../../player/Player_Head.h"
+#include "../../../graphic/Sprite.h"
+#include "../../../debugdata/DebugDraw.h"
 
 //èdóÕâ¡ë¨ìx
 const float GRAVITY = 0.3f;

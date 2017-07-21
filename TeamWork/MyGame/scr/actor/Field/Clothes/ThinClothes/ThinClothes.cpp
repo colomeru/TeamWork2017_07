@@ -1,4 +1,6 @@
 #include "ThinClothes.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 ThinClothes::ThinClothes(
 	IWorld * world,

@@ -19,56 +19,17 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara)override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
-	void SetSwordVel(const Vector2& vel) {
-		position_ = player_->GetPosition();
-		swordEndPos_ = position_+(vel*(float)Sprite::GetInstance().GetSize(SPRITE_ID::SWORD_SPRITE).y);
-		
-		swordStartPos_= position_ + (swordEndPos_ - position_).Normalize()*128.f;
-		
-	}
-	virtual bool CamMoveUpdate() {
-		if (world_->GetKeepDatas().nextLane_ < 0) {
-			CamMoveUp();
-		}
-		else {
-			CamMoveDown();
-		}
-		return true;
-	}
-	virtual void CamMoveUp()override {
-	}
-	virtual void CamMoveDown() override {
-		if (!player_->isLaneChangeFall()) {
-			return;
-		}
-		LaneChangeFall();
-		drawPos_ = GetDrawPosVect(position_);
+	void SetSwordVel(const Vector2& vel);
+	virtual bool CamMoveUpdate();
+	virtual void CamMoveUp()override;
+	virtual void CamMoveDown() override;
 
-	}
+	virtual void LaneChangeFall() override;
 
-	virtual void LaneChangeFall() override {
-		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
-		laneLerpNum = min(1.f, laneLerpNum);
-		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
-		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
-
-		if (player_->isLaneChangeFall()) {
-			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
-		}
-	}
-
-	Vector2 GetSwordStartPos() const {
-		return swordStartPos_;
-	}
-	Vector2 GetSwordEndPos() const {
-		return swordEndPos_;
-	}
-	void SetUseSword(bool useSword) {
-		useSword_ = useSword;
-	}
-	bool GetUseSword()const {
-		return useSword_;
-	}
+	Vector2 GetSwordStartPos() const;
+	Vector2 GetSwordEndPos() const;
+	void SetUseSword(bool useSword);
+	bool GetUseSword()const;
 
 private:
 	Player* player_;

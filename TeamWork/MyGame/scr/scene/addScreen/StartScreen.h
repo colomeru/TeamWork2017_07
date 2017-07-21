@@ -10,7 +10,7 @@ class StartScreen
 {
 public:
 	// コンストラクタ
-	StartScreen() {}
+	StartScreen() = default;
 	StartScreen(World* world,int maxLaneCount);
 
 	void Init(float stageWidth);

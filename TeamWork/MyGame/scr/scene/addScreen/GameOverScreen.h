@@ -17,9 +17,9 @@ public:
 private:
 	void drawUpdate();
 private:
-	int inputCount_;
+	int inputCount_{ 0 };
 	int sinCount_;
-	bool isTrigger_;
+	bool isTrigger_{ true };
 
 	std::vector<Scene> changeSceneList_;
 	std::vector<float> textAlphaList_;

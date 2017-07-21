@@ -11,7 +11,7 @@ class TutorialTextScreen
 {
 public:
 	// コンストラクタ
-	TutorialTextScreen() {}
+	TutorialTextScreen() = default;
 	TutorialTextScreen(World* world);
 
 	void Init(const std::string& filename);
@@ -20,26 +20,17 @@ public:
 	void Draw() const;
 	void End();
 private:
-	int GetMaxTextSize() {
-		int ret = 0;
-		for (int i = currentTextLine_ * 3; i< currentTextLine_ * 3 + 3; i++) {
-			if (i >= (int)drawText_.size())break;
-			ret+=drawText_[i].size();
-		}
-		return ret;
-	}
+	int GetMaxTextSize();
 private:
 	World* world_;
 
-	Stage currentStage_;
+	int textCount_{ 0 };
+	int sinCount_{ 0 };
+	int maxTextSize_{ 0 };
 
-	int textCount_;
-	int sinCount_;
-	int maxTextSize_;
+	int currentTextLine_{ 0 };
 
-	int currentTextLine_;
-
-	float textChangeTimeCount_;
+	float textChangeTimeCount_{ 0.f };
 
 	std::vector<std::vector<char>> drawText_;
 };

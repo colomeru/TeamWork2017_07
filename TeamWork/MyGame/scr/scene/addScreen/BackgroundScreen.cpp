@@ -13,24 +13,25 @@ static const int createWindCount = 100;
 
 static const int defDrawPointYAdd[3] = {0,30,60};
 
-BackgroundScreen::BackgroundScreen(World * world) :world_(world),timeCount_(0)
+BackgroundScreen::BackgroundScreen(World * world) :world_(world),
+BGList_{
+	{ Stage::Stage1,SPRITE_ID::BACKGROUND_1_SPRITE },
+	{ Stage::Stage2,SPRITE_ID::BACKGROUND_2_SPRITE },
+	{ Stage::Stage3,SPRITE_ID::BACKGROUND_3_SPRITE },
+	{ Stage::Stage4,SPRITE_ID::BACKGROUND_4_SPRITE },
+	{ Stage::Stage5,SPRITE_ID::BACKGROUND_5_SPRITE },
+	{ Stage::Stage6,SPRITE_ID::BACKGROUND_6_SPRITE },
+	{ Stage::Stage7,SPRITE_ID::BACKGROUND_7_SPRITE },
+	{ Stage::Stage8,SPRITE_ID::BACKGROUND_8_SPRITE }}
 {
-	Vector2 cPos = Vector2(2000,0);
+	Vector2 cPos = Vector2(2000.f,0.f);
 	for (int i = 0; i < defGenerateCharaCount;i++) {
 		charactersPosition_.push_back(cPos);
 		isCharactersPositionUsed_.push_back(false);
 
-		cPos.x += 180;
-		cPos.y += 100;
+		cPos.x += 180.f;
+		cPos.y += 100.f;
 	}
-	BGList_[Stage::Stage1] = SPRITE_ID::BACKGROUND_1_SPRITE;
-	BGList_[Stage::Stage2] = SPRITE_ID::BACKGROUND_2_SPRITE;
-	BGList_[Stage::Stage3] = SPRITE_ID::BACKGROUND_3_SPRITE;
-	BGList_[Stage::Stage4] = SPRITE_ID::BACKGROUND_4_SPRITE;
-	BGList_[Stage::Stage5] = SPRITE_ID::BACKGROUND_5_SPRITE;
-	BGList_[Stage::Stage6] = SPRITE_ID::BACKGROUND_6_SPRITE;
-	BGList_[Stage::Stage7] = SPRITE_ID::BACKGROUND_7_SPRITE;
-	BGList_[Stage::Stage8] = SPRITE_ID::BACKGROUND_8_SPRITE;
 }
 
 void BackgroundScreen::Init(Stage currentStage)
@@ -41,7 +42,7 @@ void BackgroundScreen::Init(Stage currentStage)
 	Vector2 pPos = world_->GetKeepDatas().playerPos_;
 	currentStage_ = currentStage;
 	
-	 ceilPos = Vector2(0, -200.f);
+	 ceilPos = Vector2(0.f, -200.f);
 }
 
 void BackgroundScreen::Update()

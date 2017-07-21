@@ -26,7 +26,7 @@ public:
 
 public:
 	// コンストラクタ
-	BackgroundScreen() {}
+	BackgroundScreen() = default;
 	BackgroundScreen(World* world);
 
 	void Init(Stage currentStage);
@@ -40,9 +40,9 @@ public:
 private:
 	World* world_;
 
-	Stage currentStage_;
-	int timeCount_;
-	Vector2 ceilPos;
+	Stage currentStage_{ Stage::Stage1 };
+	int timeCount_{ 0 };
+	Vector2 ceilPos{ 0.f, -200.f };
 
 	std::vector<Vector2> charactersPosition_;
 	std::vector<bool> isCharactersPositionUsed_;

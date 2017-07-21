@@ -10,8 +10,8 @@ class UIScreen
 {
 public:
 	// コンストラクタ
-	UIScreen() {}
-	UIScreen(World* world);
+	UIScreen()=default;
+	explicit UIScreen(World* world);
 
 	void Init(Stage currentStage,float stageLen);
 	void Update(const Vector2& playerPos);
@@ -25,15 +25,15 @@ public:
 private:
 	World* world_;
 
-	Stage currentStage_;
-	int timeCount_;
+	Stage currentStage_{ Stage::Stage1 };
+	int timeCount_{0};
 	
-	float meterLen_;
-	Vector2 meterPos_;
-	float stageLen_;
-	Vector2 playerPos_;
-	float fscore_;
-	int iscore_;
+	float meterLen_{ 800.0f };
+	Vector2 meterPos_{ Vector2(1100.0f, 50.0f) };
+	float stageLen_{0.0f};
+	Vector2 playerPos_{ Vector2::Zero };
+	float fscore_{ 0.0f };
+	int iscore_{ 0 };
 
-	ProgressMeter meter_;
+	ProgressMeter meter_{};
 };

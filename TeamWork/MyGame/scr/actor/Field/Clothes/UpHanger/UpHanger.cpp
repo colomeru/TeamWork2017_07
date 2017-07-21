@@ -61,7 +61,7 @@ void UpHanger::Draw() const
 {
 	Vector2 drawPos = GetDrawPosVect(position_);
 	auto boneHandle = Sprite::GetInstance().GetHandle(SPRITE_ID::UPHANGER_SPRITE);
-	Vector2 boneP[4];
+	Vector2 boneP[2];
 	for (int i = 0; i < 2; i++) {
 		boneP[i] = GetDrawPosVect(bonePos_[i]);
 	}

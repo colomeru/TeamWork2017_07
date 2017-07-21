@@ -3,6 +3,7 @@
 #include "../../actor/Field/Clothes/BaseClothes.h"
 #include "../../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../../actor/Field/Clothes/UpHanger/UpHanger.h"
+#include "../../actor/Field/Clothes/BowHanger/BowHanger.h"
 #include "../../actor/Field/Clothes/FluffyClothes/FluffyClothes.h"
 #include "../../actor/Field/Clothes/ThinClothes/ThinClothes.h"
 #include "../../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
@@ -173,6 +174,11 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 	//8”Ô‚Ìê‡‚Íã‚Éã‚ª‚éƒnƒ“ƒK[¶¬
 	if (data == 8) {
 		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<UpHanger>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE));
+		return;
+	}	
+	//9”Ô‚Ìê‡‚Íã‚Éã‚ª‚éƒnƒ“ƒK[¶¬
+	if (data == 9) {
+		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<BowHanger>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE));
 		return;
 	}
 

@@ -15,14 +15,18 @@ CreditPostText::CreditPostText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, i
 	position_ = Vector2(position.x, position.y);
 	parameter_.size = size;
 	parameter_.radius = 32.0f;
+	//始点
 	fulcrum_ = Vector2(position_.x, position_.y - parameter_.size.y / 2.0f);
+	//死亡座標
 	auto toX = -400 - 1070;
 	TweenManager::GetInstance().Add(Linear, &position_, Vector2(toX, position_.y), 10.3f, [=]() {
 		Dead();
 		if (cPlayer_ != nullptr) {
+			//プレイヤーをスタート位置に戻す
 			world_->sendMessage(EventMessage::PLAYER_POS_RESET);
 		}
 	});
+	//移動
 	TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(toX, fulcrum_.y), 10.3f);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	localPoints_[CuttingState::Normal].push_back(Vector3(-parameter_.size.x / 2.0f, 0.0f, 0.0f));
@@ -48,9 +52,8 @@ CreditPostText::~CreditPostText()
 //更新
 void CreditPostText::Update()
 {
+	//アニメーション更新
 	anmManager_.Update();
-
-	//if (cPlayer_->GetIsBiteMode() == false) cPlayer_ = nullptr;
 
 	//前フレームからの移動量を取得
 	velocity_ = Vector2(position_.x - f2, 0.0f);
@@ -61,6 +64,7 @@ void CreditPostText::Update()
 	if (parent_ == nullptr || cPlayer_ == nullptr) return;
 	if (!cPlayer_->GetIsBiteMode()) {
 		parent_ = nullptr;
+		cPlayer_ = nullptr;
 		return;
 	}
 
@@ -100,13 +104,13 @@ void CreditPostText::Draw() const
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);
 		auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-		DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
-		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
-		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
 
 }

@@ -5,13 +5,11 @@
 class MenuCrow {
 public:
 	enum class State {
-		Move,
-		Idle,
+		Move,	//移動
+		Idle,	//待機
 	};
 	//コンストラクタ
-	MenuCrow() = default;
-	//コンストラクタ
-	MenuCrow(Vector2 position, float interval);
+	MenuCrow();
 	//デストラクタ
 	~MenuCrow();
 	//更新
@@ -20,12 +18,12 @@ public:
 	void Draw() const;
 	//目的地加算
 	void AddDistance(float betDis);
-	//
+	//初期化
 	void Initialize(Vector2 position, float interval);
 
 private:
-	void Move();
-	void Idle();
+	void Move();	//移動
+	void Idle();	//待機
 
 private:
 	const float MoveTime = 0.5f;	//移動にかかる時間
@@ -39,5 +37,5 @@ private:
 	float dis_;			//目的地
 
 	CharacterAnmManager anmManager_;	//アニメーション
-	State state_;
+	State state_;						//状態
 };

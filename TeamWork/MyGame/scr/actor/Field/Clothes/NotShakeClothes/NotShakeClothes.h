@@ -11,7 +11,7 @@ public:
 		Vector2 pos, 
 		float weight, 
 		std::pair<CLOTHES_ID, SPRITE_ID> ids,
-		std::map<CuttingState, std::vector<Vector3>> localPoints,
+		const CLPoints& localPoints,
 		bool is_Pin = false);
 	//デストラクタ
 	virtual ~NotShakeClothes() override;

@@ -1,5 +1,4 @@
 #pragma once
-
 #include "IScene.h"
 #include <map>
 #include "../camera/Camera.h"
@@ -49,6 +48,8 @@ public:
 	void NotOperate();
 	//スタート時
 	void PlayerStart();
+	//背景色変更
+	void ChangeBackGroundColor();
 
 private:
 	// ワールド用シェアドポインタ
@@ -73,21 +74,19 @@ private:
 	// 次のシーン
 	Scene			nextScene_;
 
-	TutorialTextScreen textScreen_;
+	const Vector2 Corr = Vector2(300.0f, 500.0f);									//補正値
+	const Vector2 WhiteCorr = Vector2(-40, -20);									//白カラスの補正値
+	const Vector2 startPos_ = Vector2(WINDOW_WIDTH / 2.0f - Corr.x, -110.0f);		//スタート座標
+	const float SceneTime = 54.0f;													//遷移するまでの時間
 
-	bool isRetry_;
-
-	//
-	const float SceneTime = 54.0f;		//遷移するまでの時間
 	float sceneTimer_;					//遷移するまでのカウント
 	Vector2 pHeadPos_;					//頭座標
-	Vector2 startPos_;					//スタート座標
 	bool operate_;						//操作可能か
-	Vector2 correction;					//補正値
 	std::array<Vector2, 2> whitePos_;	//白カラスの目的地座標
 	Vector2 dWhitePos_;					//白カラスの描画座標
-	Vector2 wCorr;						//白カラスの補正値
-	bool sceneChange_;					//遷移可能か
-	bool mulInit_;						//多重振り子初期化
+	bool mulInit_;						//多重振り子初期化用
 	bool waiting_;						//待機中
+	int bgColorNum_;					//背景色番号
+	float from_;						//Tween用
+	Vector3 bgColor_;					//背景色
 };

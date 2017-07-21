@@ -5,6 +5,7 @@
 #include "../../../input/GamePad.h"
 #include "../../../actor/Actor.h"
 #include "../../../tween/TweenManager.h"
+#include "../../../debugdata/DebugDraw.h"
 
 //コンストラクタ
 ProgressMeter::ProgressMeter(World * world, int stageLength, Vector2 position) :
@@ -74,11 +75,9 @@ void ProgressMeter::Draw() const
 	});
 
 	//デバッグ表示
-	if (BuildMode == 1) {
-		DrawFormatString(0, 80, GetColor(255, 255, 255), "nowLane_:%d", nowLane_);
-		DrawFormatString(0, 100, GetColor(255, 255, 255), "pPosY:%f", pPosY_);
-
-	}
+	if (BuildMode != 1) return;
+	DebugDraw::DebugDrawFormatString(0, 80, GetColor(255, 255, 255), "nowLane_:%d", nowLane_);
+	DebugDraw::DebugDrawFormatString(0, 100, GetColor(255, 255, 255), "pPosY:%f", pPosY_);
 }
 
 //終了

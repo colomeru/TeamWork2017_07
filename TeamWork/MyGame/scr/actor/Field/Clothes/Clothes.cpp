@@ -11,7 +11,7 @@
 const float GRAVITY = 0.3f;
 
 //コンストラクタ
-Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, std::map<CuttingState, std::vector<Vector3>> localPoints)
+Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, const CLPoints& localPoints)
 	:Actor(world)
 	, clothes_ID(clothes), isFriction_(false), isWind_(false), localPoints_(localPoints)
 	, fulcrum_(0.0f, 0.0f), rot_spd_(0.08f), friction_(1.0f), count_(0)
@@ -128,6 +128,30 @@ void Clothes::SetPointsUpdate()
 	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
 	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
 	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
+}
+
+//IDの取得
+
+CLOTHES_ID Clothes::GetClothesID() const {
+	return clothes_ID;
+}
+
+//風を受けているかの取得
+
+bool Clothes::GetIsWind() const {
+	return isWind_;
+}
+
+//支点の取得
+
+Vector2 Clothes::GetFulcrum() const {
+	return fulcrum_;
+}
+
+//当たり判定のポイントの取得
+
+std::vector<Vector2> Clothes::GetCollisionPoints() const {
+	return collisionPoints;
 }
 
 void Clothes::Pendulum(Vector2 fulcrum, float length)

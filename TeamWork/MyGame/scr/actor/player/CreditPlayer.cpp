@@ -114,19 +114,19 @@ CreditPlayer::~CreditPlayer()
 	Sound::GetInstance().StopSE(SE_ID::HEAD_SHOOT_SE);
 }
 
-//
+//メッセージ処理
 void CreditPlayer::OnMessage(EventMessage message, void * param)
 {
 	switch (message) {
 	case EventMessage::GOAL_FLAG: {
 		SetMode(MODE_CLEAR);
 		world_->UnLockCameraPosY();
-
 		isUseKey_ = false;
 		break;
 	}
 	case EventMessage::OPERATE_FLAG: {
 		if ((int)param > 0) operatre_ = true;
+		//復帰中は操作を受け付けない
 		else operatre_ = false;
 	}
 	default:
@@ -143,12 +143,12 @@ void CreditPlayer::GravityReset()
 //多重振り子の初期化
 void CreditPlayer::MultipleInit(float len, const Vector2& fPos, float rot, float radius)
 {
-	auto px = GetCurrentPHeadPosition().x + MathHelper::Cos(rot) * (len);
-	auto py = GetCurrentPHeadPosition().y + MathHelper::Sin(rot) * (len);
+	auto px = GetCurrentPHeadPosition().x + MathHelper::Cos(rot + 90.0f) * (len);
+	auto py = GetCurrentPHeadPosition().y + MathHelper::Sin(rot + 90.0f) * (len);
 	PlayerNeckPendulumSupport::Init(GetCurrentPHeadPosition(), Vector2(px, py), fPos_, multiplePos, mRot, mRot_spd, neckDrawPoints);
 }
 
-//
+//1で左隣の、未入力で右隣のHeadに回転し、長さをリセットする
 void CreditPlayer::PHeadLengthReset() {
 	//長さの補間をリセットする
 	chainAddLength_ = 0.f;
@@ -160,6 +160,7 @@ void CreditPlayer::PHeadLengthReset() {
 	}
 }
 
+//死亡した頭を全て回復
 void CreditPlayer::AllResurrectHead()
 {
 	for (int i = 0; i < pHeads_.size(); i++) {
@@ -167,7 +168,7 @@ void CreditPlayer::AllResurrectHead()
 	}
 }
 
-//
+//落下中
 void CreditPlayer::FallUpdate()
 {
 	pGrav_ += defPGravPow;
@@ -201,7 +202,7 @@ void CreditPlayer::FallUpdate()
 	SetDrawNeck(position_, pHeads_[currentHead_]->GetPosition());
 }
 
-//
+//シュート中
 void CreditPlayer::ShootUpdate()
 {
 	pGrav_ += defPGravPow;
@@ -221,7 +222,7 @@ void CreditPlayer::ShootUpdate()
 	SetDrawNeck(position_, pHeads_[currentHead_]->GetPosition());
 }
 
-//
+//挟み中
 void CreditPlayer::BiteUpdate()
 {
 	Multiple();
@@ -237,14 +238,8 @@ void CreditPlayer::BiteUpdate()
 
 	//if (GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2) || Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)) {
 	if (isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B) || InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::X)) {
-		if (mRot.front() < 0.f || mRot.front() > 180.f) {
-			//SetNextLane(-1);
-		}
-		else {
-			SetMode(MODE_FALL);
-			//Headを交代する
-			PHeadChanger();
-		}
+		SetMode(MODE_FALL);
+		PHeadChanger();
 	}
 
 	slipCount_ -= 0.016f*slipCountMult_[otherClothesID_];

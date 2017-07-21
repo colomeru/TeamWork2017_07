@@ -4,13 +4,11 @@
 #include "../conv/DXConverter.h"
 #include "../fade/FadePanel.h"
 
-#include "../actor/player/Player3.h"
 #include "../actor/enemy/Enemy.h"
 #include "../graphic/Model.h"
 #include "../math/MathHelper.h"
 #include "../stageGenerator/Stage.h"
 #include "../stageGenerator/Stage1/Stage1.h"
-#include "../actor/Field/Clothes/TestClothes.h"
 #include "../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../graphic/Sprite.h"
 #include "../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"

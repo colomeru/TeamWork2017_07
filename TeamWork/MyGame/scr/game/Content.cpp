@@ -228,7 +228,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("credit_futon.png", SPRITE_ID::CREDIT_FUTON_SPRITE);
 	sprite.Load("credit_chain.png", SPRITE_ID::CREDIT_CHAIN_SPRITE);
 	sprite.Load("pg.png", SPRITE_ID::CREDIT_PG_SPRITE);
-
+	sprite.Load("stageres/credit_bg.png", SPRITE_ID::CREDIT_BG_SPRITE);
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ

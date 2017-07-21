@@ -9,19 +9,10 @@
 static const int animDelay = 3;
 static const int animSize = 8;
 DemoScene::DemoScene() :
-	isEnd_(false),
 	maxLoadContentCount_((float)GetASyncLoadNum()),
 	currentLoadCount_(0.0f),
 	prevLoadCount_(0.0f)
 {
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_1_SPRITE);
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_2_SPRITE);
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_3_SPRITE);
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_4_SPRITE);
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_5_SPRITE);
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_6_SPRITE);
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_7_SPRITE);
-	wMachineFrame_.push_back(SPRITE_ID::LOAD_ANM_8_SPRITE);
 }
 
 DemoScene::~DemoScene()
@@ -35,6 +26,11 @@ void DemoScene::Initialize()
 
 	timeCount_ = 0;
 	LoadWashMachineFrame_ = 0;
+	int num = LOAD_ANM_1_SPRITE;
+	for (int i = 0; i < 8; i++) {
+		wMachineFrame_.push_back((SPRITE_ID)(num + i));
+
+	}
 	// フェードイン
 	FadePanel::GetInstance().Initialize();
 	FadePanel::GetInstance().SetInTime(0.0f);
@@ -101,4 +97,5 @@ Scene DemoScene::Next() const
 void DemoScene::End()
 {
 	TweenManager::GetInstance().Cancel(&currentLoadCount_);
+	wMachineFrame_.clear();
 }

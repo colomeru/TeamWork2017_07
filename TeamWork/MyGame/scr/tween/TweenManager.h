@@ -136,7 +136,7 @@ public:
 	// ループ数指定 (0 = 無限ループ)
 	void SetLoopCount(const int count = 1);
 	// ループタイプ指定
-	void SetLoopType(const UpdateType type = UpdateType::Common);
+	void SetLoopType(const TweenObject::UpdateType type = TweenObject::Common);
 	// オプションリセット
 	void ResetOption();
 
@@ -150,7 +150,7 @@ public:
 	// 追加 /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Add(const EaseType& type, float* from, const float to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 追加 /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void Add(const EaseType& type, Vector2* from, const Vector2 to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void Add(const EaseType& type, Vector2* from, const Vector2& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 追加 /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Add(const EaseType& type, Vector3* from, const Vector3& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 
@@ -158,13 +158,13 @@ public:
 	// ループ /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Loop(float* value, const EaseType& type, const float b, const float c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void Loop(Vector2* value, const EaseType& type, const Vector2& b, const Vector2 c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void Loop(Vector2* value, const EaseType& type, const Vector2& b, const Vector2& c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Loop(Vector3* value, const EaseType& type, const Vector3& b, const Vector3& c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Loop(const EaseType& type, float* from, const float to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void Loop(const EaseType& type, Vector2* from, const Vector2 to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void Loop(const EaseType& type, Vector2* from, const Vector2& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void Loop(const EaseType& type, Vector3* from, const Vector3& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（一度のみ） /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
@@ -176,31 +176,31 @@ public:
 	// ループ（一度のみ） /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopOnce(const EaseType& type, float* from, const float to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（一度のみ） /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void LoopOnce(const EaseType& type, Vector2* from, const Vector2 to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void LoopOnce(const EaseType& type, Vector2* from, const Vector2& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（一度のみ） /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopOnce(const EaseType& type, Vector3* from, const Vector3& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（指定回数） /* *value : 変動値格納ポインタ / type : Easetype / count : loop数 / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopCount(float* value, const EaseType& type, const int count, const float b, const float c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（指定回数） /* *value : 変動値格納ポインタ / type : Easetype / count : loop数 / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void LoopCount(Vector2* value, const EaseType& type, const int count, const Vector2 b, const Vector2 c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void LoopCount(Vector2* value, const EaseType& type, const int count, const Vector2& b, const Vector2& c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（指定回数） /* *value : 変動値格納ポインタ / type : Easetype / count : loop数 / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopCount(Vector3* value, const EaseType& type, const int count, const Vector3& b, const Vector3& c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（指定回数） /* type : Easetype / count : loop数 / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopCount(const EaseType& type, const int count, float* from, const float to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（指定回数） /* type : Easetype / count : loop数 / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void LoopCount(const EaseType& type, const int count, Vector2* from, const Vector2 to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void LoopCount(const EaseType& type, const int count, Vector2* from, const Vector2& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// ループ（指定回数） /* type : Easetype / count : loop数 / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopCount(const EaseType& type, const int count, Vector3* from, const Vector3& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 特殊ループ（利用メモ必読） /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopPingPong(float* value, const EaseType& type, const float b, const float c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 特殊ループ（利用メモ必読） /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void LoopPingPong(Vector2* value, const EaseType& type, const Vector2 b, const Vector2 c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void LoopPingPong(Vector2* value, const EaseType& type, const Vector2& b, const Vector2& c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 特殊ループ（利用メモ必読） /* *value : 変動値格納ポインタ / type : Easetype / b : 開始値 / c : 移動量 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopPingPong(Vector3* value, const EaseType& type, const Vector3& b, const Vector3& c, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 特殊ループ（利用メモ必読） /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopPingPong(const EaseType& type, float* from, const float to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 特殊ループ（利用メモ必読） /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
-	void LoopPingPong(const EaseType& type, Vector2* from, const Vector2 to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
+	void LoopPingPong(const EaseType& type, Vector2* from, const Vector2& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 	// 特殊ループ（利用メモ必読） /* type : Easetype / *from : 開始値ポインタ / to : 終了値 / d : 終了時間 / callback : 関数 / s : back使用時の補正値 */
 	void LoopPingPong(const EaseType& type, Vector3* from, const Vector3& to, const float d = 1.0f, const std::function<void()>& callback = nullptr, const float s = 1.0f);
 
@@ -228,9 +228,9 @@ private:
 	// 追加待機tweenList
 	std::list<TweenPtr> addTweenList_;
 	// easing関数マップ
-	std::unordered_map<EaseType, TweenFuncParam>	easeFuncMap_;
+	std::unordered_map<EaseType,TweenObject::TweenFuncParam>	easeFuncMap_;
 	// ループ数
 	int			loopCount_;
 	// 更新タイプ
-	UpdateType	updateType_;
+	TweenObject::UpdateType	updateType_;
 };

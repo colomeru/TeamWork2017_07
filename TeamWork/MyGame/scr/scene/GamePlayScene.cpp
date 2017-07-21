@@ -9,7 +9,6 @@
 #include"../conv/DXConverter.h"
 #include"../actor/player/Player.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
-#include"../actor/Field/Clothes/TestClothes.h"
 #include"../actor/Field/ClothesLine.h"
 #include"../actor/Field/ClothesPin.h"
 #include"../myData/MyTestCamera.h"

@@ -15,15 +15,19 @@ CreditText::CreditText(IWorld* world, CLOTHES_ID id, SPRITE_ID sprite, int laneN
 	position_ = position;
 	parameter_.size = size;
 	parameter_.radius = 32.0f;
+	//始点
 	fulcrum_ = Vector2(position_.x, position_.y - parameter_.size.y / 2.0f);
 	auto nameCount = Sprite::GetInstance().GetSliptFrameSize(sprite);
+	//死亡座標
 	auto toX = -400 - 370 * (nameCount - frame);
 	TweenManager::GetInstance().Add(Linear, &position_, Vector2(toX, position_.y), 10.0f, [=]() {
 		Dead();
 		if (cPlayer_ != nullptr) {
+			//プレイヤーをスタート位置に戻す
 			world_->sendMessage(EventMessage::PLAYER_POS_RESET);
 		}
 	});
+	//移動
 	TweenManager::GetInstance().Add(Linear, &fulcrum_, Vector2(toX, fulcrum_.y), 10.0f);
 	colFuncMap_[COL_ID::BOX_BOX_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
@@ -51,6 +55,7 @@ void CreditText::Update()
 	if (parent_ == nullptr || cPlayer_ == nullptr) return;
 	if (!cPlayer_->GetIsBiteMode()) {
 		parent_ = nullptr;
+		cPlayer_ = nullptr;
 		return;
 	}
 
@@ -65,8 +70,6 @@ void CreditText::Update()
 void CreditText::Draw() const
 {
 	auto drawPos = GetDrawPosVect(position_);
-	auto min = drawPos - Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f); //左上
-	auto max = drawPos + Vector2(parameter_.size.x / 2.0f, parameter_.size.y / 2.0f); //右下
 
 	//服
 	Sprite::GetInstance().SplitDraw(SPRITE_ID::BASE_CLOTHES_04_SPRITE, Vector2(drawPos.x, drawPos.y - 100.0f), 0, Vector2(100, 100), Vector2(2.0f, 2.0f));
@@ -79,13 +82,13 @@ void CreditText::Draw() const
 		auto drawP2 = GetDrawPosVect(collisionPoints[1]);
 		auto drawP3 = GetDrawPosVect(collisionPoints[2]);
 		auto drawP4 = GetDrawPosVect(collisionPoints[3]);
-		DrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
-		DrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
-		DrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
-		DrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP1.x, drawP1.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP2.x, drawP2.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP3.x, drawP3.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawCircle(drawP4.x, drawP4.y, parameter_.radius, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP1.x, drawP1.y, drawP2.x, drawP2.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP2.x, drawP2.y, drawP3.x, drawP3.y, GetColor(255, 255, 255));
+		DebugDraw::DebugDrawLine(drawP3.x, drawP3.y, drawP4.x, drawP4.y, GetColor(255, 255, 255));
 	}
 
 }
@@ -93,10 +96,10 @@ void CreditText::Draw() const
 //衝突判定
 void CreditText::OnCollide(Actor & other, CollisionParameter colpara)
 {
+	//判定が重なっていたら一つだけをつかむ
 	if (other.GetParameter().ID != ACTOR_ID::PLAYER_HEAD_ACTOR) return;
 	auto temp = static_cast<CreditPlayer*>(other.GetParent());
 	if (temp->GetIsBiteMode()) return;
-	
 	parent_ = &other;
 	static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 	cPlayer_ = temp;
@@ -104,6 +107,7 @@ void CreditText::OnCollide(Actor & other, CollisionParameter colpara)
 	cPlayer_->SetIsBiteMode(true);
 }
 
+//メッセージ処理
 void CreditText::OnMessage(EventMessage message, void * param)
 {
 	switch (message)

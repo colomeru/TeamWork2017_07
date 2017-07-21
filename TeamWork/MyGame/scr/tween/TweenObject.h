@@ -1,18 +1,20 @@
 #pragma once
 #include <functional>
 
-enum UpdateType
-{
-	Common,		// 通常更新
-	Loop,		// ループ更新
-	PingPong	// 特殊ループ更新
-};
 
-//
-using TweenFuncParam = std::function<float(float, float, float, float, float)>;
 
 class TweenObject
 {
+public:
+	enum UpdateType
+	{
+		Common,		// 通常更新
+		Loop,		// ループ更新
+		PingPong	// 特殊ループ更新
+	};
+	//
+	using TweenFuncParam = std::function<float(float, float, float, float, float)>;
+
 public:
 	// コンストラクタ
 	TweenObject(float* value, float b, float c, float d = 1.0f, const std::function<void()>& callback = nullptr, float s = 1.0f);

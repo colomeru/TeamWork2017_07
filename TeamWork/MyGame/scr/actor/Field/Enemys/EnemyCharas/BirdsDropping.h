@@ -9,9 +9,7 @@ public:
 	BirdsDropping(IWorld* world, int laneNum, Vector2 pos);
 	//デストラクタ
 	~BirdsDropping();
-	virtual void FastUpdate()override {
-		isUpdate_ = true;
-	}
+	virtual void FastUpdate()override;
 
 	//更新
 	virtual void Update() override;
@@ -23,8 +21,5 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara) override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
-
-private:
-	Player* player_;
-	Actor* player_Head_;
+	
 };

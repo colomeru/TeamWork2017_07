@@ -1,11 +1,11 @@
 #include "PlayerMetamorEffect.h"
 #include"../../../time/Time.h"
 
-PlayerMetamorEffect::PlayerMetamorEffect(IWorld * world,const Vector2& position, std::shared_ptr<Actor> target,float delay,const Vector2& addVec):
-	Effect(world,SPRITE_ID::METAMOR_EFFECT_SPRITE,4),target_(target),delay_(delay), effectCount_(0)
+PlayerMetamorEffect::PlayerMetamorEffect(IWorld * world,const Vector2& position,const std::shared_ptr<Actor>& target,float delay,const Vector2& addVec):
+	Effect(world,SPRITE_ID::METAMOR_EFFECT_SPRITE,4),target_(target),delay_(delay), 
+	addVec_(addVec)
 {
-	position_ = position+addVec_;
-	addVec_ = addVec;
+	position_ = position+addVec;
 	laneNum_ = world_->GetKeepDatas().playerLane_;
 }
 

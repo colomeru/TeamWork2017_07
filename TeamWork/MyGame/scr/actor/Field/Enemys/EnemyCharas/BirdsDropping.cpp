@@ -25,6 +25,10 @@ BirdsDropping::~BirdsDropping()
 {
 }
 
+void BirdsDropping::FastUpdate() {
+	isUpdate_ = true;
+}
+
 void BirdsDropping::Update()
 {
 

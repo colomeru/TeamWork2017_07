@@ -397,10 +397,14 @@ void Player::Multiple()
 		if ((mRot_spd[0] < 0 && (isUseKey_.StickStateDown(InputChecker::Input_Stick::Right)) ||
 			(mRot_spd[0] > 0 && (isUseKey_.StickStateDown(InputChecker::Input_Stick::Left)))))
 		{
+			bool isChange = (mRot.front() <= 0.f &&mRot_spd.front() >= -10.f&&mRot_spd.front() <= 0.f)||( mRot.front() >= 180.f &&mRot_spd.front() <= 10.f&&mRot_spd.front()>=0.f);
+
 			for (auto& r : mRot_spd) {
-				r += sign(r)*1.f;
+				r += sign(r);
+				if (isChange)r = -(float)sign(r);
 				r = MathHelper::Clamp(r, -60.f, 60.f);
 			}
+
 			mRot.front() = MathHelper::Clamp(mRot.front(), -45.f, 225.f);
 
 		}

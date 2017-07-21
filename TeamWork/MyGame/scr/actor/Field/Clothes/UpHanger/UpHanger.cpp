@@ -94,7 +94,7 @@ void UpHanger::OnCollide(Actor & other, CollisionParameter colpara)
 		player_->SetIsBiteMode(true);
 		player_->SetOtherClothesID_(clothes_ID);
 
-		if (player_->GetPosition().y - player_->GetPrevPosition().y < 0.0f) return;
+		if (player_->GetPosition().y - player_->GetPrevPosition().y < 0.0f || laneNum_ == 0) return;
 		player_->SetUseKey(false);
 		isMove_ = true;
 		isPull_ = true;

@@ -14,8 +14,7 @@ static const int createWindCount = 100;
 
 static const int defDrawPointYAdd[3] = { 0,30,60 };
 
-UIScreen::UIScreen(World * world) :world_(world), timeCount_(0), meterPos_(Vector2(1100.0f, 50.0f)),
-	meterLen_(800.0f)
+UIScreen::UIScreen(World * world) :world_(world)
 {
 }
 

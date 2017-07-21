@@ -27,12 +27,12 @@ private:
 	void ScoreDraw()const;
 	void drawUpdate();
 private:
-	int score_;
-	float fscore_;
-	int headCount_;
-	float fheadCount_;
-	int starCount_;
-	int inputCount_;
+	int score_{ 0 };
+	float fscore_{ 0.f };
+	int headCount_{ 0 };
+	float fheadCount_{ 0.f };
+	int starCount_{ 0 };
+	int inputCount_{ 0 };
 	int sinCount_;
 	std::vector<Scene> changeSceneList_;
 	std::vector<float> textAlphaList_;
@@ -40,12 +40,10 @@ private:
 	std::vector<Vector2> cursorPos_;
 	Vector2 cursorDrawPos_;
 
-	std::map<Stage,int> stageNumList_;
-
 	DrawStar dstar_;
-	bool isHeadDraw_;
-	bool isShowScore_;
-	bool isKeyOnceScore_;
-	Stage stage_;
-	bool isTrigger_;
+	bool isHeadDraw_{ false };
+	bool isShowScore_{ true };
+	bool isKeyOnceScore_{ false };
+	Stage stage_{ Stage::Stage1 };
+	bool isTrigger_{ true };
 };

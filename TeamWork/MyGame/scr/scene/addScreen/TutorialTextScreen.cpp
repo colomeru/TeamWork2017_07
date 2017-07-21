@@ -13,7 +13,7 @@
 static const int textSpeed = 3;
 static const float defTextChangeTime = 3.0f;
 
-TutorialTextScreen::TutorialTextScreen(World * world) :world_(world), textCount_(0), sinCount_(0)
+TutorialTextScreen::TutorialTextScreen(World * world) :world_(world)
 {
 
 }
@@ -110,4 +110,13 @@ void TutorialTextScreen::Draw() const
 
 void TutorialTextScreen::End()
 {
+}
+
+int TutorialTextScreen::GetMaxTextSize() {
+	int ret = 0;
+	for (int i = currentTextLine_ * 3; i< currentTextLine_ * 3 + 3; i++) {
+		if (i >= (int)drawText_.size())break;
+		ret += drawText_[i].size();
+	}
+	return ret;
 }

@@ -10,26 +10,23 @@
 #include"../../fade/FadePanel.h"
 #include"../../input/InputChecker.h"
 
-PauseScreen::PauseScreen() :inputCount_(0), sinCount_(defSinC)
+PauseScreen::PauseScreen() :
+	sinCount_(defSinC),
+	changeSceneList_{
+		Scene::GamePlay,
+		Scene::GamePlay,
+		Scene::Menu
+	},
+	cursorPos_{
+		{400.f,500.f},
+		{400.f,700.f},
+		{400.f,900.f}
+	}
 {
-	changeSceneList_.push_back(Scene::GamePlay);
-	changeSceneList_.push_back(Scene::GamePlay);
-	changeSceneList_.push_back(Scene::Menu);
-
-	textAlphaList_.push_back(1.f);
-	textAlphaList_.push_back(1.f);
-	textAlphaList_.push_back(1.f);
-
-	textSizeList_.push_back(1.f);
-	textSizeList_.push_back(1.f);
-	textSizeList_.push_back(1.f);
-
-	cursorPos_.push_back(Vector2(400, 500));
-	cursorPos_.push_back(Vector2(400, 700));
-	cursorPos_.push_back(Vector2(400, 900));
+	textAlphaList_.resize(3, 1.0f);
+	textSizeList_.resize(3, 1.0f);
 
 	cursorDrawPos_ = cursorPos_[inputCount_];
-
 }
 
 PauseScreen::~PauseScreen()

@@ -4,16 +4,17 @@
 #include<DxLib.h>
 
 
-StageEffectScreen::StageEffectScreen():stage_(Stage::Stage1),isPlayEffect_(false), sinCount_(0)
-{
-	EffectColor_[Stage::Stage1] = RGBAColorF(0.0f,0.0f,0.0f,0.0f);
-	EffectColor_[Stage::Stage2] = RGBAColorF(150.0f, 220.0f, 170.0f);
-	EffectColor_[Stage::Stage3] = RGBAColorF(255.0f, 80.0f, 80.0f);
-	EffectColor_[Stage::Stage4] = RGBAColorF(0.0f, 0.0f, 0.0f, 0.0f);
-	EffectColor_[Stage::Stage5] = RGBAColorF(0.0f, 0.0f, 0.0f, 0.0f);
-	EffectColor_[Stage::Stage6] = RGBAColorF(0.0f, 0.0f, 0.0f, 0.0f);
-	EffectColor_[Stage::Stage7] = RGBAColorF(150.0f, 220.0f, 170.0f);
-	EffectColor_[Stage::Stage8] = RGBAColorF(80.0f, 80.0f,200.0f);
+StageEffectScreen::StageEffectScreen():
+	EffectColor_{
+		{ Stage::Stage1 ,RGBAColorF(0.0f,0.0f,0.0f,0.0f) },
+		{ Stage::Stage2 ,RGBAColorF(150.0f, 220.0f, 170.0f) },
+		{ Stage::Stage3 ,RGBAColorF(255.0f, 80.0f, 80.0f) },
+		{ Stage::Stage4 ,RGBAColorF(0.0f,0.0f,0.0f,0.0f) },
+		{ Stage::Stage5 ,RGBAColorF(0.0f,0.0f,0.0f,0.0f) },
+		{ Stage::Stage6 ,RGBAColorF(0.0f,0.0f,0.0f,0.0f) },
+		{ Stage::Stage7 ,RGBAColorF(150.0f, 220.0f, 170.0f) },
+		{ Stage::Stage8 ,RGBAColorF(80.0f, 80.0f,200.0f) }}{
+
 }
 
 void StageEffectScreen::Init(Stage stage)

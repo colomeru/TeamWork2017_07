@@ -21,7 +21,7 @@ void LaneChangeScreen::Update()
 	timeCount_++;
 	if (Random::GetInstance().Range(0, 100) <= 80)
 	{
-		Vector2 windNewPos = Vector2(Random::GetInstance().Range(0, WINDOW_WIDTH),windDefPoses_[dir_]);
+		Vector2 windNewPos = Vector2((float)Random::GetInstance().Range(0, WINDOW_WIDTH),windDefPoses_[dir_]);
 		world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<LaneChangeWind>(world_, windNewPos, dir_));
 
 	}

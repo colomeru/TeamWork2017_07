@@ -89,12 +89,12 @@ void TitleBGScreen::Update()
 void TitleBGScreen::Draw() const
 {
 
-	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2::Zero-Vector2(scrollPos_,0));
-	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2(WINDOW_WIDTH,0) - Vector2(scrollPos_, 0));
+	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2::Zero-Vector2((float)scrollPos_,0.f));
+	Sprite::GetInstance().Draw(BGList_.at(currentStage_), Vector2((float)WINDOW_WIDTH,0.f) - Vector2((float)scrollPos_, 0.f));
 
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_POLE_SPRITE) / 2;
-	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_POLE_SPRITE, Vector2(WINDOW_WIDTH / 2, lanePos_[1]), origin, Vector2::One);
-	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_POLE_SPRITE, Vector2(WINDOW_WIDTH / 2, lanePos_[2]), origin, Vector2::One);
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_POLE_SPRITE, Vector2((float)WINDOW_WIDTH / 2.f, (float)lanePos_[1]), origin, Vector2::One);
+	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_POLE_SPRITE, Vector2((float)WINDOW_WIDTH / 2.f, (float)lanePos_[2]), origin, Vector2::One);
 
 	for (auto i : clothes_) {
 		DrawClothes(i);
@@ -121,7 +121,7 @@ void TitleBGScreen::DrawClothes(const TitleLaneClothes& clothes)const
 	Vector2 crcOrigin = Sprite::GetInstance().GetSplitPieceSize(clothes.drawID) / 2;
 	crcOrigin.y = 0;
 
-	Sprite::GetInstance().SplitDraw(clothes.drawID, Vector2(clothes.lanePos, lanePos_[clothes.laneNum]), 0, crcOrigin, 1, Vector2::One, clothes.rotate);
+	Sprite::GetInstance().SplitDraw(clothes.drawID, Vector2((float)clothes.lanePos, (float)lanePos_[clothes.laneNum]), 0, crcOrigin, 1.f, Vector2::One, clothes.rotate,true,false);
 
 }
 

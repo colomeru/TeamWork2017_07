@@ -60,19 +60,19 @@ void BackgroundScreen::Update()
 void BackgroundScreen::Draw() const
 {
 	Vector2 camPos(world_->GetInv().Translation().x/2,0);
-	camPos.x = (int)camPos.x % (int)Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x;
+	camPos.x = (float)((int)camPos.x % Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x);
 	float myds=world_->GetKeepDatas().changeLaneLerpPos_;
-	Vector2 addpos=Vector2::Lerp(Vector2::Zero,Vector2(0,30),myds) *world_->GetKeepDatas().nextLane_;
-	Vector2 bgPos = Vector2(0,Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).y-WINDOW_HEIGHT-30) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	Vector2 addpos=Vector2::Lerp(Vector2::Zero,Vector2(0.f,30.f),myds) *(float)world_->GetKeepDatas().nextLane_;
+	Vector2 bgPos = Vector2(0.f,(float)Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).y-(float)WINDOW_HEIGHT-30.f) - addpos - Vector2(0.f, (float)defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
 	bgPos += (camPos);
-	Vector2 BGSize = Vector2(Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x, 0);
+	Vector2 BGSize = Vector2((float)Sprite::GetInstance().GetSize(BGList_.at(currentStage_)).x, 0.f);
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), bgPos- BGSize);
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), bgPos);
 	Sprite::GetInstance().Draw(BGList_.at(currentStage_), BGSize+bgPos);
 
-	Vector2 fencePos = Vector2(0, WINDOW_HEIGHT - Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0, defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
+	Vector2 fencePos = Vector2(0.f, (float)WINDOW_HEIGHT - (float)Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).y) - addpos - Vector2(0.f, (float)defDrawPointYAdd[world_->GetKeepDatas().playerLane_]);
 	fencePos += (camPos)+Vector2(0.f, 60.f);
-	Vector2 fenceSize = Vector2(Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).x, 0);
+	Vector2 fenceSize = Vector2((float)Sprite::GetInstance().GetSize(SPRITE_ID::FENCE_SPRITE).x, 0.f);
 	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos- fenceSize);
 	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos);
 	Sprite::GetInstance().Draw(SPRITE_ID::FENCE_SPRITE, fencePos+ fenceSize);

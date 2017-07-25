@@ -82,7 +82,7 @@ Vector2 PlayerNeckPendulumSupport::Pendulum(
 	Vector2 beforeTipPos = tipPos_List.back();
 
 	//Œ»İ‚Ìd‚è‚ÌˆÊ’u
-	for (int i = 0; i < fulcrum_List.size(); i++)
+	for (int i = 0; i < (int)fulcrum_List.size(); i++)
 	{
 		auto px = fulcrum_List[i].x + MathHelper::Cos(rot_List[i]) * (oneLength);
 		auto py = fulcrum_List[i].y + MathHelper::Sin(rot_List[i]) * (oneLength);
@@ -158,7 +158,7 @@ void PlayerNeckPendulumSupport::Deformation(
 {
 
 	NeckPiecePoint p;
-	for (int i = 0; i < neck_Point_List.size(); i++) {
+	for (int i = 0; i < (int)neck_Point_List.size(); i++) {
 		Vector2 v = fulcrum_List[i] - tipPos_List[i];
 		Vector2 n = Vector2(-v.y, v.x).Normalize();
 		if (i == 0) {

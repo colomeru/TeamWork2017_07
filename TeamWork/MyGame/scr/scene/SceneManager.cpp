@@ -6,6 +6,7 @@
 #include "../time/Time.h"
 #include <algorithm>
 #include"../tween/TweenManager.h"
+#include"../debugdata/DebugDraw.h"
 
 // コンストラクタ
 SceneManager::SceneManager() :
@@ -43,12 +44,10 @@ void SceneManager::Draw() const
 	currentScene_->Draw();
 	FadePanel::GetInstance().Draw();
 
-	if (BuildMode == 1)
-	{
-		DrawFormatString(0, WINDOW_HEIGHT - 20, GetColor(255, 255, 255), "FPS:[%0.1f]", FPS::GetFPS);
-		DrawFormatString(0, WINDOW_HEIGHT - 40, GetColor(255, 255, 255), "TIME_TO_LEAVE[%f]", timer_);
-		DrawFormatString(0, WINDOW_HEIGHT - 60, GetColor(255, 255, 255), "TIME_TO_LEAVE[%d]", FadePanel::GetInstance().Count());
-	}
+	
+	DebugDraw::DebugDrawFormatString(0, WINDOW_HEIGHT - 20, GetColor(255, 255, 255), "FPS:[%0.1f]", FPS::GetFPS);
+	DebugDraw::DebugDrawFormatString(0, WINDOW_HEIGHT - 40, GetColor(255, 255, 255), "TIME_TO_LEAVE[%f]", timer_);
+	DebugDraw::DebugDrawFormatString(0, WINDOW_HEIGHT - 60, GetColor(255, 255, 255), "TIME_TO_LEAVE[%d]", FadePanel::GetInstance().Count());
 }
 
 // 終了

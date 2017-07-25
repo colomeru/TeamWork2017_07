@@ -50,7 +50,7 @@ void LogoScene::Draw() const
 {
 	DrawFillBox(0, 0, WINDOW_WIDTH, WINDOW_HEIGHT, GetColor(0, 0, 0));
 	Vector2 origin = Sprite::GetInstance().GetSize(SPRITE_ID::LOGO_SPRITE)/2;
-	Sprite::GetInstance().Draw(SPRITE_ID::LOGO_SPRITE,Vector2(WINDOW_WIDTH,WINDOW_HEIGHT)/2,origin,Vector2::One);
+	Sprite::GetInstance().Draw(SPRITE_ID::LOGO_SPRITE,Vector2((float)WINDOW_WIDTH,(float)WINDOW_HEIGHT)/2.f,origin,Vector2::One);
 }
 
 bool LogoScene::IsEnd() const

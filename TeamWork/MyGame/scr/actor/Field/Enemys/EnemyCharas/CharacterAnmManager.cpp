@@ -3,6 +3,7 @@
 #include"../../../../graphic/Sprite.h"
 #include"../../../../Def.h"
 #include"../../../../math/MathHelper.h"
+#include"../../../../debugdata/DebugDraw.h"
 
 //フレーム揺れを考慮しない場合の1フレームあたりの時間(アニメーション終了時間の取得用)
 static const float defFrameTime = 0.016f;
@@ -40,10 +41,10 @@ void CharacterAnmManager::Update()
 	}
 	timeCount_ += reverse_*Time::DeltaTime;
 	int timeInt = (int)roundf((timeCount_*60.f) / anmChangeFrame_);
-	if (timeInt >= anmID_.size()-1||timeCount_<0.001f) {
+	if (timeInt >= (int)anmID_.size()-1||timeCount_<0.001f) {
 		anmEnd_ = true;
 	}
-	timeCount_ =  MathHelper::Clamp(timeCount_,0.0f, anmID_.size() - 1);
+	timeCount_ =  MathHelper::Clamp(timeCount_,0.0f, (float)anmID_.size() - 1.0f);
 
 }
 
@@ -59,10 +60,9 @@ void CharacterAnmManager::Draw(const Vector2& position,const Vector2& origin,con
 	Sprite::GetInstance().Draw(anmID_.at(targetFrame),position,origin,alpha,size);
 
 
-	if (BuildMode != 1)return;
 	int timeInt = (int)roundf((timeCount_*60.f) / anmChangeFrame_);
 
-	DrawFormatString(700, 300, GetColor(255, 255, 255), "%d", timeInt);
+	DebugDraw::DebugDrawFormatString(700, 300, GetColor(255, 255, 255), "%d", timeInt);
 }
 
 void CharacterAnmManager::Clear()

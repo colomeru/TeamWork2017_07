@@ -36,7 +36,7 @@ void StageEffectScreen::Draw() const
 {
 	if (!isPlayEffect_)return;
 
-	int effectAlpha = MathHelper::Sin(sinCount_)*EffectColor_.at(stage_).GetAlpha255I();
+	int effectAlpha = (int)(MathHelper::Sin((float)sinCount_)*EffectColor_.at(stage_).GetAlpha255I());
 	SetDrawBlendMode(DX_BLENDMODE_ALPHA, effectAlpha);
 
 	DrawBox(

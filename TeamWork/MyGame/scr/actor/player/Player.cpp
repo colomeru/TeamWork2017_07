@@ -42,10 +42,10 @@ const int backHead = -4;
 Player::Player(IWorld * world,int maxLaneSize, int startLane,const Vector2& position)
 	:Actor(world), isUseKey_(true), isTutorialText_(false),
 	currentHead_(0),
-	headChangeTime_(0), pGrav_(defPGravPow), playerMode_(MODE_FALL),
+	headChangeTime_(0.f), pGrav_(defPGravPow), playerMode_(MODE_FALL),
 	pendulumVect_(Vector2::Zero), slipCount_(defSlipCount), jumpShotPower_(defJumpShotPower),
-	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0),
-	chainAddLengthMath_(0), maxLaneSize_(maxLaneSize), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero),
+	otherClothesID_(CLOTHES_ID::FLUFFY_CLOTHES), friction(0.998f), chainLockCoolTime_(defChainLockCoolTime_), chainAddLength_(0.f),
+	chainAddLengthMath_(0.f), maxLaneSize_(maxLaneSize), changeType_(LaneChangeType::LaneChange_Normal),slipResistTime_(defResistTime), headPosAddVect_(Vector2::Zero),
 	headAngleSetter(frontHead), addLengthLocker_(false)
 {
 	addscorelist_[0] = 300;
@@ -493,13 +493,13 @@ void Player::SetDrawNeckParts(const Vector2 & bodyPoint, const Vector2 & headPoi
 	for (int i = 0; i < (float)fPos_.size(); i++) {
 		if ((fPos_[i] - position_).Length() <= parameter_.radius) {
 			if (neckDrawPoints.empty()) {
-				p = MathNeckPiecePoint(fPos_[i], multiplePos[i], resWidth);
+				p = MathNeckPiecePoint(fPos_[i], multiplePos[i], (float)resWidth);
 			}
 			else p = neckDrawPoints.back();
 			neckDrawPoints.push_back(p);
 			continue;
 		}
-		p = MathNeckPiecePoint(fPos_[i], multiplePos[i], resWidth);
+		p = MathNeckPiecePoint(fPos_[i], multiplePos[i], (float)resWidth);
 		neckDrawPoints.push_back(p);
 	}
 

@@ -5,7 +5,7 @@
 PlayerDeadHead::PlayerDeadHead(IWorld * world, const Vector2& position) :
 	Actor(world), sinCount_(0)
 {
-	position_ = Vector2(WINDOW_WIDTH/2,WINDOW_HEIGHT);
+	position_ = Vector2((float)WINDOW_WIDTH/2.f,(float)WINDOW_HEIGHT);
 	laneNum_ = world_->GetKeepDatas().playerLane_;
 }
 
@@ -17,7 +17,7 @@ void PlayerDeadHead::Update()
 {
 	sinCount_+=3;
 	sinCount_ %= 360;
-	position_.x = WINDOW_WIDTH / 5+ MathHelper::Sin(sinCount_)*200.f;
+	position_.x = (float)WINDOW_WIDTH / 5.f+ MathHelper::Sin((float)sinCount_)*200.f;
 	position_.y -= 8.f;
 
 	if (position_.y <= -600) {

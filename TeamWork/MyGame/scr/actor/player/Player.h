@@ -286,7 +286,7 @@ protected:
 	float slipResistTime_;
 
 	//頭の位置を決定する,0で右
-	float headAngleSetter;
+	int headAngleSetter;
 	//0=滞空 1=発射時 2=発射終了 3=噛み付き 4=滑り落ち
 	int playerMode_;
 	float jumpShotPower_;

@@ -24,7 +24,7 @@ void UIScreen::Init(Stage currentStage, float stageLen)
 	currentStage_ = currentStage;
 	fscore_ = 0.f;
 	iscore_ = 0;
-	meter_ = ProgressMeter(world_, stageLen,meterPos_);
+	meter_ = ProgressMeter(world_, (int)stageLen,meterPos_);
 	meter_.Initialize();
 }
 
@@ -54,9 +54,9 @@ void UIScreen::AddScore(int score)
 {
 	if ((int)roundf(fscore_) < iscore_) {
 		TweenManager::GetInstance().Cancel(&fscore_);
-		fscore_ = iscore_;
+		fscore_ = (float)iscore_;
 	}
-	float toscore = iscore_ + score;
+	float toscore = (float)(iscore_ + score);
 	toscore = min(toscore, 99999);
 	iscore_ = (int)roundf(toscore);
 	TweenManager::GetInstance().Add(EaseType::Linear, &fscore_, toscore, 0.5f);

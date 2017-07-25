@@ -45,7 +45,7 @@ void AllClearScreen::Init()
 	isHeadDraw_ = false;
 	inputCount_ = 0;
 	sinCount_ = defSinC;
-	for (int i = 0; i < changeSceneList_.size(); i++) {
+	for (int i = 0; i < (int)changeSceneList_.size(); i++) {
 		textAlphaList_[i] = 1.f;
 		textSizeList_[i] = 1.f;
 	}
@@ -167,8 +167,8 @@ void AllClearScreen::ScoreUpdate()
 		if (!isKeyOnceScore_) {
 			TweenManager::GetInstance().Cancel(&fscore_);
 			TweenManager::GetInstance().Cancel(&fheadCount_);
-			fscore_ = score_;
-			fheadCount_ = headCount_;
+			fscore_ = (float)score_;
+			fheadCount_ = (float)headCount_;
 			SetFullStarCount();
 			isHeadDraw_ = true;
 			dstar_.SetFull();
@@ -181,8 +181,8 @@ void AllClearScreen::ScoreUpdate()
 		}
 	}
 	if (isKeyOnceScore_) {
-		fscore_ = score_;
-		fheadCount_ = headCount_;
+		fscore_ = (float)score_;
+		fheadCount_ = (float)headCount_;
 
 	}
 	dstar_.Update();
@@ -212,11 +212,11 @@ void AllClearScreen::drawUpdate()
 	sinCount_ += 3;
 	if (sinCount_ > 360)sinCount_ = 0;
 
-	for (int i = 0; i < changeSceneList_.size(); i++) {
+	for (int i = 0; i < (int)changeSceneList_.size(); i++) {
 		textAlphaList_[i] = 1.f;
 		textSizeList_[i] = 1.f;
 	}
-	textAlphaList_[inputCount_] = abs(MathHelper::Sin(sinCount_));
+	textAlphaList_[inputCount_] = abs(MathHelper::Sin((float)sinCount_));
 	textSizeList_[inputCount_] = mxmSize;
 
 }

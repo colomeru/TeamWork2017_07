@@ -49,13 +49,13 @@ void DrawStar::Draw(const Vector2& position) const
 	int drawCount = (int)roundf(fstarCount_);
 	if (isFullStar_)drawCount = starCount_;
 	
-	Vector2 targethalfSize = Vector2(Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::SCORE_STAR_SPRITE).x / 2, 0.f);
+	Vector2 targethalfSize = Vector2((float)Sprite::GetInstance().GetSplitPieceSize(SPRITE_ID::SCORE_STAR_SPRITE).x / 2.f, 0.f);
 	for (int i = 0; i < drawCount; i++) {
 		Vector2 drawPos = position;
 
 		drawPos -= targethalfSize;
-		drawPos -= (drawCount - 1)*targethalfSize;
-		drawPos += (targethalfSize * 2)*i;
+		drawPos -= (float)(drawCount - 1)*targethalfSize;
+		drawPos += (targethalfSize * 2.f)*(float)i;
 		Sprite::GetInstance().SplitDraw(SPRITE_ID::SCORE_STAR_SPRITE, drawPos, timeCount_[i]/ speed);
 	}
 }
@@ -78,7 +78,7 @@ void DrawStar::SetFullStarCount(int count) {
 void DrawStar::SetFull()
 {
 	TweenManager::GetInstance().Cancel(&fstarCount_);
-	fstarCount_ = starCount_;
+	fstarCount_ = (float)starCount_;
 	for (int i = 0; i < (int)roundf(fstarCount_); i++) {
 		timeCount_[i] = (Sprite::GetInstance().GetSliptFrameSize(SPRITE_ID::SCORE_STAR_SPRITE) - 1)*speed;
 	}

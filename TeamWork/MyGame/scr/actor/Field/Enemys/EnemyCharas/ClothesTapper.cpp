@@ -6,6 +6,7 @@
 #include "../../../Effects/EnemyEffect/TapperTapEffect.h"
 #include "../../../../sound/sound.h"
 #include "../../../../graphic/Sprite.h"
+#include"../../../../debugdata/DebugDraw.h"
 
 static const float moveTime = 2.0f;
 static const float IdleTime = 3.0f;
@@ -68,9 +69,8 @@ void ClothesTapper::Draw() const
 	auto origin = Sprite::GetInstance().GetSize(spriteID_) / 2;
 	if (updateMode_ == MODE_DEAD)anmManager2_.Draw(drawPos_ + Vector2(0, 300.f), origin, Vector2(2.0f, 2.0f));
 	else anmManager_.Draw(drawPos_ + Vector2(0, 300.f), origin,Vector2(2.0f,2.0f));
-	if (BuildMode != 1)return;
-
-	DrawCircle(drawPos_.x+GetShiftPos().x, drawPos_.y+ GetShiftPos().y, parameter_.radius, GetColor(255, 255, 255));
+	
+	DebugDraw::DebugDrawCircle((int)(drawPos_.x+GetShiftPos().x), (int)(drawPos_.y+ GetShiftPos().y), (int)parameter_.radius, GetColor(255, 255, 255));
 
 }
 
@@ -185,7 +185,9 @@ void ClothesTapper::IdleUpdate()
 
 	world_->SetCollideSelect(shared_from_this(), ACTOR_ID::PLAYER_SWORD_ACTOR, COL_ID::TAPPER_PSWORD_COL);
 	
-	if (BuildMode==1&&Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z))ToDeadMode();
+#ifdef _DEBUG
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::Z))ToDeadMode();
+#endif // NDEBUG
 
 	if (timeCount_ > IdleTime) {
 		ToMoveMode();

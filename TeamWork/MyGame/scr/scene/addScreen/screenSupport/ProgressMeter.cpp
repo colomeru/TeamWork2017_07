@@ -64,13 +64,13 @@ void ProgressMeter::Draw() const
 		ins.Draw(SPRITE_ID::METER_SPRITE, Vector2(meterPos_.x, meterPos_.y + i * dis_), Vector2(0, laneSize_.y / 4), Vector2(meterLen_ / laneSize_.x, 0.5f), 1.0f, false);
 		if (i == nowLane_) {
 			//現在プレイヤーがいるレーンのメーターに表示
-			ins.Draw(SPRITE_ID::OROCHI_HEAD_SPRITE, pIconPos_, Vector2(pIconSize_.x / 4, pIconSize_.y / 1.5), Vector2(0.5f, 0.5f), 1.0f, false);
+			ins.Draw(SPRITE_ID::OROCHI_HEAD_SPRITE, pIconPos_, Vector2(pIconSize_.x / 4.f, pIconSize_.y / 1.5f), Vector2(0.5f, 0.5f), 1.0f, false);
 		}
 	}
 
 	//ピンを描画
 	world_->EachActor(ACTOR_ID::PIN_ACTOR, [=](Actor& other) {
-		PinStruct pin = { other.GetLaneNum(), other.GetPosition().x };
+		PinStruct pin = { other.GetLaneNum(), (int)other.GetPosition().x };
 		Sprite::GetInstance().Draw(SPRITE_ID::PLAYER_HEAD_SPRITE, Vector2(pin.posX * meterLen_ / stageLen_ + meterPos_.x, meterPos_.y + pin.lane * dis_ + pinSize_.y / 8), Vector2(pinSize_.x / 4, pinSize_.y / 4), Vector2(0.5f, 0.5f), 180.0f);
 	});
 

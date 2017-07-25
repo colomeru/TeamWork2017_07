@@ -33,7 +33,7 @@ void MethodTimer::InnerInitialize()
 void MethodTimer::NumReset()
 {
 	count_ = 0;
-	for (int i = 0; i < emptyCount_.size();i++) {
+	for (int i = 0; i < (int)emptyCount_.size();i++) {
 		emptyCount_[i] = MAX_EMPTY_COUNT[i];
 	}
 }
@@ -57,7 +57,7 @@ void MethodTimer::Add(std::function<void()> func)
 
 void MethodTimer::Action()
 {
-	if (targetFuncList_.size() <= count_)return;
+	if ((int)targetFuncList_.size() <= count_)return;
 
 	targetFuncList_[count_]();
 	count_++;
@@ -65,7 +65,7 @@ void MethodTimer::Action()
 
 void MethodTimer::ToLastAction()
 {
-	if (targetFuncList_.size() <= count_)return;
+	if ((int)targetFuncList_.size() <= count_)return;
 
 	count_ = targetFuncList_.size() - 1;
 
@@ -76,7 +76,7 @@ void MethodTimer::ToLastAction()
 
 void MethodTimer::CountEmpty(int count)
 {
-	if (targetFuncList_.size() <= count_)return;
+	if ((int)targetFuncList_.size() <= count_)return;
 
 	//自身のカウントを減らして
 	emptyCount_[count]--;

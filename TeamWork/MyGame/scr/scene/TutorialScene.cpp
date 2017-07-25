@@ -260,16 +260,16 @@ void TutorialScene::Draw() const
 			DrawBox(1200, 500, WINDOW_WIDTH - 50, 900, GetColor(128, 128, 128), TRUE);
 			SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 
-			Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2(gamepadX, WINDOW_HEIGHT / 2), Vector2::Zero, 1.f, Vector2::One*1.5f);
+			Sprite::GetInstance().Draw(SPRITE_ID::GAMEPAD_SPRITE, Vector2((float)gamepadX, (float)WINDOW_HEIGHT / 2.f), Vector2::Zero, 1.f, Vector2::One*1.5f);
 			for (auto i : lockList_) {
 				if (!i.isLock) {
-					Sprite::GetInstance().Draw(i.ctrl, Vector2(gamepadX, WINDOW_HEIGHT / 2),Vector2::Zero, abs(MathHelper::Sin((float)sinCount_)), Vector2::One*1.5f);
+					Sprite::GetInstance().Draw(i.ctrl, Vector2((float)gamepadX, (float)WINDOW_HEIGHT / 2.f),Vector2::Zero, abs(MathHelper::Sin((float)sinCount_)), Vector2::One*1.5f);
 					return;
 				}
 			}
 		}
 	}
-	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (abs(MathHelper::Sin(sinCount_)) * 255));
+	SetDrawBlendMode(DX_BLENDMODE_ALPHA, (int)(abs(MathHelper::Sin((float)sinCount_)) * 255.f));
 	if(!player_->GetUseKey()&& !player_->GetIsClearMode())FontManager::GetInstance().DrawTextApplyFont(1550, 250, GetColor(0, 0, 0), FONT_ID::TUTORIAL_FONT, "BÇ≈êiÇﬁÇÊ");
 	SetDrawBlendMode(DX_BLENDMODE_NOBLEND, 0);
 

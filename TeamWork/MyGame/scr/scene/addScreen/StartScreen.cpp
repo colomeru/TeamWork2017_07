@@ -26,7 +26,7 @@ bool StartScreen::Update()
 	world_->StartModeUpdate();
 
 	if ((cameraPointActor_->isArrivePoint())) {
-		Vector2 sUIPos = Vector2(WINDOW_WIDTH, WINDOW_HEIGHT) / 2.f;
+		Vector2 sUIPos = Vector2((float)WINDOW_WIDTH, (float)WINDOW_HEIGHT) / 2.f;
 		world_->Add(ACTOR_ID::UI_ACTOR, std::make_shared<StartUI>(world_, sUIPos));
 		
 		return true;

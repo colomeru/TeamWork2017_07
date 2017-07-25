@@ -102,9 +102,9 @@ void TitleScene::Update()
 		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
-	for (int i = 0; i < alpha_.size(); i++) {
+	for (int i = 0; i < (int)alpha_.size(); i++) {
 		if (i == selectNum_) {
-			alpha_[i] = MathHelper::Sin(sinCount_);
+			alpha_[i] = MathHelper::Sin((float)sinCount_);
 		}
 		else {
 			alpha_[i] = 1.f;
@@ -123,7 +123,7 @@ void TitleScene::Draw() const
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, drawpos, origin, Vector2::One);
 
 	Vector2 pborigin = Sprite::GetInstance().GetSize(SPRITE_ID::PRESS_B_SPRITE) / 2;
-	if(!isPushKey_)Sprite::GetInstance().Draw(SPRITE_ID::PRESS_B_SPRITE, Vector2(WINDOW_WIDTH/2, 800.0f),pborigin,MathHelper::Sin(sinCount_),Vector2::One);
+	if(!isPushKey_)Sprite::GetInstance().Draw(SPRITE_ID::PRESS_B_SPRITE, Vector2((float)WINDOW_WIDTH/2.f, 800.0f),pborigin,MathHelper::Sin((float)sinCount_),Vector2::One);
 
 	if (!isPushKey_)return;
 //	alpha_

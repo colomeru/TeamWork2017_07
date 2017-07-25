@@ -23,6 +23,7 @@ protected:
 		POSSIBLE_BITE,			//プレイヤーが噛めるようになる
 		END_WIND,				//風が終了
 	};
+	//服の切断ポイントマップ
 	using CLPoints = std::map<CuttingState, std::vector<Vector3>>;
 	//コンストラクタ
 	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight,

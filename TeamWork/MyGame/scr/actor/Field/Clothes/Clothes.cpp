@@ -105,6 +105,9 @@ void Clothes::OnMessage(EventMessage message, void * param)
 			&dNumber_
 		);
 	}
+	else if (message == EventMessage::NECK_SHOOT || message == EventMessage::NECK_BACK_SHOOT) {
+		isDrawRange_ = true;
+	}
 }
 
 void Clothes::SetPointsUpdate()
@@ -272,9 +275,6 @@ void Clothes::DrawClothesFeces() const
 
 void Clothes::DrawRangeUpdate()
 {
-	if (player_->GetIsShootMode())
-		isDrawRange_ = true;
-
 	if (player_->GetIsBiteMode())
 		isDrawRange_ = false;
 }

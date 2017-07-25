@@ -30,5 +30,5 @@ private:
 	std::vector<Vector2> cursorPos_;
 	Vector2 cursorDrawPos_;
 
-	bool isAlreadyPush_;
+	bool isAlreadyPush_{ false };
 };

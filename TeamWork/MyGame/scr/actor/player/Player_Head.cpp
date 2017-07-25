@@ -181,6 +181,39 @@ void Player_Head::OnMessage(EventMessage message, void * param)
 {
 }
 
+bool Player_Head::CamMoveUpdate() {
+	if (world_->GetKeepDatas().nextLane_ < 0) {
+		CamMoveUp();
+	}
+	else {
+		CamMoveDown();
+	}
+	return true;
+}
+
+void Player_Head::CamMoveDown() {
+	if (!player_->isLaneChangeFall()) {
+		return;
+	}
+	LaneChangeFall();
+
+}
+
+void Player_Head::LaneChangeFall() {
+	float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
+	laneLerpNum = min(1.f, laneLerpNum);
+	int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
+	drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
+
+	if (player_->isLaneChangeFall()) {
+		drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
+	}
+}
+
+void Player_Head::addPos(const Vector2 & addpos) {
+	position_ += addpos;
+}
+
 void Player_Head::UpdatePos()
 {
 	if (player_->GetCurHead() == myNumber_)player_->SetStopPos(position_);
@@ -199,6 +232,56 @@ void Player_Head::UpdatePos()
 
 }
 
+bool Player_Head::ResurrectHead() {
+	return player_->ResurrectHead();
+
+}
+
+void Player_Head::StartPlayerHeadBite() {
+	isHit_ = true;
+	isBitePoint_ = false;
+
+	auto basePos = player_->GetHeadPos(myNumber_);
+	Vector2 vel = basePos - player_->GetPosition();
+
+
+	Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
+
+	position_ = basePos + bPlusLngPos;
+
+	player_->SetStopPos(position_);
+	player_->SetMode(MODE_BITE);
+
+}
+
+bool Player_Head::getIsHit() const {
+	return isHit_;
+}
+
+bool Player_Head::getIsBitePoint() const {
+	return isBitePoint_;
+}
+
+bool Player_Head::getIsCurrentHead() const {
+	return player_->GetCurHead() == myNumber_;
+}
+
+void Player_Head::SetPosAddVect(const Vector2 & posAV) {
+	posAddVect_ = posAV;
+}
+
+
+//“ª‚ªŠŠ‚è—Ž‚¿‚é‚©‚Ç‚¤‚©‚ðƒZƒbƒg‚·‚é
+
+void Player_Head::setIsBiteSlipWind(bool isSlip) {
+	isBiteSlipWind_ = isSlip;
+
+}
+
+Player * Player_Head::GetPlayerPointer() const {
+	return player_;
+}
+
 void Player_Head::CreateFatigueEffect()
 {
 	if (isAlreadyCreateSplash_)return;
@@ -206,6 +289,10 @@ void Player_Head::CreateFatigueEffect()
 	world_->Add(ACTOR_ID::EFFECT_ACTOR, std::make_shared<PlayerFatigueEffect>(world_,position_,this));
 	Sound::GetInstance().PlaySE(SE_ID::FATIGUE_SE);
 	isAlreadyCreateSplash_ = true;
+}
+
+void Player_Head::SetBiteSprite() {
+	biteSpriteTimer_ = 0.15f;
 }
 
 float Player_Head::MathHeadRotation_Bite()const

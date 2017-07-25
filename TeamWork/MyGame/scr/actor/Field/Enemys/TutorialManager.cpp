@@ -7,7 +7,7 @@
 
 static const int defWindCount = 400;
 TutorialManager::TutorialManager(IWorld* world, int stage) :
-	Actor(world), timeCount_(0), resurTimer_(0.0f), stage_(stage), windCount_(defWindCount){
+	Actor(world), timeCount_{ 0 }, resurTimer_{ 0.0f }, stage_(stage), windCount_(defWindCount){
 
 	isResur_ = isSpawnTapperTutorial[stage_];
 	if (isSpawnWind[stage_]) world_->sendMessage(EventMessage::BEGIN_WIND);

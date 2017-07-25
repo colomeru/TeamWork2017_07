@@ -1,7 +1,8 @@
 #pragma once
 #include"ArrowEffectGenerator.h"
-#include"../../../world/IWorld.h"
 
+class IWorld;
+class Actor;
 class ArrowEffectGenerator {
 public:
 

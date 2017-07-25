@@ -46,7 +46,7 @@ private:
 	int currentStage_{ 0 };
 	
 	int timeCount_{ 0 };
-	int clothesCreateTime_;
+	int clothesCreateTime_{ 30 };
 
 	int plusCount_{ 1 };
 	int scrollPos_{ 0 };

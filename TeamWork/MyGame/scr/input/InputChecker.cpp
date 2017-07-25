@@ -102,3 +102,14 @@ bool InputChecker::StickTriggerDown(Input_Stick stick) const
 	return false;
 
 }
+
+bool InputChecker::AnyInputStateDown() const
+{
+	return
+	Keyboard::GetInstance().AnyStateDown()||
+	GamePad::GetInstance().AnyStateDown()||
+	StickStateDown(Input_Stick::Down)||
+	StickStateDown(Input_Stick::Left)||
+	StickStateDown(Input_Stick::Right)||
+	StickStateDown(Input_Stick::Up);
+}

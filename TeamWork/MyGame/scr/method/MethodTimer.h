@@ -31,6 +31,7 @@ private:
 	//呼び出し回数カウンタ
 	int count_;
 
+	//空の呼び出し回数リスト
 	std::vector<int> emptyCount_;
 	std::vector<int> MAX_EMPTY_COUNT;
 

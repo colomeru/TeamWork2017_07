@@ -19,84 +19,25 @@ public:
 	virtual void OnCollide(Actor& other, CollisionParameter colpara)override;
 	//メッセージ取得
 	virtual void OnMessage(EventMessage message, void* param);
-	virtual bool CamMoveUpdate() {
-		if (world_->GetKeepDatas().nextLane_ < 0) {
-			CamMoveUp();
-		}
-		else {
-			CamMoveDown();
-		}
-		return true;
-	}
-	virtual void CamMoveUp()override {
-	}
-	virtual void CamMoveDown() override {
-		if (!player_->isLaneChangeFall()) {
-			return;
-		}
-		LaneChangeFall();
+	virtual bool CamMoveUpdate();
+	virtual void CamMoveUp()override {}
+	virtual void CamMoveDown() override;
 
-	}
-
-	virtual void LaneChangeFall() override {
-		float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
-		laneLerpNum = min(1.f, laneLerpNum);
-		int targetNum = world_->GetKeepDatas().playerLane_ - laneNum_ + 2;
-		drawAddPos_.y = MathHelper::Lerp(defDrawLineChangePosY[targetNum], defDrawLineChangePosY[targetNum - 1], laneLerpNum) - defDrawLineChangePosY[targetNum];
-
-		if (player_->isLaneChangeFall()) {
-			drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
-		}
-	}
-	void addPos(const Vector2& addpos) {
-		position_ += addpos;
-	}
+	virtual void LaneChangeFall() override;
+	void addPos(const Vector2& addpos);
 	void UpdatePos();
-	bool ResurrectHead() {
-		return player_->ResurrectHead();
-		
-	}
-	void StartPlayerHeadBite() {
-		isHit_ = true;
-		isBitePoint_ = false;
+	bool ResurrectHead();
+	void StartPlayerHeadBite();
 
-		auto basePos = player_->GetHeadPos(myNumber_);
-		Vector2 vel = basePos - player_->GetPosition();
-
-
-		Vector2 bPlusLngPos = vel*player_->GetHeadLengthChangeToPosMult(myNumber_);
-
-		position_ = basePos + bPlusLngPos;
-
-		player_->SetStopPos(position_);
-		player_->SetMode(MODE_BITE);
-
-	}
-
-	bool getIsHit()const{
-		return isHit_;
-	}
-	bool getIsBitePoint()const{
-		return isBitePoint_;
-	}
-	bool getIsCurrentHead()const {
-		return player_->GetCurHead() == myNumber_;
-	}
-	void SetPosAddVect(const Vector2& posAV) {
-		posAddVect_ = posAV;
-	}
+	bool getIsHit()const;
+	bool getIsBitePoint()const;
+	bool getIsCurrentHead()const;
+	void SetPosAddVect(const Vector2& posAV);
 	//頭が滑り落ちるかどうかをセットする
-	void setIsBiteSlipWind(bool isSlip) {
-		isBiteSlipWind_ = isSlip;
-
-	}
-	Player* GetPlayerPointer() const{
-		return player_;
-	}
+	void setIsBiteSlipWind(bool isSlip);
+	Player* GetPlayerPointer() const;
 	void CreateFatigueEffect();
-	void SetBiteSprite() {
-		biteSpriteTimer_ = 0.15f;
-	}
+	void SetBiteSprite();
 
 private:
 	float MathHeadRotation_Bite()const;

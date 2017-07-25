@@ -1,7 +1,7 @@
 #include "MethodTimer.h"
 #include"../math/MathHelper.h"
 
-MethodTimer::MethodTimer() :count_(0)
+MethodTimer::MethodTimer() :count_{ 0 }
 {
 	Initialize();
 }
@@ -9,6 +9,8 @@ MethodTimer::MethodTimer() :count_(0)
 MethodTimer::~MethodTimer()
 {
 	targetFuncList_.clear();
+	emptyCount_.clear();
+	MAX_EMPTY_COUNT.clear();
 }
 
 void MethodTimer::Initialize()

@@ -10,6 +10,7 @@
 static const float defDrawLinePosY[3] = { 0,500,1000 };
 static const float defDrawLineChangePosY[5] = { -400,0,500,1000,1500 };
 
+class Actor;
 //World内で、アクター全員が取得出来るデータ
 struct KeepDatas {
 	//playerの現在のレーン
@@ -75,9 +76,7 @@ public:
 	/* ワールドインターフェース */
 	// 追加
 	virtual void Add(ACTOR_ID id, ActorPtr actor);
-	virtual void SetTarget(Actor* tgt) {
-		targetAct_ = tgt;
-	}
+	virtual void SetTarget(Actor* tgt);
 	// 終わっているか？
 	virtual bool IsEnd() const;
 	// 衝突判定設定
@@ -99,75 +98,28 @@ public:
 	virtual void inv(const Matrix& mat) override;
 	virtual Matrix InitializeInv(Vector2 position) override;
 
-	virtual Matrix GetInv()override {
-		return inv_;
-	}
-	virtual Matrix& GetChangeInv()override {
-		return inv_;
-	}
-	virtual void SetScrollPos(const Vector2& pos) override {
-		targetMat_.Translation(Vector3(pos.x, pos.y, 0));
-	}
+	virtual Matrix GetInv()override;
+	virtual Matrix& GetChangeInv()override;
+	virtual void SetScrollPos(const Vector2& pos) override;
 	//共有データを更新する、変更を行わない値の引数は、元のKeepDatasの値を渡す事
-	virtual void SetKeepDatas(KeepDatas data) override {
-		keepDatas_ = data;
-	}
+	virtual void SetKeepDatas(KeepDatas data) override;
 	//共有データを取得する
-	virtual KeepDatas GetKeepDatas()const override {
-		return keepDatas_;
-	}
+	virtual KeepDatas GetKeepDatas()const override;
 
-	virtual KeepDatas& GetCanChangedKeepDatas() override {
-		return keepDatas_;
-	}
-	virtual void ChangeCamMoveMode(int addNum) override {
-		isChangeCam_ = true;
-		addNum_ = addNum;
-		if (addNum > 0) camShootSpd_ = 2.33f;
-		else camShootSpd_ = 0.f;
-		keepDatas_.SetPlayerNextLane(addNum_);
-	}
-	virtual bool GetIsCamChangeMode()const override {
-		return isChangeCam_;
-	}
-	virtual bool isChangeFrame()const {
-		return isChangeFrame_;
-	}
-	virtual void SetIsChangeFrame(bool is) {
-		isChangeFrame_ = is;
-	}
+	virtual KeepDatas& GetCanChangedKeepDatas() override;
+	virtual void ChangeCamMoveMode(int addNum) override;
+	virtual bool GetIsCamChangeMode()const override;
+	virtual bool isChangeFrame()const;
+	virtual void SetIsChangeFrame(bool is);
 	virtual void StartModeUpdate()override;
 
-	virtual void UnLockCameraPosY()override {
-		isLockedCamY_ = false;
-	}
-	virtual void FreeCameraPosY(bool is) {
-		if (isFreeCamY_ == is)return;
-		isFreeCamY_ = is;
-	}
-	virtual bool GetIsFreeCamY_()const {
-		return isFreeCamY_;
-	}
-	virtual void UpdateDrawPos() {
-		actors_.DrawUpdate();
-	}
-	virtual void SetMaxSize(int size) override{
-		maxSize_ = size;
-	}
+	virtual void UnLockCameraPosY()override;
+	virtual void FreeCameraPosY(bool is);
+	virtual bool GetIsFreeCamY_()const;
+	virtual void UpdateDrawPos();
+	virtual void SetMaxSize(int size) override;
 private:
-	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const
-	{
-		// バネの伸び具合を計算
-		Vector2 stretch = (pos - resPos);
-		// バネの力を計算
-		Vector2 force = -stiffness * stretch;
-		// 加速度を追加
-		Vector2 acceleration = force / mass;
-		// 移動速度を計算
-		velo = friction * (velo + acceleration);
-
-		pos = pos + velo;
-	}
+	void Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness = 0.1f, float friction = 0.5f, float mass = 2.0f) const;
 
 private:
 	int maxSize_;

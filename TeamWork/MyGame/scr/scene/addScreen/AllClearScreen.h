@@ -27,7 +27,7 @@ private:
 	void ScoreDraw()const;
 	void drawUpdate();
 private:
-	int score_;
+	int score_{ 0 };
 	float fscore_{ 0.f };
 	int headCount_{ 0 };
 	float fheadCount_{ 0.f };

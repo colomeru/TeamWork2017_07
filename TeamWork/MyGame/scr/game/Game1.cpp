@@ -13,7 +13,7 @@
 #include "../sound/sound.h"
 #include "../graphic/FontManager.h"
 #include "../scene/LogoScene.h"
-
+#include"../tgs/TGSManager.h"
 
 void Game1::Initialize()
 {
@@ -24,6 +24,7 @@ void Game1::Initialize()
 	Sprite::GetInstance().Initialize();
 	Sound::GetInstance().Initialize();
 	FontManager::GetInstance().Initialize();
+	TGSManager::GetInstance().Initialize();
 
 	mContent.NotAsyncLoadSprite(Sprite::GetInstance(), Model::GetInstance());
 
@@ -80,6 +81,11 @@ void Game1::Update()
 	mSceneManager.Update();
 	
 	Sound::GetInstance().Update();
+
+	if (TGSManager::GetInstance().Update()) {
+		GameFrame::GameEnd();
+	}
+
 }
 
 void Game1::Draw()

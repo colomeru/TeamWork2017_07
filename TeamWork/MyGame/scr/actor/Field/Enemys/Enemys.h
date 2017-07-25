@@ -30,6 +30,6 @@ public:
 
 protected:
 	//Õ“Ë‚µ‚Ä‚¢‚é‚©
-	bool isHit_;
+	bool isHit_{ false };
 
 };

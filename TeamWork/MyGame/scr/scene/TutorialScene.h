@@ -109,14 +109,14 @@ private:
 	using WorldPtr = std::shared_ptr<World>;
 	using PlayerPtr = std::shared_ptr<Player>;
 	// ワールド
-	WorldPtr		world_;
-	PlayerPtr		player_;
+	WorldPtr		world_{ nullptr };
+	PlayerPtr		player_{ nullptr };
 	//背景描画クラス
-	BackgroundScreen bgScreen_; 
+	BackgroundScreen bgScreen_;
 	//ステージ作成マネージャー
 	StageGenerateManager stageGeneratorManager;
 	// 次のシーン
-	Scene			nextScene_;
+	Scene			nextScene_{ Scene::Menu };
 	//チュートリアル用テキスト描画クラス
 	TutorialTextScreen textScreen_;
 	//現在のチュートリアルのベース番号
@@ -129,22 +129,22 @@ private:
 	std::string TextAddList_[4];
 
 	float timeCount_;
-	int sinCount_;
+	int sinCount_{ 0 };
 
 	//既にテキストを全て飛ばし、ボタンを入力したか
 	bool isAlreadyPutButton_;
 	//コントローラを描画するかどうか
-	bool isDrawCtrl_;
+	bool isDrawCtrl_{ false };
 	//worldの更新を行うかどうか
-	bool isUpdate_;
+	bool isUpdate_{ false };
 	//次のシーンへの遷移を開始しているかどうか
-	bool isNext_;
+	bool isNext_{ false };
 	//チュートリアルクリア項目リスト
 	std::vector<LockList> lockList_;
 	//チュートリアルステージ名リスト
 	std::array<std::string, 10> stageTexts_;
 	//現在のステージ番号
-	int stageTextNum_;
+	int stageTextNum_{ 0 };
 	//ロック設定関数リスト
 	std::vector<std::function<void(int)>> setLockFuncList_;
 	//チュートリアル時エネミー生成クラス

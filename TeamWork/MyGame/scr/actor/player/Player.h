@@ -12,7 +12,7 @@
 class Player_Head;
 class Player_Sword;
 
-static const Vector2 pHDist = Vector2(32, 32);
+static const Vector2 pHDist = Vector2(32.f, 32.f);
 static const float defHeadChangeTime = 0.2f;
 static const float defHeadLength = 2.f;
 static const float defPGravPow = 0.05f;

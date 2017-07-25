@@ -1,10 +1,10 @@
 #include "ArrowEffectGenerator.h"
 #include"../../../time/Time.h"
 #include"CursorEffect.h"
+#include"../../../world/IWorld.h"
 
-ArrowEffectGenerator::ArrowEffectGenerator()
-{
-
+ArrowEffectGenerator::ArrowEffectGenerator() :world_{ nullptr }, target_{ nullptr } {
+	
 }
 
 

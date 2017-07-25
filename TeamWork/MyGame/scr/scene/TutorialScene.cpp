@@ -30,8 +30,7 @@ static int maxTextCount[maxTutorialNum]{
 	3
 };
 
-TutorialScene::TutorialScene() :
-	nextScene_(Scene::Menu), sinCount_(0), isDrawCtrl_(false), isNext_(false),stageTextNum_(0), isUpdate_(false)
+TutorialScene::TutorialScene()
 {
 	// ƒ[ƒ‹ƒh¶¬
 	world_ = std::make_shared<World>();

@@ -44,6 +44,8 @@ public:
 	bool StickStateDown(Input_Stick stick)const;
 	//指定方向にスティックを倒したかを返す
 	bool StickTriggerDown(Input_Stick stick)const;
+
+	bool AnyInputStateDown()const;
 private:
 	using Connect_Key_Pad = std::pair<UINT, UINT>;
 	std::map<Input_Key, Connect_Key_Pad> inputList_;

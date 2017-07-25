@@ -115,6 +115,10 @@ void World::Add(ACTOR_ID id, ActorPtr actor)
 	actors_.Add(id, actor);
 }
 
+void World::SetTarget(Actor * tgt) {
+	targetAct_ = tgt;
+}
+
 // 
 bool World::IsEnd() const
 {
@@ -220,10 +224,93 @@ Matrix World::InitializeInv(Vector2 position)
 	return inv_;
 }
 
+Matrix World::GetInv() {
+	return inv_;
+}
+
+Matrix & World::GetChangeInv() {
+	return inv_;
+}
+
+void World::SetScrollPos(const Vector2 & pos) {
+	targetMat_.Translation(Vector3(pos.x, pos.y, 0));
+}
+
+//共有データを更新する、変更を行わない値の引数は、元のKeepDatasの値を渡す事
+
+void World::SetKeepDatas(KeepDatas data) {
+	keepDatas_ = data;
+}
+
+//共有データを取得する
+
+KeepDatas World::GetKeepDatas() const {
+	return keepDatas_;
+}
+
+KeepDatas & World::GetCanChangedKeepDatas() {
+	return keepDatas_;
+}
+
+void World::ChangeCamMoveMode(int addNum) {
+	isChangeCam_ = true;
+	addNum_ = addNum;
+	if (addNum > 0) camShootSpd_ = 2.33f;
+	else camShootSpd_ = 0.f;
+	keepDatas_.SetPlayerNextLane(addNum_);
+}
+
+bool World::GetIsCamChangeMode() const {
+	return isChangeCam_;
+}
+
+bool World::isChangeFrame() const {
+	return isChangeFrame_;
+}
+
+void World::SetIsChangeFrame(bool is) {
+	isChangeFrame_ = is;
+}
+
 void World::StartModeUpdate()
 {
 	inv(targetMat_);
 	targetMat_ = Matrix::CreateTranslation(Vector3(targetAct_->GetPosition().x, 0, 0));
 	actors_.StartModeUpdate();
 	isLockedCamY_ = true;
+}
+
+void World::UnLockCameraPosY() {
+	isLockedCamY_ = false;
+}
+
+void World::FreeCameraPosY(bool is) {
+	if (isFreeCamY_ == is)return;
+	isFreeCamY_ = is;
+}
+
+bool World::GetIsFreeCamY_() const {
+	return isFreeCamY_;
+}
+
+void World::UpdateDrawPos() {
+	actors_.DrawUpdate();
+}
+
+void World::SetMaxSize(int size) {
+	maxSize_ = size;
+}
+
+void World::Spring(Vector2 & pos, Vector2 & resPos, Vector2 & velo, float stiffness, float friction, float mass) const
+{
+	// バネの伸び具合を計算
+	Vector2 stretch = (pos - resPos);
+	// バネの力を計算
+	Vector2 force = -stiffness * stretch;
+	// 加速度を追加
+	Vector2 acceleration = force / mass;
+	// 移動速度を計算
+	velo = friction * (velo + acceleration);
+
+	pos = pos + velo;
 }

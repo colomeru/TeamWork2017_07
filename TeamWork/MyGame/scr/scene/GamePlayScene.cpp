@@ -141,8 +141,6 @@ void GamePlayScene::Initialize()
 
 void GamePlayScene::Update()
 {
-	Sound::GetInstance().SetAllBGMVolume(0.0f);
-
 	updateFunctionMap_[gamePlayMode_]();
 	if (!world_->GetIsFreeCamY_()) {
 		if (!world_->GetIsCamChangeMode()) {

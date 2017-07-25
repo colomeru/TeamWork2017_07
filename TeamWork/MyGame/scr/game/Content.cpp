@@ -62,6 +62,8 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("hanger.png", SPRITE_ID::HANGER_SPRITE);
 	sprite.Load("upHanger.png", SPRITE_ID::UPHANGER_SPRITE);
 	sprite.Load("upHangerCode.png", SPRITE_ID::UPHANGER_CODE_SPRITE);
+	sprite.Load("bowHanger.png", SPRITE_ID::BOWHANGER_SPRITE);
+	sprite.Load("bowHangerCode.png", SPRITE_ID::BOWHANGER_CODE_SPRITE);
 	sprite.Load("fluffyClothes.png", SPRITE_ID::FLUFFY_SPRITE, 6, Point(3, 2), Point(200, 240));
 	sprite.Load("fluffyClothes02.png", SPRITE_ID::FLUFFY_02_SPRITE, 6, Point(3, 2), Point(200, 240));
 	sprite.Load("fluffyClothes03.png", SPRITE_ID::FLUFFY_03_SPRITE, 6, Point(3, 2), Point(200, 240));
@@ -228,7 +230,7 @@ void Content::LoadSprite(Sprite& sprite, Model& model)
 	sprite.Load("credit_futon.png", SPRITE_ID::CREDIT_FUTON_SPRITE);
 	sprite.Load("credit_chain.png", SPRITE_ID::CREDIT_CHAIN_SPRITE);
 	sprite.Load("pg.png", SPRITE_ID::CREDIT_PG_SPRITE);
-
+	sprite.Load("stageres/credit_bg.png", SPRITE_ID::CREDIT_BG_SPRITE);
 }
 
 // ÇRÇcÉÇÉfÉãÇì«Ç›çûÇﬁ

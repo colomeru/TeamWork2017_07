@@ -1,4 +1,6 @@
 #include "BaseClothes.h"
+#include "../../../graphic/Sprite.h"
+#include "../../../debugdata/DebugDraw.h"
 
 BaseClothes::BaseClothes(
 	IWorld * world,
@@ -6,7 +8,7 @@ BaseClothes::BaseClothes(
 	Vector2 pos,
 	float weight,
 	std::pair<CLOTHES_ID, SPRITE_ID> ids,
-	const std::map<CuttingState, std::vector<Vector3>>& localPoints, 
+	const CLPoints& localPoints,
 	bool is_Pin)
 	:Clothes(world, ids.first, laneNum, weight, localPoints)
 {

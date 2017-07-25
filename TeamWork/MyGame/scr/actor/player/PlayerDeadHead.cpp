@@ -1,5 +1,6 @@
 #include "PlayerDeadHead.h"
-#include"../../Def.h"
+#include "../../Def.h"
+#include "../../graphic/Sprite.h"
 
 PlayerDeadHead::PlayerDeadHead(IWorld * world, const Vector2& position) :
 	Actor(world), sinCount_(0)

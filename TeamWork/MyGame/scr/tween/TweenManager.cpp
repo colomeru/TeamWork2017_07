@@ -5,7 +5,7 @@
 
 TweenManager::TweenManager() :
 	loopCount_(0),
-	updateType_(UpdateType::Common)
+	updateType_(TweenObject::Common)
 {
 	Clear();
 	easeFuncMap_.clear();
@@ -138,7 +138,7 @@ void TweenManager::SetLoopCount(const int count)
 	loopCount_ = count;
 }
 
-void TweenManager::SetLoopType(const UpdateType type)
+void TweenManager::SetLoopType(const TweenObject::UpdateType type)
 {
 	updateType_ = type;
 }
@@ -146,7 +146,7 @@ void TweenManager::SetLoopType(const UpdateType type)
 void TweenManager::ResetOption()
 {
 	loopCount_ = 0;
-	updateType_ = UpdateType::Common;
+	updateType_ = TweenObject::Common;
 }
 
 void TweenManager::Add(float* value, const EaseType& type, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
@@ -186,7 +186,7 @@ void TweenManager::Add(const EaseType & type, float * from, const float to, cons
 	Add(from, type, *from, to - *from, d, callback, s);
 }
 
-void TweenManager::Add(const EaseType & type, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::Add(const EaseType & type, Vector2 * from, const Vector2& to, const float d, const std::function<void()>& callback, const float s)
 {
 	Add(from, type, *from, to - *from, d, callback, s);
 }
@@ -199,15 +199,15 @@ void TweenManager::Add(const EaseType & type, Vector3 * from, const Vector3& to,
 void TweenManager::Loop(float * value, const EaseType & type, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 0;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
 
-void TweenManager::Loop(Vector2 * value, const EaseType & type, const Vector2 & b, const Vector2 c, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::Loop(Vector2 * value, const EaseType & type, const Vector2 & b, const Vector2& c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 0;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -215,7 +215,7 @@ void TweenManager::Loop(Vector2 * value, const EaseType & type, const Vector2 & 
 void TweenManager::Loop(Vector3 * value, const EaseType & type, const Vector3 & b, const Vector3& c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 0;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -223,15 +223,15 @@ void TweenManager::Loop(Vector3 * value, const EaseType & type, const Vector3 & 
 void TweenManager::Loop(const EaseType & type, float * from, const float to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 0;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
 
-void TweenManager::Loop(const EaseType & type, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::Loop(const EaseType & type, Vector2 * from, const Vector2& to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 0;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -239,7 +239,7 @@ void TweenManager::Loop(const EaseType & type, Vector2 * from, const Vector2 to,
 void TweenManager::Loop(const EaseType & type, Vector3 * from, const Vector3 & to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 0;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -247,7 +247,7 @@ void TweenManager::Loop(const EaseType & type, Vector3 * from, const Vector3 & t
 void TweenManager::LoopOnce(float * value, const EaseType & type, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 1;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -255,7 +255,7 @@ void TweenManager::LoopOnce(float * value, const EaseType & type, const float b,
 void TweenManager::LoopOnce(Vector2 * value, const EaseType & type, const Vector2 & b, const Vector2 & c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 1;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -263,7 +263,7 @@ void TweenManager::LoopOnce(Vector2 * value, const EaseType & type, const Vector
 void TweenManager::LoopOnce(Vector3 * value, const EaseType & type, const Vector3 & b, const Vector3 & c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 1;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -271,15 +271,15 @@ void TweenManager::LoopOnce(Vector3 * value, const EaseType & type, const Vector
 void TweenManager::LoopOnce(const EaseType & type, float * from, const float to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 1;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
 
-void TweenManager::LoopOnce(const EaseType & type, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::LoopOnce(const EaseType & type, Vector2 * from, const Vector2& to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 1;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -287,7 +287,7 @@ void TweenManager::LoopOnce(const EaseType & type, Vector2 * from, const Vector2
 void TweenManager::LoopOnce(const EaseType & type, Vector3 * from, const Vector3 & to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = 1;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -295,15 +295,15 @@ void TweenManager::LoopOnce(const EaseType & type, Vector3 * from, const Vector3
 void TweenManager::LoopCount(float * value, const EaseType & type, const int count, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
 
-void TweenManager::LoopCount(Vector2 * value, const EaseType & type, const int count, const Vector2 b, const Vector2 c, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::LoopCount(Vector2 * value, const EaseType & type, const int count, const Vector2& b, const Vector2& c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -311,7 +311,7 @@ void TweenManager::LoopCount(Vector2 * value, const EaseType & type, const int c
 void TweenManager::LoopCount(Vector3 * value, const EaseType & type, const int count, const Vector3 & b, const Vector3 & c, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -319,15 +319,15 @@ void TweenManager::LoopCount(Vector3 * value, const EaseType & type, const int c
 void TweenManager::LoopCount(const EaseType & type, const int count, float * from, const float to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
 
-void TweenManager::LoopCount(const EaseType & type, const int count, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::LoopCount(const EaseType & type, const int count, Vector2 * from, const Vector2& to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
@@ -335,49 +335,49 @@ void TweenManager::LoopCount(const EaseType & type, const int count, Vector2 * f
 void TweenManager::LoopCount(const EaseType & type, const int count, Vector3 * from, const Vector3 & to, const float d, const std::function<void()>& callback, const float s)
 {
 	loopCount_ = count;
-	updateType_ = UpdateType::Loop;
+	updateType_ = TweenObject::Loop;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
 
 void TweenManager::LoopPingPong(float * value, const EaseType & type, const float b, const float c, const float d, const std::function<void()>& callback, const float s)
 {
-	updateType_ = UpdateType::PingPong;
+	updateType_ = TweenObject::PingPong;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
 
-void TweenManager::LoopPingPong(Vector2 * value, const EaseType & type, const Vector2 b, const Vector2 c, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::LoopPingPong(Vector2 * value, const EaseType & type, const Vector2& b, const Vector2& c, const float d, const std::function<void()>& callback, const float s)
 {
-	updateType_ = UpdateType::PingPong;
+	updateType_ = TweenObject::PingPong;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
 
 void TweenManager::LoopPingPong(Vector3 * value, const EaseType & type, const Vector3 & b, const Vector3 & c, const float d, const std::function<void()>& callback, const float s)
 {
-	updateType_ = UpdateType::PingPong;
+	updateType_ = TweenObject::PingPong;
 	Add(value, type, b, c, d / 2.0f, callback, s);
 	ResetOption();
 }
 
 void TweenManager::LoopPingPong(const EaseType & type, float * from, const float to, const float d, const std::function<void()>& callback, const float s)
 {
-	updateType_ = UpdateType::PingPong;
+	updateType_ = TweenObject::PingPong;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
 
-void TweenManager::LoopPingPong(const EaseType & type, Vector2 * from, const Vector2 to, const float d, const std::function<void()>& callback, const float s)
+void TweenManager::LoopPingPong(const EaseType & type, Vector2 * from, const Vector2& to, const float d, const std::function<void()>& callback, const float s)
 {
-	updateType_ = UpdateType::PingPong;
+	updateType_ = TweenObject::PingPong;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }
 
 void TweenManager::LoopPingPong(const EaseType & type, Vector3 * from, const Vector3 & to, const float d, const std::function<void()>& callback, const float s)
 {
-	updateType_ = UpdateType::PingPong;
+	updateType_ = TweenObject::PingPong;
 	Add(from, type, *from, to - *from, d / 2.0f, callback, s);
 	ResetOption();
 }

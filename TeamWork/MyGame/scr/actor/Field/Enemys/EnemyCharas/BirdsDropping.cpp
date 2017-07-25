@@ -1,6 +1,7 @@
 #include "BirdsDropping.h"
-#include"../../../../math/Easing.h"
-#include"../../../../tween/TweenManager.h"
+#include "../../../../math/Easing.h"
+#include "../../../../tween/TweenManager.h"
+#include "../../../../graphic/Sprite.h"
 
 static const float defDropFallTime = 3.0f;
 
@@ -23,6 +24,10 @@ BirdsDropping::BirdsDropping(IWorld * world, int laneNum, Vector2 pos):
 
 BirdsDropping::~BirdsDropping()
 {
+}
+
+void BirdsDropping::FastUpdate() {
+	isUpdate_ = true;
 }
 
 void BirdsDropping::Update()

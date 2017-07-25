@@ -183,7 +183,6 @@
     <ClCompile Include="scr\actor\Field\Clothes\DropClothes\DropClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.cpp" />
-    <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\TutorialFlash.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Hairball\Hairball.cpp" />
     <ClCompile Include="scr\actor\Field\Clothes\Hairball\HairballGenerator\HairballGenerator.cpp" />
@@ -206,16 +205,14 @@
     <ClCompile Include="scr\actor\player\CreditPlayer.cpp" />
     <ClCompile Include="scr\actor\player\Input\PlayerInputChecker.cpp" />
     <ClCompile Include="scr\actor\player\Player.cpp" />
-    <ClCompile Include="scr\actor\player\Player2.cpp" />
-    <ClCompile Include="scr\actor\player\Player3.cpp" />
     <ClCompile Include="scr\actor\player\PlayerDeadHead.cpp" />
     <ClCompile Include="scr\actor\player\PlayerDeadPin.cpp" />
     <ClCompile Include="scr\actor\player\PlayerEffectManager.cpp" />
     <ClCompile Include="scr\actor\player\PlayerFallPin.cpp" />
+    <ClCompile Include="scr\actor\player\PlayerNeckDraw.cpp" />
     <ClCompile Include="scr\actor\player\PlayerNeck\PlayerNeckPendulumSupport.cpp" />
     <ClCompile Include="scr\actor\player\Player_Head.cpp" />
     <ClCompile Include="scr\actor\player\Player_Sword.cpp" />
-    <ClCompile Include="scr\actor\SampleActor.cpp" />
     <ClCompile Include="scr\actor\UI\GoalUI.cpp" />
     <ClCompile Include="scr\actor\UI\StartUI.cpp" />
     <ClCompile Include="scr\camera\Camera.cpp" />
@@ -275,10 +272,8 @@
     <ClCompile Include="scr\scene\addScreen\TitleBGScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\TutorialTextScreen.cpp" />
     <ClCompile Include="scr\scene\addScreen\UIScreen.cpp" />
-    <ClCompile Include="scr\scene\Credit2Scene.cpp" />
     <ClCompile Include="scr\scene\CreditScene.cpp" />
     <ClCompile Include="scr\scene\DemoScene.cpp" />
-    <ClCompile Include="scr\scene\EndingScene.cpp" />
     <ClCompile Include="scr\scene\GamePlayScene.cpp" />
     <ClCompile Include="scr\scene\LogoScene.cpp" />
     <ClCompile Include="scr\scene\MenuScene.cpp" />
@@ -325,7 +320,6 @@
     <ClInclude Include="scr\actor\Field\Clothes\DropClothes\DropClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\FluffyClothes\FluffyClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\GoalClothes.h" />
-    <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.h" />
     <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\TutorialFlash.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Hairball\Hairball.h" />
     <ClInclude Include="scr\actor\Field\Clothes\Hairball\HairballGenerator\HairballGenerator.h" />
@@ -349,8 +343,6 @@
     <ClInclude Include="scr\actor\player\CreditPlayer.h" />
     <ClInclude Include="scr\actor\player\Input\PlayerInputChecker.h" />
     <ClInclude Include="scr\actor\player\Player.h" />
-    <ClInclude Include="scr\actor\player\Player2.h" />
-    <ClInclude Include="scr\actor\player\Player3.h" />
     <ClInclude Include="scr\actor\player\PlayerDeadHead.h" />
     <ClInclude Include="scr\actor\player\PlayerDeadPin.h" />
     <ClInclude Include="scr\actor\player\PlayerEffectManager.h" />
@@ -360,7 +352,6 @@
     <ClInclude Include="scr\actor\player\PlayerNeck\PlayerNeckPendulumSupport.h" />
     <ClInclude Include="scr\actor\player\Player_Head.h" />
     <ClInclude Include="scr\actor\player\Player_Sword.h" />
-    <ClInclude Include="scr\actor\SampleActor.h" />
     <ClInclude Include="scr\actor\UI\GoalUI.h" />
     <ClInclude Include="scr\actor\UI\StartUI.h" />
     <ClInclude Include="scr\AllInclude.h" />
@@ -432,10 +423,8 @@
     <ClInclude Include="scr\scene\addScreen\TitleBGScreen.h" />
     <ClInclude Include="scr\scene\addScreen\TutorialTextScreen.h" />
     <ClInclude Include="scr\scene\addScreen\UIScreen.h" />
-    <ClInclude Include="scr\scene\Credit2Scene.h" />
     <ClInclude Include="scr\scene\CreditScene.h" />
     <ClInclude Include="scr\scene\DemoScene.h" />
-    <ClInclude Include="scr\scene\EndingScene.h" />
     <ClInclude Include="scr\scene\GamePlayDefine.h" />
     <ClInclude Include="scr\scene\GamePlayScene.h" />
     <ClInclude Include="scr\scene\IScene.h" />

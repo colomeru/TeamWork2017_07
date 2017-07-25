@@ -129,13 +129,7 @@
     <ClCompile Include="scr\conv\DXConverter.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\actor\SampleActor.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\scene\CreditScene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\scene\EndingScene.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\scene\MenuScene.cpp">
@@ -145,12 +139,6 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\actor\enemy\Enemy.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\actor\player\Player2.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
-    <ClCompile Include="scr\actor\player\Player3.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\actor\Field\Clothes\BaseClothes.cpp">
@@ -261,9 +249,6 @@
     <ClCompile Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\tween\TweenManager.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -354,9 +339,6 @@
     <ClCompile Include="scr\actor\player\PlayerFallPin.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
-    <ClCompile Include="scr\scene\Credit2Scene.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="scr\scene\addScreen\screenSupport\CreditText.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -424,6 +406,9 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="scr\actor\Field\Clothes\BowHanger\BowHanger.cpp">
+      <Filter>ソース ファイル</Filter>
+    </ClCompile>
+    <ClCompile Include="scr\actor\player\PlayerNeckDraw.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
@@ -581,13 +566,7 @@
     <ClInclude Include="scr\conv\DXConverter.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\actor\SampleActor.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\scene\CreditScene.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\scene\EndingScene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\scene\MenuScene.h">
@@ -600,12 +579,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\CameraAct\TPSCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\actor\player\Player2.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\actor\player\Player3.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\Field\Clothes\BaseClothes.h">
@@ -743,9 +716,6 @@
     <ClInclude Include="scr\actor\Field\Enemys\EnemyCharas\ClothesTapper.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\actor\Field\Clothes\GoalClothes\MoveGoalClothes.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\tween\TweenManager.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -840,9 +810,6 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\actor\player\PlayerFallPin.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\scene\Credit2Scene.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="scr\scene\addScreen\screenSupport\CreditText.h">

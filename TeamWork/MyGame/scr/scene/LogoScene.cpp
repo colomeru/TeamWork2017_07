@@ -5,7 +5,7 @@
 #include"../fade/FadePanel.h"
 
 LogoScene::LogoScene() :
-	nextScene_(Scene::Title)
+	nextScene_(Scene::Title),timeCount_(0)
 {
 	// ƒ[ƒ‹ƒh¶¬
 	world_ = std::make_shared<World>();

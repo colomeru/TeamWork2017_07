@@ -1,5 +1,6 @@
 #include "Hairball.h"
-#include "../MyGame/scr/tween/TweenManager.h"
+#include "../../../../tween/TweenManager.h"
+#include "../../../../graphic/Sprite.h"
 
 Hairball::Hairball(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)

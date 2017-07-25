@@ -1,5 +1,6 @@
 #include "ClothesFeces.h"
 #include "../Clothes.h"
+#include "../../../../graphic/Sprite.h"
 
 ClothesFeces::ClothesFeces(IWorld * world, int laneNum, Vector2 pos, Actor* clothes)
 	:Actor(world, clothes)

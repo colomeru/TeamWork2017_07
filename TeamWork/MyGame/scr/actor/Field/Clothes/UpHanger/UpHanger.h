@@ -21,15 +21,24 @@ public:
 private:
 	//ばねの計算
 	void Spring(const Vector2& pos, float stiffnes, float friction, float mass);
-	//
+	//プレイヤーが噛んでいない状態ではリセットする処理
 	void Cancel();
+	//プレイヤーが上に上がる一連の処理
+	void UpPlayer();
 
 private:
+	//ハンガーの機能が動いているか
 	bool isMove_;
+	//引っ張っているかどうか
 	bool isPull_;
-	Vector2 startPos_;
+	//紐の中心の基準点
+	Vector2 baseCenter_;
+	//プレイヤーの頭の更新座標
 	Vector2 pHeadPos_;
+	//ハンガーのしなりの位置
 	Vector2 bonePos_[2];
+	//紐の描画用の位置
 	Vector2 codePos_[6];
+	//紐の中心点
 	Vector2 codeCenterPos_;
 };

@@ -5,7 +5,7 @@ class DummyActor : public Actor
 {
 public:
 	//コンストラクタ
-	DummyActor(IWorld* world);
+	explicit DummyActor(IWorld* world);
 	//デストラクタ
 	~DummyActor();
 	//更新

@@ -4,13 +4,11 @@
 #include "../conv/DXConverter.h"
 #include "../fade/FadePanel.h"
 
-#include "../actor/player/Player3.h"
 #include "../actor/enemy/Enemy.h"
 #include "../graphic/Model.h"
 #include "../math/MathHelper.h"
 #include "../stageGenerator/Stage.h"
 #include "../stageGenerator/Stage1/Stage1.h"
-#include "../actor/Field/Clothes/TestClothes.h"
 #include "../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../graphic/Sprite.h"
 #include "../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
@@ -499,8 +497,8 @@ void TutorialScene::SetLockList(int currentTutorial,int tutorialLockNum)
 {
 	lockList_.clear();
 
-	player_->isUseKey_.SetKeyLock(false);
-	player_->isUseKey_.SetStickLock(false);
+	player_->GetEditableUseKey().SetKeyLock(false);
+	player_->GetEditableUseKey().SetStickLock(false);
 
 	setLockFuncList_[currentTutorial](tutorialLockNum);
 
@@ -511,25 +509,25 @@ void TutorialScene::SetLock1(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
-		player_->isUseKey_.SetKeyLock(true);
+		player_->GetEditableUseKey().SetKeyLock(true);
 		
 		lockList_.push_back(LockList(UnLockType::HalfFullRightStick, false, SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		lockList_.push_back(LockList(UnLockType::HalfFullLeftStick, false,SPRITE_ID::GAMEPAD_STICK_SPRITE));
 		break;
 	}
 	case 1: {
-		for (auto& rs : player_->mRot_spd) {
+		for (auto& rs : player_->GetEditableRot_Speed()) {
 			rs = MathHelper::Clamp(rs, 10.f, 10.f);
 		}
-		player_->isUseKey_.SetStickLock(true);
-		player_->isUseKey_.SetKeyLock(InputChecker::Input_Key::X, true);
+		player_->GetEditableUseKey().SetStickLock(true);
+		player_->GetEditableUseKey().SetKeyLock(InputChecker::Input_Key::X, true);
 
 		lockList_.push_back(LockList(UnLockType::PlayerShoot, false,SPRITE_ID::GAMEPAD_B_SPRITE));
 		lockList_.push_back(LockList(UnLockType::BiteClothes, false,SPRITE_ID::GAMEPAD_B_SPRITE));
 		break;
 	}
 	case 2: {
-		player_->isUseKey_.SetKeyLock(InputChecker::Input_Key::B,true);
+		player_->GetEditableUseKey().SetKeyLock(InputChecker::Input_Key::B,true);
 
 		lockList_.push_back(LockList(UnLockType::PlayerBackShoot, false, SPRITE_ID::GAMEPAD_X_SPRITE));
 		lockList_.push_back(LockList(UnLockType::BiteClothes, false, SPRITE_ID::GAMEPAD_X_SPRITE));
@@ -588,8 +586,8 @@ void TutorialScene::SetLock4(int tutorialLockNum)
 	switch (tutorialLockNum)
 	{
 	case 0: {
-		player_->isUseKey_.SetKeyLock(true);
-		player_->isUseKey_.SetKeyLock(InputChecker::Input_Key::A,false);
+		player_->GetEditableUseKey().SetKeyLock(true);
+		player_->GetEditableUseKey().SetKeyLock(InputChecker::Input_Key::A,false);
 
 
 		lockList_.push_back(LockList(UnLockType::UseSword, false, SPRITE_ID::GAMEPAD_A_SPRITE));

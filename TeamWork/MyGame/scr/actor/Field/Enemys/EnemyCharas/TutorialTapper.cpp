@@ -1,10 +1,10 @@
 #include "TutorialTapper.h"
-#include"../../../../game/Random.h"
-#include"../../../../tween/TweenManager.h"
-#include"../../../../math/Easing.h"
-#include"../../../../input/Keyboard.h"
-#include"../../../Effects/EnemyEffect/TapperTapEffect.h"
-#include"../../../../sound/sound.h"
+#include "../../../../game/Random.h"
+#include "../../../../tween/TweenManager.h"
+#include "../../../../input/Keyboard.h"
+#include "../../../Effects/EnemyEffect/TapperTapEffect.h"
+#include "../../../../sound/sound.h"
+#include "../../../../graphic/Sprite.h"
 
 static const float moveTime = 2.0f;
 static const float IdleTime = 3.0f;

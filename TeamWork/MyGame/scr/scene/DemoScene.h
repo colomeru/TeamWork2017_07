@@ -24,9 +24,6 @@ public:
 	virtual void End() override;
 
 private:
-	// 終了フラグ
-	bool isEnd_;
-
 	// 非同期読み込みコンテント数
 	float	maxLoadContentCount_;
 	// 読み込み中コンテント数

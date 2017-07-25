@@ -1,11 +1,11 @@
 #pragma once
 #include "../Actor.h"
-#include<vector>
-#include"../../math/MathHelper.h"
-#include"../../math/MyFuncionList.h"
-#include"../../Def.h"
-#include"../../graphic/DrawPos.h"
-#include "../../scene/Credit2Scene.h"
+#include <vector>
+#include "../../math/MathHelper.h"
+#include "../../math/MyFuncionList.h"
+#include "../../Def.h"
+#include "../../graphic/DrawPos.h"
+#include "Player.h"
 
 class Player_Head;
 class Player_Sword;
@@ -22,7 +22,7 @@ public:
 	CreditPlayer(IWorld* world, int maxLaneSize = 3, int startLane = 1);
 	//デストラクタ
 	~CreditPlayer();
-	//メッセージ取得
+	//メッセージ処理
 	virtual void OnMessage(EventMessage message, void* param);
 	//重力リセット
 	void GravityReset();
@@ -34,11 +34,10 @@ public:
 	void MultipleInit(float Length, const Vector2& fPos, float rot, float radius);
 
 private:
-	void FallUpdate();
-	//
-	void ShootUpdate();
-	//
-	void BiteUpdate();
+	//状態ごとの更新
+	void FallUpdate();	//落下中
+	void ShootUpdate();	//シュート中
+	void BiteUpdate();	//挟み中
 
 private:
 	bool operatre_; //操作可能か？

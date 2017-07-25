@@ -1,5 +1,6 @@
 #include "TutorialFlash.h"
 #include "../../../../tween/TweenManager.h"
+#include "../../../../graphic/Sprite.h"
 
 TutorialFlash::TutorialFlash(IWorld * world, int laneNum, Vector2 pos, Actor * clothes)
 	:Actor(world, clothes)

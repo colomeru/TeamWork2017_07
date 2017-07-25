@@ -21,9 +21,9 @@ public:
 	void EndEffect();
 private:
 	//¶¬üŠú
-	float delayTime_;
-	float timeCount_;
-	bool isCreateEffect_;
+	float delayTime_{ 0.f };
+	float timeCount_{ 0.f };
+	bool isCreateEffect_{ false };
 	IWorld* world_;
 	Actor* target_;
 };

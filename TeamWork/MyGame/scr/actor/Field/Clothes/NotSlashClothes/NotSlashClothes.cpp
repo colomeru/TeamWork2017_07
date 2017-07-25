@@ -1,4 +1,6 @@
 #include "NotSlashClothes.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 NotSlashClothes::NotSlashClothes(
 	IWorld * world, 
@@ -6,7 +8,7 @@ NotSlashClothes::NotSlashClothes(
 	Vector2 pos,
 	float weight,
 	std::pair<CLOTHES_ID, SPRITE_ID> ids,
-	std::map<CuttingState, std::vector<Vector3>> localPoints,
+	const CLPoints& localPoints,
 	bool is_Pin)
 	:Clothes(world, ids.first, laneNum, weight, localPoints)
 {

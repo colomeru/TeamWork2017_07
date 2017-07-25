@@ -7,14 +7,11 @@
 #include "../scene/TutorialScene.h"
 #include "../scene/GamePlayScene.h"
 #include "../scene/CreditScene.h"
-#include "../scene/EndingScene.h"
 #include "../scene/MovieScene.h"
-#include "../graphic/Anime.h"
 #include "../graphic/Model.h"
 #include "../graphic/Sprite.h"
 #include "../sound/sound.h"
 #include "../graphic/FontManager.h"
-#include "../scene/Credit2Scene.h"
 #include "../scene/LogoScene.h"
 
 

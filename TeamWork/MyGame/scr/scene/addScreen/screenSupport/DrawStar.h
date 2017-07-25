@@ -4,7 +4,7 @@
 
 class DrawStar {
 public:
-	DrawStar(int delayTime=0);
+	explicit DrawStar(int delayTime=0);
 	~DrawStar();
 
 	void Update();

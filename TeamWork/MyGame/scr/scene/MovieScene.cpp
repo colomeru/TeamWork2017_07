@@ -8,7 +8,7 @@
 const float MovieEndTime = 93.2f;
 
 MovieScene::MovieScene() :
-	nextScene_(Scene::Title)
+	nextScene_(Scene::Title), timer_(0.0f)
 {
 }
 MovieScene::~MovieScene()
@@ -20,7 +20,7 @@ void MovieScene::Initialize()
 	WorkFolder::SetWorkFolder("res/Movie/");
 	movieView_.Load(MOVIE_FILE);
 	movieView_.Play(DEMO_MOVIE);
-	timer = 0;
+	timer_ = 0;
 	isEnd_ = false;		
 	FadePanel::GetInstance().Initialize();
 	FadePanel::GetInstance().SetInTime(0.0f);
@@ -29,10 +29,10 @@ void MovieScene::Initialize()
 
 void MovieScene::Update()
 {
-	timer += Time::DeltaTime;
+	timer_ += Time::DeltaTime;
 	
-	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)||timer >= MovieEndTime) {
-		timer = 0;
+	if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M)|| timer_ >= MovieEndTime) {
+		timer_ = 0;
 		FadePanel::GetInstance().AddCollBack([=]() {
 			SetBackgroundColor(153, 204, 255);
 			isEnd_ = true;

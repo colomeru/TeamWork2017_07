@@ -10,8 +10,8 @@ class LaneChangeScreen
 {
 public:
 	// コンストラクタ
-	LaneChangeScreen() {}
-	LaneChangeScreen(World* world);
+	LaneChangeScreen() = default;
+	explicit LaneChangeScreen(World* world);
 
 	void Init(WindDir dir);
 	void Update();
@@ -21,10 +21,10 @@ public:
 private:
 	World* world_;
 
-	int timeCount_;
-	bool isCreateWind_;
+	int timeCount_{ 0 };
+	bool isCreateWind_{ false };
 
-	WindDir dir_;
+	WindDir dir_{ WindDir::UP };
 
 	std::map<WindDir, float> windDefPoses_;
 

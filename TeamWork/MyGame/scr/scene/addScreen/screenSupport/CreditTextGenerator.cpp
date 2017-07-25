@@ -3,19 +3,19 @@
 #include "CreditText.h"
 #include "../../../time/Time.h"
 #include "CreditPostText.h"
+#include "../../../graphic/Sprite.h"
 
 //コンストラクタ
 CreditTextGenerator::CreditTextGenerator(IWorld * world, Vector2 position) :
-	Actor(world)
+	Actor(world),frame_(0),idCount_(0),loopHandle_(0.0f)
 {
 	position_ = position;
-	frame_ = 0;
-	idCount_ = 0;
+	//アニメーション読み込み
 	int nameIdNum = CREDIT_SAITO_SPRITE;
 	for (int i = 0; i < 7; i++) {
 		id_.push_back((SPRITE_ID)(nameIdNum + i));
 	}
-
+	//ID
 	postId_.push_back(SPRITE_ID::CREDIT_MPL_SPRITE);
 	postId_.push_back(SPRITE_ID::CREDIT_MPG_SPRITE);
 	postId_.push_back(SPRITE_ID::CREDIT_PG_SPRITE);
@@ -23,7 +23,7 @@ CreditTextGenerator::CreditTextGenerator(IWorld * world, Vector2 position) :
 	postId_.push_back(SPRITE_ID::CREDIT_PG_SPRITE);
 	postId_.push_back(SPRITE_ID::CREDIT_SPG_SPRITE);
 	postId_.push_back(SPRITE_ID::CREDIT_DESIGNER_SPRITE);
-
+	//リソースサイズ
 	for (int i = 0; i < 7; i++) {
 		postSize_.push_back(Sprite::GetInstance().GetSize(postId_.at(i)));
 	}

@@ -3,7 +3,7 @@
 
 class PlayerMetamorEffect:public Effect{
 public:
-	PlayerMetamorEffect(IWorld* world, const Vector2& position,std::shared_ptr<Actor> target, float delay=0.0f, const Vector2& addVec=Vector2::Zero);
+	PlayerMetamorEffect(IWorld* world, const Vector2& position,const std::shared_ptr<Actor>& target, float delay=0.0f, const Vector2& addVec=Vector2::Zero);
 
 	void Update()override;
 	void Draw()const override;
@@ -17,5 +17,5 @@ private:
 	//位置の加算値
 	Vector2 addVec_;
 	//MetamorEffectが何個作られたかをカウントする
-	int effectCount_;
+	int effectCount_{ 0 };
 };

@@ -3,11 +3,11 @@
 #include "../../actor/Field/Clothes/BaseClothes.h"
 #include "../../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../../actor/Field/Clothes/UpHanger/UpHanger.h"
+#include "../../actor/Field/Clothes/BowHanger/BowHanger.h"
 #include "../../actor/Field/Clothes/FluffyClothes/FluffyClothes.h"
 #include "../../actor/Field/Clothes/ThinClothes/ThinClothes.h"
 #include "../../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
 #include "../../actor/Field/Clothes/GoalClothes/GoalClothes.h"
-#include "../../actor/Field/Clothes/GoalClothes/MoveGoalClothes.h"
 #include "../../actor/Field/Clothes/StartClothes/StartClothes.h"
 #include "../../actor/Field/Clothes/NotShakeClothes/NotShakeClothes.h"
 #include "../../actor/Field/Clothes/NotSlashClothes/NotSlashClothes.h"
@@ -18,7 +18,7 @@
 //コンストラクタ
 Stage1::Stage1(IWorld * world, std::string & fileName, int frequencyWind, int frequencyHairball, int hairballCnt)
 	:StageGenerator(world, fileName)
-	,frequencyWind_(frequencyWind), frequencyHairball_(frequencyHairball), hairballCnt_(hairballCnt), currentStage_(Stage::Stage1)
+	, frequencyWind_(frequencyWind), frequencyHairball_(frequencyHairball), hairballCnt_(hairballCnt), currentStage_(Stage::Stage1)
 {
 	spriteIdMap_.clear();
 	spriteIdMap_[CLOTHES_ID::BASE_CLOTHES].push_back(SPRITE_ID::BASE_CLOTHES_SPRITE);
@@ -82,7 +82,7 @@ void Stage1::AddStage()
 		auto pin = i % 5;
 		if (pin == 0 && i != 0) {
 			laneNum++;
-			while(!pin_list.empty())
+			while (!pin_list.empty())
 				pin_list.pop();
 
 		}
@@ -98,7 +98,11 @@ void Stage1::AddStage()
 			}
 			case 2: {
 				Clothes_Add(i, j, data, laneNum);
-				world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other){
+				world_->EachActor(ACTOR_ID::STAGE_ACTOR, [=](Actor& other) {
+					static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
+					static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
+				});			
+				world_->EachActor(ACTOR_ID::HANGER_ACTOR, [=](Actor& other) {
 					static_cast<Clothes*>(&other)->SetFrequencyWind(frequencyWind_);
 					static_cast<Clothes*>(&other)->SetCurrentStage(currentStage_);
 				});
@@ -175,6 +179,11 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<UpHanger>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE));
 		return;
 	}
+	//9番の場合は上に上がるハンガー生成
+	if (data == 9) {
+		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<BowHanger>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE));
+		return;
+	}
 
 	//服の重さ、ID、画像のIDを決定する
 	float weight = Random::GetInstance().Range(0.0f, 1.5f);
@@ -188,9 +197,9 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 	{
 	case 1: {
 		auto base = std::make_shared<BaseClothes>(
-			world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, weight, pair, pointSetter_.GetLocalPoints(id) , pin_list.front());
+			world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, weight, pair, pointSetter_.GetLocalPoints(id), pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, base);
-		if(pin_list.front())
+		if (pin_list.front())
 			world_->Add(ACTOR_ID::PIN_ACTOR, std::make_shared<ClothesPin>(world_, laneNum, Vector2(50.0f, 50.0f), base.get(), base->GetFulcrum()));
 		pin_list.pop();
 		break;
@@ -250,10 +259,6 @@ void Stage1::GoalClothes_Add(int i, int j, int data, int laneNum)
 	{
 	case 1: {
 		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -600.0f)));
-		break;
-	}
-	case 2: {
-		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<MoveGoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -600.0f)));
 		break;
 	}
 	}

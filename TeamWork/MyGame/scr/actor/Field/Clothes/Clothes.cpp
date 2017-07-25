@@ -6,12 +6,14 @@
 #include "../../Effects/PlayerEffect/SwordAttackEffect.h"
 #include "../../../sound/sound.h"
 #include "../../player/Player_Head.h"
+#include "../../../graphic/Sprite.h"
+#include "../../../debugdata/DebugDraw.h"
 
 //重力加速度
 const float GRAVITY = 0.3f;
 
 //コンストラクタ
-Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, std::map<CuttingState, std::vector<Vector3>> localPoints)
+Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, const CLPoints& localPoints)
 	:Actor(world)
 	, clothes_ID(clothes), isFriction_(false), isWind_(false), localPoints_(localPoints)
 	, fulcrum_(0.0f, 0.0f), rot_spd_(0.08f), friction_(1.0f), count_(0)
@@ -128,6 +130,30 @@ void Clothes::SetPointsUpdate()
 	collisionPoints.push_back(Vector2(p2.Translation().x, p2.Translation().y));
 	collisionPoints.push_back(Vector2(p3.Translation().x, p3.Translation().y));
 	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
+}
+
+//IDの取得
+
+CLOTHES_ID Clothes::GetClothesID() const {
+	return clothes_ID;
+}
+
+//風を受けているかの取得
+
+bool Clothes::GetIsWind() const {
+	return isWind_;
+}
+
+//支点の取得
+
+Vector2 Clothes::GetFulcrum() const {
+	return fulcrum_;
+}
+
+//当たり判定のポイントの取得
+
+std::vector<Vector2> Clothes::GetCollisionPoints() const {
+	return collisionPoints;
 }
 
 void Clothes::Pendulum(Vector2 fulcrum, float length)
@@ -320,4 +346,32 @@ void Clothes::DrawRange() const
 	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[1], topOrigin, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[2], topOrigin, Vector2::One, angle_);
 	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[3], topOrigin, Vector2::One, angle_);
+}
+
+void Clothes::DrawHangerRange(Vector2 startPos, Vector2 endPos) const
+{
+	if (currentStage_ != Stage::Stage1 ||
+		!isDrawRange_ ||
+		player_->GetLaneNum() != laneNum_) return;
+
+	auto topSize = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_TOP_SPRITE);
+	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::BITE_RANGE_SPRITE) / 2;
+	auto topOrigin = topSize / 2;
+
+	Vector2 drawP[2];
+	drawP[0] = GetDrawPosVect(startPos);
+	drawP[1] = GetDrawPosVect(endPos);
+	Vector2 modiPos[2][2];
+	for (int i = 0; i < 2; i++) {
+		//Pointから見て、左、右、上、下
+		modiPos[i][0] = drawP[i] + Vector2(0.0f, -topSize.x / 2.0f);
+		modiPos[i][1] = drawP[i] + Vector2(0.0f, topSize.x / 2.0f);
+	}
+
+	auto handle = Sprite::GetInstance().GetHandle(SPRITE_ID::BITE_RANGE_SPRITE);
+	DrawModiGraph(modiPos[0][0].x, modiPos[0][0].y, modiPos[1][0].x, modiPos[1][0].y,
+		modiPos[1][1].x, modiPos[1][1].y, modiPos[0][1].x, modiPos[0][1].y, handle, true);
+
+	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[0], topOrigin, Vector2::One, angle_);
+	Sprite::GetInstance().Draw(SPRITE_ID::BITE_RANGE_TOP_SPRITE, drawP[1], topOrigin, Vector2::One, angle_);
 }

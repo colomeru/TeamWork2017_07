@@ -1,7 +1,7 @@
 #include "Bird.h"
 #include"BirdsDropping.h"
-#include"../../../../math/Easing.h"
-#include"../../../../game/Random.h"
+#include "../../../../game/Random.h"
+#include "../../../../graphic/Sprite.h"
 
 Bird::Bird(IWorld * world, int laneNum, Vector2 pos) :
 	Enemys(world, laneNum, pos),dropTimer_(0), timeCount_(0.0f), basePos_(pos),

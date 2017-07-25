@@ -44,14 +44,11 @@ public:
 private:
 	void drawUpdate();
 private:
-	int sinCount_;
-	std::vector<Scene> changeSceneList_;
-	std::vector<float> textAlphaList_;
-	std::vector<float> textSizeList_;
+	int sinCount_{ 0 };
 	std::map <Stage, RGBAColorF> EffectColor_;
-	Stage stage_;
+	Stage stage_{ Stage::Stage1 };
 
-	bool isPlayEffect_;
+	bool isPlayEffect_{ false };
 
 
 };

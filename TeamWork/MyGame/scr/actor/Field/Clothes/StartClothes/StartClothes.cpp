@@ -1,4 +1,6 @@
 #include "StartClothes.h"
+#include "../../../../graphic/Sprite.h"
+#include "../../../../debugdata/DebugDraw.h"
 
 StartClothes::StartClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos, float weight, bool is_Pin)
 	:Clothes(world, clothes, laneNum, weight)

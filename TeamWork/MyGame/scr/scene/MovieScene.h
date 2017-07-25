@@ -29,6 +29,6 @@ public:
 
 private:
 	Movie movieView_;
-	float timer;
+	float timer_;
 	Scene			nextScene_;
 };

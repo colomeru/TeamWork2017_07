@@ -2,7 +2,6 @@
 #include "../../Actor.h"
 #include "../../player/Player.h"
 #include "../../../game/ID.h"
-#include "../../../debugdata/DebugDraw.h"
 
 enum CuttingState
 {
@@ -24,11 +23,12 @@ protected:
 		POSSIBLE_BITE,			//プレイヤーが噛めるようになる
 		END_WIND,				//風が終了
 	};
+	using CLPoints = std::map<CuttingState, std::vector<Vector3>>;
+	//コンストラクタ
+	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight,
+		const CLPoints& localPoints = std::map<CuttingState, std::vector<Vector3>>());
 
 public:
-	//コンストラクタ
-	Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, 
-		std::map<CuttingState, std::vector<Vector3>> localPoints = std::map<CuttingState, std::vector<Vector3>>());
 	//デストラクタ
 	virtual ~Clothes() override;
 	//更新
@@ -43,21 +43,13 @@ public:
 	virtual void SetPointsUpdate();
 
 	//IDの取得
-	CLOTHES_ID GetClothesID() const {
-		return clothes_ID;
-	}
+	CLOTHES_ID GetClothesID() const;
 	//風を受けているかの取得
-	bool GetIsWind() const {
-		return isWind_;
-	}
+	bool GetIsWind() const;
 	//支点の取得
-	Vector2 GetFulcrum() const {
-		return fulcrum_;
-	}
+	Vector2 GetFulcrum() const;
 	//当たり判定のポイントの取得
-	std::vector<Vector2> GetCollisionPoints() const {
-		return collisionPoints;
-	}
+	std::vector<Vector2> GetCollisionPoints() const;
 	//振り子運動
 	void Pendulum(Vector2 fulcrum, float length);
 	//風による服揺らし
@@ -72,6 +64,8 @@ public:
 	void DrawRangeUpdate();
 	//補助線描画
 	void DrawRange() const;
+	//補助線描画（ハンガー用）
+	void DrawHangerRange(Vector2 startPos, Vector2 endPos) const;
 	//プレイヤーを服に同期させる振り子
 	void Synchronize();
 	//服の揺れる確率の設定
@@ -89,7 +83,7 @@ protected:
 	//当たり判定のポイント
 	std::vector<Vector2> collisionPoints;
 	//当たり判定のポイントのローカル座標
-	std::map<CuttingState, std::vector<Vector3>> localPoints_;
+	CLPoints localPoints_;
 	//重さ
 	float weight_;
 	//画像のコマ番号

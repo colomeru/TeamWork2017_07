@@ -1,6 +1,7 @@
 #include "StartUI.h"
 #include "../../Def.h"
-#include"../../tween/TweenManager.h"
+#include "../../tween/TweenManager.h"
+#include "../../graphic/Sprite.h"
 
 StartUI::StartUI(IWorld * world, Vector2 pos)
 	:Actor(world), timeCount_(120),txtSize_(Vector2(0.7f,0.7f))

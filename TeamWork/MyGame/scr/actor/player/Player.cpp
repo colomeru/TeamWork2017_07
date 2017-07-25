@@ -1,7 +1,7 @@
 #include "Player.h"
 #include "../../input/Keyboard.h"
 #include "../../conv/DXConverter.h"
-#include "../../graphic/Model.h"
+#include "../../graphic/Sprite.h"
 #include"../../math/MathHelper.h"
 #include"Player_Head.h"
 #include"../../math/Matrix.h"
@@ -170,6 +170,17 @@ void Player::Update()
 
 }
 
+//事前更新
+
+void Player::FastUpdate() {
+	if (!world_->GetIsCamChangeMode()) {
+		int nexLane = world_->GetKeepDatas().nextLane_;
+		UpdateLaneNum(nexLane, changeType_);
+		world_->GetCanChangedKeepDatas().SetPlayerNextLane(0);
+	}
+
+}
+
 void Player::Draw() const
 {
 	auto is = Matrix::CreateRotationZ(angle_);
@@ -240,6 +251,28 @@ void Player::OnMessage(EventMessage message, void * param)
 	}
 
 }
+
+//レーン移動時更新
+
+bool Player::CamMoveUpdate() {
+	if (world_->GetKeepDatas().nextLane_ < 0) {
+		CamMoveUp();
+	}
+	else {
+		CamMoveDown();
+	}
+
+	return true;
+}
+
+//下移動
+
+void Player::CamMoveDown() {
+	if (changeType_ == LaneChangeType::LaneChange_Normal) {
+		return;
+	}
+	LaneChangeFall();
+}
 void Player::LaneChangeFall() {
 
 	float laneLerpNum = world_->GetKeepDatas().changeLaneLerpPos_;
@@ -251,10 +284,34 @@ void Player::LaneChangeFall() {
 		drawAddPos_.y = drawAddPos_.y * fallAddPosMult;
 	}
 }
+
+//落下によるレーン移動かを調べる
+
+bool Player::isLaneChangeFall() const {
+	return changeType_ == LaneChangeType::LaneChange_Fall;
+}
 void Player::StartPendulum() {
 	Vector2 lngPs = pHeads_[currentHead_]->GetPosition() - position_;
 	MultipleInit(lngPs.Length(), pHeads_[currentHead_]->GetPosition(), MathAngle(position_-pHeadPoses_[currentHead_],Vector2::Down),parameter_.radius);
 	Multiple();
+}
+
+//首の根本の位置を調べる
+
+Vector2 Player::GetHeadPos(int headNum) const {
+	return pHeadPoses_[headNum];
+}
+
+//現在の首の根本の位置を調べる
+
+Vector2 Player::GetHeadPos() const {
+	return pHeadPoses_[currentHead_];
+}
+
+//Headの長さを実際のゲームに反映される値に変換して返す
+
+float Player::GetHeadLengthChangeToPosMult(int headNum) const {
+	return pHeadLength_[headNum] * HeadShootMult;
 }
 
 //現在使用しているHeadの座標を返す
@@ -264,6 +321,12 @@ Vector2 Player::GetCurrentPHeadPosition() const {
 }
 float Player::GetPlayerSwordAngle() const {
 	return MathFormedAngle(pSword_->GetSwordEndPos() - position_);
+}
+
+//振り子の支点位置を移動する
+
+void Player::SetMultipleFulcrumPos(const Vector2 & pos) {
+	fPos_.front() = pos;
 }
 bool Player::GetIsSwordActive() const {
 	return pSword_->GetUseSword();
@@ -304,6 +367,18 @@ void Player::deadLine()
 	}
 
 }
+
+//キーを有効化するかどうかを決定する
+
+void Player::SetUseKey(bool key) {
+	isUseKey_.SetUseKey(key);
+}
+bool Player::GetUseKey() const {
+	return isUseKey_.GetUseKey(); 
+}
+void Player::SetIsTutorialTextWriting(bool is) {
+	isTutorialText_ = is;
+}
 bool Player::IsLookBack() const
 {
 	return headAngleSetter==backHead;
@@ -322,10 +397,14 @@ void Player::Multiple()
 		if ((mRot_spd[0] < 0 && (isUseKey_.StickStateDown(InputChecker::Input_Stick::Right)) ||
 			(mRot_spd[0] > 0 && (isUseKey_.StickStateDown(InputChecker::Input_Stick::Left)))))
 		{
+			bool isChange = (mRot.front() <= 0.f &&mRot_spd.front() >= -10.f&&mRot_spd.front() <= 0.f)||( mRot.front() >= 180.f &&mRot_spd.front() <= 10.f&&mRot_spd.front()>=0.f);
+
 			for (auto& r : mRot_spd) {
-				r += sign(r)*1.f;
+				r += sign(r);
+				if (isChange)r = -(float)sign(r);
 				r = MathHelper::Clamp(r, -60.f, 60.f);
 			}
+
 			mRot.front() = MathHelper::Clamp(mRot.front(), -45.f, 225.f);
 
 		}
@@ -342,6 +421,7 @@ void Player::Multiple()
 void Player::UpdateMultiplePos() {
 	SetMultiplePos((position_ - prevPosition_));
 }
+//軸と先端の位置を修正し、同時に描画位置を変更する
 void Player::SetMultiplePos(const Vector2 & addpos) {
 	for (int i = 0; i < (int)multiplePos.size(); i++) {
 		multiplePos[i] += addpos;
@@ -353,6 +433,15 @@ void Player::SetMultiplePos(const Vector2 & addpos) {
 		n.fulcrumRight += addpos;
 		n.tipPosLeft += addpos;
 		n.tipPosRight += addpos;
+	}
+}
+
+//多重振り子を強制的に移動
+
+void Player::AddMultiplePos(const Vector2 & addPos) {
+	for (int i = 0; i < (int)multiplePos.size(); i++) {
+		multiplePos[i] += (addPos);
+		if (i > 0) fPos_[i] = multiplePos[i - 1];
 	}
 }
 
@@ -455,6 +544,23 @@ void Player::SwordPosUpdate() {
 	pSword_->SetLaneNum(laneNum_);
 }
 
+//使用する頭を右隣の物に変更
+
+void Player::changeHead() {
+	//回転した時点でSlip状態を直す
+	currentHead_++;
+	if (currentHead_ >= (int)pHeads_.size())currentHead_ = 0;
+	headChangeTime_ = defHeadChangeTime;
+}
+
+//使用する頭を左隣の物に変更
+
+void Player::backChangeHead() {
+	currentHead_--;
+	if (currentHead_ < 0)currentHead_ = pHeads_.size() - 1;
+	headChangeTime_ = -defHeadChangeTime;
+}
+
 void Player::StartPlayerSet() {
 	SetMode(MODE_BITE,false);
 	pHeadLength_[currentHead_]=5.f;
@@ -469,6 +575,12 @@ void Player::StartPlayerSet() {
 
 int Player::GetCurHead() const {
 	return currentHead_;
+}
+
+//指定IDの頭が死んでいるかを調べる
+
+bool Player::GetPHeadDead(int pHeadNum) const {
+	return pHeadDead_[pHeadNum];
 }
 
 void Player::CurHeadBite(const Vector2 & target) {
@@ -499,6 +611,59 @@ bool Player::ResurrectHead() {
 		return true;
 	}
 	return false;
+}
+
+//掴んでいる服の種類を設定する
+
+void Player::SetOtherClothesID_(CLOTHES_ID cId) {
+	otherClothesID_ = cId;
+}
+
+//噛み付ける状態かを返す(レジスト含む)
+
+bool Player::GetIsShootMode() const {
+	return playerMode_ == MODE_SHOOT;
+}
+
+//噛み付き状態or踏ん張り状態かを調べる
+
+bool Player::GetIsBiteMode() const {
+	return playerMode_ == MODE_BITE || playerMode_ == MODE_RESIST;
+}
+
+//プレイヤーの状態をチェックする、引数のモードと一致していればtrue
+
+bool Player::PlayerModeChecker(Player_Mode pMode) {
+	return playerMode_ == pMode;
+}
+
+//踏ん張り状態かを調べる
+
+bool Player::GetIsResistMode() const {
+	return playerMode_ == MODE_RESIST;
+}
+
+//ステージクリア状態かを調べる
+
+bool Player::GetIsClearMode() const {
+	return playerMode_ == MODE_CLEAR;
+}
+
+//現在生きている頭の数を調べる
+
+int Player::GetPHeadLiveCount() const {
+	int result = 0;
+	for (auto i : pHeadDead_) {
+		if (!i)result++;
+	}
+	return result;
+}
+
+//噛み付き状態にするかをセット、
+
+void Player::SetIsBiteMode(bool ismode) {
+	int setMode = (ismode) ? MODE_BITE : MODE_SHOOT;
+	playerMode_ = setMode;
 }
 
 
@@ -552,6 +717,34 @@ break;
 		}
 }
 
+//シュート終了の瞬間かどうかを取る
+
+bool Player::GetIsShootModeEnd() const {
+	return playerMode_ == MODE_SHOOT_END;
+}
+
+//滑り落ちるまでの時間を返す
+
+float Player::GetSlipCount() const {
+	return slipCount_;
+}
+
+//滑り落ち状態かを調べる
+
+bool Player::GetIsSlipped() const {
+	return playerMode_ == MODE_SLIP;
+}
+
+//編集可能インプットを取得する
+
+PlayerInputChecker & Player::GetEditableUseKey() {
+	return isUseKey_;
+}
+
+std::vector<float>& Player::GetEditableRot_Speed() {
+	return mRot_spd;
+}
+
 void Player::SetMyHeadLaneNum(int targetNum) {
 	pHeads_[targetNum]->SetLaneNum(laneNum_);
 }
@@ -592,8 +785,40 @@ void Player::SetNextLane(int addNum, LaneChangeType changeType) {
 	world_->sendMessage(EventMessage::START_LANE_CHANGE);
 }
 
+//支点固定座標を設定し、首の位置を補正する
+
+void Player::setCurPHeadSPos(const Vector2 & sPos) {
+	if (isTutorialText_) return;
+
+	SetMultiplePos(sPos - stopPos_);
+	stopPos_ = sPos;
+}
+
+//振り子により作り出された移動ベクトルを取得する
+
+Vector2 Player::GetPendulumVect() const {
+	return pendulumVect_;
+}
+
+//振り子により作り出された移動ベクトルを上書きする
+
+void Player::SetPendulumVect(const Vector2 & pvect) {
+	pendulumVect_ = pvect;
+}
+
 void Player::curPHeadSlip(bool isSlip) {
 	pHeads_[currentHead_]->setIsBiteSlipWind(isSlip);
+}
+
+//プレイヤーが死んでるか
+
+bool Player::isPlayerDead() const {
+	if (laneNum_ == (maxLaneSize_ - 1) && position_.y >= WINDOW_HEIGHT - 200)return true;
+
+	for (auto pHD : pHeadDead_) {
+		if (!pHD)return false;
+	}
+	return true;
 }
 
 void Player::PHeadChanger(int rot) {
@@ -613,6 +838,30 @@ void Player::PHeadChanger(int rot) {
 
 void Player::SetStopPos(Vector2 target) {
 	stopPos_ = target;
+}
+
+//支点固定座標を取得する
+
+Vector2 Player::GetStopPos() const {
+	return stopPos_;
+}
+
+//首の先端の角度を調べる
+
+float Player::GetRot() const {
+	return mRot.front();
+}
+
+//首の根本の角度を調べる
+
+float Player::GetRotBack() const {
+	return mRot.back();
+}
+
+//滑り落ち時のHeadのあるべき位置を取得する
+
+Vector2 Player::GetSlipHeadPoint() const {
+	return fPos_.front();
 }
 
 

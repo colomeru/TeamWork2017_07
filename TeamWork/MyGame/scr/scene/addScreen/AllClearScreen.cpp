@@ -6,29 +6,18 @@
 #include"../../math/MathHelper.h"
 #include"../GamePlayDefine.h"
 #include"../../tween/TweenManager.h"
-#include"screenSupport\DrawScore.h"
+#include"screenSupport/DrawScore.h"
 #include"../../sound/sound.h"
 #include"../../fade/FadePanel.h"
 #include"../../input/InputChecker.h"
 
-AllClearScreen::AllClearScreen() :inputCount_(0), sinCount_(defSinC), fscore_(0.f), fheadCount_(0.f)
+AllClearScreen::AllClearScreen() :sinCount_(defSinC),
+changeSceneList_{ Scene::Credit },
+textAlphaList_{1.0f},
+textSizeList_{1.0f},
+cursorPos_{{400.f,800.f}},
+dstar_()
 {
-	changeSceneList_.push_back(Scene::Credit);
-
-	textAlphaList_.push_back(1.f);
-
-	textSizeList_.push_back(1.f);
-
-	cursorPos_.push_back(Vector2(400, 800));
-
-	stageNumList_[Stage::Stage1] = 0;
-	stageNumList_[Stage::Stage2] = 1;
-	stageNumList_[Stage::Stage3] = 2;
-	stageNumList_[Stage::Stage4] = 3;
-	stageNumList_[Stage::Stage5] = 4;
-	stageNumList_[Stage::Stage6] = 5;
-	stageNumList_[Stage::Stage7] = 6;
-	stageNumList_[Stage::Stage8] = 7;
 
 	cursorDrawPos_ = cursorPos_[inputCount_];
 }
@@ -151,7 +140,7 @@ void AllClearScreen::SetHeadCount() {
 
 void AllClearScreen::SetStarCount() {
 	starCount_ = 1;
-	if (score_ >= ScoreList[stageNumList_[stage_]]) {
+	if (score_ >= ScoreList[(int)stage_]) {
 		starCount_++;
 	}
 	if (headCount_ >= 5) {
@@ -163,7 +152,7 @@ void AllClearScreen::SetStarCount() {
 }
 void AllClearScreen::SetFullStarCount() {
 	starCount_ = 1;
-	if (score_ >= ScoreList[stageNumList_[stage_]]) {
+	if (score_ >= ScoreList[(int)stage_]) {
 		starCount_++;
 	}
 	if (headCount_ >= 5) {

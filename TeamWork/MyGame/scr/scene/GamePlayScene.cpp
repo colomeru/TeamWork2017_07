@@ -4,12 +4,10 @@
 #include "../fade/FadePanel.h"
 #include"../sound/sound.h"
 #include"../debugdata/DebugDraw.h"
-#include "../actor/SampleActor.h"
 #include"../camera/Camera.h"
 #include"../conv/DXConverter.h"
 #include"../actor/player/Player.h"
 #include"../actor/Field/Clothes/BaseClothes.h"
-#include"../actor/Field/Clothes/TestClothes.h"
 #include"../actor/Field/ClothesLine.h"
 #include"../actor/Field/ClothesPin.h"
 #include"../myData/MyTestCamera.h"
@@ -143,6 +141,8 @@ void GamePlayScene::Initialize()
 
 void GamePlayScene::Update()
 {
+	Sound::GetInstance().SetAllBGMVolume(0.0f);
+
 	updateFunctionMap_[gamePlayMode_]();
 	if (!world_->GetIsFreeCamY_()) {
 		if (!world_->GetIsCamChangeMode()) {

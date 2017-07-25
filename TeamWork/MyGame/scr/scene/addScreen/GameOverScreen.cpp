@@ -10,19 +10,17 @@
 #include"../../fade/FadePanel.h"
 #include"../../input/InputChecker.h"
 
-GameOverScreen::GameOverScreen() :inputCount_(0), sinCount_(defSinC)
+GameOverScreen::GameOverScreen() :sinCount_(defSinC),
+cursorPos_{
+	{400.f,600.f},
+	{400.f,800.f}
+}
 {
 	changeSceneList_.push_back(Scene::GamePlay);
 	changeSceneList_.push_back(Scene::Menu);
 
-	textAlphaList_.push_back(1.f);
-	textAlphaList_.push_back(1.f);
-
-	textSizeList_.push_back(1.f);
-	textSizeList_.push_back(1.f);
-
-	cursorPos_.push_back(Vector2(400, 600));
-	cursorPos_.push_back(Vector2(400, 800));
+	textAlphaList_.resize(2, 1.0f);
+	textSizeList_.resize(2, 1.0f);
 
 	cursorDrawPos_ = cursorPos_[inputCount_];
 }

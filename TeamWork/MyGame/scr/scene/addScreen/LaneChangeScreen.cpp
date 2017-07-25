@@ -2,10 +2,10 @@
 #include"../../game/Random.h"
 #include"../../Def.h"
 
-LaneChangeScreen::LaneChangeScreen(World * world):world_(world), dir_(WindDir::UP), isCreateWind_(false)
-{
-	windDefPoses_[WindDir::UP] = WINDOW_HEIGHT;
-	windDefPoses_[WindDir::DOWN] = 0;
+LaneChangeScreen::LaneChangeScreen(World * world) :world_(world),
+windDefPoses_{
+	{ WindDir::UP,(float)WINDOW_HEIGHT },
+	{ WindDir::DOWN,0.f }}{
 }
 
 void LaneChangeScreen::Init(WindDir dir)

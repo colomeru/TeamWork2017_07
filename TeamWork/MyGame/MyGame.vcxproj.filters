@@ -659,12 +659,6 @@
     <ClInclude Include="scr\actor\UI\GoalUI.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
-    <ClInclude Include="scr\myData\MyTestCamera.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
-    <ClInclude Include="scr\myData\MyTestCol.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="scr\collision\CollisionFunction.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>

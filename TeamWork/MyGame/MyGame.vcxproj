@@ -407,8 +407,6 @@
     <ClInclude Include="scr\math\Vector2.h" />
     <ClInclude Include="scr\math\Vector3.h" />
     <ClInclude Include="scr\method\MethodTimer.h" />
-    <ClInclude Include="scr\myData\MyTestCamera.h" />
-    <ClInclude Include="scr\myData\MyTestCol.h" />
     <ClInclude Include="scr\scene\addScreen\AllClearScreen.h" />
     <ClInclude Include="scr\scene\addScreen\BackgroundScreen.h" />
     <ClInclude Include="scr\scene\addScreen\GameClearScreen.h" />

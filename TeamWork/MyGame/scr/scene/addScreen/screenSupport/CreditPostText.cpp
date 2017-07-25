@@ -62,6 +62,7 @@ void CreditPostText::Update()
 
 	SetPointsUpdate();
 
+	//プレイヤーがいなければ以下の動作をスキップ
 	if (parent_ == nullptr || cPlayer_ == nullptr) return;
 	if (!cPlayer_->GetIsBiteMode()) {
 		parent_ = nullptr;

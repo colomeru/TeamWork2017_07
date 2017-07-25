@@ -33,21 +33,21 @@ public:
 private:
 	World*		world_;
 
-	int stageLen_; //ステージの長さ
-	int meterNum_; //メーターの本数
-	int meterLen_; //メーターの長さ
-	int nowLane_; //プレイヤーのいるレーン番号
-	Vector2 meterPos_; //メーター座標
-	Vector2 pIconPos_; //プレイヤーアイコンの座標
-	float pPosY_; //プレイヤーアイコンのy座標
-	int prevLane_; //1フレーム前のレーン番号
-	int dis_; //メーター間距離
+	int stageLen_;			//ステージの長さ
+	int meterNum_;			//メーターの本数
+	int meterLen_;			//メーターの長さ
+	int nowLane_;			//プレイヤーのいるレーン番号
+	Vector2 meterPos_;		//メーター座標
+	Vector2 pIconPos_;		//プレイヤーアイコンの座標
+	float pPosY_;			//プレイヤーアイコンのy座標
+	int prevLane_;			//1フレーム前のレーン番号
+	int dis_;				//メーター間距離
 
 	//画像のサイズ
-	Vector2 pinSize_; //ピン
-	Vector2 pIconSize_; //プレイヤーアイコン
-	Vector2 laneSize_; //レーン
-	Vector2 startSize_; //スタート
-	Vector2 goalSize_; //ゴール
+	Vector2 pinSize_;		//ピン
+	Vector2 pIconSize_;		//プレイヤーアイコン
+	Vector2 laneSize_;		//レーン
+	Vector2 startSize_;		//スタート
+	Vector2 goalSize_;		//ゴール
 
 };

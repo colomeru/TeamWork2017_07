@@ -52,6 +52,7 @@ void MenuCrow::Draw() const
 void MenuCrow::AddDistance(float betDis)
 {
 	if (timer_ <= interval_) return;
+	//パネルに合わせて縦移動する
 	dis_ += betDis;
 	TweenManager::GetInstance().Add(EaseOutExpo, &from_, Vector2(0.0f, dis_), MoveTime);
 }
@@ -68,7 +69,7 @@ void MenuCrow::Move()
 {
 	position_ += velocity_;
 
-	if (position_.x <= -OffSet) {//画面外に出たら
+	if (position_.x <= -OffSet) {//画面外に出たら待機位置に戻る
 		timer_ = 0.0f;
 		position_.x = WINDOW_WIDTH + OffSet;
 		state_ = State::Idle;
@@ -79,10 +80,11 @@ void MenuCrow::Move()
 void MenuCrow::Idle()
 {
 	timer_ += Time::DeltaTime;
-	dis_ = 0.0f;
-	from_ = 0.0f;
 	from_ = Vector2(0.0f, 0.0f);
-	if (timer_ >= interval_) {
+	if (timer_ >= interval_) { //待機時間後に移動開
+		//縦移動リセット
+		dis_ = 0.0f;
+		from_ = 0.0f;
 		state_ = State::Move;
 	}
 }

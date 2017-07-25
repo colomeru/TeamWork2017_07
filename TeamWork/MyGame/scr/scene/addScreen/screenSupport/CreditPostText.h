@@ -23,5 +23,5 @@ private:
 	int frame_;	//フレーム数
 	float f2;	//前の値
 
-	CharacterAnmManager anmManager_;
+	CharacterAnmManager anmManager_; //アニメーションマネージャー
 };

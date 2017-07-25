@@ -53,6 +53,7 @@ void CreditText::Update()
 
 	SetPointsUpdate();
 
+	//プレイヤーがいなければ以下の動作をスキップ
 	if (parent_ == nullptr || cPlayer_ == nullptr) return;
 	if (!cPlayer_->GetIsBiteMode()) {
 		parent_ = nullptr;
@@ -64,7 +65,6 @@ void CreditText::Update()
 	Vector2 pos = parent_->GetPosition() + velocity_;
 	cPlayer_->setCurPHeadSPos(pos);
 	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0)));
-
 }
 
 //描画

@@ -74,13 +74,9 @@ public:
 	//外部クラス用
 public:
 	//「戻る」が選択されているか？
-	bool GetIsBackSelect()const {
-		return backSelect_;
-	}
+	bool GetIsBackSelect()const;
 	//チュートリアルステージが選択されているか？
-	bool GetIsTutorialSelect()const {
-		return stageNum_ == 0;
-	}
+	bool GetIsTutorialSelect()const;
 	//ステージをセット
 	void InputSelectStage();
 	//背景リセット
@@ -101,10 +97,10 @@ private:
 	Vector2 cursorPos_;					//カーソルの座標
 	std::array<PanelStruct, 9> panel;	//PanelStructをステージ数分生成
 
-	float dis_;		//目的値
-	Vector2 from_;	//移動座標
+	float dis_;			//目的値
+	Vector2 from_;		//移動座標
 
-	Vector3 color_;	//背景色
+	Vector3 color_;		//背景色
 
 	//星
 	float alphaValue_;					//アルファ変更値

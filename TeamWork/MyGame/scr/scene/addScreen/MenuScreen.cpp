@@ -92,7 +92,7 @@ void MenuScreen::Init()
 	ResetBG();
 
 	//BGM
-	if (!Sound::GetInstance().IsPlayBGM()) {
+	if (!Sound::GetInstance().IsPlayBGM()) { //タイトルのBGMを引き継ぐ
 		Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM, DX_PLAYTYPE_LOOP);
 		Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 1.0f);
 	}
@@ -159,7 +159,6 @@ void MenuScreen::Update()
 	Star();
 
 	SE();
-
 }
 
 //描画
@@ -337,9 +336,11 @@ void MenuScreen::Crow()
 //SE
 void MenuScreen::SE()
 {
+	//決定
 	if (backSelect_ == false && IsInputCheck()) {
 		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
 	}
+	//戻る
 	if (backSelect_ == true && IsInputCheck()) {
 		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
 	}
@@ -355,6 +356,16 @@ void MenuScreen::End()
 Stage MenuScreen::GetGamePlayStage() const
 {
 	return stageList_[stageNum_];
+}
+
+//「戻る」が選択されているか？
+bool MenuScreen::GetIsBackSelect() const {
+	return backSelect_;
+}
+
+//チュートリアルステージが選択されているか？
+bool MenuScreen::GetIsTutorialSelect() const {
+	return stageNum_ == 0;
 }
 
 //ステージをセット

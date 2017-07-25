@@ -30,8 +30,6 @@ protected:
 	void Pin_Add(int i, int j, int data, int laneNum);
 	//服追加関数
 	void Clothes_Add(int i, int j, int data, int laneNum);
-	//ゴール追加関数（２種類のゴール）
-	void GoalClothes_Add(int i, int j, int data, int laneNum);
 
 protected:
 	//ピンがつくかどうか

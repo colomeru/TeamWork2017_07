@@ -132,25 +132,13 @@ void Clothes::SetPointsUpdate()
 	collisionPoints.push_back(Vector2(p4.Translation().x, p4.Translation().y));
 }
 
-//IDの取得
-
-CLOTHES_ID Clothes::GetClothesID() const {
-	return clothes_ID;
-}
-
-//風を受けているかの取得
-
 bool Clothes::GetIsWind() const {
 	return isWind_;
 }
 
-//支点の取得
-
 Vector2 Clothes::GetFulcrum() const {
 	return fulcrum_;
 }
-
-//当たり判定のポイントの取得
 
 std::vector<Vector2> Clothes::GetCollisionPoints() const {
 	return collisionPoints;

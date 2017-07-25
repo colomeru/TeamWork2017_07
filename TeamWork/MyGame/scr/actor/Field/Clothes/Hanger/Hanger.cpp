@@ -11,7 +11,7 @@ Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	parameter_.ID = ACTOR_ID::HANGER_ACTOR;
 	parameter_.size = Vector2(150.0f, 80.0f);
 
-	position_ = pos - Vector2(0.0f, LENGTH / 2.0f);
+	position_ = pos - Vector2(0.0f, LENGTH / 2.0f - 10.0f);
 	velocity_ = Vector2(10.0f, 0.0f);
 
 	colFuncMap_[COL_ID::BOX_CLOTHES_COL] = std::bind(&CollisionFunction::IsHit_OBB_OBB, colFunc_, std::placeholders::_1, std::placeholders::_2);

@@ -42,8 +42,6 @@ public:
 	//•‚Ì“–‚½‚è”»’è‚Ìİ’è
 	virtual void SetPointsUpdate();
 
-	//ID‚Ìæ“¾
-	CLOTHES_ID GetClothesID() const;
 	//•—‚ğó‚¯‚Ä‚¢‚é‚©‚Ìæ“¾
 	bool GetIsWind() const;
 	//x“_‚Ìæ“¾

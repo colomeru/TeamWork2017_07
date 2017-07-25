@@ -20,5 +20,4 @@ public:
 
 private:
 	Player_Head* player_Head_;
-	float vecY_;
 };

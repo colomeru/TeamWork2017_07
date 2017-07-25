@@ -16,9 +16,7 @@ UpHanger::UpHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	parameter_.size = Vector2(150.0f, 80.0f);
 	parameter_.radius = 12.0f;
 
-	laneNum_ = laneNum;
-
-	position_ = pos - Vector2(0, LENGTH / 2.0f);
+	position_ = pos - Vector2(0, LENGTH / 2.0f - 10.0f);
 
 	bonePos_[0] = position_ - Vector2(parameter_.size.x / 2.0f, parameter_.size.y);
 	bonePos_[1] = position_ + Vector2(parameter_.size.x / 2.0f, -parameter_.size.y);

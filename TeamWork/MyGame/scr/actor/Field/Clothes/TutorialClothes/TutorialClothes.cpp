@@ -16,7 +16,6 @@ TutorialClothes::TutorialClothes(
 	parameter_.ID = ACTOR_ID::STAGE_ACTOR;
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(100.0f, 200.0f);
-	laneNum_ = laneNum;
 
 	position_ = pos + Vector2(0.0f, -10.0f);
 	fulcrum_ = position_ - Vector2(0.0f, LENGTH);

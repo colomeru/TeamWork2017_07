@@ -15,9 +15,7 @@ BowHanger::BowHanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 po
 	parameter_.size = Vector2(150.f, 80.f);
 	parameter_.radius = 12.0f;
 
-	laneNum_ = laneNum;
-
-	position_ = pos - Vector2(0, LENGTH / 2.0f);
+	position_ = pos - Vector2(0, LENGTH / 2.0f - 10.0f);
 
 	codeCenterPos_ = position_;
 	codePos_[0] = position_ + Vector2(-parameter_.size.x / 2.0f + 1.0f, -2.5f);
@@ -87,10 +85,12 @@ void BowHanger::OnCollide(Actor & other, CollisionParameter colpara)
 		codeCenterPos_ = colpara.colPos;
 		isMove_ = true;
 		isPull_ = true;
-		TweenManager::GetInstance().Delay(2.0f, [=]() {
+		TweenManager::GetInstance().Delay(2.2f, [=]() {
 			if (parent_ == nullptr) return;
+			//•R‚Ìˆø‚Á’£‚è
 			auto toSpringPos = position_ + (player_->GetPosition() - position_).Normalize() * 100.0f;
 			TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, toSpringPos, 1.0f, [=]() {
+				//”ò‚Î‚µ‚½Œã‚Ì•R‚Ì—h‚ê
 				TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {isMove_ = false;});
 				isPull_ = false;
 				Shoot();

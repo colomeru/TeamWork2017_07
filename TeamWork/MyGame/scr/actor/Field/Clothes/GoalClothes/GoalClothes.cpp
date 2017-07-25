@@ -15,8 +15,6 @@ GoalClothes::GoalClothes(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector
 	parameter_.radius = 16.0f;
 	parameter_.size = Vector2(220.0f, 1500.0f);
 
-	laneNum_ = laneNum;
-
 	position_ = pos;
 	fulcrum_ = position_ - Vector2(0, LENGTH);
 

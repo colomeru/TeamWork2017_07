@@ -1,5 +1,6 @@
 #include "Stage1.h"
 #include "../../game/ID.h"
+#include "../../game/Random.h"
 #include "../../actor/Field/Clothes/BaseClothes.h"
 #include "../../actor/Field/Clothes/Hanger/Hanger.h"
 #include "../../actor/Field/Clothes/UpHanger/UpHanger.h"
@@ -8,12 +9,10 @@
 #include "../../actor/Field/Clothes/ThinClothes/ThinClothes.h"
 #include "../../actor/Field/Clothes/Hairball/HairballGenerator/HairballGenerator.h"
 #include "../../actor/Field/Clothes/GoalClothes/GoalClothes.h"
-#include "../../actor/Field/Clothes/StartClothes/StartClothes.h"
 #include "../../actor/Field/Clothes/NotShakeClothes/NotShakeClothes.h"
 #include "../../actor/Field/Clothes/NotSlashClothes/NotSlashClothes.h"
 #include "../../actor/Field/Clothes/TutorialClothes/TutorialClothes.h"
 #include "../../actor/Field/ClothesPin.h"
-#include "../../game/Random.h"
 
 //コンストラクタ
 Stage1::Stage1(IWorld * world, std::string & fileName, int frequencyWind, int frequencyHairball, int hairballCnt)
@@ -108,10 +107,6 @@ void Stage1::AddStage()
 				});
 				break;
 			}
-			case 3: {
-				GoalClothes_Add(i, j, data, laneNum);
-				break;
-			}
 			}
 		}
 	}
@@ -120,6 +115,8 @@ void Stage1::AddStage()
 	for (int i = 0; i < 3; i++) {
 		world_->Add(ACTOR_ID::HAIRBALL_ACTOR, std::make_shared<HairballGenerator>(world_, i, Vector2::Zero, frequencyHairball_, hairballCnt_));
 	}
+	//ステージ最後にゴール生成
+	world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -600.0f)));
 }
 void Stage1::CreateClothes() {
 	//ステージ読み込み
@@ -167,22 +164,27 @@ void Stage1::Pin_Add(int i, int j, int data, int laneNum)
 
 void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 {
-	//0番の場合は何も生成しない
-	if (data == 0) return;
-	//6番の場合はハンガー生成
-	if (data == 6) {
+	switch (data)
+	{
+	case 0: {
+		//何も生成しない
+		return;
+	}
+	case 6: {
+		//ハンガー生成
 		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<Hanger>(world_, CLOTHES_ID::HANGER, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE));
 		return;
 	}
-	//8番の場合は上に上がるハンガー生成
-	if (data == 8) {
+	case 8: {
+		//上に上がるハンガー生成
 		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<UpHanger>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE));
 		return;
 	}
-	//9番の場合は上に上がるハンガー生成
-	if (data == 9) {
+	case 9: {
+		//横に吹っ飛ぶハンガー生成
 		world_->Add(ACTOR_ID::HANGER_ACTOR, std::make_shared<BowHanger>(world_, CLOTHES_ID::FLUFFY_CLOTHES, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE));
 		return;
+	}
 	}
 
 	//服の重さ、ID、画像のIDを決定する
@@ -196,6 +198,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 	switch (data)
 	{
 	case 1: {
+		//普通の服生成
 		auto base = std::make_shared<BaseClothes>(
 			world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, weight, pair, pointSetter_.GetLocalPoints(id), pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, base);
@@ -205,6 +208,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 2: {
+		//ふわふわの服生成
 		auto fluffy = std::make_shared<FluffyClothes>(
 			world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, weight, pair, pointSetter_.GetLocalPoints(id), pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, fluffy);
@@ -214,6 +218,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 3: {
+		//タオル生成
 		auto thin = std::make_shared<ThinClothes>(world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, weight, pair, pointSetter_.GetLocalPoints(id), pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, thin);
 		if (pin_list.front())
@@ -222,6 +227,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 4: {
+		//揺れない服生成
 		auto notShake = std::make_shared<NotShakeClothes>(
 			world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, 0.0f, pair, pointSetter_.GetLocalPoints(id), pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, notShake);
@@ -231,6 +237,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 5: {
+		//切れない服生成
 		auto notSlash = std::make_shared<NotSlashClothes>(
 			world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, weight, pair, pointSetter_.GetLocalPoints(id), pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, notSlash);
@@ -240,6 +247,7 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 		break;
 	}
 	case 7: {
+		//チュートリアル用の服生成
 		auto tutorial = std::make_shared<TutorialClothes>(
 			world_, laneNum, Vector2(j, 0.0f) * STAGE_TIP_SIZE, weight, pair, pointSetter_.GetLocalPoints(id), pin_list.front());
 		world_->Add(ACTOR_ID::STAGE_ACTOR, tutorial);
@@ -250,16 +258,5 @@ void Stage1::Clothes_Add(int i, int j, int data, int laneNum)
 	}
 	default:
 		break;
-	}
-}
-
-void Stage1::GoalClothes_Add(int i, int j, int data, int laneNum)
-{
-	switch (data)
-	{
-	case 1: {
-		world_->Add(ACTOR_ID::GOAL_ACTOR, std::make_shared<GoalClothes>(world_, CLOTHES_ID::GOAL_CLOTHES, 0, Vector2(stageSize_.x, -600.0f)));
-		break;
-	}
 	}
 }

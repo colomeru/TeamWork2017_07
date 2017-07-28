@@ -2,8 +2,8 @@
 #include "../time/Time.h"
 #include "../math/MathHelper.h"
 #include "../graphic/Sprite.h"
-#include"../fade/FadePanel.h"
-
+#include "../fade/FadePanel.h"
+#include "../sound/sound.h"
 
 MenuScene::MenuScene() :
 	nextScene_(Scene::GamePlay)
@@ -32,7 +32,7 @@ void MenuScene::Initialize()
 
 void MenuScene::Update()
 {
-	
+
 	// 更新
 	world_->Update();
 
@@ -42,15 +42,19 @@ void MenuScene::Update()
 	if (!FadePanel::GetInstance().IsClearScreen()) return;
 
 	// 終了
-	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || //AボタンかMを押すとステージクリア（仮）
+	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)))
 	{
-		if (menu.GetIsBackSelect())
+		if (menu.GetIsBackSelect()) {
 			nextScene_ = Scene::Title;
-		else if (menu.GetIsTutorialSelect())
+			Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
+		}
+		else if (menu.GetIsTutorialSelect()) {
 			nextScene_ = Scene::Tutorial;
+			Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+		}
 
-		FadePanel::GetInstance().AddCollBack([=] { 
+		FadePanel::GetInstance().AddCollBack([=] {
 			isEnd_ = true;
 		});
 		FadePanel::GetInstance().FadeOut();

@@ -121,7 +121,7 @@ void CreditPlayer::OnMessage(EventMessage message, void * param)
 	case EventMessage::GOAL_FLAG: {
 		SetMode(MODE_CLEAR);
 		world_->UnLockCameraPosY();
-		isUseKey_ = false;
+		isUseKey_.SetUseKey(false);
 		break;
 	}
 	case EventMessage::OPERATE_FLAG: {

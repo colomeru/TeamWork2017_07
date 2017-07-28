@@ -56,16 +56,12 @@ public:
 	bool IsInputLeft() const;
 	//"上/下/右"のいずれかが入力されたか
 	bool IsInputAny() const;
-	//チェックボタンが押されたか
-	bool IsInputCheck() const;
 	//星
 	void Star();
 	//流れ星
 	void ShootingStar();
 	//カラス
 	void Crow();
-	//SE
-	void SE();
 	//終了
 	void End();
 	//ステージを取得

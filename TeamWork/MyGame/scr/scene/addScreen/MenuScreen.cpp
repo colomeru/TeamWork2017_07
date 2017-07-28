@@ -157,8 +157,6 @@ void MenuScreen::Update()
 	SetBackgroundColor(color_.x, color_.y, color_.z);
 
 	Star();
-
-	SE();
 }
 
 //描画
@@ -261,12 +259,6 @@ bool MenuScreen::IsInputAny() const
 		isUseKey_.StickTriggerDown(InputChecker::Input_Stick::Right);
 }
 
-//チェックボタンが入力されたか
-bool MenuScreen::IsInputCheck() const
-{
-	return isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B);
-}
-
 //星
 void MenuScreen::Star()
 {
@@ -330,19 +322,6 @@ void MenuScreen::Crow()
 {
 	for (int i = 0; i < 3; i++) {
 		crow_[i].Update(stageNum_);
-	}
-}
-
-//SE
-void MenuScreen::SE()
-{
-	//決定
-	if (backSelect_ == false && IsInputCheck()) {
-		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
-	}
-	//戻る
-	if (backSelect_ == true && IsInputCheck()) {
-		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
 	}
 }
 

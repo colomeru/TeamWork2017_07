@@ -3,7 +3,7 @@
 
 class PlayerInputChecker {
 public:
-	PlayerInputChecker(bool isUse);
+	explicit PlayerInputChecker(bool isUse);
 
 	//ƒL[‚ª‰Ÿ‚³‚ê‚½‚©‚ğ•Ô‚·
 	bool KeyTriggerDown(InputChecker::Input_Key key)const;

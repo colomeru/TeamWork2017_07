@@ -87,7 +87,10 @@ void BowHanger::OnCollide(Actor & other, CollisionParameter colpara)
 		isMove_ = true;
 		isPull_ = true;
 		TweenManager::GetInstance().Delay(2.0f, [=]() {
-			if (parent_ == nullptr) return;
+			if (parent_ == nullptr) {
+				Sound::GetInstance().StopSE(SE_ID::BELLOWS_SE);
+				return;
+			}
 			//•R‚Ìˆø‚Á’£‚è
 			Sound::GetInstance().PlaySE(SE_ID::BELLOWS_SE);
 			auto toSpringPos = position_ + (player_->GetPosition() - position_).Normalize() * 100.0f;

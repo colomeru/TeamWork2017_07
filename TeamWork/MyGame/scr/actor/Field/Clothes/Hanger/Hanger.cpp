@@ -29,6 +29,7 @@ void Hanger::Update()
 
 	if (parent_ == nullptr || player_ == nullptr) return;
 	if (!player_->GetIsBiteMode()) {
+		Sound::GetInstance().StopSE(SE_ID::GLIDE_SE);
 		parent_ = nullptr;
 		return;
 	}

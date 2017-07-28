@@ -75,7 +75,6 @@ void ProgressMeter::Draw() const
 	});
 
 	//デバッグ表示
-	if (BuildMode != 1) return;
 	DebugDraw::DebugDrawFormatString(0, 80, GetColor(255, 255, 255), "nowLane_:%d", nowLane_);
 	DebugDraw::DebugDrawFormatString(0, 100, GetColor(255, 255, 255), "pPosY:%f", pPosY_);
 }

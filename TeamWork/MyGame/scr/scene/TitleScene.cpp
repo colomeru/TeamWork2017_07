@@ -13,8 +13,8 @@
 #include"../input/InputChecker.h"
 
 TitleScene::TitleScene() :
-	nextScene_(Scene::Menu),dummy_(0.0f), timer_(0.0f),isStartSetPanel_(false),
-	isPushKey_(false),sinCount_(0),selectNum_(0)
+	nextScene_(Scene::Menu), dummy_(0.0f), timer_(0.0f), isStartSetPanel_(false),
+	isPushKey_(false), sinCount_(0), selectNum_(0)
 {
 	world_ = std::make_shared<World>();
 
@@ -36,7 +36,7 @@ void TitleScene::Initialize()
 	isEnd_ = false;
 	isPushKey_ = false;
 	isStartSetPanel_ = false;
-	selectPos_ = Vector2(430.f,750.f);
+	selectPos_ = Vector2(430.f, 750.f);
 	selectNum_ = 0;
 	timer_ = 0;
 	alpha_.resize(2, 0.f);
@@ -46,7 +46,7 @@ void TitleScene::Initialize()
 
 	if (!Sound::GetInstance().IsPlayBGM()) {
 		Sound::GetInstance().PlayBGM(BGM_ID::TITLE_BGM, DX_PLAYTYPE_LOOP);
-		Sound::GetInstance().SetBGMVolume(BGM_ID::TITLE_BGM, 0.5f);
+		Sound::GetInstance().SetAllBGMVolume(1.0f);
 	}
 	FadePanel::GetInstance().SetInTime(0.5f);
 	FadePanel::GetInstance().FadeIn();
@@ -55,7 +55,7 @@ void TitleScene::Initialize()
 
 void TitleScene::Update()
 {
-	sinCount_+=5; sinCount_ %= 360;
+	sinCount_ += 5; sinCount_ %= 360;
 	bgScreen_.Update();
 	world_->Update();
 
@@ -70,7 +70,7 @@ void TitleScene::Update()
 
 		return;
 	}
-	
+
 	timer_ += Time::DeltaTime;
 	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) || GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)) {
 	if (InputChecker::GetInstance().KeyTriggerDown(InputChecker::Input_Key::B)) {
@@ -91,7 +91,7 @@ void TitleScene::Update()
 	//if (Keyboard::GetInstance().KeyTriggerDown(KEYCODE::W)|| (GamePad::GetInstance().Stick().y < -0.3f&&isTrigger_)) {
 	if (InputChecker::GetInstance().StickTriggerDown(InputChecker::Input_Stick::Up)) {
 		selectNum_++;
-		selectNum_ %=2;
+		selectNum_ %= 2;
 		TweenManager::GetInstance().Add(Linear, &selectPos_, posList_[selectNum_], 0.2f);
 		Sound::GetInstance().PlaySE(SE_ID::MOVE_CURSOR_SE);
 	}
@@ -118,18 +118,18 @@ void TitleScene::Draw() const
 	bgScreen_.Draw();
 
 
-	auto drawpos = Vector2(WINDOW_WIDTH / 2, 450) ;
+	auto drawpos = Vector2(WINDOW_WIDTH / 2, 450);
 	auto origin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_SPRITE, drawpos, origin, Vector2::One);
 
 	Vector2 pborigin = Sprite::GetInstance().GetSize(SPRITE_ID::PRESS_B_SPRITE) / 2;
-	if(!isPushKey_)Sprite::GetInstance().Draw(SPRITE_ID::PRESS_B_SPRITE, Vector2((float)WINDOW_WIDTH/2.f, 800.0f),pborigin,MathHelper::Sin((float)sinCount_),Vector2::One);
+	if (!isPushKey_)Sprite::GetInstance().Draw(SPRITE_ID::PRESS_B_SPRITE, Vector2((float)WINDOW_WIDTH / 2.f, 800.0f), pborigin, MathHelper::Sin((float)sinCount_), Vector2::One);
 
 	if (!isPushKey_)return;
-//	alpha_
+	//	alpha_
 
-	Vector2 ssorigin = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE)/2;
-	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, Vector2(WINDOW_WIDTH/2, 750.0f), ssorigin,alpha_.at(0),Vector2::One);
+	Vector2 ssorigin = Sprite::GetInstance().GetSize(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE) / 2;
+	Sprite::GetInstance().Draw(SPRITE_ID::CHANGE_STAGESELECT_TEXT_SPRITE, Vector2(WINDOW_WIDTH / 2, 750.0f), ssorigin, alpha_.at(0), Vector2::One);
 	Vector2 teorigin = Sprite::GetInstance().GetSize(SPRITE_ID::TITLE_EXIT_SPRITE) / 2;
 	Sprite::GetInstance().Draw(SPRITE_ID::TITLE_EXIT_SPRITE, Vector2(WINDOW_WIDTH / 2, 950.0f), teorigin, alpha_.at(1), Vector2::One);
 	Vector2 csorigin = Sprite::GetInstance().GetSize(SPRITE_ID::OROCHI_CURSOR_SPRITE) / 2;

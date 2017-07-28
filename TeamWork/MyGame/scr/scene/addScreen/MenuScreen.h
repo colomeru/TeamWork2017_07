@@ -62,6 +62,8 @@ public:
 	void ShootingStar();
 	//カラス
 	void Crow();
+	//SE
+	void SE();
 	//終了
 	void End();
 	//ステージを取得

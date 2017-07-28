@@ -144,25 +144,10 @@ void CreditScene::Draw() const
 	if (BuildMode != 1) return;
 	DebugDraw::DebugDrawFormatString(0, 00, GetColor(255, 255, 255), "CreditScene");
 	DebugDraw::DebugDrawFormatString(0, 20, GetColor(255, 255, 255), "FPS:[%.1f]", FPS::GetFPS);
-	DebugDraw::DebugDrawFormatString(0, 40, GetColor(255, 255, 255), "PHeadyPos_:%f %f", pHeadPos_.x, pHeadPos_.y);
-	DebugDraw::DebugDrawFormatString(0, 60, GetColor(255, 255, 255), "PlayerPos_:%f %f", player_->GetCurrentPHeadPosition().x, player_->GetCurrentPHeadPosition().y);
-
-	if (operate_) DebugDraw::DebugDrawFormatString(0, 120, GetColor(255, 255, 255), "操作できます！");
-	else DebugDraw::DebugDrawFormatString(0, 120, GetColor(255, 255, 255), "操作できません！");
-
-	DebugDraw::DebugDrawFormatString(0, 140, GetColor(255, 255, 255), "sceneTimer_:[%f]", sceneTimer_);
-
-	DebugDraw::DebugDrawFormatString(0, 180, GetColor(255, 255, 255), "PlayerPos_:%f %f", player_->GetPosition().x, player_->GetPosition().y);
-	DebugDraw::DebugDrawFormatString(0, 220, GetColor(255, 255, 255), "bgColorNum_:%d", bgColorNum_);
-
-	DebugDraw::DebugDrawLine(0, 500, WINDOW_WIDTH, 500, GetColor(255, 0, 0), 1);
-	DebugDraw::DebugDrawLine(300, 0, 300, WINDOW_HEIGHT, GetColor(255, 0, 0), 1);
-	DebugDraw::DebugDrawLine(0, player_->GetCurrentPHeadPosition().y, WINDOW_WIDTH, player_->GetCurrentPHeadPosition().y, GetColor(0, 255, 0), 1);
-	DebugDraw::DebugDrawLine(player_->GetCurrentPHeadPosition().x, 0, player_->GetCurrentPHeadPosition().x, WINDOW_HEIGHT, GetColor(0, 255, 0), 1);
-	DebugDraw::DebugDrawLine(0, WINDOW_HEIGHT / 2.0f, WINDOW_WIDTH, WINDOW_HEIGHT / 2.0f, GetColor(0, 0, 255), 1);
-	DebugDraw::DebugDrawLine(WINDOW_WIDTH / 2.0f, 0, WINDOW_WIDTH / 2.0f, WINDOW_HEIGHT, GetColor(0, 0, 255), 1);
-	DebugDraw::DebugDrawLine(0, player_->GetCurrentPHeadPosition().y + Corr.y, WINDOW_WIDTH, player_->GetCurrentPHeadPosition().y + Corr.y, GetColor(0, 0, 0), 1);
-	DebugDraw::DebugDrawLine(player_->GetCurrentPHeadPosition().x + Corr.x, 0, player_->GetCurrentPHeadPosition().x + Corr.x, WINDOW_HEIGHT, GetColor(0, 0, 0), 1);
+	if (operate_) DebugDraw::DebugDrawFormatString(0, 40, GetColor(255, 255, 255), "操作できます！");
+	else DebugDraw::DebugDrawFormatString(0, 40, GetColor(255, 255, 255), "操作できません！");
+	DebugDraw::DebugDrawFormatString(0, 60, GetColor(255, 255, 255), "sceneTimer_:[%f]", sceneTimer_);
+	DebugDraw::DebugDrawFormatString(0, 80, GetColor(255, 255, 255), "bgColorNum_:%d", bgColorNum_);
 }
 
 //終了しているか？

@@ -45,15 +45,10 @@ void MenuScene::Update()
 	if ((Keyboard::GetInstance().KeyTriggerDown(KEYCODE::M) ||
 		GamePad::GetInstance().ButtonTriggerDown(PADBUTTON::NUM2)))
 	{
-		if (menu.GetIsBackSelect()) {
+		if (menu.GetIsBackSelect())
 			nextScene_ = Scene::Title;
-			Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
-		}
-		else if (menu.GetIsTutorialSelect()) {
+		else if (menu.GetIsTutorialSelect())
 			nextScene_ = Scene::Tutorial;
-			Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
-		}
-
 		FadePanel::GetInstance().AddCollBack([=] {
 			isEnd_ = true;
 		});

@@ -157,6 +157,8 @@ void MenuScreen::Update()
 	SetBackgroundColor(color_.x, color_.y, color_.z);
 
 	Star();
+
+	SE();
 }
 
 //描画
@@ -211,7 +213,6 @@ void MenuScreen::Draw() const
 	ins.Draw(SPRITE_ID::OROCHI_CURSOR_SPRITE, cursorPos_, Vector2(48.0f, 35.0f), 1.0f, Vector2::One, true, backSelect_);
 
 	//デバッグ表示
-	if (BuildMode != 1) return;
 	DebugDraw::DebugDrawFormatString(0, 40, GetColor(255, 255, 255), "stageNum:%d", stageNum_);
 }
 
@@ -322,6 +323,19 @@ void MenuScreen::Crow()
 {
 	for (int i = 0; i < 3; i++) {
 		crow_[i].Update(stageNum_);
+	}
+}
+
+//SE
+void MenuScreen::SE()
+{
+	//決定
+	if (!backSelect_ && isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B)) {
+		Sound::GetInstance().PlaySE(SE_ID::CHECK_SE);
+	}
+	//戻る
+	if (backSelect_ && isUseKey_.KeyTriggerDown(InputChecker::Input_Key::B)) {
+		Sound::GetInstance().PlaySE(SE_ID::CANCEL_SE);
 	}
 }
 

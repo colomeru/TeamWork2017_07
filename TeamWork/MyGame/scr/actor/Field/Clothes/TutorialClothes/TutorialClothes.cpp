@@ -31,8 +31,8 @@ TutorialClothes::~TutorialClothes()
 void TutorialClothes::Update()
 {
 	if (parent_ != nullptr) {
-		if (!static_cast<Player*>(parent_->GetParent())->GetIsBiteMode()) {
-			parent_ = nullptr;
+		if (!player_->GetIsBiteMode()) {
+			FreePlayer();
 		}
 	}
 

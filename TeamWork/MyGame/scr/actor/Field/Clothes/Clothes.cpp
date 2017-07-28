@@ -24,7 +24,6 @@ Clothes::Clothes(IWorld* world, CLOTHES_ID clothes, int laneNum, float weight, c
 
 	laneNum_ = laneNum;
 	rot_ = Random::GetInstance().Range(88.0f, 92.0f);
-
 	collisionPoints.clear();
 
 	world_->EachActor(ACTOR_ID::PLAYER_ACTOR, [=](Actor& other) { player_ = static_cast<Player*>(&other); });
@@ -47,10 +46,10 @@ void Clothes::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 	case ACTOR_ID::PLAYER_HEAD_ACTOR:
 	{
+		if (player_->GetIsBiteMode()) return;
 		if (!isWind_ && !isDroping_) {
 			parent_ = &other;
 			static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
-			player_ = static_cast<Player*>(parent_->GetParent());
 			player_->CurHeadBite(other.GetPosition());
 			player_->SetIsBiteMode(true);
 			player_->SetOtherClothesID_(clothes_ID);
@@ -104,9 +103,11 @@ void Clothes::OnMessage(EventMessage message, void * param)
 			clothesState_ = ClothesState::BEGIN_WIND; },
 			&dNumber_
 		);
+		return;
 	}
-	else if (message == EventMessage::NECK_SHOOT || message == EventMessage::NECK_BACK_SHOOT) {
+	if (message == EventMessage::NECK_SHOOT || message == EventMessage::NECK_BACK_SHOOT) {
 		isDrawRange_ = true;
+		return;
 	}
 }
 
@@ -147,48 +148,48 @@ std::vector<Vector2> Clothes::GetCollisionPoints() const {
 	return collisionPoints;
 }
 
-void Clothes::Pendulum(Vector2 fulcrum, float length)
+void Clothes::Pendulum(Vector2 & position, float & rot, float & rot_spd, float length, bool isClothes)
 {
-	beforePos_ = position_;
-
 	//åªç›ÇÃèdÇËÇÃà íu
-	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
-	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
+	position.x = fulcrum_.x + MathHelper::Cos(rot) * length;
+	position.y = fulcrum_.y + MathHelper::Sin(rot) * length;
 
 	//èdóÕà⁄ìÆó ÇîΩâfÇµÇΩèdÇËÇÃà íu
-	auto length_vec = position_ - fulcrum;
+	auto length_vec = position - fulcrum_;
 	auto t = -(length_vec.y * GRAVITY) / (length_vec.x * length_vec.x + length_vec.y * length_vec.y);
-	auto gx = position_.x + t * length_vec.x;
-	auto gy = position_.y + GRAVITY + t * length_vec.y;
+	auto gx = position.x + t * length_vec.x;
+	auto gy = position.y + GRAVITY + t * length_vec.y;
 
 	//2Ç¬ÇÃèdÇËÇÃà íuÇÃäpìxç∑
-	auto r = MathHelper::ATan(gy - fulcrum.y, gx - fulcrum.x);
+	auto r = MathHelper::ATan(gy - fulcrum_.y, gx - fulcrum_.x);
 
 	//äpìxç∑Çäpë¨ìxÇ…â¡éZ
-	auto sub = r - rot_;
+	auto sub = r - rot;
 	sub -= std::floor(sub / 360.0f) * 360.0f;
 	if (sub < -180.0f) sub += 360.0f;
 	if (sub > 180.0f) sub -= 360.0f;
 
-	auto temp = rot_spd_ + sub;
-	if (sign(rot_spd_) != sign(temp) && isFriction_) {
+	auto temp = rot_spd + sub;
+	if (sign(rot_spd) != sign(temp) && isFriction_) {
 		friction_ *= 0.992f;
 	}
-	rot_spd_ = temp;
+	rot_spd = temp;
 
 	//ñÄéC
-	rot_ *= friction_;
+	rot *= friction_;
 
 	//äpìxÇ…äpë¨ìxÇâ¡éZ
-	rot_ += rot_spd_;
+	rot += rot_spd;
 
 	//êVÇµÇ¢èdÇËÇÃà íu
-	position_.x = fulcrum.x + MathHelper::Cos(rot_) * length;
-	position_.y = fulcrum.y + MathHelper::Sin(rot_) * length;
+	position.x = fulcrum_.x + MathHelper::Cos(rot) * length;
+	position.y = fulcrum_.y + MathHelper::Sin(rot) * length;
+
+	if (!isClothes) return;
 
 	//äpìxÇâÊëúÇ…îΩâf
-	angle_ = rot_ - 90.0f;
-	
+	angle_ = rot - 90.0f;
+
 	if (clothesState_ == ClothesState::WINDLESS) return;
 
 	count_++;
@@ -215,7 +216,7 @@ void Clothes::Pendulum(Vector2 fulcrum, float length)
 void Clothes::ShakesClothes()
 {
 	if (isDraw_) {
-		Pendulum(fulcrum_, LENGTH);
+		Pendulum(position_, rot_, rot_spd_, LENGTH, true);
 
 		switch (clothesState_)
 		{
@@ -255,7 +256,7 @@ void Clothes::WindSwing()
 	if (parent_ == nullptr) return;
 
 	if (clothesState_ == ClothesState::STRONG_WIND) {
-		static_cast<Player*>(parent_->GetParent())->SetMode(MODE_RESIST);
+		player_->SetMode(MODE_RESIST);
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(true);
 		parent_ = nullptr;
 	}
@@ -283,10 +284,18 @@ void Clothes::Synchronize()
 {
 	if (parent_ == nullptr || player_== nullptr || !player_->GetIsBiteMode()) return;
 
-	pendulumVec_ = (position_ - beforePos_);
-	auto pos = parent_->GetPosition() + pendulumVec_;
-	parent_->SetPose(Matrix::CreateTranslation(Vector3(pos.x, pos.y, 0.0f)));
-	player_->setCurPHeadSPos(pos);
+	Vector2 pos = parent_->GetPosition();
+	Vector2 beforePos = pos;
+	float len = (fulcrum_ - beforePos).Length();
+	float rot = MathHelper::ATan(pos.y - fulcrum_.y, pos.x - fulcrum_.x);
+	float rot_spd = rot_spd_;
+
+	Pendulum(pos, rot, rot_spd, len);
+
+	//à⁄ìÆó Çì™Ç…ì¸ÇÍÇÈ
+	pendulumVec_ = pos - beforePos;
+	static_cast<Player_Head*>(const_cast<Actor*>(parent_))->addPos(pendulumVec_);
+	player_->setCurPHeadSPos(parent_->GetPosition());
 }
 
 void Clothes::SetFrequencyWind(int wind)
@@ -297,6 +306,13 @@ void Clothes::SetFrequencyWind(int wind)
 void Clothes::SetCurrentStage(Stage currentStage)
 {
 	currentStage_ = currentStage;
+}
+
+void Clothes::FreePlayer()
+{
+	Vector2 velo = pendulumVec_ + player_->GetPendulumVect();
+	player_->SetPendulumVect(velo);
+	parent_ = nullptr;
 }
 
 void Clothes::DrawRange() const

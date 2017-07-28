@@ -277,7 +277,9 @@ void Content::LoadSound(Sound& sound)
 	sound.LoadSE("se/slash.mp3", SE_ID::SLASH_SE);
 	sound.LoadSE("se/resurrect.mp3", SE_ID::RESURRECT_SE);
 	sound.LoadSE("se/batu.mp3", SE_ID::BAD_SE);
-
+	sound.LoadSE("se/bellows.mp3", SE_ID::BELLOWS_SE);
+	sound.LoadSE("se/blowoff.mp3", SE_ID::BLOWOFF_SE);
+	sound.LoadSE("se/glide.mp3", SE_ID::GLIDE_SE);
 
 }
 

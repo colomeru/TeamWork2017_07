@@ -31,7 +31,7 @@ NotShakeClothes::~NotShakeClothes()
 void NotShakeClothes::Update()
 {
 	if (parent_ != nullptr) {
-		if (!static_cast<Player*>(parent_->GetParent())->GetIsBiteMode()) {
+		if (!player_->GetIsBiteMode()) {
 			parent_ = nullptr;
 		}
 	}

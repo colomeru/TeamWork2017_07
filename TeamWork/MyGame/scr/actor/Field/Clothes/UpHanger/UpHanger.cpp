@@ -4,6 +4,7 @@
 #include "../../../../time/Time.h"
 #include "../../../../debugdata/DebugDraw.h"
 #include "../../../../graphic/Sprite.h"
+#include "../../../../sound/sound.h"
 
 const float DESTINATION = -400.0f;		//目標値
 
@@ -154,10 +155,13 @@ void UpHanger::UpPlayer()
 	Vector2 deformCode2 = codePos_[5] + Vector2(-5.0f, 8.0f);
 
 	//ハンガーのしなりと紐の引っ張り
+	Sound::GetInstance().PlaySE(SE_ID::BELLOWS_SE);
 	TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[1], deformCode1, time);
 	TweenManager::GetInstance().Add(EaseOutQuad, &codePos_[5], deformCode2, time);
 	TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, pullPos, time, [=]() {
 		isPull_ = false;
+		Sound::GetInstance().StopSE(SE_ID::BELLOWS_SE);
+		Sound::GetInstance().PlaySE(SE_ID::BLOWOFF_SE);
 		//ハンガーが元に戻るのとプレイヤーを飛ばす
 		TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[1], baseCode1, 0.4f);
 		TweenManager::GetInstance().Add(EaseOutBounce, &codePos_[5], baseCode2, 0.4f);

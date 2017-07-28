@@ -2,6 +2,7 @@
 #include "../../../player/Player_Head.h"
 #include "../../../../graphic/Sprite.h"
 #include "../../../../debugdata/DebugDraw.h"
+#include "../../../../sound/sound.h"
 
 Hanger::Hanger(IWorld * world, CLOTHES_ID clothes, int laneNum, Vector2 pos)
 	:Clothes(world, clothes, laneNum, 0.0f)
@@ -65,6 +66,7 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	{
 	case ACTOR_ID::PLAYER_HEAD_ACTOR:
 	{
+		Sound::GetInstance().PlaySE(SE_ID::GLIDE_SE);
 		parent_ = &other;
 		static_cast<Player_Head*>(const_cast<Actor*>(parent_))->setIsBiteSlipWind(false);
 		player_ = static_cast<Player*>(parent_->GetParent());
@@ -75,6 +77,7 @@ void Hanger::OnCollide(Actor & other, CollisionParameter colpara)
 	}
 	case ACTOR_ID::STAGE_ACTOR:
 	{
+		Sound::GetInstance().StopSE(SE_ID::GLIDE_SE);
 		if (position_.x >= other.GetPosition().x) return;
 		isStop_ = true;
 		if (player_->GetRotBack() > 70.0f || isSlip_) return;

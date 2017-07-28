@@ -2,6 +2,7 @@
 #include "../../../player/Player_Head.h"
 #include "../../../../tween/TweenManager.h"
 #include "../../../../graphic/Sprite.h"
+#include "../../../../sound/sound.h"
 #include <DxLib.h>
 
 const float DESTINATION = -400.0f;
@@ -85,12 +86,15 @@ void BowHanger::OnCollide(Actor & other, CollisionParameter colpara)
 		codeCenterPos_ = colpara.colPos;
 		isMove_ = true;
 		isPull_ = true;
-		TweenManager::GetInstance().Delay(2.2f, [=]() {
+		TweenManager::GetInstance().Delay(2.0f, [=]() {
 			if (parent_ == nullptr) return;
 			//•R‚Ìˆø‚Á’£‚è
+			Sound::GetInstance().PlaySE(SE_ID::BELLOWS_SE);
 			auto toSpringPos = position_ + (player_->GetPosition() - position_).Normalize() * 100.0f;
 			TweenManager::GetInstance().Add(EaseOutQuad, &codeCenterPos_, toSpringPos, 1.0f, [=]() {
 				//”ò‚Î‚µ‚½Œã‚Ì•R‚Ì—h‚ê
+				Sound::GetInstance().StopSE(SE_ID::BELLOWS_SE);
+				Sound::GetInstance().PlaySE(SE_ID::BLOWOFF_SE);
 				TweenManager::GetInstance().Add(EaseOutBounce, &codeCenterPos_, baseCenter_, 0.4f, [=]() {isMove_ = false;});
 				isPull_ = false;
 				Shoot();

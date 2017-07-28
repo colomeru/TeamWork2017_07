@@ -50,7 +50,7 @@ public:
 	//当たり判定のポイントの取得
 	std::vector<Vector2> GetCollisionPoints() const;
 	//振り子運動
-	void Pendulum(Vector2 fulcrum, float length);
+	void Pendulum(Vector2& position, float& rot, float& rot_spd, float length, bool isClothes = false);
 	//風による服揺らし
 	void ShakesClothes();
 	//強い風によるプレイヤーへの作用
@@ -71,7 +71,10 @@ public:
 	void SetFrequencyWind(int wind);
 	//現在のステージ番号の設定
 	void SetCurrentStage(Stage currentStage);
+	//服を離した際の移動量を代入
+	void FreePlayer();
 
+private:
 	//コピー禁止
 	Clothes(const Clothes& other) = delete;
 	Clothes& operator = (const Clothes& other) = delete;
@@ -99,7 +102,7 @@ protected:
 	ActorPtr clothesFeces_;
 	//プレイヤー
 	Player* player_;
-	//振り子の移動量
+	//プレイヤーと服の同期の際の移動量
 	Vector2 pendulumVec_;
 	//振り子の移動前の位置
 	Vector2 beforePos_;

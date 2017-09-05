@@ -1,8 +1,8 @@
 #include "TGSManager.h"
 #include"../input/InputChecker.h"
 #include"../time/Time.h"
-
-//#include"TGSMode.h"//TGS提出版でない場合はコメントアウトする事
+#include<string>
+#include"TGSMode.h"//TGS提出版でない場合はコメントアウトする事
 
 TGSManager::TGSManager():
 	timeCount_(0.0f), isActive_(true){
@@ -23,6 +23,8 @@ void TGSManager::Initialize()
 
 bool TGSManager::Update() {
 	AddTime();
+	OutputDebugString(std::to_string(timeCount_).c_str());
+	OutputDebugString("\n");
 	CheckIsReset();
 
 	return CheckExit_Input()||CheckExit_Timer();
